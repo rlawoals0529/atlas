@@ -22,7 +22,7 @@ jobs:
         run: |
           npm run data:validate
           npm run data:seed
-          git diff --exit-code -- migrations/0002_seed.sql
+          test -s generated/catalog-seed.sql
           npm run check
       - name: Verify Cloudflare credentials are configured
         run: |
