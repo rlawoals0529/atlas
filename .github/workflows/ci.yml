@@ -21,9 +21,13 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Validate canonical catalog shards
         run: npm run data:validate
+      - name: Generate catalog quality report
+        run: npm run data:report
       - name: Generate SQL seed artifact
         run: npm run data:seed
-      - name: Verify generated seed is non-empty
-        run: test -s generated/catalog-seed.sql
+      - name: Verify generated artifacts
+        run: |
+          test -s generated/data-report.json
+          test -s generated/catalog-seed.sql
       - name: Typecheck, build, and validate Worker bundle
         run: npm run check
