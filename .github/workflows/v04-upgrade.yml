@@ -1,0 +1,39 @@
+name: Input Atlas v0.4 upgrade
+
+on:
+  push:
+    branches: [feature/shape-lab-v04]
+    paths:
+      - '.v04/**'
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/shape-lab-v04
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply UI upgrade
+        run: node .v04/apply.mjs
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate catalog
+        run: npm run data:validate
+      - name: Build application
+        run: npm run build
+      - name: Commit validated upgrade
+        run: |
+          rm -rf .v04 .github/workflows/v04-upgrade.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Polish Shape Lab and grip-aware similarity"
+          git pull --rebase origin feature/shape-lab-v04
+          git push origin HEAD:feature/shape-lab-v04
