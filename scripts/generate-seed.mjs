@@ -13,5 +13,7 @@ for (const p of products) {
   for (const s of p.sources) sql += `INSERT OR REPLACE INTO product_sources(product_id,source_id) VALUES('${esc(p.id)}','${esc(s.id)}');\n`;
 }
 sql += "COMMIT;\n";
-fs.writeFileSync(new URL("../migrations/0002_seed.sql", import.meta.url), sql);
-console.log(`Wrote ${products.length} products and ${sourceMap.size} unique sources from ${catalog.shards.length} catalog shards.`);
+const output = new URL("../generated/catalog-seed.sql", import.meta.url);
+fs.mkdirSync(new URL("../generated/", import.meta.url), { recursive: true });
+fs.writeFileSync(output, sql);
+console.log(`Wrote ${products.length} products and ${sourceMap.size} unique sources from ${catalog.shards.length} catalog shards to generated/catalog-seed.sql.`);
