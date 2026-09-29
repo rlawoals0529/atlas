@@ -2,7 +2,7 @@
 
 Gaming-peripheral research database + explainable fit engine. Input Atlas starts mouse-first, then models mousepads and skates as parts of the same aiming system rather than isolated products.
 
-## Current build — v0.6 data layer / v0.5 product UI
+## Current build
 
 The current catalog contains **39 gaming mice**, **16 mousepads**, **6 skate families**, 8 grip subtypes and 8 game/use profiles. It is intentionally curated rather than exhaustive: provenance, fit usefulness and maintainability matter more than inflating the product count.
 
@@ -17,7 +17,8 @@ The product experience includes:
 - evidence-health scoring that keeps manufacturer, independent, community and Atlas/editorial information visibly distinct;
 - database filters for brand, shape, polling, weight, wireless status, product status, price and evidence quality;
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
-- responsive dark technical UI influenced by the interaction discipline of Sidereal and FantasyStats while remaining visually distinct.
+- responsive dark technical UI influenced by the interaction discipline of Sidereal and FantasyStats while remaining visually distinct;
+- installable web-app metadata, structured WebApplication metadata and an explicit research/correction workflow.
 
 ## Canonical data architecture
 
@@ -35,9 +36,9 @@ manufacturer / independent / community research
 
 Both the runtime and maintenance scripts merge the shards. `npm run data:validate` enforces global IDs/slugs, source-definition consistency, valid evidence references, physical dimensions and 0–100 model bounds across the combined catalog.
 
-`npm run data:seed` produces `generated/catalog-seed.sql` on demand. Generated SQL is deliberately ignored by git; JSON research remains canonical and `migrations/0001_init.sql` remains the D1 schema migration. This avoids committing a large derived SQL diff every time research changes.
+`npm run data:report` generates `generated/data-report.json` with product counts, source-class coverage, evidence-confidence totals and the source-check date window. `npm run data:seed` produces `generated/catalog-seed.sql` on demand. Both artifacts are ignored by git; JSON research remains canonical and `migrations/0001_init.sql` remains the D1 schema migration.
 
-## v0.6 research additions
+## Current research additions
 
 The 2026 Q3 shard adds the **Razer Viper V3 Pro SE** and all five **Razer Gigantus V2 Pro** speed grades.
 
@@ -58,6 +59,7 @@ The current production runtime serves the bundled canonical catalog directly fro
 ## API
 
 - `GET /api/health`
+- `GET /api/stats`
 - `GET /api/catalog?type=mouse&q=claw`
 - `GET /api/products/:slug`
 - `GET /api/compare?ids=mouse-id-1,mouse-id-2`
@@ -65,32 +67,36 @@ The current production runtime serves the bundled canonical catalog directly fro
 - `GET /api/shape?length=122&width=59&height=39&hump=55&weight=55`
 - `POST /api/recommend` with a `UserProfile`
 
+`/api/stats` reports the current release metadata, type counts, source-class coverage, evidence-confidence mix and source-check window.
+
 ## Local setup
 
 1. `npm install`
 2. `npm run data:validate`
-3. `npm run data:seed`
-4. `npm run dev`
+3. `npm run data:report`
+4. `npm run data:seed`
+5. `npm run dev`
 
 ## Validation
 
 ```bash
 npm run data:validate
+npm run data:report
 npm run data:seed
 npm run check
 ```
 
-CI validates all catalog shards, verifies the generated SQL artifact is non-empty, then runs TypeScript, Vite and a Wrangler deployment dry-run.
+CI validates every catalog shard, generates both derived artifacts, verifies they are non-empty, then runs TypeScript, Vite and a Wrangler deployment dry-run.
 
 ## Cloudflare deploy
 
 The current Worker has no required application secret or database binding. Locally, authenticate Wrangler and run `npm run deploy` after validation/build.
 
-For GitHub deployment, add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then run **Actions → Deploy Input Atlas**. The manual workflow validates the catalog, generates the SQL artifact, runs the Worker dry-run, checks credentials and deploys with Wrangler.
+For GitHub deployment, add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then run **Actions → Deploy Input Atlas**. The manual workflow validates the catalog, generates the data-health and SQL artifacts, runs the Worker dry-run, checks credentials and deploys with Wrangler.
 
 ## Research rules
 
-Read `research/FIELD_MODEL.md`, `research/RESEARCH_NOTES.md`, `research/SOURCE_POLICY.md`, `research/V05_RESEARCH.md` and `research/V06_DATA.md` before bulk imports.
+Read `CONTRIBUTING.md`, `research/FIELD_MODEL.md`, `research/RESEARCH_NOTES.md`, `research/SOURCE_POLICY.md`, `research/V05_RESEARCH.md` and `research/V06_DATA.md` before bulk imports.
 
 Core rules:
 
