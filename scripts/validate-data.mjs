@@ -1,6 +1,6 @@
-import fs from "node:fs";
+import { loadCatalog } from "./load-catalog.mjs";
 
-const data = JSON.parse(fs.readFileSync(new URL("../data/catalog.json", import.meta.url), "utf8"));
+const data = loadCatalog();
 const groups = ["mice", "mousepads", "skates"];
 const products = groups.flatMap((key) => data[key] ?? []);
 const errors = [];
@@ -59,4 +59,4 @@ if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
-console.log(`Validated ${products.length} products (${data.mice.length} mice, ${data.mousepads.length} pads, ${data.skates.length} skates) and ${sourceDefs.size} source definitions.`);
+console.log(`Validated ${products.length} products (${data.mice.length} mice, ${data.mousepads.length} pads, ${data.skates.length} skates) across ${data.shards.length} catalog shards and ${sourceDefs.size} source definitions.`);
