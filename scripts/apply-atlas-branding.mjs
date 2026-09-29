@@ -1,3 +1,4 @@
+// One-time validated migration for the Atlas rename and security release.
 import fs from "node:fs";
 import path from "node:path";
 
