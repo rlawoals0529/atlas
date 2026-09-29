@@ -1,6 +1,6 @@
 {
-  "name": "Input Atlas — Gaming Peripheral Fit Lab",
-  "short_name": "Input Atlas",
+  "name": "Atlas — Gaming Peripheral Fit Lab",
+  "short_name": "Atlas",
   "description": "Evidence-aware mouse, mousepad and skate research with explainable fit and shape comparison.",
   "start_url": "/",
   "scope": "/",
