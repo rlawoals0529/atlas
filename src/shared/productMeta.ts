@@ -20,8 +20,8 @@ export const productFamilies: ProductFamily[] = [
   {
     id: "razer-viper-pro",
     label: "Razer Viper Pro line",
-    memberIds: ["mouse-viper-v3-pro", "mouse-viper-v4-pro"],
-    relationship: "Successive Viper Pro generations. Compare shell geometry, weight, sensor, switches, battery and wireless implementation rather than treating the newer revision as automatically better for every grip.",
+    memberIds: ["mouse-viper-v3-pro-se", "mouse-viper-v3-pro", "mouse-viper-v4-pro"],
+    relationship: "Razer states the Viper V3 Pro SE, V3 Pro and V4 Pro share the exact mouse shape. Atlas therefore preserves one manufacturer-confirmed shell relationship while keeping weight, sensor, switches, polling hardware and battery implementation separate.",
   },
   {
     id: "logitech-pro-x",
@@ -52,6 +52,12 @@ export const productFamilies: ProductFamily[] = [
     label: "ARTISAN NINJA FX surfaces",
     memberIds: ["pad-artisan-zero-xsoft", "pad-artisan-zero-soft", "pad-artisan-type99-soft", "pad-artisan-hien-soft", "pad-artisan-hayate-otsu-v2-soft", "pad-artisan-raiden-mid"],
     relationship: "Surface family spanning control through speed. Firmness and weave are treated as separate behavior inputs.",
+  },
+  {
+    id: "razer-gigantus-v2-pro",
+    label: "Razer Gigantus V2 Pro speed system",
+    memberIds: ["pad-razer-gigantus-v2-pro-max-control", "pad-razer-gigantus-v2-pro-control", "pad-razer-gigantus-v2-pro-balance", "pad-razer-gigantus-v2-pro-speed", "pad-razer-gigantus-v2-pro-max-speed"],
+    relationship: "One manufacturer-defined five-grade surface system: Max Control, Control, Balance, Speed and Max Speed. Atlas preserves Razer's ordering but labels its 0–100 glide/stopping values as normalized interpolation rather than measured friction.",
   },
   {
     id: "xray-skates",
