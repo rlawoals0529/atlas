@@ -1,97 +1,111 @@
 # Input Atlas
 
-Gaming-mouse-first research database + explainable fit engine, with mousepads and skates modeled as part of the same aiming system.
+Gaming-peripheral research database + explainable fit engine. Input Atlas starts mouse-first, then models mousepads and skates as parts of the same aiming system rather than isolated products.
 
-## What v0.3 contains
-- **38 gaming mice** spanning ultralight FPS, symmetrical/esports, ergonomic FPS, all-purpose multi-button and MMO designs.
-- **11 mousepads** spanning control cloth, balanced cloth/hybrid, speed cloth and glass.
-- **6 skate families** spanning pure PTFE, hardened PTFE and UHMW-PE, with fresh/broken-in/wear behavior.
-- **8 game/use profiles:** tactical FPS, tracking FPS, arena FPS, battle royale, MOBA/RTS, MMO, action/general and mixed gaming.
-- **8 grip subtypes:** palm, relaxed/aggressive/pincer/knuckle claw, fingertip, extended fingertip and palm-claw hybrid.
-- Relative recommendation mode: choose the mouse you already own and ask for smaller/larger, narrower/wider, lower/higher hump, lighter/heavier and less/more palm support.
-- 5-axis shape finder and side-by-side comparison UI.
+## v0.5
 
-The seed catalog is intentionally representative rather than exhaustive. Editorial fit/feel vectors are provisional until independent/community evidence is aggregated at larger scale.
+The current build contains **38 gaming mice**, **11 mousepads**, **6 skate families**, 8 grip subtypes and 8 game/use profiles. The seed catalog is intentionally curated rather than exhaustive; provenance and useful fit data matter more than inflating the product count.
+
+v0.5 turns the project into a product lab rather than a static spec database:
+
+- explainable mouse, pad and skate recommendations based on hand size, grip, game style, sensitivity and surface preference;
+- relative recommendation mode for moving smaller/larger, narrower/wider, lower/higher, lighter/heavier or changing palm support from a mouse you already own;
+- Shape Lab with top/side overlays, real scale or normalized length, center/front/rear/sensor alignment and up to five layers;
+- grip-aware shape similarity modes for Balanced, Claw, Fingertip and Palm weighting;
+- 12-component shape scoring covering length, grip width, height, hump position, front height, rear flare, side taper, hump fullness, button height, pinky clearance, sensor position and shape family;
+- direct target-geometry search;
+- product detail inspector with full type-specific specs, family/revision context, fit/feel models and source provenance;
+- evidence-health scoring that keeps manufacturer, independent, community and Atlas/editorial information visibly distinct;
+- database filters for brand, shape, polling, weight, wireless status, product status, price and evidence quality;
+- side-by-side mouse comparison with raw spec deltas, shape overlays and component-level geometry similarity;
+- responsive dark technical UI inspired by the interaction discipline of Sidereal and FantasyStats while keeping Input Atlas visually distinct.
 
 ## Architecture
-`data/catalog.json` is the canonical research source. The same data powers the React UI, Worker API, deterministic recommender and generated D1 seed. This prevents the database site and recommendation site from becoming two conflicting datasets.
+
+`data/catalog.json` is the canonical research source. The same data powers the React UI, Worker API, deterministic recommender and generated SQL seed so the database and recommendation engine cannot silently drift into conflicting datasets.
 
 ```text
 manufacturer / independent / community research
                      ↓
               data/catalog.json
                  ↙    ↓     ↘
-         React UI   fit engine   D1 seed
+         React UI   fit engine   SQL seed
                      ↓
                 Worker API
 ```
 
+The v0.5 production runtime intentionally serves the canonical bundled catalog directly from the Worker. The existing D1 schema and generated migration are retained for the later persistence/search stage, but D1 is **not required to deploy the current site**. This avoids a fake database binding blocking production before the Worker actually needs it.
+
 Stack:
+
 - React 19 + TypeScript + Vite
 - Hono API on Cloudflare Workers
 - Cloudflare Workers Static Assets for the SPA
-- Cloudflare D1 + FTS5 schema for production search/catalog storage
-- Deterministic, explainable recommendation engine; no LLM is required for ranking
+- deterministic, explainable recommendation + geometry engines
+- prepared D1 + FTS5 schema/migrations for the future persisted catalog/search layer
 
 ## API
+
 - `GET /api/health`
 - `GET /api/catalog?type=mouse&q=claw`
 - `GET /api/products/:slug`
 - `GET /api/compare?ids=mouse-id-1,mouse-id-2`
+- `GET /api/similar/:id?mode=claw`
 - `GET /api/shape?length=122&width=59&height=39&hump=55&weight=55`
 - `POST /api/recommend` with a `UserProfile`
 
-## First-time setup
+## Local setup
+
 1. `npm install`
-2. `npx wrangler d1 create input-atlas`
-3. Put the returned database UUID into `wrangler.jsonc`, replacing `REPLACE_AFTER_WRANGLER_D1_CREATE`.
-4. `npm run data:validate`
-5. `npm run data:seed`
-6. `npx wrangler d1 migrations apply input-atlas --local`
-7. `npm run dev`
+2. `npm run data:validate`
+3. `npm run data:seed`
+4. `npm run dev`
 
-Wrangler requires a real D1 `database_id` in the binding configuration. Create the database once before the first local Worker/Vite run; subsequent local development uses Wrangler's local D1 storage unless you explicitly opt into remote development.
+## Cloudflare deploy
 
-## First Cloudflare deploy
-After first-time setup:
-1. `npm run data:validate`
-2. `npm run data:seed`
-3. `npx wrangler d1 migrations apply input-atlas --remote`
+The current v0.5 Worker has no required application secret or database binding.
+
+Local Wrangler path:
+
+1. authenticate Wrangler to the intended Cloudflare account;
+2. `npm run data:validate`
+3. `npm run build`
 4. `npm run deploy`
 
-## Research rules
-Read `research/FIELD_MODEL.md`, `research/RESEARCH_NOTES.md`, and `research/SOURCE_POLICY.md` before bulk imports. Manufacturer claims, independent measurements, community observations and Atlas editorial inference must remain distinguishable.
+GitHub path:
 
-Important design decisions:
-- no single universal “best gaming mouse” score;
-- 8 kHz polling receives only contextual/small weight rather than an automatic bonus;
+1. add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`;
+2. open **Actions → Deploy Input Atlas → Run workflow**;
+3. the workflow validates the catalog, checks generated seed consistency, runs the TypeScript/Vite/Worker dry-run, then deploys with Wrangler.
+
+The deployment workflow is manual by design so missing credentials cannot break normal pushes. When D1 persistence is enabled later, create the `input-atlas` database, add its real binding ID, and apply the migrations. Until the Worker actually reads D1, the generated schema/seed remain a checked future-storage path rather than a production dependency.
+
+## Research rules
+
+Read `research/FIELD_MODEL.md`, `research/RESEARCH_NOTES.md`, `research/SOURCE_POLICY.md` and `research/V05_RESEARCH.md` before bulk imports.
+
+Core rules:
+
+- there is no single universal “best gaming mouse” score;
+- manufacturer claims, independent measurements, community observations and Atlas editorial inference remain distinguishable;
+- product family, manufacturer-confirmed same shell, modeled geometric similarity and grip-specific fit similarity are separate relationships;
+- 8 kHz polling receives contextual weight rather than an automatic bonus;
 - shape and grip are multi-axis rather than S/M/L labels;
-- static glide, dynamic glide and stopping power are separate pad axes;
-- skate feel is pad-dependent and includes fresh vs broken-in behavior;
-- gaming categories change the ranking weights (e.g. button density matters far more for MMO than tactical FPS).
+- static glide, dynamic glide and stopping power are separate mousepad axes;
+- skate feel is pad-dependent and tracks fresh vs broken-in behavior where data exists;
+- 0–100 fit/feel values are comparative indices, not fabricated laboratory coefficients;
+- measured latency, friction, force or other physical values require explicit methodology and provenance.
+
+## Shape data
+
+Current outline rendering uses **Input Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. No outline asset is copied from EloShapes, RTINGS or another site's scans. `MouseProduct.outline` already supports sourced measured point sets (`measured-svg` / `scan`) so measured geometry can replace parametric geometry later without changing the Shape Lab interface.
 
 ## Data maintenance
-Run:
 
 ```bash
 npm run data:validate
 npm run data:seed
+npm run build
 ```
 
-The generator writes `migrations/0002_seed.sql` from the same canonical catalog.
-
-
-## Shape Lab (v0.3)
-
-The new Shape Lab makes visual shape discovery a first-class workflow:
-
-- overlay up to five gaming mice at once
-- top or side view
-- real-scale or normalized-length comparison
-- align by geometric center, front edge, rear edge, or sensor position
-- adjustable layer opacity
-- find-similar search using an 8-axis geometry vector
-- human-readable difference explanations
-- one-click load of similar pairs into the overlay
-
-The initial outlines are **Input Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. They are not copied from EloShapes, RTINGS, or another site's scan assets. `MouseProduct.outline` can store sourced measured point sets later (`measured-svg` / `scan`) while preserving source provenance.
+The generator writes `migrations/0002_seed.sql` from the canonical catalog. GitHub Actions validates the catalog, regenerates the seed, checks that the generated SQL is committed and runs `npm run check` (TypeScript, Vite and Wrangler dry-run) on every pull request to `main`.

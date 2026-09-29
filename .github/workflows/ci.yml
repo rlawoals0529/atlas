@@ -25,5 +25,5 @@ jobs:
         run: npm run data:seed
       - name: Ensure generated seed is committed
         run: git diff --exit-code -- migrations/0002_seed.sql
-      - name: Typecheck and build
-        run: npm run build
+      - name: Typecheck, build, and validate Worker bundle
+        run: npm run check
