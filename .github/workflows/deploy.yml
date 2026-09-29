@@ -1,4 +1,4 @@
-name: Deploy Input Atlas
+name: Deploy Atlas
 
 on:
   workflow_dispatch:
@@ -13,11 +13,16 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
       - name: Validate catalog and Worker bundle
         run: |
           npm run data:validate
