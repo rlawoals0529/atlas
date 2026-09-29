@@ -63,14 +63,22 @@ Stack:
 
 ## Cloudflare deploy
 
-The current v0.5 Worker has no required secret or database binding:
+The current v0.5 Worker has no required application secret or database binding.
+
+Local Wrangler path:
 
 1. authenticate Wrangler to the intended Cloudflare account;
 2. `npm run data:validate`
 3. `npm run build`
 4. `npm run deploy`
 
-When D1 persistence is enabled later, create the `input-atlas` database, add its real binding ID, and apply the migrations. Until the Worker actually reads D1, the generated schema/seed remain a checked future-storage path rather than a production dependency.
+GitHub path:
+
+1. add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`;
+2. open **Actions → Deploy Input Atlas → Run workflow**;
+3. the workflow validates the catalog, checks generated seed consistency, runs the TypeScript/Vite/Worker dry-run, then deploys with Wrangler.
+
+The deployment workflow is manual by design so missing credentials cannot break normal pushes. When D1 persistence is enabled later, create the `input-atlas` database, add its real binding ID, and apply the migrations. Until the Worker actually reads D1, the generated schema/seed remain a checked future-storage path rather than a production dependency.
 
 ## Research rules
 
@@ -100,4 +108,4 @@ npm run data:seed
 npm run build
 ```
 
-The generator writes `migrations/0002_seed.sql` from the canonical catalog. GitHub Actions validates the catalog, regenerates the seed, checks that the generated SQL is committed and typechecks/builds every pull request to `main`.
+The generator writes `migrations/0002_seed.sql` from the canonical catalog. GitHub Actions validates the catalog, regenerates the seed, checks that the generated SQL is committed and runs `npm run check` (TypeScript, Vite and Wrangler dry-run) on every pull request to `main`.
