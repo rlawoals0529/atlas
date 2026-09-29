@@ -22,25 +22,27 @@ v0.5 turns the project into a product lab rather than a static spec database:
 
 ## Architecture
 
-`data/catalog.json` is the canonical research source. The same data powers the React UI, Worker API, deterministic recommender and generated D1 seed so the database and recommendation engine cannot silently drift into two conflicting datasets.
+`data/catalog.json` is the canonical research source. The same data powers the React UI, Worker API, deterministic recommender and generated SQL seed so the database and recommendation engine cannot silently drift into conflicting datasets.
 
 ```text
 manufacturer / independent / community research
                      ↓
               data/catalog.json
                  ↙    ↓     ↘
-         React UI   fit engine   D1 seed
+         React UI   fit engine   SQL seed
                      ↓
                 Worker API
 ```
+
+The v0.5 production runtime intentionally serves the canonical bundled catalog directly from the Worker. The existing D1 schema and generated migration are retained for the later persistence/search stage, but D1 is **not required to deploy the current site**. This avoids a fake database binding blocking production before the Worker actually needs it.
 
 Stack:
 
 - React 19 + TypeScript + Vite
 - Hono API on Cloudflare Workers
 - Cloudflare Workers Static Assets for the SPA
-- Cloudflare D1 + FTS5 for production catalog/search storage
-- deterministic, explainable recommendation engine; no LLM is required for ranking
+- deterministic, explainable recommendation + geometry engines
+- prepared D1 + FTS5 schema/migrations for the future persisted catalog/search layer
 
 ## API
 
@@ -48,27 +50,27 @@ Stack:
 - `GET /api/catalog?type=mouse&q=claw`
 - `GET /api/products/:slug`
 - `GET /api/compare?ids=mouse-id-1,mouse-id-2`
+- `GET /api/similar/:id?mode=claw`
 - `GET /api/shape?length=122&width=59&height=39&hump=55&weight=55`
 - `POST /api/recommend` with a `UserProfile`
 
-## First-time setup
+## Local setup
 
 1. `npm install`
-2. `npx wrangler d1 create input-atlas`
-3. Put the returned database UUID into `wrangler.jsonc`, replacing `REPLACE_AFTER_WRANGLER_D1_CREATE`.
-4. `npm run data:validate`
-5. `npm run data:seed`
-6. `npx wrangler d1 migrations apply input-atlas --local`
-7. `npm run dev`
+2. `npm run data:validate`
+3. `npm run data:seed`
+4. `npm run dev`
 
-Wrangler requires a real D1 `database_id` in the binding configuration. Create the database once before the first local Worker/Vite run; subsequent local development uses Wrangler's local D1 storage unless remote development is explicitly enabled.
+## Cloudflare deploy
 
-## First Cloudflare deploy
+The current v0.5 Worker has no required secret or database binding:
 
-1. `npm run data:validate`
-2. `npm run data:seed`
-3. `npx wrangler d1 migrations apply input-atlas --remote`
+1. authenticate Wrangler to the intended Cloudflare account;
+2. `npm run data:validate`
+3. `npm run build`
 4. `npm run deploy`
+
+When D1 persistence is enabled later, create the `input-atlas` database, add its real binding ID, and apply the migrations. Until the Worker actually reads D1, the generated schema/seed remain a checked future-storage path rather than a production dependency.
 
 ## Research rules
 
