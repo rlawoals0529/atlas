@@ -1,0 +1,62 @@
+# Obsessive-grade field model
+
+## Mouse — geometry and fit
+- length, max width, grip width at front/mid/rear, height, front button height
+- hump peak position (normalized X), hump width/radius, rear flare, front flare
+- side curvature, side-wall angle, comfort grooves, ergo tilt, ledges/rests
+- sensor X/Y position relative to grip center
+- center of gravity X/Y and lift balance
+- 1-2-2 vs 1-3-1 suitability; ring/pinky clearance
+- palm / relaxed claw / aggressive claw / pincer claw / knuckle claw / fingertip vectors
+- hand length and width bands, plus ratio-based fit
+
+## Mouse — implementation
+- total weight and unit variance; shell material/perforation
+- coating + dry/sweaty behavior + long-term wear
+- sensor model, MCU, firmware, motion sync, ripple control, angle snapping, LOD/landing distance
+- supported and *stable measured* polling rates; high-poll dongle included/optional
+- click latency by connection, sensor start/mid/end delay, CPI error/deviation
+- main switch model/type, actuation force curve, pre-travel, post-travel/total travel, wobble
+- side-button switch, position, force and travel
+- encoder make/height, wheel step tactility, wheel click force, free-spin/tilt if present
+- debounce range, eager/deferred modes, slam-click protection
+- battery capacity and runtime by polling mode; charging behavior
+- stock skate material/geometry/thickness; spare feet/grips
+- software/web driver, OS support, onboard profiles, remapping limits
+- QC signals: flex, creak, click grinding, wheel wobble, coating variance, revision notes
+
+## Mousepad
+- surface class: cloth / hybrid / glass / resin / plastic
+- weave/finish/coating/treatment and actual surface material
+- static friction / initial-speed index and dynamic-friction / glide-speed index separately
+- stopping power as its own derived axis, not a synonym for speed
+- X/Y friction ratio and directional feel
+- texture/abrasiveness, skin friction, sleeve friction and noise
+- humidity/sweat sensitivity, temperature sensitivity, static-electricity behavior
+- base material, durometer/Shore measurement, xsoft/soft/mid/firm label, thickness
+- pressure response/sink curve and effect on braking
+- edge stitch height/recess, corner radius, flatness, base grip
+- break-in curve, worn-zone behavior, cleaning recovery, coating life
+- sensor tracking exceptions and skate/material dependencies
+
+## Skates
+- material: pure PTFE, hardened PTFE, UHMW-PE, glass, ceramic/sapphire/other
+- purity/treatment when documented; edge rounding; thickness
+- dot/donut/full-size geometry, diameter, contact area and number of pieces
+- cushion layer, anti-collapse layer, adhesive type
+- static/dynamic speed by pad class, stopping, noise, vibration, dust sensitivity
+- wear rate on cloth/hybrid/glass; break-in curve
+- compatibility matrix for pad material and base softness
+
+## User profile
+- hand length + width; optional finger lengths
+- grip subtype and actual palm contact points
+- finger layout 1-2-2 / 1-3-1
+- current mouse + liked/disliked traits (relative recommendation mode)
+- wrist / hybrid / arm aim; sensitivity as cm/360; DPI/CPI
+- games and input pattern (tac FPS, tracking, MOBA click-spam, productivity)
+- desired weight, click force, wheel tactility, side-button priority, connectivity
+- display refresh + CPU tier when evaluating >1 kHz polling value
+- dry/sweaty hands, texture tolerance, sleeve use, ambient humidity
+- pressure habit on pad, preferred stopping behavior, pad size/desk constraint
+- budget and region/availability

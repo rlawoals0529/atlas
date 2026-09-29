@@ -1,0 +1,6189 @@
+{
+  "mice": [
+    {
+      "id": "mouse-viper-v3-pro",
+      "slug": "razer-viper-v3-pro",
+      "type": "mouse",
+      "brand": "Razer",
+      "model": "Viper V3 Pro",
+      "status": "current",
+      "msrpUsd": 159.99,
+      "summary": "Safe symmetrical flagship with a medium profile and strong all-round competitive performance.",
+      "sources": [
+        {
+          "id": "prosettings-v3",
+          "label": "ProSettings mouse database",
+          "url": "https://prosettings.net/guides/gaming-mouse/",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "rtings-method",
+          "label": "RTINGS mouse test methodology",
+          "url": "https://www.rtings.com/mouse/learn/how-we-test",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 127.1,
+        "widthMm": 63.9,
+        "heightMm": 39.9,
+        "weightG": 54,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Focus Pro 35K Optical Gen-2",
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "shellMaterial": "plastic",
+        "webDriver": false,
+        "programmableButtons": 6,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 55.8,
+        "maxDpi": 35000,
+        "mainSwitch": "Razer Optical Gen-3",
+        "battery1kHours": 95,
+        "battery8kHours": 17
+      },
+      "fit": {
+        "handLengthCm": [
+          17.5,
+          21
+        ],
+        "handWidthCm": [
+          8.8,
+          11.2
+        ],
+        "grip": {
+          "palm": 68,
+          "relaxed-claw": 92,
+          "aggressive-claw": 78,
+          "pincer-claw": 72,
+          "knuckle-claw": 78,
+          "fingertip": 72,
+          "extended-fingertip": 69,
+          "palm-claw-hybrid": 89
+        },
+        "aimStyle": {
+          "wrist": 88,
+          "hybrid": 94,
+          "arm": 90,
+          "finger": 94
+        },
+        "gameStyle": {
+          "tactical": 94,
+          "tracking": 95,
+          "moba": 76,
+          "mixed": 92,
+          "tactical-fps": 94,
+          "tracking-fps": 95,
+          "arena-fps": 95,
+          "battle-royale": 92,
+          "moba-rts": 76,
+          "mmo": 45,
+          "action": 92
+        },
+        "coatingDry": 86,
+        "coatingSweaty": 88,
+        "clickLightness": 72,
+        "balance": "center",
+        "clickCrispness": 80,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 68
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "prosettings-v3"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "rtings-method"
+          ],
+          "confidence": "medium",
+          "note": "Initial editorial fit vector; to be replaced by aggregated reviewer/community evidence."
+        }
+      },
+      "geometry": {
+        "humpPositionPct": 58,
+        "humpFullness": 64,
+        "rearFlare": 58,
+        "frontFlare": 56,
+        "sideTaper": 50,
+        "buttonHeight": 46,
+        "pinkyClearance": 66,
+        "sensorOffsetMm": 0
+      },
+      "tags": [
+        "fps",
+        "esports",
+        "8k",
+        "claw",
+        "fingertip"
+      ]
+    },
+    {
+      "id": "mouse-gpx2",
+      "slug": "logitech-g-pro-x-superlight-2",
+      "type": "mouse",
+      "brand": "Logitech G",
+      "model": "G Pro X Superlight 2",
+      "status": "current",
+      "msrpUsd": 159.99,
+      "summary": "Neutral, accommodating symmetrical shape with broad hand-size compatibility and very mature wireless implementation.",
+      "sources": [
+        {
+          "id": "prosettings-gpx2",
+          "label": "ProSettings mouse database",
+          "url": "https://prosettings.net/gear/lists/mice/",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 124.2,
+        "widthMm": 60.6,
+        "heightMm": 39.6,
+        "weightG": 59,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "HERO 25K",
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "hybrid",
+        "shellMaterial": "plastic",
+        "webDriver": false,
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 59,
+        "maxDpi": 44000,
+        "mainSwitch": "LIGHTFORCE Hybrid",
+        "battery1kHours": 95
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21.5
+        ],
+        "handWidthCm": [
+          8.5,
+          11.2
+        ],
+        "grip": {
+          "palm": 78,
+          "relaxed-claw": 94,
+          "aggressive-claw": 80,
+          "pincer-claw": 78,
+          "knuckle-claw": 80,
+          "fingertip": 70,
+          "extended-fingertip": 67,
+          "palm-claw-hybrid": 91
+        },
+        "aimStyle": {
+          "wrist": 84,
+          "hybrid": 95,
+          "arm": 94,
+          "finger": 95
+        },
+        "gameStyle": {
+          "tactical": 96,
+          "tracking": 91,
+          "moba": 70,
+          "mixed": 94,
+          "tactical-fps": 96,
+          "tracking-fps": 91,
+          "arena-fps": 94,
+          "battle-royale": 94,
+          "moba-rts": 70,
+          "mmo": 45,
+          "action": 94
+        },
+        "coatingDry": 84,
+        "coatingSweaty": 82,
+        "clickLightness": 58,
+        "balance": "center",
+        "clickCrispness": 80,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 68
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "prosettings-gpx2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "prosettings-gpx2"
+          ],
+          "confidence": "medium",
+          "note": "Editorial fit values are provisional."
+        }
+      },
+      "geometry": {
+        "humpPositionPct": 61,
+        "humpFullness": 74,
+        "rearFlare": 62,
+        "frontFlare": 55,
+        "sideTaper": 40,
+        "buttonHeight": 52,
+        "pinkyClearance": 68,
+        "sensorOffsetMm": 0
+      },
+      "tags": [
+        "fps",
+        "esports",
+        "safe-shape",
+        "8k",
+        "mixed-grip"
+      ]
+    },
+    {
+      "id": "mouse-op1w-4k-v2",
+      "slug": "endgame-gear-op1w-4k-v2",
+      "type": "mouse",
+      "brand": "Endgame Gear",
+      "model": "OP1w 4k v2",
+      "status": "current",
+      "msrpUsd": 119,
+      "summary": "Narrow precision-focused shape with hot-swappable main switches and unusually deep enthusiast tuning potential.",
+      "sources": [
+        {
+          "id": "egg-op1w",
+          "label": "Endgame Gear product page",
+          "url": "https://www.endgamegear.co.uk/en-gb/gaming-mice/op1w-4k-v2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 118.2,
+        "widthMm": 60.5,
+        "heightMm": 37.2,
+        "weightG": 58.5,
+        "shape": "symmetrical",
+        "hump": "rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "PAW3950",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "shellMaterial": "plastic",
+        "webDriver": false,
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 53.5,
+        "maxDpi": 30000,
+        "mcu": "Nordic nRF52840",
+        "encoder": "Kailh Dustproof",
+        "mainSwitch": "Kailh GX",
+        "battery4kHours": 30
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          20
+        ],
+        "handWidthCm": [
+          8,
+          10.5
+        ],
+        "grip": {
+          "palm": 45,
+          "relaxed-claw": 88,
+          "aggressive-claw": 98,
+          "pincer-claw": 90,
+          "knuckle-claw": 86,
+          "fingertip": 86,
+          "extended-fingertip": 83,
+          "palm-claw-hybrid": 85
+        },
+        "aimStyle": {
+          "wrist": 96,
+          "hybrid": 95,
+          "arm": 82,
+          "finger": 96
+        },
+        "gameStyle": {
+          "tactical": 97,
+          "tracking": 90,
+          "moba": 88,
+          "mixed": 94,
+          "tactical-fps": 97,
+          "tracking-fps": 90,
+          "arena-fps": 94,
+          "battle-royale": 94,
+          "moba-rts": 88,
+          "mmo": 45,
+          "action": 94
+        },
+        "coatingDry": 94,
+        "coatingSweaty": 92,
+        "clickLightness": 90,
+        "balance": "center",
+        "clickCrispness": 80,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 55
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "egg-op1w"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "egg-op1w"
+          ],
+          "confidence": "medium",
+          "note": "Shape-fit scores are editorial until review aggregation is imported."
+        }
+      },
+      "geometry": {
+        "humpPositionPct": 73,
+        "humpFullness": 60,
+        "rearFlare": 58,
+        "frontFlare": 30,
+        "sideTaper": 80,
+        "buttonHeight": 30,
+        "pinkyClearance": 58,
+        "sensorOffsetMm": 0
+      },
+      "tags": [
+        "fps",
+        "narrow",
+        "claw",
+        "4k",
+        "hotswap"
+      ]
+    },
+    {
+      "id": "mouse-beast-x-pro",
+      "slug": "wlmouse-beast-x-pro",
+      "type": "mouse",
+      "brand": "WLMOUSE",
+      "model": "Beast X Pro",
+      "status": "current",
+      "msrpUsd": 145,
+      "summary": "Very light magnesium symmetrical mouse with 8 kHz wireless, multiple switch choices, and a low-medium shell.",
+      "sources": [
+        {
+          "id": "wlmouse-beast",
+          "label": "WLMOUSE product page",
+          "url": "https://www.wlmouse.com/products/x-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122,
+        "widthMm": 62,
+        "heightMm": 37,
+        "weightG": 39,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PAW3950HS",
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "shellMaterial": "magnesium alloy",
+        "webDriver": true,
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 55.5,
+        "maxDpi": 30000,
+        "mcu": "Nordic nRF52840",
+        "encoder": "TTC Dust-Proof Silver"
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          19
+        ],
+        "handWidthCm": [
+          8.2,
+          10.5
+        ],
+        "grip": {
+          "palm": 62,
+          "relaxed-claw": 90,
+          "aggressive-claw": 84,
+          "pincer-claw": 82,
+          "knuckle-claw": 76,
+          "fingertip": 88,
+          "extended-fingertip": 85,
+          "palm-claw-hybrid": 87
+        },
+        "aimStyle": {
+          "wrist": 96,
+          "hybrid": 94,
+          "arm": 87,
+          "finger": 96
+        },
+        "gameStyle": {
+          "tactical": 92,
+          "tracking": 98,
+          "moba": 78,
+          "mixed": 94,
+          "tactical-fps": 92,
+          "tracking-fps": 98,
+          "arena-fps": 98,
+          "battle-royale": 94,
+          "moba-rts": 78,
+          "mmo": 45,
+          "action": 94
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 74,
+        "clickLightness": 84,
+        "balance": "center",
+        "clickCrispness": 80,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 55
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "wlmouse-beast"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "wlmouse-beast"
+          ],
+          "confidence": "medium",
+          "note": "Manufacturer gives ideal hand-size range; detailed grip scores are editorial."
+        }
+      },
+      "geometry": {
+        "humpPositionPct": 52,
+        "humpFullness": 47,
+        "rearFlare": 58,
+        "frontFlare": 54,
+        "sideTaper": 58,
+        "buttonHeight": 36,
+        "pinkyClearance": 64,
+        "sensorOffsetMm": 0
+      },
+      "tags": [
+        "fps",
+        "ultralight",
+        "magnesium",
+        "8k",
+        "claw",
+        "fingertip"
+      ]
+    },
+    {
+      "id": "mouse-x2-crazylight-mini",
+      "slug": "pulsar-x2-crazylight-mini",
+      "type": "mouse",
+      "brand": "Pulsar",
+      "model": "X2 CrazyLight Mini",
+      "status": "current",
+      "msrpUsd": 129.95,
+      "summary": "Compact rear-biased symmetrical shape with extremely low mass and strong fingertip/claw potential.",
+      "sources": [
+        {
+          "id": "pulsar-x2cl",
+          "label": "Pulsar product page",
+          "url": "https://us.pulsar.gg/products/x2-crazylight-la-gaming-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 115.6,
+        "widthMm": 61,
+        "heightMm": 36.6,
+        "weightG": 35,
+        "shape": "symmetrical",
+        "hump": "rear",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PixArt flagship sensor",
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "shellMaterial": "plastic",
+        "webDriver": true,
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "stockSkateMaterial": "UHMW-PE dots included",
+        "gripWidthMm": 54.5,
+        "maxDpi": 32000,
+        "mainSwitch": "Pulsar Optical",
+        "encoder": "Pulsar Blue"
+      },
+      "fit": {
+        "handLengthCm": [
+          15.5,
+          18.5
+        ],
+        "handWidthCm": [
+          7.8,
+          10
+        ],
+        "grip": {
+          "palm": 30,
+          "relaxed-claw": 88,
+          "aggressive-claw": 95,
+          "pincer-claw": 92,
+          "knuckle-claw": 84,
+          "fingertip": 99,
+          "extended-fingertip": 96,
+          "palm-claw-hybrid": 85
+        },
+        "aimStyle": {
+          "wrist": 99,
+          "hybrid": 94,
+          "arm": 78,
+          "finger": 99
+        },
+        "gameStyle": {
+          "tactical": 92,
+          "tracking": 99,
+          "moba": 78,
+          "mixed": 93,
+          "tactical-fps": 92,
+          "tracking-fps": 99,
+          "arena-fps": 99,
+          "battle-royale": 93,
+          "moba-rts": 78,
+          "mmo": 45,
+          "action": 93
+        },
+        "coatingDry": 80,
+        "coatingSweaty": 78,
+        "clickLightness": 82,
+        "balance": "center",
+        "clickCrispness": 80,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 55
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "pulsar-x2cl"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "pulsar-x2cl"
+          ],
+          "confidence": "medium",
+          "note": "Grip/aim vectors are editorial and intended to be superseded by evidence aggregation."
+        }
+      },
+      "geometry": {
+        "humpPositionPct": 69,
+        "humpFullness": 54,
+        "rearFlare": 70,
+        "frontFlare": 35,
+        "sideTaper": 55,
+        "buttonHeight": 30,
+        "pinkyClearance": 68,
+        "sensorOffsetMm": 0
+      },
+      "tags": [
+        "fps",
+        "ultralight",
+        "mini",
+        "8k",
+        "claw",
+        "fingertip"
+      ]
+    },
+    {
+      "id": "mouse-viper-v4-pro",
+      "slug": "razer-viper-v4-pro",
+      "type": "mouse",
+      "brand": "Razer",
+      "model": "Viper V4 Pro",
+      "status": "current",
+      "msrpUsd": 159.99,
+      "summary": "Current-generation symmetrical esports mouse with 49 g black-shell weight, optical wheel/switches, and 8 kHz wired/wireless reporting.",
+      "tags": [
+        "fps",
+        "esports",
+        "8k",
+        "ultralight",
+        "claw",
+        "fingertip"
+      ],
+      "sources": [
+        {
+          "id": "razer-v4",
+          "label": "Razer Viper V4 Pro technical specifications",
+          "url": "https://www.razer.com/gaming-mice/razer-viper-v4-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 127.1,
+        "widthMm": 63.9,
+        "heightMm": 39.9,
+        "gripWidthMm": 56,
+        "frontHeightMm": 14,
+        "weightG": 49,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Razer Focus Pro 50K Gen-3",
+        "maxDpi": 50000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Razer Optical Gen-4",
+        "encoder": "Razer Optical Scroll Wheel",
+        "shellMaterial": "plastic",
+        "programmableButtons": 6,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "onboardProfiles": 1,
+        "webDriver": true,
+        "battery1kHours": 180,
+        "battery8kHours": 45,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 55,
+        "humpFullness": 62,
+        "rearFlare": 58,
+        "frontFlare": 58,
+        "sideTaper": 53,
+        "sideWallAngle": 50,
+        "buttonHeight": 44,
+        "pinkyClearance": 68,
+        "sensorOffsetMm": 1
+      },
+      "fit": {
+        "handLengthCm": [
+          17.5,
+          21.5
+        ],
+        "handWidthCm": [
+          8.5,
+          11.5
+        ],
+        "grip": {
+          "palm": 70,
+          "relaxed-claw": 94,
+          "aggressive-claw": 88,
+          "pincer-claw": 84,
+          "knuckle-claw": 78,
+          "fingertip": 90,
+          "extended-fingertip": 90,
+          "palm-claw-hybrid": 84
+        },
+        "aimStyle": {
+          "finger": 94,
+          "wrist": 94,
+          "hybrid": 96,
+          "arm": 92
+        },
+        "gameStyle": {
+          "tactical-fps": 96,
+          "tracking-fps": 98,
+          "arena-fps": 98,
+          "battle-royale": 96,
+          "moba-rts": 78,
+          "mmo": 45,
+          "action": 88,
+          "mixed": 94
+        },
+        "coatingDry": 86,
+        "coatingSweaty": 88,
+        "clickLightness": 84,
+        "clickCrispness": 88,
+        "wheelTactility": 70,
+        "liftSecurity": 90,
+        "palmSupport": 62,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "razer-v4"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "razer-v4",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-deathadder-v4-pro",
+      "slug": "razer-deathadder-v4-pro",
+      "type": "mouse",
+      "brand": "Razer",
+      "model": "DeathAdder V4 Pro",
+      "status": "current",
+      "msrpUsd": 169.99,
+      "summary": "Large right-handed ergonomic esports shape at 56 g with 8 kHz Gen-2 wireless and an optical 24-step wheel.",
+      "tags": [
+        "fps",
+        "esports",
+        "ergo",
+        "8k",
+        "palm",
+        "claw"
+      ],
+      "sources": [
+        {
+          "id": "razer-dav4",
+          "label": "Razer DeathAdder V4 Pro technical specifications",
+          "url": "https://www.razer.com/gaming-mice/razer-deathadder-v4-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 128,
+        "widthMm": 68,
+        "heightMm": 44,
+        "gripWidthMm": 59,
+        "frontHeightMm": 17,
+        "weightG": 56,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Razer Focus Pro 45K Gen-2",
+        "maxDpi": 45000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Razer Optical Gen-4",
+        "encoder": "Razer Optical 24-step",
+        "shellMaterial": "plastic",
+        "programmableButtons": 6,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "onboardProfiles": 1,
+        "webDriver": true,
+        "battery1kHours": 150,
+        "battery8kHours": 22,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 50,
+        "humpFullness": 93,
+        "rearFlare": 78,
+        "frontFlare": 64,
+        "sideTaper": 50,
+        "sideWallAngle": 72,
+        "buttonHeight": 70,
+        "pinkyClearance": 82,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          18,
+          22.5
+        ],
+        "handWidthCm": [
+          9,
+          12.2
+        ],
+        "grip": {
+          "palm": 98,
+          "relaxed-claw": 94,
+          "aggressive-claw": 80,
+          "pincer-claw": 70,
+          "knuckle-claw": 90,
+          "fingertip": 56,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 98
+        },
+        "aimStyle": {
+          "finger": 65,
+          "wrist": 83,
+          "hybrid": 94,
+          "arm": 98
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 94,
+          "arena-fps": 88,
+          "battle-royale": 96,
+          "moba-rts": 74,
+          "mmo": 45,
+          "action": 92,
+          "mixed": 93
+        },
+        "coatingDry": 88,
+        "coatingSweaty": 92,
+        "clickLightness": 82,
+        "clickCrispness": 88,
+        "wheelTactility": 76,
+        "liftSecurity": 94,
+        "palmSupport": 94,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "razer-dav4"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "razer-dav4",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-pro-x2-superstrike",
+      "slug": "logitech-pro-x2-superstrike",
+      "type": "mouse",
+      "brand": "Logitech G",
+      "model": "PRO X2 SUPERSTRIKE",
+      "status": "current",
+      "msrpUsd": 179.99,
+      "summary": "Superlight-family esports shape with customizable inductive analog main triggers, haptic click feedback, and 8 kHz LIGHTSPEED.",
+      "tags": [
+        "fps",
+        "esports",
+        "inductive-click",
+        "8k",
+        "mixed-grip"
+      ],
+      "sources": [
+        {
+          "id": "logi-x2ss",
+          "label": "Logitech PRO X2 SUPERSTRIKE specifications",
+          "url": "https://support.logi.com/hc/en/articles/35026563405591-Specification-PRO-X2-SUPERSTRIKE",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 125,
+        "widthMm": 63.5,
+        "heightMm": 40,
+        "gripWidthMm": 59,
+        "weightG": 60,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Logitech HERO 2",
+        "maxDpi": 44000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "LIGHTSPEED 2.4GHz",
+          "wired"
+        ],
+        "switchType": "inductive",
+        "mainSwitch": "HITS inductive analog",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "onboardProfiles": 1,
+        "webDriver": false,
+        "battery1kHours": 90,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 62,
+        "humpFullness": 75,
+        "rearFlare": 63,
+        "frontFlare": 53,
+        "sideTaper": 42,
+        "buttonHeight": 52,
+        "pinkyClearance": 68,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17.5,
+          21.5
+        ],
+        "handWidthCm": [
+          8.8,
+          11.6
+        ],
+        "grip": {
+          "palm": 80,
+          "relaxed-claw": 94,
+          "aggressive-claw": 84,
+          "pincer-claw": 82,
+          "knuckle-claw": 80,
+          "fingertip": 72,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 91
+        },
+        "aimStyle": {
+          "finger": 80,
+          "wrist": 88,
+          "hybrid": 94,
+          "arm": 94
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 93,
+          "arena-fps": 91,
+          "battle-royale": 94,
+          "moba-rts": 92,
+          "mmo": 45,
+          "action": 90,
+          "mixed": 94
+        },
+        "coatingDry": 80,
+        "coatingSweaty": 83,
+        "clickLightness": 96,
+        "clickCrispness": 88,
+        "wheelTactility": 66,
+        "liftSecurity": 90,
+        "palmSupport": 77,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "logi-x2ss"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "logi-x2ss",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-superlight-2c",
+      "slug": "logitech-pro-x-superlight-2c",
+      "type": "mouse",
+      "brand": "Logitech G",
+      "model": "PRO X SUPERLIGHT 2c",
+      "status": "current",
+      "msrpUsd": 149.99,
+      "summary": "Compact 51 g Superlight variant aimed at smaller hands while retaining HERO 2 and up-to-8 kHz LIGHTSPEED.",
+      "tags": [
+        "fps",
+        "esports",
+        "compact",
+        "8k",
+        "claw",
+        "fingertip"
+      ],
+      "sources": [
+        {
+          "id": "logi-2c",
+          "label": "Logitech PRO X SUPERLIGHT 2c product page",
+          "url": "https://www.logitechg.com/en-us/shop/p/pro-x-superlight-2c",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 118.4,
+        "widthMm": 61.4,
+        "heightMm": 38.5,
+        "gripWidthMm": 56.5,
+        "weightG": 51,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Logitech HERO 2",
+        "maxDpi": 44000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "LIGHTSPEED 2.4GHz",
+          "wired"
+        ],
+        "switchType": "hybrid",
+        "mainSwitch": "LIGHTFORCE Hybrid",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 63,
+        "humpFullness": 65,
+        "rearFlare": 62,
+        "frontFlare": 52,
+        "sideTaper": 44,
+        "buttonHeight": 44,
+        "pinkyClearance": 66,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          15.8,
+          19
+        ],
+        "handWidthCm": [
+          7.8,
+          10.2
+        ],
+        "grip": {
+          "palm": 68,
+          "relaxed-claw": 96,
+          "aggressive-claw": 92,
+          "pincer-claw": 90,
+          "knuckle-claw": 80,
+          "fingertip": 96,
+          "extended-fingertip": 95,
+          "palm-claw-hybrid": 82
+        },
+        "aimStyle": {
+          "finger": 98,
+          "wrist": 97,
+          "hybrid": 94,
+          "arm": 80
+        },
+        "gameStyle": {
+          "tactical-fps": 96,
+          "tracking-fps": 97,
+          "arena-fps": 98,
+          "battle-royale": 94,
+          "moba-rts": 82,
+          "mmo": 45,
+          "action": 86,
+          "mixed": 93
+        },
+        "coatingDry": 80,
+        "coatingSweaty": 83,
+        "clickLightness": 80,
+        "clickCrispness": 84,
+        "wheelTactility": 65,
+        "liftSecurity": 88,
+        "palmSupport": 65,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "logi-2c"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "logi-2c",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-g502-x-plus",
+      "slug": "logitech-g502-x-plus",
+      "type": "mouse",
+      "brand": "Logitech G",
+      "model": "G502 X PLUS",
+      "status": "current",
+      "msrpUsd": 159.99,
+      "summary": "Feature-dense multi-genre right-handed mouse with 13 programmable controls, tilt/free-spin wheel, LIGHTSPEED, and hybrid main switches.",
+      "tags": [
+        "multi-genre",
+        "feature-rich",
+        "free-spin",
+        "many-buttons",
+        "wireless"
+      ],
+      "sources": [
+        {
+          "id": "logi-g502x",
+          "label": "Logitech G502 X PLUS product page",
+          "url": "https://www.logitechg.com/en-us/shop/p/g502-x-plus-wireless-lightforce",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 131.4,
+        "widthMm": 79.2,
+        "heightMm": 41.1,
+        "gripWidthMm": 61,
+        "weightG": 106,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "high",
+        "sideCurvature": "aggressive",
+        "sensor": "Logitech HERO 25K / current 44K revision",
+        "maxDpi": 44000,
+        "maxPollingHz": 1000,
+        "connectivity": [
+          "LIGHTSPEED 2.4GHz",
+          "wired"
+        ],
+        "switchType": "hybrid",
+        "mainSwitch": "LIGHTFORCE Hybrid",
+        "shellMaterial": "plastic",
+        "programmableButtons": 13,
+        "sideButtons": 3,
+        "tiltWheel": true,
+        "freeSpinWheel": true,
+        "onboardProfiles": 5,
+        "webDriver": false,
+        "battery1kHours": 130,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 50,
+        "humpFullness": 94,
+        "rearFlare": 76,
+        "frontFlare": 86,
+        "sideTaper": 76,
+        "buttonHeight": 66,
+        "pinkyClearance": 88,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          18,
+          23
+        ],
+        "handWidthCm": [
+          9.2,
+          13
+        ],
+        "grip": {
+          "palm": 98,
+          "relaxed-claw": 84,
+          "aggressive-claw": 64,
+          "pincer-claw": 50,
+          "knuckle-claw": 80,
+          "fingertip": 35,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 95
+        },
+        "aimStyle": {
+          "finger": 45,
+          "wrist": 62,
+          "hybrid": 78,
+          "arm": 92
+        },
+        "gameStyle": {
+          "tactical-fps": 62,
+          "tracking-fps": 58,
+          "arena-fps": 54,
+          "battle-royale": 82,
+          "moba-rts": 92,
+          "mmo": 88,
+          "action": 98,
+          "mixed": 96
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 82,
+        "clickLightness": 72,
+        "clickCrispness": 82,
+        "wheelTactility": 82,
+        "liftSecurity": 94,
+        "palmSupport": 96,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "logi-g502x"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "logi-g502x",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-naga-v2-pro",
+      "slug": "razer-naga-v2-pro",
+      "type": "mouse",
+      "brand": "Razer",
+      "model": "Naga V2 Pro",
+      "status": "current",
+      "msrpUsd": 179.99,
+      "summary": "Modular MMO/multi-genre mouse with interchangeable 2-, 6-, and 12-button side plates and a highly configurable tilt/free-spin wheel.",
+      "tags": [
+        "mmo",
+        "moba",
+        "modular",
+        "many-buttons",
+        "free-spin",
+        "wireless"
+      ],
+      "sources": [
+        {
+          "id": "razer-naga-v2",
+          "label": "Razer Naga V2 Pro support/specifications",
+          "url": "https://mysupport.razer.com/app/answers/detail/a_id/6292/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 119.5,
+        "widthMm": 75.5,
+        "heightMm": 43.5,
+        "gripWidthMm": 61,
+        "weightG": 134,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "high",
+        "sideCurvature": "aggressive",
+        "sensor": "Razer Focus Pro 30K",
+        "maxDpi": 30000,
+        "maxPollingHz": 1000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Razer Optical",
+        "shellMaterial": "plastic",
+        "programmableButtons": 20,
+        "sideButtons": 12,
+        "tiltWheel": true,
+        "freeSpinWheel": true,
+        "onboardProfiles": 5,
+        "webDriver": false,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 50,
+        "humpFullness": 99,
+        "rearFlare": 84,
+        "frontFlare": 88,
+        "sideTaper": 82,
+        "buttonHeight": 70,
+        "pinkyClearance": 92,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17.5,
+          22.5
+        ],
+        "handWidthCm": [
+          9,
+          13
+        ],
+        "grip": {
+          "palm": 99,
+          "relaxed-claw": 78,
+          "aggressive-claw": 50,
+          "pincer-claw": 42,
+          "knuckle-claw": 68,
+          "fingertip": 25,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 90
+        },
+        "aimStyle": {
+          "finger": 35,
+          "wrist": 42,
+          "hybrid": 68,
+          "arm": 82
+        },
+        "gameStyle": {
+          "tactical-fps": 40,
+          "tracking-fps": 35,
+          "arena-fps": 32,
+          "battle-royale": 78,
+          "moba-rts": 97,
+          "mmo": 100,
+          "action": 93,
+          "mixed": 94
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 86,
+        "clickLightness": 70,
+        "clickCrispness": 82,
+        "wheelTactility": 86,
+        "liftSecurity": 96,
+        "palmSupport": 99,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "razer-naga-v2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "razer-naga-v2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-scimitar-se",
+      "slug": "corsair-scimitar-elite-wireless-se",
+      "type": "mouse",
+      "brand": "Corsair",
+      "model": "SCIMITAR ELITE WIRELESS SE",
+      "status": "current",
+      "msrpUsd": 149.99,
+      "summary": "Dedicated MMO/MOBA wireless mouse with 16 programmable inputs and an 8 mm adjustable 12-button Key Slider.",
+      "tags": [
+        "mmo",
+        "moba",
+        "16-buttons",
+        "adjustable-side-panel",
+        "wireless"
+      ],
+      "sources": [
+        {
+          "id": "corsair-scimitar",
+          "label": "Corsair SCIMITAR ELITE WIRELESS SE product page",
+          "url": "https://www.corsair.com/us/en/p/gaming-mouse/ch-9314014-ww/scimitar-elite-wireless-se-mmo-gaming-mouse-gun-metal-ch-9314014-ww",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 119.23,
+        "widthMm": 73.48,
+        "heightMm": 42.17,
+        "gripWidthMm": 60.5,
+        "weightG": 114,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "high",
+        "sideCurvature": "aggressive",
+        "sensor": "Corsair MARKSMAN S",
+        "maxDpi": 33000,
+        "maxPollingHz": 1000,
+        "connectivity": [
+          "2.4GHz SLIPSTREAM",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Corsair Optical QuickStrike",
+        "shellMaterial": "plastic",
+        "programmableButtons": 16,
+        "sideButtons": 12,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "onboardProfiles": 3,
+        "webDriver": false,
+        "battery1kHours": 150,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 52,
+        "humpFullness": 96,
+        "rearFlare": 80,
+        "frontFlare": 83,
+        "sideTaper": 78,
+        "buttonHeight": 67,
+        "pinkyClearance": 88,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          22.5
+        ],
+        "handWidthCm": [
+          9,
+          12.8
+        ],
+        "grip": {
+          "palm": 98,
+          "relaxed-claw": 78,
+          "aggressive-claw": 52,
+          "pincer-claw": 45,
+          "knuckle-claw": 68,
+          "fingertip": 30,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 90
+        },
+        "aimStyle": {
+          "finger": 35,
+          "wrist": 52,
+          "hybrid": 70,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 48,
+          "tracking-fps": 42,
+          "arena-fps": 38,
+          "battle-royale": 73,
+          "moba-rts": 98,
+          "mmo": 100,
+          "action": 90,
+          "mixed": 90
+        },
+        "coatingDry": 74,
+        "coatingSweaty": 78,
+        "clickLightness": 82,
+        "clickCrispness": 85,
+        "wheelTactility": 72,
+        "liftSecurity": 92,
+        "palmSupport": 97,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "corsair-scimitar"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "corsair-scimitar",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-zowie-u2-dw",
+      "slug": "zowie-u2-dw",
+      "type": "mouse",
+      "brand": "ZOWIE",
+      "model": "U2-DW",
+      "status": "current",
+      "msrpUsd": 149.99,
+      "summary": "Driverless 60 g symmetrical competitive shape with inward-curved sides, optical wheel, enhanced receiver/charging dock, and 4 kHz reporting.",
+      "tags": [
+        "fps",
+        "esports",
+        "driverless",
+        "4k",
+        "claw",
+        "pincer-claw"
+      ],
+      "sources": [
+        {
+          "id": "zowie-u2",
+          "label": "ZOWIE U2-DW official specifications",
+          "url": "https://zowie.benq.com/en-us/mouse/u2-dw.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 124,
+        "widthMm": 65,
+        "heightMm": 38,
+        "gripWidthMm": 54.5,
+        "weightG": 60,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "PixArt-class esports sensor",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz"
+        ],
+        "switchType": "mechanical",
+        "encoder": "24-step Optical Wheel",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": true,
+        "battery1kHours": 80,
+        "battery4kHours": 24,
+        "stockSkateMaterial": "PTFE Type E"
+      },
+      "geometry": {
+        "humpPositionPct": 67,
+        "humpFullness": 67,
+        "rearFlare": 68,
+        "frontFlare": 35,
+        "sideTaper": 85,
+        "buttonHeight": 40,
+        "pinkyClearance": 73,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21
+        ],
+        "handWidthCm": [
+          8.3,
+          11
+        ],
+        "grip": {
+          "palm": 68,
+          "relaxed-claw": 96,
+          "aggressive-claw": 94,
+          "pincer-claw": 92,
+          "knuckle-claw": 84,
+          "fingertip": 86,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 84
+        },
+        "aimStyle": {
+          "finger": 92,
+          "wrist": 94,
+          "hybrid": 96,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 94,
+          "arena-fps": 95,
+          "battle-royale": 94,
+          "moba-rts": 74,
+          "mmo": 45,
+          "action": 82,
+          "mixed": 91
+        },
+        "coatingDry": 90,
+        "coatingSweaty": 94,
+        "clickLightness": 68,
+        "clickCrispness": 86,
+        "wheelTactility": 92,
+        "liftSecurity": 98,
+        "palmSupport": 64,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "zowie-u2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "zowie-u2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-zowie-ec2-dw",
+      "slug": "zowie-ec2-dw",
+      "type": "mouse",
+      "brand": "ZOWIE",
+      "model": "EC2-DW",
+      "status": "current",
+      "msrpUsd": 149.99,
+      "summary": "Medium ergonomic esports mouse with a classic palm/claw shape, driverless controls, enhanced charging receiver, and 4 kHz polling.",
+      "tags": [
+        "fps",
+        "esports",
+        "ergo",
+        "driverless",
+        "4k",
+        "palm",
+        "claw"
+      ],
+      "sources": [
+        {
+          "id": "zowie-ec2",
+          "label": "ZOWIE EC2-DW official specifications",
+          "url": "https://zowie.benq.com/en-us/mouse/ec2-dw.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 123,
+        "widthMm": 65,
+        "heightMm": 42,
+        "gripWidthMm": 58,
+        "weightG": 60,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PixArt-class esports sensor",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz"
+        ],
+        "switchType": "mechanical",
+        "encoder": "24-step Optical Wheel",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": true,
+        "battery1kHours": 80,
+        "battery4kHours": 24,
+        "stockSkateMaterial": "PTFE Type F"
+      },
+      "geometry": {
+        "humpPositionPct": 49,
+        "humpFullness": 94,
+        "rearFlare": 78,
+        "frontFlare": 60,
+        "sideTaper": 54,
+        "buttonHeight": 62,
+        "pinkyClearance": 86,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21
+        ],
+        "handWidthCm": [
+          8.5,
+          11.5
+        ],
+        "grip": {
+          "palm": 98,
+          "relaxed-claw": 96,
+          "aggressive-claw": 80,
+          "pincer-claw": 66,
+          "knuckle-claw": 93,
+          "fingertip": 48,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 98
+        },
+        "aimStyle": {
+          "finger": 60,
+          "wrist": 84,
+          "hybrid": 96,
+          "arm": 97
+        },
+        "gameStyle": {
+          "tactical-fps": 99,
+          "tracking-fps": 91,
+          "arena-fps": 84,
+          "battle-royale": 95,
+          "moba-rts": 70,
+          "mmo": 45,
+          "action": 88,
+          "mixed": 92
+        },
+        "coatingDry": 90,
+        "coatingSweaty": 94,
+        "clickLightness": 66,
+        "clickCrispness": 85,
+        "wheelTactility": 94,
+        "liftSecurity": 98,
+        "palmSupport": 95,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "zowie-ec2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "zowie-ec2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-xm2w-4k-v2",
+      "slug": "endgame-gear-xm2w-4k-v2",
+      "type": "mouse",
+      "brand": "Endgame Gear",
+      "model": "XM2w 4k v2",
+      "status": "current",
+      "msrpUsd": 119.99,
+      "summary": "Wide rear-hump claw-focused wireless shape with Kailh GX mains, dry-grip coating, and 4 kHz Nordic wireless.",
+      "tags": [
+        "fps",
+        "claw",
+        "rear-hump",
+        "4k",
+        "dry-grip"
+      ],
+      "sources": [
+        {
+          "id": "egg-xm2w",
+          "label": "Endgame Gear XM2w 4k v2 specifications",
+          "url": "https://www.endgamegear.com/en-at/gaming-mice/xm2w-4k-v2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122,
+        "widthMm": 66,
+        "heightMm": 38,
+        "gripWidthMm": 56.5,
+        "weightG": 61.5,
+        "shape": "symmetrical",
+        "hump": "rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "PixArt PAW3950-class",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "mainSwitch": "Kailh GX",
+        "encoder": "Kailh Dustproof",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "webDriver": false,
+        "battery4kHours": 30,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 78,
+        "humpFullness": 82,
+        "rearFlare": 84,
+        "frontFlare": 30,
+        "sideTaper": 80,
+        "buttonHeight": 36,
+        "pinkyClearance": 70,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21
+        ],
+        "handWidthCm": [
+          8.5,
+          11.5
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 98,
+          "aggressive-claw": 99,
+          "pincer-claw": 82,
+          "knuckle-claw": 86,
+          "fingertip": 68,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 88
+        },
+        "aimStyle": {
+          "finger": 78,
+          "wrist": 92,
+          "hybrid": 98,
+          "arm": 90
+        },
+        "gameStyle": {
+          "tactical-fps": 99,
+          "tracking-fps": 92,
+          "arena-fps": 90,
+          "battle-royale": 95,
+          "moba-rts": 86,
+          "mmo": 45,
+          "action": 82,
+          "mixed": 93
+        },
+        "coatingDry": 96,
+        "coatingSweaty": 94,
+        "clickLightness": 84,
+        "clickCrispness": 92,
+        "wheelTactility": 78,
+        "liftSecurity": 94,
+        "palmSupport": 82,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "egg-xm2w"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "egg-xm2w",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-vaxee-xe-v2",
+      "slug": "vaxee-xe-v2-wireless-4k",
+      "type": "mouse",
+      "brand": "VAXEE",
+      "model": "XE v2 Wireless (4K)",
+      "status": "current",
+      "msrpUsd": 139.99,
+      "summary": "Roughly 60 g symmetrical competitive mouse with PAW3950, driverless/on-mouse tuning, and a broad neutral shell.",
+      "tags": [
+        "fps",
+        "esports",
+        "4k",
+        "driverless",
+        "neutral-shape"
+      ],
+      "sources": [
+        {
+          "id": "vaxee-xe-list",
+          "label": "VAXEE current wireless mouse lineup",
+          "url": "https://www.vaxee.co/EN/product.php?act=list&cid=1",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "rtings-xe-v2",
+          "label": "RTINGS VAXEE XE v2 Wireless review",
+          "url": "https://www.rtings.com/mouse/reviews/vaxee/xe-v2-wireless-4k-mouse",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122,
+        "widthMm": 66,
+        "heightMm": 38,
+        "gripWidthMm": 58.5,
+        "weightG": 59.7,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": true,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 53,
+        "humpFullness": 70,
+        "rearFlare": 62,
+        "frontFlare": 55,
+        "sideTaper": 48,
+        "buttonHeight": 38,
+        "pinkyClearance": 72,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21.5
+        ],
+        "handWidthCm": [
+          8.5,
+          11.8
+        ],
+        "grip": {
+          "palm": 78,
+          "relaxed-claw": 94,
+          "aggressive-claw": 84,
+          "pincer-claw": 88,
+          "knuckle-claw": 82,
+          "fingertip": 84,
+          "extended-fingertip": 62,
+          "palm-claw-hybrid": 90
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 90,
+          "hybrid": 96,
+          "arm": 94
+        },
+        "gameStyle": {
+          "tactical-fps": 97,
+          "tracking-fps": 96,
+          "arena-fps": 94,
+          "battle-royale": 96,
+          "moba-rts": 80,
+          "mmo": 45,
+          "action": 88,
+          "mixed": 94
+        },
+        "coatingDry": 92,
+        "coatingSweaty": 96,
+        "clickLightness": 76,
+        "clickCrispness": 88,
+        "wheelTactility": 82,
+        "liftSecurity": 97,
+        "palmSupport": 72,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "vaxee-xe-list",
+            "rtings-xe-v2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "vaxee-xe-list",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-lamzu-maya-x",
+      "slug": "lamzu-maya-x",
+      "type": "mouse",
+      "brand": "LAMZU",
+      "model": "MAYA X 8K",
+      "status": "current",
+      "msrpUsd": 119.99,
+      "summary": "47 g medium-large symmetrical mouse with a narrow 55.6 mm mid grip, low front, PAW3950/Nordic platform, and 8 kHz support.",
+      "tags": [
+        "fps",
+        "ultralight",
+        "8k",
+        "claw",
+        "pincer-claw",
+        "fingertip"
+      ],
+      "sources": [
+        {
+          "id": "lamzu-maya-x",
+          "label": "LAMZU Maya X launch/spec video",
+          "url": "https://www.youtube.com/watch?v=pQf26SnyVDQ",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "fnatic-maya",
+          "label": "FNATIC x LAMZU MAYA X 8K tech specifications",
+          "url": "https://help.fnatic.com/support/solutions/folders/77000328715",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 124.4,
+        "widthMm": 64.9,
+        "heightMm": 39.6,
+        "gripWidthMm": 55.6,
+        "frontHeightMm": 12.6,
+        "weightG": 47,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950",
+        "maxDpi": 30000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Omron Optical",
+        "mcu": "Nordic nRF52840",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "webDriver": true,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 51,
+        "humpFullness": 62,
+        "rearFlare": 60,
+        "frontFlare": 38,
+        "sideTaper": 58,
+        "buttonHeight": 31,
+        "pinkyClearance": 70,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16.8,
+          20.8
+        ],
+        "handWidthCm": [
+          8.2,
+          11.2
+        ],
+        "grip": {
+          "palm": 72,
+          "relaxed-claw": 97,
+          "aggressive-claw": 89,
+          "pincer-claw": 94,
+          "knuckle-claw": 82,
+          "fingertip": 94,
+          "extended-fingertip": 95,
+          "palm-claw-hybrid": 87
+        },
+        "aimStyle": {
+          "finger": 97,
+          "wrist": 97,
+          "hybrid": 97,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 96,
+          "tracking-fps": 99,
+          "arena-fps": 99,
+          "battle-royale": 97,
+          "moba-rts": 80,
+          "mmo": 45,
+          "action": 86,
+          "mixed": 95
+        },
+        "coatingDry": 84,
+        "coatingSweaty": 88,
+        "clickLightness": 86,
+        "clickCrispness": 88,
+        "wheelTactility": 66,
+        "liftSecurity": 90,
+        "palmSupport": 62,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "lamzu-maya-x",
+            "fnatic-maya"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "lamzu-maya-x",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-ulx-competition-medium",
+      "slug": "finalmouse-ultralightx-competition-medium",
+      "type": "mouse",
+      "brand": "Finalmouse",
+      "model": "UltralightX Competition (Medium)",
+      "status": "current",
+      "msrpUsd": 189.99,
+      "summary": "37 g carbon-composite medium symmetrical mouse built around extreme mass reduction and 8 kHz wireless.",
+      "tags": [
+        "fps",
+        "ultralight",
+        "carbon",
+        "8k",
+        "fingertip",
+        "claw"
+      ],
+      "sources": [
+        {
+          "id": "fm-ulx",
+          "label": "Finalmouse ULX Competition overview",
+          "url": "https://finalmouse.com/products/ulx-competition-overview",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "rtings-ulx",
+          "label": "RTINGS UltralightX Competition review",
+          "url": "https://www.rtings.com/mouse/reviews/finalmouse/ultralightx-competition",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 121.3,
+        "widthMm": 61.5,
+        "heightMm": 37,
+        "gripWidthMm": 56.8,
+        "weightG": 37,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Finalsensor / PixArt-based",
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "mainSwitch": "Huano Blueshell custom",
+        "encoder": "TTC Gold Dustproof",
+        "shellMaterial": "carbon-fiber composite",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 53,
+        "humpFullness": 52,
+        "rearFlare": 58,
+        "frontFlare": 55,
+        "sideTaper": 52,
+        "buttonHeight": 34,
+        "pinkyClearance": 65,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          20
+        ],
+        "handWidthCm": [
+          8,
+          10.8
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 94,
+          "aggressive-claw": 88,
+          "pincer-claw": 84,
+          "knuckle-claw": 72,
+          "fingertip": 99,
+          "extended-fingertip": 99,
+          "palm-claw-hybrid": 78
+        },
+        "aimStyle": {
+          "finger": 100,
+          "wrist": 99,
+          "hybrid": 96,
+          "arm": 82
+        },
+        "gameStyle": {
+          "tactical-fps": 94,
+          "tracking-fps": 100,
+          "arena-fps": 100,
+          "battle-royale": 97,
+          "moba-rts": 76,
+          "mmo": 45,
+          "action": 80,
+          "mixed": 93
+        },
+        "coatingDry": 72,
+        "coatingSweaty": 76,
+        "clickLightness": 82,
+        "clickCrispness": 82,
+        "wheelTactility": 62,
+        "liftSecurity": 84,
+        "palmSupport": 50,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "fm-ulx",
+            "rtings-ulx"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "fm-ulx",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit vector; geometry/feel should be superseded by aggregated measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-x2h-crazylight-medium",
+      "slug": "pulsar-x2h-crazylight-medium",
+      "brand": "Pulsar",
+      "model": "X2H CrazyLight Medium",
+      "msrpUsd": 99.95,
+      "summary": "43 g high-hump, narrow-waist symmetrical mouse explicitly optimized for claw and relaxed claw, with XS-1 sensor and 8 kHz wireless.",
+      "tags": [
+        "fps",
+        "claw",
+        "rear-hump",
+        "ultralight",
+        "8k"
+      ],
+      "sources": [
+        {
+          "id": "pulsar-x2h-cl-med",
+          "label": "Pulsar X2H CrazyLight Medium official page",
+          "url": "https://www.pulsar.gg/products/x2h-crazylight-medium-gaming-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 120.4,
+        "widthMm": 65,
+        "heightMm": 39,
+        "gripWidthMm": 55.5,
+        "weightG": 43,
+        "shape": "symmetrical",
+        "hump": "rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "Pulsar XS-1",
+        "maxDpi": 32000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Pulsar Optical 100M",
+        "encoder": "TTC Golden Encoder",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "webDriver": true,
+        "stockSkateMaterial": "UHMW-PE dots / regular skates"
+      },
+      "geometry": {
+        "humpPositionPct": 73,
+        "humpFullness": 84,
+        "rearFlare": 72,
+        "frontFlare": 38,
+        "sideTaper": 82,
+        "buttonHeight": 38,
+        "pinkyClearance": 67,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          20.8
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 98,
+          "aggressive-claw": 97,
+          "pincer-claw": 93,
+          "knuckle-claw": 92,
+          "fingertip": 78,
+          "extended-fingertip": 58,
+          "palm-claw-hybrid": 88
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 96,
+          "arena-fps": 96,
+          "battle-royale": 97,
+          "moba-rts": 75,
+          "mmo": 42,
+          "action": 82,
+          "mixed": 91
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 80,
+        "clickCrispness": 80,
+        "wheelTactility": 76,
+        "liftSecurity": 88,
+        "palmSupport": 82,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "pulsar-x2h-cl-med"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "pulsar-x2h-cl-med",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-op1-8k-v2",
+      "slug": "endgame-gear-op1-8k-v2",
+      "brand": "Endgame Gear",
+      "model": "OP1 8k v2",
+      "msrpUsd": 79.99,
+      "summary": "49.5 g wired narrow competitive mouse with PAW3950, true 8 kHz, Kailh GX switches and hot-swap-friendly construction.",
+      "tags": [
+        "fps",
+        "wired",
+        "8k",
+        "narrow",
+        "claw",
+        "fingertip"
+      ],
+      "sources": [
+        {
+          "id": "egg-op1-8k-v2",
+          "label": "Endgame Gear OP1 8k v2 specifications",
+          "url": "https://endgamegear.com/products/op1-8k-v2-gaming-mouse-raw-input-edition",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 118.2,
+        "widthMm": 60.5,
+        "heightMm": 37.2,
+        "gripWidthMm": 54,
+        "weightG": 49.5,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950",
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "mainSwitch": "Kailh GX",
+        "encoder": "Kailh Dustproof",
+        "mcu": "NUVOTON M483",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "driverless": false,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 66,
+        "humpFullness": 62,
+        "rearFlare": 62,
+        "frontFlare": 30,
+        "sideTaper": 72,
+        "buttonHeight": 34,
+        "pinkyClearance": 62,
+        "sensorOffsetMm": 1
+      },
+      "fit": {
+        "handLengthCm": [
+          15.5,
+          20
+        ],
+        "handWidthCm": [
+          7.5,
+          10.3
+        ],
+        "grip": {
+          "palm": 48,
+          "relaxed-claw": 96,
+          "aggressive-claw": 97,
+          "pincer-claw": 94,
+          "knuckle-claw": 93,
+          "fingertip": 97,
+          "extended-fingertip": 82,
+          "palm-claw-hybrid": 70
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 99,
+          "tracking-fps": 98,
+          "arena-fps": 99,
+          "battle-royale": 97,
+          "moba-rts": 88,
+          "mmo": 40,
+          "action": 80,
+          "mixed": 90
+        },
+        "coatingDry": 92,
+        "coatingSweaty": 94,
+        "clickLightness": 84,
+        "clickCrispness": 95,
+        "wheelTactility": 84,
+        "liftSecurity": 88,
+        "palmSupport": 52,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "egg-op1-8k-v2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "egg-op1-8k-v2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-zowie-fk2-dw",
+      "slug": "zowie-fk2-dw",
+      "brand": "ZOWIE",
+      "model": "FK2-DW",
+      "msrpUsd": 149.99,
+      "summary": "Low-profile 65 g driverless esports shape designed to leave palm clearance for agile micro-adjustments, with 4 kHz enhanced receiver.",
+      "tags": [
+        "fps",
+        "low-profile",
+        "driverless",
+        "4k",
+        "fingertip"
+      ],
+      "sources": [
+        {
+          "id": "zowie-fk2",
+          "label": "ZOWIE FK2-DW official page",
+          "url": "https://zowie.benq.com/en-us/mouse/fk2-dw.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "fk2-dim",
+          "label": "FK2-DW dimensional cross-check",
+          "url": "https://www.eloshapes.com/mouse/compare?p=zowie-fk2-dw",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 125.1,
+        "widthMm": 64.9,
+        "heightMm": 36.4,
+        "gripWidthMm": 58.8,
+        "weightG": 65,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950-class",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "encoder": "24-step optical wheel",
+        "shellMaterial": "plastic",
+        "programmableButtons": 7,
+        "sideButtons": 2,
+        "driverless": true,
+        "battery1kHours": 80,
+        "battery4kHours": 24,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 52,
+        "humpFullness": 42,
+        "rearFlare": 50,
+        "frontFlare": 40,
+        "sideTaper": 52,
+        "buttonHeight": 34,
+        "pinkyClearance": 78,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21.5
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 42,
+          "relaxed-claw": 84,
+          "aggressive-claw": 76,
+          "pincer-claw": 88,
+          "knuckle-claw": 72,
+          "fingertip": 98,
+          "extended-fingertip": 94,
+          "palm-claw-hybrid": 60
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 96,
+          "tracking-fps": 96,
+          "arena-fps": 97,
+          "battle-royale": 95,
+          "moba-rts": 72,
+          "mmo": 40,
+          "action": 78,
+          "mixed": 88
+        },
+        "coatingDry": 90,
+        "coatingSweaty": 94,
+        "clickLightness": 72,
+        "clickCrispness": 80,
+        "wheelTactility": 92,
+        "liftSecurity": 88,
+        "palmSupport": 38,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "zowie-fk2",
+            "fk2-dim"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "zowie-fk2",
+            "fk2-dim",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-zowie-s2-dw",
+      "slug": "zowie-s2-dw",
+      "brand": "ZOWIE",
+      "model": "S2-DW",
+      "msrpUsd": 149.99,
+      "summary": "Short 65 g symmetrical esports mouse focused on stable tracking and easy lifting, with driverless 4 kHz controls.",
+      "tags": [
+        "fps",
+        "short",
+        "driverless",
+        "4k",
+        "claw"
+      ],
+      "sources": [
+        {
+          "id": "zowie-s2",
+          "label": "ZOWIE S2-DW official page",
+          "url": "https://zowie.benq.com/en-us/mouse/s2-dw.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "s2-dim",
+          "label": "S2-DW dimensional cross-check",
+          "url": "https://esportsmice.com/shapes",
+          "kind": "independent",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122,
+        "widthMm": 64,
+        "heightMm": 38,
+        "gripWidthMm": 56,
+        "weightG": 65,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950-class",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "encoder": "24-step optical wheel",
+        "shellMaterial": "plastic",
+        "programmableButtons": 7,
+        "sideButtons": 2,
+        "driverless": true,
+        "battery1kHours": 80,
+        "battery4kHours": 24,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 66,
+        "humpFullness": 72,
+        "rearFlare": 74,
+        "frontFlare": 34,
+        "sideTaper": 70,
+        "buttonHeight": 37,
+        "pinkyClearance": 72,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          20.5
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 68,
+          "relaxed-claw": 96,
+          "aggressive-claw": 91,
+          "pincer-claw": 92,
+          "knuckle-claw": 85,
+          "fingertip": 82,
+          "extended-fingertip": 63,
+          "palm-claw-hybrid": 88
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 97,
+          "arena-fps": 96,
+          "battle-royale": 97,
+          "moba-rts": 74,
+          "mmo": 42,
+          "action": 80,
+          "mixed": 91
+        },
+        "coatingDry": 90,
+        "coatingSweaty": 94,
+        "clickLightness": 72,
+        "clickCrispness": 80,
+        "wheelTactility": 92,
+        "liftSecurity": 88,
+        "palmSupport": 72,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "zowie-s2",
+            "s2-dim"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "zowie-s2",
+            "s2-dim",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-zowie-za13-dw",
+      "slug": "zowie-za13-dw",
+      "brand": "ZOWIE",
+      "model": "ZA13-DW",
+      "msrpUsd": 149.99,
+      "summary": "Small 65 g high-profile driverless esports shape with an aggressive rear hump for strong claw anchoring.",
+      "tags": [
+        "fps",
+        "high-hump",
+        "rear-hump",
+        "driverless",
+        "claw"
+      ],
+      "sources": [
+        {
+          "id": "zowie-za13",
+          "label": "ZOWIE ZA13-DW official page",
+          "url": "https://zowie.benq.com/en-us/mouse/za13-dw.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "za13-dim",
+          "label": "ZA13-DW dimensional review cross-check",
+          "url": "https://www.reddit.com/r/MouseReview/comments/1ir4j1n/zowie_za13dw_4k_review/",
+          "kind": "community",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 121.7,
+        "widthMm": 62.8,
+        "heightMm": 40.2,
+        "gripWidthMm": 53,
+        "weightG": 65,
+        "shape": "symmetrical",
+        "hump": "rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "PixArt PAW3950-class",
+        "maxPollingHz": 4000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "encoder": "24-step optical wheel",
+        "shellMaterial": "plastic",
+        "programmableButtons": 7,
+        "sideButtons": 2,
+        "driverless": true,
+        "battery1kHours": 80,
+        "battery4kHours": 24,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 80,
+        "humpFullness": 91,
+        "rearFlare": 82,
+        "frontFlare": 28,
+        "sideTaper": 90,
+        "buttonHeight": 37,
+        "pinkyClearance": 60,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          15.5,
+          19.5
+        ],
+        "handWidthCm": [
+          7.5,
+          10
+        ],
+        "grip": {
+          "palm": 66,
+          "relaxed-claw": 97,
+          "aggressive-claw": 99,
+          "pincer-claw": 92,
+          "knuckle-claw": 98,
+          "fingertip": 66,
+          "extended-fingertip": 45,
+          "palm-claw-hybrid": 88
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 94,
+          "arena-fps": 94,
+          "battle-royale": 96,
+          "moba-rts": 72,
+          "mmo": 40,
+          "action": 78,
+          "mixed": 89
+        },
+        "coatingDry": 90,
+        "coatingSweaty": 94,
+        "clickLightness": 72,
+        "clickCrispness": 80,
+        "wheelTactility": 92,
+        "liftSecurity": 88,
+        "palmSupport": 90,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "zowie-za13",
+            "za13-dim"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "zowie-za13",
+            "za13-dim",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-rog-harpe-ii-ace",
+      "slug": "rog-harpe-ii-ace",
+      "brand": "ASUS ROG",
+      "model": "Harpe II Ace",
+      "msrpUsd": 169.99,
+      "summary": "48 g symmetrical tri-mode mouse with 42K AimPoint Pro sensor, 8 kHz wired/wireless and browser-based Gear Link configuration.",
+      "tags": [
+        "fps",
+        "8k",
+        "ultralight",
+        "web-driver",
+        "tri-mode"
+      ],
+      "sources": [
+        {
+          "id": "rog-harpe2",
+          "label": "ROG Harpe II Ace official specifications",
+          "url": "https://rog.asus.com/us/mice-mouse-pads/mice/wireless/rog-harpe-ii-ace/spec/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 126.1,
+        "widthMm": 63.9,
+        "heightMm": 39.7,
+        "gripWidthMm": 57,
+        "weightG": 48,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "ROG AimPoint Pro",
+        "maxDpi": 42000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "ROG 100M Optical",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "webDriver": true,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 56,
+        "humpFullness": 61,
+        "rearFlare": 58,
+        "frontFlare": 38,
+        "sideTaper": 61,
+        "buttonHeight": 38,
+        "pinkyClearance": 73,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          21.5
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 66,
+          "relaxed-claw": 92,
+          "aggressive-claw": 86,
+          "pincer-claw": 91,
+          "knuckle-claw": 82,
+          "fingertip": 94,
+          "extended-fingertip": 84,
+          "palm-claw-hybrid": 80
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 98,
+          "tracking-fps": 98,
+          "arena-fps": 98,
+          "battle-royale": 97,
+          "moba-rts": 82,
+          "mmo": 42,
+          "action": 84,
+          "mixed": 92
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 78,
+        "clickCrispness": 88,
+        "wheelTactility": 72,
+        "liftSecurity": 88,
+        "palmSupport": 58,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "rog-harpe2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "rog-harpe2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-rog-keris-ii-ace",
+      "slug": "rog-keris-ii-ace",
+      "brand": "ASUS ROG",
+      "model": "Keris II Ace",
+      "msrpUsd": 159.99,
+      "summary": "54 g ergonomic tri-mode mouse with 42K AimPoint Pro sensor, 4 kHz wireless / 8 kHz wired booster support and optical switches.",
+      "tags": [
+        "fps",
+        "ergo",
+        "4k",
+        "tri-mode"
+      ],
+      "sources": [
+        {
+          "id": "rog-keris2",
+          "label": "ROG Keris II Ace official specifications",
+          "url": "https://rog.asus.com/us/mice-mouse-pads/mice/ergonomic-right-handed/rog-keris-ii-ace/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 121,
+        "widthMm": 67,
+        "heightMm": 42,
+        "gripWidthMm": 58.5,
+        "weightG": 54,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "aggressive",
+        "sensor": "ROG AimPoint Pro",
+        "maxDpi": 42000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "ROG 100M Optical",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "battery1kHours": 107,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 55,
+        "humpFullness": 78,
+        "rearFlare": 68,
+        "frontFlare": 55,
+        "sideTaper": 73,
+        "buttonHeight": 42,
+        "pinkyClearance": 82,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          21
+        ],
+        "handWidthCm": [
+          8.2,
+          11.5
+        ],
+        "grip": {
+          "palm": 94,
+          "relaxed-claw": 92,
+          "aggressive-claw": 82,
+          "pincer-claw": 78,
+          "knuckle-claw": 76,
+          "fingertip": 73,
+          "extended-fingertip": 60,
+          "palm-claw-hybrid": 96
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 97,
+          "tracking-fps": 96,
+          "arena-fps": 93,
+          "battle-royale": 96,
+          "moba-rts": 82,
+          "mmo": 47,
+          "action": 91,
+          "mixed": 93
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 72,
+        "clickCrispness": 80,
+        "wheelTactility": 72,
+        "liftSecurity": 94,
+        "palmSupport": 89,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "rog-keris2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "rog-keris2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-corsair-sabre-v2-pro-mg",
+      "slug": "corsair-sabre-v2-pro-mg",
+      "brand": "Corsair",
+      "model": "SABRE v2 PRO Wireless Magnesium",
+      "msrpUsd": 149.99,
+      "summary": "56 g magnesium tri-mode FPS mouse with 33K Marksman S sensor, 8 kHz wireless, 120 h at 1 kHz and browser configuration.",
+      "tags": [
+        "fps",
+        "8k",
+        "magnesium",
+        "web-driver"
+      ],
+      "sources": [
+        {
+          "id": "corsair-sabre-v2-mg",
+          "label": "Corsair SABRE v2 PRO Wireless Magnesium official page",
+          "url": "https://www.corsair.com/us/en/p/gaming-mouse/ch-931g100-ww/sabre-v2-pro-wireless-magnesium-alloy-gaming-mouse-black-ch-931g100-ww",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122.85,
+        "widthMm": 64.12,
+        "heightMm": 38.83,
+        "gripWidthMm": 57,
+        "weightG": 56,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "CORSAIR MARKSMAN S",
+        "maxDpi": 33000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "shellMaterial": "magnesium alloy",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "webDriver": true,
+        "battery1kHours": 120,
+        "battery8kHours": 21,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 55,
+        "humpFullness": 58,
+        "rearFlare": 58,
+        "frontFlare": 48,
+        "sideTaper": 58,
+        "buttonHeight": 38,
+        "pinkyClearance": 76,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          21
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 64,
+          "relaxed-claw": 91,
+          "aggressive-claw": 87,
+          "pincer-claw": 90,
+          "knuckle-claw": 83,
+          "fingertip": 94,
+          "extended-fingertip": 82,
+          "palm-claw-hybrid": 79
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 97,
+          "tracking-fps": 97,
+          "arena-fps": 96,
+          "battle-royale": 97,
+          "moba-rts": 78,
+          "mmo": 42,
+          "action": 84,
+          "mixed": 91
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 72,
+        "clickCrispness": 80,
+        "wheelTactility": 72,
+        "liftSecurity": 88,
+        "palmSupport": 57,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "corsair-sabre-v2-mg"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "corsair-sabre-v2-mg",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-burst-ii-air",
+      "slug": "turtle-beach-burst-ii-air",
+      "brand": "Turtle Beach",
+      "model": "Burst II Air",
+      "msrpUsd": 99.99,
+      "summary": "47 g wireless symmetrical gaming mouse with Owl-Eye 26K sensor, optical switches, 1 kHz polling and Bluetooth.",
+      "tags": [
+        "fps",
+        "lightweight",
+        "1k",
+        "wireless"
+      ],
+      "sources": [
+        {
+          "id": "tb-burst2",
+          "label": "Turtle Beach Burst II Air official page",
+          "url": "https://www.turtlebeach.com/products/burst-ii-air-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122.2,
+        "widthMm": 67.3,
+        "heightMm": 39.2,
+        "gripWidthMm": 58,
+        "weightG": 47,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Owl-Eye 26K",
+        "maxDpi": 26000,
+        "maxPollingHz": 1000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "TITAN Optical 100M",
+        "shellMaterial": "plastic",
+        "programmableButtons": 6,
+        "sideButtons": 2,
+        "onboardProfiles": 1,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 64,
+        "humpFullness": 68,
+        "rearFlare": 67,
+        "frontFlare": 45,
+        "sideTaper": 60,
+        "buttonHeight": 38,
+        "pinkyClearance": 75,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          21.5
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 68,
+          "relaxed-claw": 94,
+          "aggressive-claw": 89,
+          "pincer-claw": 90,
+          "knuckle-claw": 87,
+          "fingertip": 90,
+          "extended-fingertip": 76,
+          "palm-claw-hybrid": 84
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 94,
+          "tracking-fps": 95,
+          "arena-fps": 94,
+          "battle-royale": 95,
+          "moba-rts": 80,
+          "mmo": 44,
+          "action": 86,
+          "mixed": 91
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 72,
+        "clickCrispness": 80,
+        "wheelTactility": 72,
+        "liftSecurity": 88,
+        "palmSupport": 68,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "tb-burst2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "tb-burst2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-basilisk-v3-pro-35k",
+      "slug": "razer-basilisk-v3-pro-35k",
+      "brand": "Razer",
+      "model": "Basilisk V3 Pro 35K",
+      "msrpUsd": 159.99,
+      "summary": "112 g feature-rich ergonomic mouse with 11 programmable inputs, smart free-spin/ratchet tilt wheel, tri-mode wireless and 8 kHz support.",
+      "tags": [
+        "general-gaming",
+        "moba",
+        "productivity",
+        "free-spin",
+        "multi-button"
+      ],
+      "sources": [
+        {
+          "id": "razer-basilisk35",
+          "label": "Razer Basilisk V3 Pro 35K technical specifications",
+          "url": "https://mysupport.razer.com/app/answers/detail/a_id/14675/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 130,
+        "widthMm": 75.4,
+        "heightMm": 42.5,
+        "gripWidthMm": 62,
+        "weightG": 112,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "high",
+        "sideCurvature": "aggressive",
+        "sensor": "Razer Focus Pro 35K Gen-2",
+        "maxDpi": 35000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Razer Optical Gen-3",
+        "shellMaterial": "plastic",
+        "programmableButtons": 11,
+        "sideButtons": 3,
+        "tiltWheel": true,
+        "freeSpinWheel": true,
+        "onboardProfiles": 5,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 53,
+        "humpFullness": 88,
+        "rearFlare": 76,
+        "frontFlare": 78,
+        "sideTaper": 75,
+        "buttonHeight": 44,
+        "pinkyClearance": 92,
+        "sensorOffsetMm": 1
+      },
+      "fit": {
+        "handLengthCm": [
+          18,
+          23
+        ],
+        "handWidthCm": [
+          9,
+          13
+        ],
+        "grip": {
+          "palm": 97,
+          "relaxed-claw": 85,
+          "aggressive-claw": 67,
+          "pincer-claw": 62,
+          "knuckle-claw": 61,
+          "fingertip": 42,
+          "extended-fingertip": 30,
+          "palm-claw-hybrid": 92
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 64,
+          "tracking-fps": 67,
+          "arena-fps": 58,
+          "battle-royale": 74,
+          "moba-rts": 97,
+          "mmo": 83,
+          "action": 98,
+          "mixed": 96
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 66,
+        "clickCrispness": 80,
+        "wheelTactility": 76,
+        "liftSecurity": 88,
+        "palmSupport": 98,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "razer-basilisk35"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "razer-basilisk35",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-gpx2-dex",
+      "slug": "logitech-g-pro-x-superlight-2-dex",
+      "brand": "Logitech G",
+      "model": "PRO X SUPERLIGHT 2 DEX",
+      "msrpUsd": 159.99,
+      "summary": "60 g right-handed asymmetrical esports shape with HERO 2 sensor, LIGHTFORCE switches and up to 8 kHz LIGHTSPEED wireless.",
+      "tags": [
+        "fps",
+        "ergo-ish",
+        "8k",
+        "esports"
+      ],
+      "sources": [
+        {
+          "id": "logi-dex",
+          "label": "Logitech G PRO X SUPERLIGHT 2 DEX official specifications",
+          "url": "https://www.logitechg.com/en-gb/products/gaming-mice/pro-x-superlight-2-dex.910-007358.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 125.8,
+        "widthMm": 67.7,
+        "heightMm": 43.9,
+        "gripWidthMm": 59.5,
+        "weightG": 60,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "HERO 2",
+        "maxDpi": 44000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "hybrid",
+        "mainSwitch": "LIGHTFORCE",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "battery1kHours": 95,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 56,
+        "humpFullness": 82,
+        "rearFlare": 70,
+        "frontFlare": 57,
+        "sideTaper": 60,
+        "buttonHeight": 43,
+        "pinkyClearance": 83,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17.5,
+          22
+        ],
+        "handWidthCm": [
+          8.8,
+          12
+        ],
+        "grip": {
+          "palm": 91,
+          "relaxed-claw": 94,
+          "aggressive-claw": 83,
+          "pincer-claw": 78,
+          "knuckle-claw": 78,
+          "fingertip": 70,
+          "extended-fingertip": 55,
+          "palm-claw-hybrid": 96
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 97,
+          "tracking-fps": 96,
+          "arena-fps": 94,
+          "battle-royale": 97,
+          "moba-rts": 78,
+          "mmo": 43,
+          "action": 89,
+          "mixed": 93
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 67,
+        "clickCrispness": 80,
+        "wheelTactility": 72,
+        "liftSecurity": 88,
+        "palmSupport": 88,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "logi-dex"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "logi-dex",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-logitech-g309",
+      "slug": "logitech-g309-lightspeed",
+      "brand": "Logitech G",
+      "model": "G309 LIGHTSPEED",
+      "msrpUsd": 79.99,
+      "summary": "Battery-powered 1 kHz LIGHTSPEED/Bluetooth gaming mouse with HERO 25K, optional POWERPLAY operation and a compact neutral shape.",
+      "tags": [
+        "wireless",
+        "budget",
+        "general-gaming",
+        "replaceable-battery"
+      ],
+      "sources": [
+        {
+          "id": "logi-g309",
+          "label": "Logitech G309 official specifications",
+          "url": "https://support.logi.com/hc/en-ca/articles/23447365767575-Specification-G309-LIGHTSPEED-Gaming-Mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 120,
+        "widthMm": 64,
+        "heightMm": 39,
+        "gripWidthMm": 56.5,
+        "weightG": 86,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "HERO 25K",
+        "maxDpi": 25600,
+        "maxPollingHz": 1000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth"
+        ],
+        "switchType": "hybrid",
+        "shellMaterial": "plastic",
+        "programmableButtons": 7,
+        "sideButtons": 2,
+        "tiltWheel": true,
+        "onboardProfiles": 5,
+        "battery1kHours": 300,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 56,
+        "humpFullness": 62,
+        "rearFlare": 58,
+        "frontFlare": 46,
+        "sideTaper": 56,
+        "buttonHeight": 39,
+        "pinkyClearance": 73,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16,
+          20.5
+        ],
+        "handWidthCm": [
+          8.2,
+          11
+        ],
+        "grip": {
+          "palm": 66,
+          "relaxed-claw": 89,
+          "aggressive-claw": 86,
+          "pincer-claw": 87,
+          "knuckle-claw": 83,
+          "fingertip": 88,
+          "extended-fingertip": 75,
+          "palm-claw-hybrid": 81
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 80,
+          "tracking-fps": 81,
+          "arena-fps": 78,
+          "battle-royale": 83,
+          "moba-rts": 88,
+          "mmo": 55,
+          "action": 91,
+          "mixed": 90
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 64,
+        "clickCrispness": 80,
+        "wheelTactility": 72,
+        "liftSecurity": 88,
+        "palmSupport": 62,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "logi-g309"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "logi-g309",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "type": "mouse",
+      "status": "current",
+      "id": "mouse-kone-ii-air",
+      "slug": "turtle-beach-kone-ii-air",
+      "brand": "Turtle Beach",
+      "model": "Kone II Air",
+      "msrpUsd": 119.99,
+      "summary": "110 g large ergonomic wireless mouse with 21 customizable functions, 4D tilt/free-spin wheel and long battery life.",
+      "tags": [
+        "general-gaming",
+        "moba",
+        "large-hands",
+        "free-spin",
+        "multi-button"
+      ],
+      "sources": [
+        {
+          "id": "tb-kone2",
+          "label": "Turtle Beach Kone II Air official specifications",
+          "url": "https://www.turtlebeach.com/products/kone-ii-air-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 130.2,
+        "widthMm": 82.6,
+        "heightMm": 44.1,
+        "gripWidthMm": 65,
+        "weightG": 110,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "high",
+        "sideCurvature": "aggressive",
+        "sensor": "Owl-Eye 26K",
+        "maxDpi": 26000,
+        "maxPollingHz": 1000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "TITAN Optical 100M",
+        "shellMaterial": "plastic",
+        "programmableButtons": 21,
+        "sideButtons": 4,
+        "tiltWheel": true,
+        "freeSpinWheel": true,
+        "onboardProfiles": 5,
+        "battery1kHours": 130,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 54,
+        "humpFullness": 94,
+        "rearFlare": 86,
+        "frontFlare": 85,
+        "sideTaper": 75,
+        "buttonHeight": 45,
+        "pinkyClearance": 96,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          19,
+          24
+        ],
+        "handWidthCm": [
+          9.5,
+          13.5
+        ],
+        "grip": {
+          "palm": 99,
+          "relaxed-claw": 82,
+          "aggressive-claw": 58,
+          "pincer-claw": 50,
+          "knuckle-claw": 58,
+          "fingertip": 30,
+          "extended-fingertip": 22,
+          "palm-claw-hybrid": 92
+        },
+        "aimStyle": {
+          "finger": 88,
+          "wrist": 91,
+          "hybrid": 94,
+          "arm": 88
+        },
+        "gameStyle": {
+          "tactical-fps": 57,
+          "tracking-fps": 62,
+          "arena-fps": 51,
+          "battle-royale": 68,
+          "moba-rts": 98,
+          "mmo": 94,
+          "action": 99,
+          "mixed": 96
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 84,
+        "clickLightness": 64,
+        "clickCrispness": 80,
+        "wheelTactility": 78,
+        "liftSecurity": 88,
+        "palmSupport": 99,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "tb-kone2"
+          ],
+          "confidence": "high"
+        },
+        "fit": {
+          "sourceIds": [
+            "tb-kone2",
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Provisional Input Atlas fit/geometry vector; supersede with aggregated independent measurements and owner reports."
+        }
+      }
+    },
+    {
+      "id": "mouse-hitscan-hyperlight",
+      "slug": "hitscan-hyperlight",
+      "type": "mouse",
+      "brand": "Hitscan",
+      "model": "Hyperlight",
+      "status": "current",
+      "msrpUsd": 89.99,
+      "summary": "Compact 39 g symmetrical mouse with a low click profile, mid hump, forward-biased sensor and claw-focused intent.",
+      "sources": [
+        {
+          "id": "official-hitscan-hyperlight",
+          "label": "Hitscan official product/specification page",
+          "url": "https://hitscan.com/products/hyperlight",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 118,
+        "widthMm": 61,
+        "heightMm": 38,
+        "weightG": 39,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3395",
+        "maxDpi": 26000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Omron Optical",
+        "encoder": "TTC Gold Dustproof",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 55.5,
+        "battery1kHours": 75
+      },
+      "geometry": {
+        "humpPositionPct": 54,
+        "humpFullness": 57,
+        "rearFlare": 55,
+        "frontFlare": 48,
+        "sideTaper": 58,
+        "buttonHeight": 39,
+        "pinkyClearance": 62,
+        "sensorOffsetMm": 4
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          19.5
+        ],
+        "handWidthCm": [
+          8,
+          10.5
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 94,
+          "aggressive-claw": 89,
+          "pincer-claw": 86,
+          "knuckle-claw": 60,
+          "fingertip": 88,
+          "extended-fingertip": 84,
+          "palm-claw-hybrid": 60
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 80,
+        "clickLightness": 82,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 57,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-hitscan-hyperlight"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "claw",
+        "fingertip",
+        "8k",
+        "sub-40g"
+      ]
+    },
+    {
+      "id": "mouse-wlmouse-ying",
+      "slug": "wlmouse-ying",
+      "type": "mouse",
+      "brand": "WLMOUSE",
+      "model": "YING",
+      "status": "current",
+      "msrpUsd": 139,
+      "summary": "Magnesium 47 g symmetrical shape with 3950HS sensor, 8 kHz wireless and OP1-adjacent narrow-body positioning.",
+      "sources": [
+        {
+          "id": "official-wlmouse-ying",
+          "label": "WLMOUSE official product/specification page",
+          "url": "https://www.wlmouse.com/products/yingmg",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 119,
+        "widthMm": 60,
+        "heightMm": 37,
+        "weightG": 47,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "PAW3950HS",
+        "maxDpi": 30000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Omron Optical",
+        "encoder": "TTC Dust Proof Silver",
+        "shellMaterial": "magnesium alloy",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 54.5
+      },
+      "geometry": {
+        "humpPositionPct": 63,
+        "humpFullness": 59,
+        "rearFlare": 58,
+        "frontFlare": 43,
+        "sideTaper": 70,
+        "buttonHeight": 37,
+        "pinkyClearance": 59,
+        "sensorOffsetMm": 1
+      },
+      "fit": {
+        "handLengthCm": [
+          16.5,
+          19.8
+        ],
+        "handWidthCm": [
+          8,
+          10.4
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 94,
+          "aggressive-claw": 91,
+          "pincer-claw": 90,
+          "knuckle-claw": 88,
+          "fingertip": 78,
+          "extended-fingertip": 60,
+          "palm-claw-hybrid": 60
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 78,
+        "clickLightness": 76,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 66,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-wlmouse-ying"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "claw",
+        "magnesium",
+        "8k"
+      ]
+    },
+    {
+      "id": "mouse-akitsu-small",
+      "slug": "arbiter-akitsu-small",
+      "type": "mouse",
+      "brand": "Arbiter Studio",
+      "model": "AKITSU Small",
+      "status": "current",
+      "msrpUsd": 99.99,
+      "summary": "Very light carbon-fiber 38 g symmetrical mouse with 3395 sensor and 8 kHz support.",
+      "sources": [
+        {
+          "id": "official-akitsu-small",
+          "label": "Arbiter Studio official product/specification page",
+          "url": "https://arbiterstudio.com/products/akitsu-carbon-fiber-8k-wireless-gaming-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 118,
+        "widthMm": 59.7,
+        "heightMm": 36.5,
+        "weightG": 38,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3395",
+        "maxDpi": 26000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "mainSwitch": "Custom Dragon Claw",
+        "encoder": "TTC Golden Dust Proof",
+        "shellMaterial": "carbon fiber composite",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 54.5,
+        "battery1kHours": 60,
+        "battery8kHours": 12
+      },
+      "geometry": {
+        "humpPositionPct": 56,
+        "humpFullness": 52,
+        "rearFlare": 52,
+        "frontFlare": 45,
+        "sideTaper": 60,
+        "buttonHeight": 36,
+        "pinkyClearance": 60,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          16,
+          19.2
+        ],
+        "handWidthCm": [
+          7.8,
+          10.2
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 88,
+          "aggressive-claw": 86,
+          "pincer-claw": 84,
+          "knuckle-claw": 60,
+          "fingertip": 94,
+          "extended-fingertip": 91,
+          "palm-claw-hybrid": 60
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 77,
+        "clickLightness": 77,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 52,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-akitsu-small"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "fingertip",
+        "carbon-fiber",
+        "8k",
+        "sub-40g"
+      ]
+    },
+    {
+      "id": "mouse-akitsu-medium",
+      "slug": "arbiter-akitsu-medium",
+      "type": "mouse",
+      "brand": "Arbiter Studio",
+      "model": "AKITSU Medium",
+      "status": "current",
+      "msrpUsd": 109.99,
+      "summary": "40 g carbon-fiber medium symmetrical mouse with PAW3950 and 8 kHz support.",
+      "sources": [
+        {
+          "id": "official-akitsu-medium",
+          "label": "Arbiter Studio official product/specification page",
+          "url": "https://arbiterstudio.com/collections/gaming-mouse/products/tenko-akitsu-medium-40g-carbon-fiber-8k-wireless-gaming-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 123,
+        "widthMm": 62.5,
+        "heightMm": 38.5,
+        "weightG": 40,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950",
+        "maxDpi": 30000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "mainSwitch": "Huano Blue Shell Pink Dot",
+        "encoder": "TTC Golden Dust Proof",
+        "shellMaterial": "carbon fiber composite",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 57,
+        "battery1kHours": 50,
+        "battery8kHours": 14
+      },
+      "geometry": {
+        "humpPositionPct": 55,
+        "humpFullness": 56,
+        "rearFlare": 56,
+        "frontFlare": 50,
+        "sideTaper": 54,
+        "buttonHeight": 40,
+        "pinkyClearance": 64,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17,
+          20.5
+        ],
+        "handWidthCm": [
+          8.3,
+          10.8
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 91,
+          "aggressive-claw": 84,
+          "pincer-claw": 82,
+          "knuckle-claw": 60,
+          "fingertip": 88,
+          "extended-fingertip": 60,
+          "palm-claw-hybrid": 82
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 77,
+        "clickLightness": 75,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 58,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-akitsu-medium"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "claw",
+        "fingertip",
+        "carbon-fiber",
+        "8k"
+      ]
+    },
+    {
+      "id": "mouse-pulsar-xlite-v4",
+      "slug": "pulsar-xlite-v4-medium",
+      "type": "mouse",
+      "brand": "Pulsar",
+      "model": "Xlite v4 Medium",
+      "status": "current",
+      "msrpUsd": 99.95,
+      "summary": "54 g right-handed ergonomic esports mouse built around palm and relaxed-claw support.",
+      "sources": [
+        {
+          "id": "official-pulsar-xlite-v4",
+          "label": "Pulsar official product/specification page",
+          "url": "https://www.pulsar.gg/products/xlite-v4-gaming-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122,
+        "widthMm": 66,
+        "heightMm": 43,
+        "weightG": 54,
+        "shape": "ergonomic",
+        "hump": "center-rear",
+        "frontFlare": "medium",
+        "sideCurvature": "aggressive",
+        "sensor": "Pulsar XS-1",
+        "maxDpi": 32000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Pulsar Optical",
+        "encoder": "Pulsar Blue Encoder",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 59
+      },
+      "geometry": {
+        "humpPositionPct": 62,
+        "humpFullness": 78,
+        "rearFlare": 69,
+        "frontFlare": 57,
+        "sideTaper": 65,
+        "buttonHeight": 48,
+        "pinkyClearance": 72,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          17.5,
+          21
+        ],
+        "handWidthCm": [
+          8.8,
+          11.5
+        ],
+        "grip": {
+          "palm": 94,
+          "relaxed-claw": 92,
+          "aggressive-claw": 60,
+          "pincer-claw": 68,
+          "knuckle-claw": 60,
+          "fingertip": 54,
+          "extended-fingertip": 60,
+          "palm-claw-hybrid": 95
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 82,
+        "clickLightness": 72,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 92,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-pulsar-xlite-v4"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "ergo",
+        "palm",
+        "relaxed-claw",
+        "8k"
+      ]
+    },
+    {
+      "id": "mouse-pulsar-x3",
+      "slug": "pulsar-x3-medium",
+      "type": "mouse",
+      "brand": "Pulsar",
+      "model": "X3 Medium",
+      "status": "current",
+      "msrpUsd": 99.95,
+      "summary": "55 g hybrid ergonomic right-hand mouse aimed at relaxed palm-claw users with symmetrical click heights.",
+      "sources": [
+        {
+          "id": "official-pulsar-x3",
+          "label": "Pulsar official product/specification page",
+          "url": "https://www.pulsar.gg/products/x3-rhd-gaming-mouse",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 124.7,
+        "widthMm": 69.5,
+        "heightMm": 43.1,
+        "weightG": 55,
+        "shape": "ergonomic",
+        "hump": "center-rear",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Pulsar XS-1",
+        "maxDpi": 32000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "wired"
+        ],
+        "switchType": "optical",
+        "mainSwitch": "Kailh Optical",
+        "encoder": "Pulsar Blue Encoder",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 61
+      },
+      "geometry": {
+        "humpPositionPct": 66,
+        "humpFullness": 80,
+        "rearFlare": 72,
+        "frontFlare": 54,
+        "sideTaper": 48,
+        "buttonHeight": 50,
+        "pinkyClearance": 75,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          18,
+          21.5
+        ],
+        "handWidthCm": [
+          9,
+          11.8
+        ],
+        "grip": {
+          "palm": 88,
+          "relaxed-claw": 96,
+          "aggressive-claw": 60,
+          "pincer-claw": 60,
+          "knuckle-claw": 78,
+          "fingertip": 48,
+          "extended-fingertip": 60,
+          "palm-claw-hybrid": 96
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 82,
+        "clickLightness": 74,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 94,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-pulsar-x3"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "hybrid-ergo",
+        "relaxed-claw",
+        "8k"
+      ]
+    },
+    {
+      "id": "mouse-mchose-l7-pro",
+      "slug": "mchose-l7-pro",
+      "type": "mouse",
+      "brand": "MCHOSE",
+      "model": "L7 Pro",
+      "status": "current",
+      "msrpUsd": 59.99,
+      "summary": "Compact 39 g tri-mode symmetrical mouse with a low 115.6 mm body for claw and fingertip-oriented users.",
+      "sources": [
+        {
+          "id": "official-mchose-l7",
+          "label": "MCHOSE official product/specification page",
+          "url": "https://support.mchose.store/hc/en-us/articles/50830320796820-L7-Tri-mode-Gaming-Mouse-User-Guide",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 115.62,
+        "widthMm": 60.61,
+        "heightMm": 36.04,
+        "weightG": 39,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3395",
+        "maxDpi": 26000,
+        "maxPollingHz": 8000,
+        "connectivity": [
+          "2.4GHz",
+          "Bluetooth",
+          "wired"
+        ],
+        "switchType": "mechanical",
+        "mainSwitch": "Huano / model dependent",
+        "encoder": null,
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "driverless": false,
+        "webDriver": false,
+        "stockSkateMaterial": "PTFE",
+        "gripWidthMm": 55
+      },
+      "geometry": {
+        "humpPositionPct": 55,
+        "humpFullness": 52,
+        "rearFlare": 51,
+        "frontFlare": 48,
+        "sideTaper": 58,
+        "buttonHeight": 38,
+        "pinkyClearance": 60,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [
+          15.8,
+          19
+        ],
+        "handWidthCm": [
+          7.6,
+          10
+        ],
+        "grip": {
+          "palm": 60,
+          "relaxed-claw": 91,
+          "aggressive-claw": 88,
+          "pincer-claw": 87,
+          "knuckle-claw": 60,
+          "fingertip": 95,
+          "extended-fingertip": 92,
+          "palm-claw-hybrid": 60
+        },
+        "aimStyle": {
+          "finger": 90,
+          "wrist": 88,
+          "hybrid": 92,
+          "arm": 86
+        },
+        "gameStyle": {
+          "tactical-fps": 90,
+          "tracking-fps": 90,
+          "arena-fps": 90,
+          "battle-royale": 90,
+          "moba-rts": 68,
+          "mmo": 40,
+          "action": 84,
+          "mixed": 90
+        },
+        "coatingDry": 78,
+        "coatingSweaty": 76,
+        "clickLightness": 79,
+        "clickCrispness": 78,
+        "wheelTactility": 68,
+        "liftSecurity": 78,
+        "palmSupport": 48,
+        "balance": "center"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "official-mchose-l7"
+          ],
+          "confidence": "high"
+        },
+        "geometry": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Geometry vector is an Atlas editorial approximation until measured outline/cross-section data is sourced."
+        },
+        "fit": {
+          "sourceIds": [
+            "atlas-editorial-fit"
+          ],
+          "confidence": "medium",
+          "note": "Fit vector is provisional editorial inference from dimensions, stated shape intent, and enthusiast cross-comparison."
+        }
+      },
+      "tags": [
+        "fps",
+        "compact",
+        "claw",
+        "fingertip",
+        "tri-mode",
+        "sub-40g"
+      ]
+    }
+  ],
+  "mousepads": [
+    {
+      "id": "pad-artisan-zero-xsoft",
+      "slug": "artisan-zero-xsoft",
+      "type": "mousepad",
+      "brand": "ARTISAN",
+      "model": "NINJA FX ZERO XSOFT",
+      "status": "current",
+      "msrpUsd": 55,
+      "summary": "Balanced-control cloth pad with a very soft base that lets pressure add stopping power.",
+      "sources": [
+        {
+          "id": "artisan-zero",
+          "label": "ARTISAN Zero XSOFT specifications",
+          "url": "https://www.artisan-jp.com/item_zero_xsoft_eng.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "pad-friction-community",
+          "label": "MousepadReview friction testing discussion",
+          "url": "https://www.reddit.com/r/MousepadReview/comments/gzdacu",
+          "kind": "community",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "polyester twisted-yarn knit",
+        "baseMaterial": "special single-bubble rubber foam",
+        "firmness": "xsoft",
+        "thicknessMm": 4,
+        "widthMm": 490,
+        "heightMm": 420,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 48,
+        "dynamicSpeed": 46,
+        "stoppingPower": 82,
+        "texture": 35,
+        "pressureResponse": 96,
+        "humidityResistance": 82,
+        "sleeveCompatibility": 70,
+        "xyConsistency": 93,
+        "noise": 12,
+        "skinDrag": 35,
+        "breakInChange": 16,
+        "wornZoneStability": 84,
+        "cleaningRecovery": 86
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "artisan-zero"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "artisan-zero",
+            "pad-friction-community"
+          ],
+          "confidence": "medium",
+          "note": "Normalized relative values, not laboratory coefficients."
+        }
+      },
+      "tags": []
+    },
+    {
+      "id": "pad-wallhack-sp004",
+      "slug": "wallhack-sp-004",
+      "type": "mousepad",
+      "brand": "Wallhack",
+      "model": "SP-004",
+      "status": "current",
+      "msrpUsd": 119,
+      "summary": "Micro-etched tempered glass pad focused on low static friction, consistency, and hard-surface feedback.",
+      "sources": [
+        {
+          "id": "wallhack-sp004",
+          "label": "Wallhack SP-004 product page",
+          "url": "https://wallhack.com/collections/glass-mousepads/products/sp-004-black",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "glass-ranking",
+          "label": "2026 community glass pad comparison",
+          "url": "https://www.reddit.com/r/MouseReview/comments/1rc072r/glass_mousepad_speed_and_texture_rankings/",
+          "kind": "community",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "glass",
+        "surfaceMaterial": "micro-etched silicate glass",
+        "baseMaterial": "60A silicone",
+        "firmness": "hard",
+        "thicknessMm": 3.9,
+        "widthMm": 490,
+        "heightMm": 430,
+        "stitchedEdges": false
+      },
+      "feel": {
+        "staticSpeed": 94,
+        "dynamicSpeed": 91,
+        "stoppingPower": 32,
+        "texture": 48,
+        "pressureResponse": 4,
+        "humidityResistance": 99,
+        "sleeveCompatibility": 94,
+        "xyConsistency": 99,
+        "noise": 82,
+        "skinDrag": 18,
+        "breakInChange": 3,
+        "wornZoneStability": 98,
+        "cleaningRecovery": 98
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "wallhack-sp004"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "glass-ranking"
+          ],
+          "confidence": "medium",
+          "note": "Glass feel is highly skate-dependent."
+        }
+      },
+      "tags": []
+    },
+    {
+      "id": "pad-artisan-zero-soft",
+      "slug": "artisan-zero-soft",
+      "type": "mousepad",
+      "brand": "ARTISAN",
+      "model": "NINJA FX ZERO SOFT",
+      "status": "current",
+      "msrpUsd": 55,
+      "summary": "Balanced-control cloth benchmark with less pressure sensitivity than XSOFT and broad FPS suitability.",
+      "sources": [
+        {
+          "id": "artisan-zero-soft-source",
+          "label": "ARTISAN Zero product family",
+          "url": "https://artisan-jp.com/global/catalogsearch/result/index/?cat=24&q=Artisan+Zero",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        },
+        {
+          "id": "softness-community",
+          "label": "Softness/firmness discussion",
+          "url": "https://www.reddit.com/r/MousepadReview/comments/mojhht",
+          "kind": "community",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "polyester knit",
+        "baseMaterial": "poron-style foam",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 490,
+        "heightMm": 420,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 52,
+        "dynamicSpeed": 50,
+        "stoppingPower": 76,
+        "texture": 35,
+        "pressureResponse": 68,
+        "humidityResistance": 84,
+        "sleeveCompatibility": 72,
+        "xyConsistency": 93,
+        "noise": 12,
+        "skinDrag": 35,
+        "breakInChange": 16,
+        "wornZoneStability": 84,
+        "cleaningRecovery": 86
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "artisan-zero-soft-source"
+          ],
+          "confidence": "medium"
+        },
+        "feel": {
+          "sourceIds": [
+            "softness-community"
+          ],
+          "confidence": "medium"
+        }
+      },
+      "tags": []
+    },
+    {
+      "status": "current",
+      "id": "pad-artisan-type99-soft",
+      "slug": "artisan-type99-soft",
+      "type": "mousepad",
+      "brand": "ARTISAN",
+      "model": "NINJA FX TYPE-99 SOFT",
+      "msrpUsd": 55,
+      "summary": "ARTISAN control surface prioritizing easy stops with a smoother hand feel than rough control cloths.",
+      "tags": [
+        "control",
+        "tactical-fps",
+        "smooth-control"
+      ],
+      "sources": [
+        {
+          "id": "artisan-guide",
+          "label": "ARTISAN Mousepad Selection Guide",
+          "url": "https://artisan-jp.com/global/selection-guide",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "polyester knit",
+        "baseMaterial": "special single-bubble rubber foam",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 490,
+        "heightMm": 420,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 35,
+        "dynamicSpeed": 38,
+        "stoppingPower": 90,
+        "texture": 22,
+        "pressureResponse": 72,
+        "humidityResistance": 82,
+        "sleeveCompatibility": 80,
+        "xyConsistency": 93,
+        "noise": 10,
+        "skinDrag": 24,
+        "breakInChange": 12,
+        "wornZoneStability": 82,
+        "cleaningRecovery": 86
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "medium",
+          "note": "Relative Atlas indices derived from manufacturer positioning; not laboratory friction coefficients."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-artisan-hien-soft",
+      "slug": "artisan-hien-soft",
+      "type": "mousepad",
+      "brand": "ARTISAN",
+      "model": "NINJA FX HIEN SOFT",
+      "msrpUsd": 55,
+      "summary": "Textured medium-fast cloth with sharp startup, strong feedback, and enough stopping power for mixed FPS aim.",
+      "tags": [
+        "balanced-fast",
+        "textured",
+        "tracking",
+        "fps"
+      ],
+      "sources": [
+        {
+          "id": "artisan-guide",
+          "label": "ARTISAN Mousepad Selection Guide",
+          "url": "https://artisan-jp.com/global/selection-guide",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "hardened crepe knit polyester",
+        "baseMaterial": "special single-bubble rubber foam",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 490,
+        "heightMm": 420,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 73,
+        "dynamicSpeed": 70,
+        "stoppingPower": 59,
+        "texture": 82,
+        "pressureResponse": 68,
+        "humidityResistance": 91,
+        "sleeveCompatibility": 68,
+        "xyConsistency": 80,
+        "noise": 24,
+        "skinDrag": 60,
+        "breakInChange": 20,
+        "wornZoneStability": 88,
+        "cleaningRecovery": 90
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "medium",
+          "note": "Relative Atlas indices; Hien is explicitly positioned as rough/feedback-heavy with sharp start."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-artisan-hayate-otsu-v2-soft",
+      "slug": "artisan-hayate-otsu-v2-soft",
+      "type": "mousepad",
+      "brand": "ARTISAN",
+      "model": "NINJA FX HAYATE-OTSU V2 SOFT",
+      "msrpUsd": 59,
+      "summary": "Medium-speed all-round surface tuned for easy startup while preserving meaningful braking.",
+      "tags": [
+        "balanced",
+        "all-round",
+        "fps"
+      ],
+      "sources": [
+        {
+          "id": "artisan-guide",
+          "label": "ARTISAN Mousepad Selection Guide",
+          "url": "https://artisan-jp.com/global/selection-guide",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "advanced woven polyester",
+        "baseMaterial": "special single-bubble rubber foam",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 490,
+        "heightMm": 420,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 67,
+        "dynamicSpeed": 64,
+        "stoppingPower": 66,
+        "texture": 48,
+        "pressureResponse": 68,
+        "humidityResistance": 88,
+        "sleeveCompatibility": 78,
+        "xyConsistency": 90,
+        "noise": 17,
+        "skinDrag": 40,
+        "breakInChange": 16,
+        "wornZoneStability": 84,
+        "cleaningRecovery": 88
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "medium",
+          "note": "Relative Atlas indices derived from ARTISAN medium-speed positioning."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-artisan-raiden-mid",
+      "slug": "artisan-raiden-mid",
+      "type": "mousepad",
+      "brand": "ARTISAN",
+      "model": "NINJA FX RAIDEN MID",
+      "msrpUsd": 55,
+      "summary": "Very smooth high-speed cloth designed for low-friction tracking with a firm, consistent base.",
+      "tags": [
+        "speed",
+        "tracking",
+        "smooth"
+      ],
+      "sources": [
+        {
+          "id": "artisan-guide",
+          "label": "ARTISAN Mousepad Selection Guide",
+          "url": "https://artisan-jp.com/global/selection-guide",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "smooth knit polyester",
+        "baseMaterial": "special single-bubble rubber foam",
+        "firmness": "mid",
+        "thicknessMm": 3,
+        "widthMm": 490,
+        "heightMm": 420,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 88,
+        "dynamicSpeed": 87,
+        "stoppingPower": 39,
+        "texture": 12,
+        "pressureResponse": 12,
+        "humidityResistance": 88,
+        "sleeveCompatibility": 92,
+        "xyConsistency": 96,
+        "noise": 10,
+        "skinDrag": 14,
+        "breakInChange": 14,
+        "wornZoneStability": 88,
+        "cleaningRecovery": 90
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "artisan-guide"
+          ],
+          "confidence": "medium",
+          "note": "Relative Atlas indices; ARTISAN positions RAIDEN as extreme speed and MID as consistent glide/tracking-heavy."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-lgg-saturn-pro-soft",
+      "slug": "lgg-saturn-pro-soft",
+      "type": "mousepad",
+      "brand": "Lethal Gaming Gear",
+      "model": "Saturn Pro SOFT",
+      "msrpUsd": 49.99,
+      "summary": "Control/medium polyester pad with low static friction for a control surface and a locked-in dynamic glide.",
+      "tags": [
+        "control",
+        "balanced-control",
+        "tactical-fps"
+      ],
+      "sources": [
+        {
+          "id": "lgg-saturn",
+          "label": "LGG Saturn Pro product page",
+          "url": "https://www.lethal.gg/products/saturn-pro-xl",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "polyester",
+        "baseMaterial": "SlimFlex foam",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 500,
+        "heightMm": 500,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 51,
+        "dynamicSpeed": 45,
+        "stoppingPower": 84,
+        "texture": 30,
+        "pressureResponse": 70,
+        "humidityResistance": 82,
+        "sleeveCompatibility": 82,
+        "xyConsistency": 95,
+        "noise": 10,
+        "skinDrag": 25,
+        "breakInChange": 14,
+        "wornZoneStability": 86,
+        "cleaningRecovery": 88
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "lgg-saturn"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "lgg-saturn"
+          ],
+          "confidence": "medium",
+          "note": "LGG describes lower static friction for a control pad, locked-in dynamic friction, smooth/light texture."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-lgg-neptune-pro-xsoft",
+      "slug": "lgg-neptune-pro-xsoft",
+      "type": "mousepad",
+      "brand": "Lethal Gaming Gear",
+      "model": "Neptune Pro XSOFT",
+      "msrpUsd": 49.99,
+      "summary": "Smooth very-fast cloth with light textural feedback, aimed at tracking-heavy play without moving to glass.",
+      "tags": [
+        "speed",
+        "tracking",
+        "smooth"
+      ],
+      "sources": [
+        {
+          "id": "lgg-neptune",
+          "label": "LGG Neptune Pro product page",
+          "url": "https://lethal.gg/collections/best-sellers-1/products/neptune-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "micro-textured polyester",
+        "baseMaterial": "Japanese SlimFlex foam",
+        "firmness": "xsoft",
+        "thicknessMm": 4,
+        "widthMm": 500,
+        "heightMm": 500,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 82,
+        "dynamicSpeed": 84,
+        "stoppingPower": 46,
+        "texture": 24,
+        "pressureResponse": 88,
+        "humidityResistance": 70,
+        "sleeveCompatibility": 90,
+        "xyConsistency": 94,
+        "noise": 11,
+        "skinDrag": 20,
+        "breakInChange": 18,
+        "wornZoneStability": 78,
+        "cleaningRecovery": 82
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "lgg-neptune"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "lgg-neptune"
+          ],
+          "confidence": "medium",
+          "note": "Manufacturer describes smooth/very-fast surface; humidity score remains provisional and should be independently validated."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-xray-ac-pro-soft",
+      "slug": "xraypad-aqua-control-pro-soft",
+      "type": "mousepad",
+      "brand": "X-Raypad",
+      "model": "Aqua Control Pro SOFT",
+      "msrpUsd": 45.9,
+      "summary": "Hybrid balanced-fast surface with consistent X/Y behavior and a soft polyurethane base for pressure tuning.",
+      "tags": [
+        "hybrid",
+        "balanced-fast",
+        "fps"
+      ],
+      "sources": [
+        {
+          "id": "xray-acpro",
+          "label": "X-Raypad AC PRO product family",
+          "url": "https://shop.x-raypad.com/product-category/x-ray-gaming-mouse-pads/aqua-game-mousepads/ac-pro/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "hybrid",
+        "surfaceMaterial": "hybrid woven fabric",
+        "baseMaterial": "Sigma honeycomb polyurethane",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 500,
+        "heightMm": 500,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 69,
+        "dynamicSpeed": 67,
+        "stoppingPower": 64,
+        "texture": 52,
+        "pressureResponse": 70,
+        "humidityResistance": 90,
+        "sleeveCompatibility": 78,
+        "xyConsistency": 96,
+        "noise": 18,
+        "skinDrag": 45,
+        "breakInChange": 16,
+        "wornZoneStability": 87,
+        "cleaningRecovery": 90
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-acpro"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-acpro"
+          ],
+          "confidence": "medium",
+          "note": "X-Raypad explicitly describes fast start, balanced speed/control, consistent X/Y and pressure-dependent firmness differences."
+        }
+      }
+    },
+    {
+      "status": "current",
+      "id": "pad-xray-heavy-bee-control-xsoft",
+      "slug": "xraypad-heavy-bee-control-xsoft",
+      "type": "mousepad",
+      "brand": "X-Raypad",
+      "model": "Heavy Bee CONTROL XSOFT",
+      "msrpUsd": 45.9,
+      "summary": "Honeycomb control surface designed to add braking resistance, paired with a very soft polyurethane base.",
+      "tags": [
+        "control",
+        "tactical-fps",
+        "textured"
+      ],
+      "sources": [
+        {
+          "id": "xray-heavybee",
+          "label": "X-Raypad Heavy Bee product family",
+          "url": "https://shop.x-raypad.com/product-category/x-ray-gaming-mouse-pads/heavy-bee/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "hybrid",
+        "surfaceMaterial": "honeycomb woven fabric",
+        "baseMaterial": "Sigma honeycomb polyurethane",
+        "firmness": "xsoft",
+        "thicknessMm": 4,
+        "widthMm": 500,
+        "heightMm": 500,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 43,
+        "dynamicSpeed": 46,
+        "stoppingPower": 88,
+        "texture": 63,
+        "pressureResponse": 94,
+        "humidityResistance": 87,
+        "sleeveCompatibility": 70,
+        "xyConsistency": 90,
+        "noise": 18,
+        "skinDrag": 52,
+        "breakInChange": 14,
+        "wornZoneStability": 84,
+        "cleaningRecovery": 88
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-heavybee"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-heavybee"
+          ],
+          "confidence": "medium",
+          "note": "Relative Atlas model follows X-Raypad control/speed ordering and braking description."
+        }
+      }
+    }
+  ],
+  "skates": [
+    {
+      "id": "skate-jade-air-dots",
+      "slug": "xraypad-jade-air-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Jade Air D6.0 Dots",
+      "status": "current",
+      "msrpUsd": 9.9,
+      "summary": "Pure PTFE speed-oriented dots with a noise-damping foam layer for cloth/plastic pads.",
+      "sources": [
+        {
+          "id": "xray-jade",
+          "label": "X-Raypad Jade series",
+          "url": "https://shop.x-raypad.com/product-category/products/x-ray-gaming-mouse-pads/mouse-feet/speed-jade-series/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "material": "pure-ptfe",
+        "format": "dots",
+        "thicknessMm": 0.8,
+        "cushionLayer": true,
+        "antiCollapse": false,
+        "diameterMm": 6
+      },
+      "feel": {
+        "speed": 94,
+        "control": 38,
+        "noise": 32,
+        "durability": 68,
+        "freshSpeed": 97,
+        "brokenInSpeed": 94,
+        "wearRate": 60,
+        "dustSensitivity": 45
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": false,
+        "plastic": true,
+        "softBase": "conditional"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-jade"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-jade"
+          ],
+          "confidence": "medium"
+        }
+      },
+      "tags": []
+    },
+    {
+      "id": "skate-obsidian-air-dots",
+      "slug": "xraypad-obsidian-air-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Obsidian Air Dots",
+      "status": "current",
+      "msrpUsd": 9.9,
+      "summary": "Hardened PTFE control skate with foam damping; compatible with cloth and glass surfaces.",
+      "sources": [
+        {
+          "id": "xray-obsidian",
+          "label": "X-Raypad Obsidian series",
+          "url": "https://shop.x-raypad.com/product-category/x-ray-gaming-mouse-pads/mouse-feet/control-obsidian-series/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "material": "hardened-ptfe",
+        "format": "dots",
+        "cushionLayer": true,
+        "antiCollapse": false,
+        "diameterMm": 6
+      },
+      "feel": {
+        "speed": 66,
+        "control": 82,
+        "noise": 28,
+        "durability": 85,
+        "freshSpeed": 69,
+        "brokenInSpeed": 66,
+        "wearRate": 28,
+        "dustSensitivity": 45
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": false,
+        "softBase": "conditional"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-obsidian"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-obsidian"
+          ],
+          "confidence": "medium"
+        }
+      },
+      "tags": []
+    },
+    {
+      "id": "skate-xray-titanium-u9-dots",
+      "slug": "xraypad-titanium-u9-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Titanium U9 Dots",
+      "status": "current",
+      "msrpUsd": 12.9,
+      "summary": "UHMW-PE durability-focused dots aimed especially at long-term consistency on glass pads.",
+      "tags": [
+        "glass-pad",
+        "durability",
+        "uhmwpe"
+      ],
+      "sources": [
+        {
+          "id": "xray-u9",
+          "label": "X-Raypad skate FAQ",
+          "url": "https://shop.x-raypad.com/faq/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "material": "uhmwpe",
+        "format": "dots",
+        "diameterMm": 6,
+        "thicknessMm": 0.8,
+        "cushionLayer": false,
+        "antiCollapse": true
+      },
+      "feel": {
+        "speed": 74,
+        "control": 68,
+        "noise": 42,
+        "durability": 98,
+        "freshSpeed": 78,
+        "brokenInSpeed": 74,
+        "wearRate": 8,
+        "dustSensitivity": 42
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": true,
+        "softBase": "conditional"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-u9"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-u9"
+          ],
+          "confidence": "medium",
+          "note": "Manufacturer positions U9 as long-life glass-pad choice; Atlas speed/control values are relative, not measured coefficients."
+        }
+      }
+    },
+    {
+      "id": "skate-xray-obsidian-ultra-dots",
+      "slug": "xraypad-obsidian-ultra-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Obsidian Ultra Dots",
+      "status": "current",
+      "msrpUsd": 11.9,
+      "summary": "Control-oriented hardened PTFE with anti-collapse filling for consistent stops under pressure.",
+      "tags": [
+        "control",
+        "hardened-ptfe",
+        "anti-collapse"
+      ],
+      "sources": [
+        {
+          "id": "xray-obsidian",
+          "label": "X-Raypad Obsidian series",
+          "url": "https://shop.x-raypad.com/product-category/x-ray-gaming-mouse-pads/mouse-feet/control-obsidian-series/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "material": "hardened-ptfe",
+        "format": "dots",
+        "diameterMm": 6,
+        "thicknessMm": 0.8,
+        "cushionLayer": true,
+        "antiCollapse": true
+      },
+      "feel": {
+        "speed": 61,
+        "control": 88,
+        "noise": 30,
+        "durability": 90,
+        "freshSpeed": 65,
+        "brokenInSpeed": 61,
+        "wearRate": 22,
+        "dustSensitivity": 38
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": true,
+        "softBase": "good"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-obsidian"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-obsidian"
+          ],
+          "confidence": "medium",
+          "note": "Control and stability positioning comes from manufacturer; relative numbers are Atlas indices."
+        }
+      }
+    },
+    {
+      "id": "skate-xray-jade-ultra-dots",
+      "slug": "xraypad-jade-ultra-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Jade Ultra Dots",
+      "status": "current",
+      "msrpUsd": 11.9,
+      "summary": "Speed-focused PTFE dots with anti-collapse construction for more consistent support than soft speed dots.",
+      "tags": [
+        "speed",
+        "ptfe",
+        "anti-collapse"
+      ],
+      "sources": [
+        {
+          "id": "xray-skate-faq",
+          "label": "X-Raypad skate FAQ",
+          "url": "https://shop.x-raypad.com/faq/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "material": "pure-ptfe",
+        "format": "dots",
+        "diameterMm": 6,
+        "thicknessMm": 0.8,
+        "cushionLayer": true,
+        "antiCollapse": true
+      },
+      "feel": {
+        "speed": 92,
+        "control": 42,
+        "noise": 31,
+        "durability": 70,
+        "freshSpeed": 95,
+        "brokenInSpeed": 92,
+        "wearRate": 62,
+        "dustSensitivity": 45
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": true,
+        "softBase": "good"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "xray-skate-faq"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "xray-skate-faq"
+          ],
+          "confidence": "medium",
+          "note": "Manufacturer positions Jade as speed and Ultra as anti-collapse; PTFE-on-glass wear remains a caution."
+        }
+      }
+    },
+    {
+      "id": "skate-esptiger-ice-v2",
+      "slug": "esptiger-ice-v2",
+      "type": "skate",
+      "brand": "ESPTiger",
+      "model": "ICE V2",
+      "status": "current",
+      "msrpUsd": 8.99,
+      "summary": "Pure PTFE model-specific feet with 2.5D edges and anti-collapse support for smooth, stable glide.",
+      "tags": [
+        "speed",
+        "ptfe",
+        "full-size"
+      ],
+      "sources": [
+        {
+          "id": "tiger-ice",
+          "label": "ESPTiger ICE V2 product page",
+          "url": "https://esptiger.com/products/esptiger-ice-v2-ptfe-skates-logitech-g-pro-x-superlight-2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "material": "pure-ptfe",
+        "format": "full-size",
+        "cushionLayer": false,
+        "antiCollapse": true
+      },
+      "feel": {
+        "speed": 84,
+        "control": 55,
+        "noise": 28,
+        "durability": 72,
+        "freshSpeed": 88,
+        "brokenInSpeed": 84,
+        "wearRate": 54,
+        "dustSensitivity": 40
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": true,
+        "softBase": "good"
+      },
+      "evidence": {
+        "specs": {
+          "sourceIds": [
+            "tiger-ice"
+          ],
+          "confidence": "high"
+        },
+        "feel": {
+          "sourceIds": [
+            "tiger-ice"
+          ],
+          "confidence": "medium",
+          "note": "ESPTiger states premium PTFE, curved edges, anti-collapse support and smooth glide; Atlas feel values are relative."
+        }
+      }
+    }
+  ]
+}
