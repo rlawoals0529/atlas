@@ -1,5 +1,7 @@
 import fs from "node:fs";
-const catalog = JSON.parse(fs.readFileSync(new URL("../data/catalog.json", import.meta.url), "utf8"));
+import { loadCatalog } from "./load-catalog.mjs";
+
+const catalog = loadCatalog();
 const esc = (v) => String(v).replaceAll("'", "''");
 const products = [...catalog.mice, ...catalog.mousepads, ...catalog.skates];
 const sourceMap = new Map();
@@ -12,4 +14,4 @@ for (const p of products) {
 }
 sql += "COMMIT;\n";
 fs.writeFileSync(new URL("../migrations/0002_seed.sql", import.meta.url), sql);
-console.log(`Wrote ${products.length} products and ${sourceMap.size} unique sources.`);
+console.log(`Wrote ${products.length} products and ${sourceMap.size} unique sources from ${catalog.shards.length} catalog shards.`);
