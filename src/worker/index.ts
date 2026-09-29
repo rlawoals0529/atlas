@@ -2,7 +2,9 @@ import { Hono } from "hono";
 import { catalog, mice, mousepads, skates } from "../shared/catalog";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { evidenceHealth, familyFor, productSearchText } from "../shared/productMeta";
+import { RELEASE } from "../shared/release";
 import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
+import { catalogStats } from "../shared/stats";
 import type { MouseProduct, UserProfile } from "../shared/types";
 
 const app = new Hono();
@@ -13,12 +15,21 @@ const humpPct = (mouse: MouseProduct) => mouse.geometry?.humpPositionPct ?? (
 
 app.get("/api/health", (c) => c.json({
   ok: true,
-  build: "v0.5",
+  build: RELEASE.label,
+  productUi: RELEASE.productUi,
+  dataLayer: RELEASE.dataLayer,
+  researchCutoff: RELEASE.researchCutoff,
   products: catalog.length,
   mice: mice.length,
   pads: mousepads.length,
   skates: skates.length,
   averageEvidenceHealth: Math.round(catalog.reduce((sum, product) => sum + evidenceHealth(product).score, 0) / Math.max(1, catalog.length)),
+}));
+
+app.get("/api/stats", (c) => c.json({
+  release: RELEASE,
+  catalog: catalogStats(catalog),
+  types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length },
 }));
 
 app.get("/api/catalog", (c) => {
