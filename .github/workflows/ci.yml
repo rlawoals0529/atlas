@@ -19,11 +19,11 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Validate canonical catalog
+      - name: Validate canonical catalog shards
         run: npm run data:validate
-      - name: Regenerate D1 seed
+      - name: Generate SQL seed artifact
         run: npm run data:seed
-      - name: Ensure generated seed is committed
-        run: git diff --exit-code -- migrations/0002_seed.sql
+      - name: Verify generated seed is non-empty
+        run: test -s generated/catalog-seed.sql
       - name: Typecheck, build, and validate Worker bundle
         run: npm run check
