@@ -21,7 +21,9 @@ jobs:
       - name: Validate catalog and Worker bundle
         run: |
           npm run data:validate
+          npm run data:report
           npm run data:seed
+          test -s generated/data-report.json
           test -s generated/catalog-seed.sql
           npm run check
       - name: Verify Cloudflare credentials are configured

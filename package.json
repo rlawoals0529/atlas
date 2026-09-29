@@ -10,6 +10,7 @@
     "deploy": "wrangler deploy",
     "cf-typegen": "wrangler types",
     "data:seed": "node scripts/generate-seed.mjs",
+    "data:report": "node scripts/data-report.mjs",
     "data:validate": "node scripts/validate-data.mjs"
   },
   "dependencies": {
