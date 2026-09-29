@@ -1,0 +1,11 @@
+{
+  "name": "Input Atlas — Gaming Peripheral Fit Lab",
+  "short_name": "Input Atlas",
+  "description": "Evidence-aware mouse, mousepad and skate research with explainable fit and shape comparison.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07090c",
+  "theme_color": "#07090c",
+  "categories": ["utilities", "productivity", "games"]
+}
