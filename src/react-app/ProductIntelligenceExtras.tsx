@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { mice } from "../shared/catalog";
 import { analyzeMouseCatalog, directCompetitorsFor } from "../shared/productInsights";
+import CommunityEvidencePilot from "./CommunityEvidencePilot";
 import ProductPositionMap from "./ProductPositionMap";
 
 const money = (value: number | null) => value == null ? "—" : `$${Math.round(value)}`;
@@ -39,5 +40,7 @@ export default function ProductIntelligenceExtras() {
       </div>
       <p className="pl-caption">The score is an Atlas-derived positioning heuristic: shape 52%, weight 18%, MSRP band 12%, polling parity 10%, wireless parity 8%. It is not sales competition, demand, or market-share evidence.</p>
     </section>
+
+    <CommunityEvidencePilot/>
   </div>;
 }
