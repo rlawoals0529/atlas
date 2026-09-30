@@ -3,6 +3,7 @@ import type { Context } from "hono";
 import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { evidenceHealth, familyFor, productSearchText } from "../shared/productMeta";
+import { imageForProduct, mediaSourceForProduct } from "../shared/productImages";
 import { RELEASE } from "../shared/release";
 import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
@@ -127,7 +128,7 @@ function metaContent(html: string, key: string): string | null {
   return null;
 }
 
-function imageCandidateFromHtml(html: string): string | null {
+function imageCandidateFromHtml(html: string, product: CatalogProduct): string | null {
   for (const key of ["og:image:secure_url", "og:image", "twitter:image"]) {
     const value = metaContent(html, key);
     if (value) return value;
@@ -136,7 +137,24 @@ function imageCandidateFromHtml(html: string): string | null {
     ?? html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']image_src["']/i);
   if (imageSrc?.[1]) return decodeHtml(imageSrc[1]);
   const jsonImage = html.match(/"image"\s*:\s*"([^"]+)"/i) ?? html.match(/"image"\s*:\s*\[\s*"([^"]+)"/i);
-  return jsonImage?.[1] ? decodeHtml(jsonImage[1].replaceAll("\\/", "/")) : null;
+  if (jsonImage?.[1]) return decodeHtml(jsonImage[1].replaceAll("\\/", "/"));
+
+  const terms = [...product.brand.split(/\s+/), ...product.model.split(/\s+/)]
+    .map(term => term.toLowerCase().replace(/[^a-z0-9]/g, ""))
+    .filter(term => term.length >= 3);
+  let best: { value: string; score: number } | null = null;
+  for (const tag of html.match(/<img\b[^>]*>/gi) ?? []) {
+    const alt = decodeHtml(tag.match(/alt\s*=\s*["']([^"']*)["']/i)?.[1] ?? "").toLowerCase();
+    const src = tag.match(/(?:src|data-src)\s*=\s*["']([^"']+)["']/i)?.[1]
+      ?? tag.match(/srcset\s*=\s*["']([^"',\s]+)/i)?.[1];
+    if (!src) continue;
+    const normalizedAlt = alt.replace(/[^a-z0-9]/g, "");
+    let score = terms.filter(term => normalizedAlt.includes(term)).length * 3;
+    if (/logo|icon|payment|shipping|avatar|flag/.test(alt)) score -= 8;
+    if (/mouse|keyboard|switch|product|gaming/.test(alt)) score += 2;
+    if (!best || score > best.score) best = { value: decodeHtml(src), score };
+  }
+  return best && best.score > 0 ? best.value : null;
 }
 
 function sourceScore(url: string): number {
@@ -150,6 +168,8 @@ function sourceScore(url: string): number {
 }
 
 function officialSource(product: CatalogProduct): string | null {
+  const override = mediaSourceForProduct(product.id);
+  if (override && safeHttpsUrl(override)) return override;
   const sources = product.sources
     .filter(source => source.kind === "manufacturer")
     .map(source => source.url)
@@ -161,12 +181,14 @@ function officialSource(product: CatalogProduct): string | null {
 async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl: string; sourceUrl: string } | null> {
   const cached = mediaCache.get(product.id);
   if (cached && cached.expiresAt > Date.now()) return cached;
+  const explicit = imageForProduct(product.id);
+  if (explicit) return { imageUrl: explicit.url, sourceUrl: explicit.sourceUrl };
   const sourceUrl = officialSource(product);
   if (!sourceUrl) return null;
-  const response = await fetch(sourceUrl, { redirect: "follow", headers: { "Accept": "text/html,application/xhtml+xml", "User-Agent": "Atlas product-media resolver" } });
+  const response = await fetch(sourceUrl, { redirect: "follow", headers: { "Accept": "text/html,application/xhtml+xml", "User-Agent": "Mozilla/5.0 (compatible; AtlasProductMedia/1.0)" } });
   if (!response.ok || !(response.headers.get("content-type") ?? "").includes("text/html")) return null;
   const html = (await response.text()).slice(0, 2_000_000);
-  const candidate = imageCandidateFromHtml(html);
+  const candidate = imageCandidateFromHtml(html, product);
   const imageUrl = candidate ? safeHttpsUrl(candidate, sourceUrl) : null;
   if (!imageUrl) return null;
   const resolved = { imageUrl, sourceUrl, expiresAt: Date.now() + MEDIA_TTL_MS };
@@ -186,7 +208,7 @@ app.get("/api/media/:id", async (c) => {
   if (limited) return limited;
   const resolved = await resolveOfficialImage(product);
   if (!resolved) return c.json({ error: "Official product image unavailable" }, 404);
-  const imageResponse = await fetch(resolved.imageUrl, { redirect: "follow", headers: { "Accept": "image/avif,image/webp,image/png,image/jpeg,image/*" } });
+  const imageResponse = await fetch(resolved.imageUrl, { redirect: "follow", headers: { "Accept": "image/avif,image/webp,image/png,image/jpeg,image/*", "User-Agent": "Mozilla/5.0 (compatible; AtlasProductMedia/1.0)", "Referer": resolved.sourceUrl } });
   const contentType = imageResponse.headers.get("content-type") ?? "";
   if (!imageResponse.ok || !contentType.startsWith("image/") || !imageResponse.body) return c.json({ error: "Official product image unavailable" }, 502);
   return new Response(imageResponse.body, { status: 200, headers: { "Content-Type": contentType, "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800", "X-Atlas-Media-Source": new URL(resolved.sourceUrl).hostname } });
