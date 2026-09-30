@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { keyboards, switches } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, sourceKindMeta } from "../shared/productMeta";
 import type { KeyboardProduct, KeyboardSwitchProduct } from "../shared/types";
+import { ProductMedia } from "./ProductMedia";
 
 type KeyboardLabProduct = KeyboardProduct | KeyboardSwitchProduct;
 
@@ -13,6 +14,10 @@ const human = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, cha
 function ProductGlyph({ product }: { product: KeyboardLabProduct }) {
   if (product.type === "switch") return <div className={`kb-switch-glyph ${product.specs.technology}`}><i/><span>{product.specs.feel}</span></div>;
   return <div className={`kb-board-glyph f-${product.specs.formFactor.replace(/[^a-z0-9]/gi, "")}`}><div className="kb-key-row">{Array.from({length: 14}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row short">{Array.from({length: 13}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row">{Array.from({length: 12}, (_, i) => <i key={i}/>)}</div><span>{product.specs.formFactor}</span></div>;
+}
+
+function ProductVisual({ product }: { product: KeyboardLabProduct }) {
+  return <ProductMedia productId={product.id} className={`kb-product-media ${product.type}`} fallback={<ProductGlyph product={product}/>}/>;
 }
 
 function Chips({ product }: { product: KeyboardLabProduct }) {
@@ -57,7 +62,7 @@ function Inspector({ product, onClose }: { product: KeyboardLabProduct; onClose:
     <button className="kb-backdrop" aria-label="Close" onClick={onClose}/>
     <aside className="kb-inspector">
       <header><div><span>{product.type.toUpperCase()} / {product.brand}</span><h2>{product.model}</h2></div><button onClick={onClose} aria-label="Close">×</button></header>
-      <div className="kb-detail-art"><ProductGlyph product={product}/><div><b>{health.score}</b><span>DATA HEALTH</span><small>{health.label}</small></div></div>
+      <div className="kb-detail-art"><ProductVisual product={product}/><div><b>{health.score}</b><span>DATA HEALTH</span><small>{health.label}</small></div></div>
       <p className="kb-summary">{product.summary}</p>
       <div className="kb-chip-row"><Chips product={product}/><span>{money(product.msrpUsd)} MSRP</span><span>{product.status}</span></div>
       <section><div className="utility-section-head"><span>SPECIFICATION</span><h3>Source-backed hardware facts</h3></div><Specs product={product}/></section>
@@ -109,7 +114,7 @@ export default function KeyboardLab() {
       <section className="kb-grid">{filtered.map(product => {
         const health = evidenceHealth(product);
         return <button className="kb-card" key={product.id} onClick={() => setSelected(product)}>
-          <div className="kb-card-art"><ProductGlyph product={product}/><span className={`kb-health h${Math.floor(health.score/20)}`}>{health.label}</span></div>
+          <div className="kb-card-art"><ProductVisual product={product}/><span className={`kb-health h${Math.floor(health.score/20)}`}>{health.label}</span></div>
           <div className="kb-card-copy"><span>{product.brand} / {product.type}</span><h2>{product.model}</h2><p>{product.summary}</p><div className="kb-chip-row"><Chips product={product}/></div><footer><b>{health.sourceCount} sources</b><span>{health.evidenceCount} evidence groups</span><i>open record →</i></footer></div>
         </button>;
       })}</section>
