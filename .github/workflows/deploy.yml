@@ -100,4 +100,4 @@ jobs:
         shell: bash
         run: |
           node scripts/verify-deployed-media.mjs "${{ steps.deploy.outputs.url }}" | tee /tmp/atlas-media-verification.log
-          echo "Product media probes: PASS — missing-registry mouse, keyboard and switch returned image responses." >> "$GITHUB_STEP_SUMMARY"
+          echo "Product media probes: PASS — every catalog product using the official-source fallback returned an image response." >> "$GITHUB_STEP_SUMMARY"
