@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { CatalogProduct, ProductType } from "../shared/types";
+import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 
 type CompareRow = {
   section: string;
@@ -185,14 +186,16 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
         <div className="consumer-compare-axis"><span>PRODUCT</span></div>
         {products.map(product => <article key={product.id}>
           <button onClick={() => onRemove(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button>
+          <div className="consumer-compare-media"><ProductMedia productId={product.id}/></div>
           <span>{product.brand}</span><h3>{product.model}</h3><small>{money(product.msrpUsd)} · {coverage(product)}/100 evidence</small>
+          <ProductImageCredit productId={product.id}/>
         </article>)}
       </div>
 
       <div className="consumer-compare-table" style={{ "--compare-count": products.length } as React.CSSProperties}>
         {sections.map(section => <div className="consumer-compare-section" key={section}>
           <div className="consumer-compare-section-title">{section}</div>
-          {rows.map((row, rowIndex) => row.section === section ? <div className="consumer-compare-row" key={`${section}-${row.label}`}>
+          {rows.map(row => row.section === section ? <div className="consumer-compare-row" key={`${section}-${row.label}`}>
             <div className="consumer-compare-axis"><span>{row.label}</span></div>
             {rowSets.map((set, productIndex) => {
               const originalIndex = rowSets[0].findIndex(candidate => candidate.section === row.section && candidate.label === row.label);
