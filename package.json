@@ -14,7 +14,8 @@
     "data:validate": "node scripts/validate-data.mjs",
     "community:validate": "node scripts/validate-community-insights.mjs",
     "sensitivity:validate": "node scripts/validate-sensitivity.mjs",
-    "product:validate": "node scripts/validate-product-lab.mjs"
+    "product:validate": "node scripts/validate-product-lab.mjs",
+    "media:validate": "node scripts/validate-product-media.mjs"
   },
   "dependencies": {
     "hono": "4.13.11",
