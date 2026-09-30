@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { Context } from "hono";
 import { catalog, mice, mousepads, skates } from "../shared/catalog";
+import { isAtlasAnalyticsEvent } from "../shared/analytics";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { evidenceHealth, familyFor, productSearchText } from "../shared/productMeta";
 import { RELEASE } from "../shared/release";
@@ -8,7 +9,17 @@ import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
 import type { MouseProduct, UserProfile } from "../shared/types";
 
-const app = new Hono();
+interface AnalyticsDatasetBinding {
+  writeDataPoint(point: { indexes?: string[]; blobs?: string[]; doubles?: number[] }): void;
+}
+
+type WorkerEnv = {
+  Bindings: {
+    ANALYTICS?: AnalyticsDatasetBinding;
+  };
+};
+
+const app = new Hono<WorkerEnv>();
 
 const securityHeaders: Record<string, string> = {
   "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
@@ -114,6 +125,61 @@ app.get("/api/stats", (c) => c.json({
   catalog: catalogStats(catalog),
   types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length },
 }));
+
+app.get("/api/analytics/status", (c) => c.json({
+  collection: c.env.ANALYTICS ? "enabled" : "disabled",
+  schemaVersion: 1,
+  storage: "cloudflare-workers-analytics-engine",
+  privacy: {
+    directIdentifiers: false,
+    ipStored: false,
+    freeTextStored: false,
+    exactHandMeasurementsStored: false,
+    globalPrivacyControlRespected: true,
+    doNotTrackRespected: true,
+  },
+}));
+
+app.post("/api/events", async (c) => {
+  const limited = enforceRateLimit(c, "analytics", 180, 60_000);
+  if (limited) return limited;
+
+  const origin = c.req.header("origin");
+  if (origin && origin !== new URL(c.req.url).origin) return c.json({ error: "Cross-origin analytics events are not accepted" }, 403);
+
+  const contentType = c.req.header("content-type") ?? "";
+  if (!contentType.toLowerCase().startsWith("application/json")) return c.json({ error: "Content-Type must be application/json" }, 415);
+
+  const raw = await c.req.text();
+  if (new Blob([raw]).size > 8 * 1024) return c.json({ error: "Event body is too large" }, 413);
+
+  let event: unknown;
+  try {
+    event = JSON.parse(raw);
+  } catch {
+    return c.json({ error: "Invalid JSON" }, 400);
+  }
+  if (!isAtlasAnalyticsEvent(event)) return c.json({ error: "Invalid analytics event" }, 422);
+
+  c.env.ANALYTICS?.writeDataPoint({
+    indexes: [event.visitorId],
+    blobs: [
+      event.name,
+      event.eventId,
+      event.sessionId,
+      event.productId ?? "",
+      event.feature ?? "",
+      event.segments?.grip ?? "",
+      event.segments?.gameStyle ?? "",
+      event.segments?.handSize ?? "",
+      JSON.stringify(event.properties ?? {}),
+      String(event.schemaVersion),
+    ],
+    doubles: [Date.parse(event.occurredAt)],
+  });
+
+  return c.body(null, 204);
+});
 
 app.get("/api/catalog", (c) => {
   const type = c.req.query("type");
