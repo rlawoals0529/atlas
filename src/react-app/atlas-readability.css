@@ -435,3 +435,163 @@ body{
   .shape-layer-main small{white-space:normal}
   .shape-opacity{min-width:130px}
 }
+
+
+/* Shape Lab focus pass: one editor for the active layer instead of repeating controls in every card. */
+.shape-layer{
+  grid-template-columns:28px 48px minmax(0,1fr) 30px!important;
+  padding:8px 9px!important;
+  cursor:default;
+}
+.shape-layer.selected{
+  border-color:#aebfb5!important;
+  background:#fff!important;
+  box-shadow:0 0 0 2px rgba(12,107,86,.055);
+}
+.shape-layer.selected:after{
+  content:"";
+  position:absolute;
+  right:8px;
+  top:8px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--shape-layer-color);
+}
+.shape-layer-select{
+  appearance:none;
+  width:100%;
+  min-width:0;
+  padding:2px 18px 2px 0;
+  border:0;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.shape-layer-select:hover .shape-layer-name{color:#0c6b56}
+.shape-layer-select:focus-visible{
+  border-radius:6px;
+  outline:2px solid rgba(12,107,86,.42);
+  outline-offset:2px;
+}
+.shape-layer>.shape-remove{
+  width:30px;
+  height:30px;
+  align-self:center;
+}
+.shape-layer-editor{
+  position:relative;
+  margin:9px 0 14px;
+  padding:12px;
+  border:1px solid #ced8d0;
+  border-left:3px solid var(--shape-layer-color);
+  border-radius:10px;
+  background:#f7faf7;
+}
+.shape-layer-editor>header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.shape-layer-editor>header>div{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.shape-layer-editor>header span,
+.shape-editor-field>span{
+  color:#5b685f;
+  font:500 9px var(--atlas-mono);
+}
+.shape-layer-editor>header b{
+  overflow:hidden;
+  color:var(--atlas-ink);
+  font:650 12px var(--atlas-sans);
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.shape-editor-solo{
+  flex:0 0 auto;
+  min-height:30px;
+  padding:0 9px;
+  border:1px solid #bdcbc2;
+  border-radius:7px;
+  background:#fff;
+  color:#285a49;
+  font:600 10px var(--atlas-sans);
+}
+.shape-editor-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) 84px minmax(130px,1fr) auto;
+  gap:9px;
+  align-items:end;
+}
+.shape-editor-field{
+  display:grid;
+  gap:6px;
+  min-width:0;
+}
+.shape-editor-colors{align-self:end}
+.shape-editor-colors .shape-swatches{min-height:30px}
+.shape-editor-opacity input{
+  width:100%;
+  min-width:0;
+  accent-color:var(--atlas-accent);
+}
+.shape-layer-editor .shape-line-style{
+  width:100%;
+  min-width:0;
+  flex-basis:auto;
+}
+.shape-layer-editor .shape-order{margin:0}
+.shape-layer-editor .shape-color-warning{
+  display:block;
+  margin-top:9px;
+}
+.shape-method-disclosure{
+  margin-top:11px;
+  border-top:1px solid #dde4de;
+  color:#59665f;
+  font-size:10.5px;
+}
+.shape-method-disclosure summary{
+  padding-top:10px;
+  color:#4f5c55;
+  font-weight:600;
+  cursor:pointer;
+}
+.shape-method-disclosure p{
+  margin:7px 0 0;
+  color:#59665f;
+  font-size:10.5px;
+  line-height:1.55;
+}
+.shape-method-disclosure p b{color:#26362e}
+
+/* Collision-managed canvas labels. Each name gets a small chip; displaced labels get a leader. */
+.shape-outline-label-group{pointer-events:none}
+.shape-label-chip{
+  fill:rgba(255,255,255,.94);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+}
+.shape-label-leader{
+  fill:none;
+  stroke-width:1;
+  stroke-opacity:.5;
+  stroke-dasharray:3 3;
+  vector-effect:non-scaling-stroke;
+}
+.shape-outline-label{
+  paint-order:normal!important;
+  stroke:none!important;
+  font:600 10px var(--atlas-sans)!important;
+}
+@media(max-width:760px){
+  .shape-layer{grid-template-columns:28px 44px minmax(0,1fr) 30px!important}
+  .shape-editor-grid{grid-template-columns:1fr 90px}
+  .shape-editor-colors,.shape-editor-opacity{grid-column:1/-1}
+}

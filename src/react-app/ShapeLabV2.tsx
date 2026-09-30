@@ -117,6 +117,32 @@ export function ShapeCanvas({
     };
   });
 
+  const labelPositions = (() => {
+    const top = 28;
+    const bottom = Math.max(top, H - guideReserve - 18);
+    const gap = 22;
+    const ordered = paths
+      .map(({ mouse, box }) => ({ id: mouse.id, desiredY: Math.max(top, Math.min(bottom, box.minY - 10)) }))
+      .sort((a, b) => a.desiredY - b.desiredY);
+    const placed = ordered.map((item, index) => ({
+      ...item,
+      y: index === 0 ? item.desiredY : Math.max(item.desiredY, top + index * gap),
+    }));
+    for (let index = 1; index < placed.length; index += 1) {
+      placed[index].y = Math.max(placed[index].y, placed[index - 1].y + gap);
+    }
+    if (placed.length) {
+      const overflow = placed[placed.length - 1].y - bottom;
+      if (overflow > 0) placed.forEach(item => { item.y -= overflow; });
+      for (let index = placed.length - 2; index >= 0; index -= 1) {
+        placed[index].y = Math.min(placed[index].y, placed[index + 1].y - gap);
+      }
+      const underflow = top - placed[0].y;
+      if (underflow > 0) placed.forEach(item => { item.y += underflow; });
+    }
+    return new Map(placed.map(item => [item.id, item.y]));
+  })();
+
   return <div className="shape-canvas">
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${view} view mouse shape comparison`}>
       <g className="shape-grid">
@@ -138,14 +164,18 @@ export function ShapeCanvas({
         strokeLinecap="round"
         vectorEffect="non-scaling-stroke"
       />)}
-      {showLabels && paths.map(({ layer, mouse, box }) => <text
-        key={`label-${mouse.id}`}
-        className="shape-outline-label"
-        x={box.minX + 4}
-        y={Math.max(18, box.minY - 8)}
-        fill={layer.color}
-        fillOpacity={layer.opacity}
-      >{mouse.brand} {mouse.model}</text>)}
+      {showLabels && paths.map(({ layer, mouse, box }) => {
+        const label = `${mouse.brand} ${mouse.model}`;
+        const width = Math.min(238, Math.max(92, label.length * 6.1 + 18));
+        const x = Math.max(16, Math.min(W - width - 16, box.minX + 4));
+        const y = labelPositions.get(mouse.id) ?? Math.max(24, box.minY - 10);
+        const displaced = Math.abs(y - (box.minY - 10)) > 5;
+        return <g className="shape-outline-label-group" key={`label-${mouse.id}`} opacity={Math.max(.55, layer.opacity)}>
+          {displaced && <path className="shape-label-leader" d={`M ${x + 8} ${y + 4} L ${box.minX + 2} ${Math.max(20, box.minY - 3)}`} stroke={layer.color}/>}
+          <rect className="shape-label-chip" x={x} y={y - 14} width={width} height="20" rx="6" stroke={layer.color}/>
+          <text className="shape-outline-label" x={x + 9} y={y} fill={layer.color}>{label}</text>
+        </g>;
+      })}
       {showDimensions && paths.map(({ layer, mouse, box }, index) => {
         const lengthY = H - 20 - index * 17;
         const dimensionX = Math.min(W - 24 - index * 10, box.maxX + 20 + index * 8);
@@ -171,10 +201,38 @@ export function ShapeCanvas({
 function LayerRow({
   layer,
   index,
+  selected,
+  onChange,
+  onRemove,
+  onSelect,
+}: {
+  layer: ShapeLayer;
+  index: number;
+  selected: boolean;
+  onChange: (next: ShapeLayer) => void;
+  onRemove: () => void;
+  onSelect: () => void;
+}) {
+  const mouse = layerMouse(layer);
+  if (!mouse) return null;
+  return <article className={`shape-layer ${layer.visible ? "" : "muted"} ${selected ? "selected" : ""}`} style={{ "--shape-layer-color": layer.color } as React.CSSProperties}>
+    <button className="shape-eye" onClick={() => onChange({ ...layer, visible: !layer.visible })} aria-label={layer.visible ? `Hide ${mouse.model}` : `Show ${mouse.model}`}>{layer.visible ? "●" : "○"}</button>
+    <div className="shape-layer-thumb"><ProductMedia productId={mouse.id} fallback={fallbackMouse(mouse)}/></div>
+    <button className="shape-layer-main shape-layer-select" type="button" onClick={onSelect} aria-pressed={selected}>
+      <span>{String(index + 1).padStart(2, "0")} · {mouse.brand}</span>
+      <b className="shape-layer-name">{mouse.model}</b>
+      <small>{fmt(mouse.specs.lengthMm)} × {fmt(mouse.specs.widthMm)} × {fmt(mouse.specs.heightMm)} mm · {mouse.specs.weightG} g</small>
+    </button>
+    <button className="shape-remove" onClick={onRemove} aria-label={`Remove ${mouse.brand} ${mouse.model}`}>×</button>
+  </article>;
+}
+
+function LayerEditor({
+  layer,
+  index,
   total,
   duplicateColor,
   onChange,
-  onRemove,
   onMove,
   onSolo,
 }: {
@@ -183,45 +241,49 @@ function LayerRow({
   total: number;
   duplicateColor: boolean;
   onChange: (next: ShapeLayer) => void;
-  onRemove: () => void;
   onMove: (direction: -1 | 1) => void;
   onSolo: () => void;
 }) {
   const mouse = layerMouse(layer);
   if (!mouse) return null;
-  return <article className={`shape-layer ${layer.visible ? "" : "muted"}`} style={{ "--shape-layer-color": layer.color } as React.CSSProperties}>
-    <button className="shape-eye" onClick={() => onChange({ ...layer, visible: !layer.visible })} aria-label={layer.visible ? "Hide mouse" : "Show mouse"}>{layer.visible ? "●" : "○"}</button>
-    <div className="shape-layer-thumb"><ProductMedia productId={mouse.id} fallback={fallbackMouse(mouse)}/></div>
-    <div className="shape-layer-main">
-      <span>{String(index + 1).padStart(2, "0")} · {mouse.brand}</span>
-      <b className="shape-layer-name">{mouse.model}</b>
-      <small>{fmt(mouse.specs.lengthMm)} × {fmt(mouse.specs.widthMm)} × {fmt(mouse.specs.heightMm)} mm · {mouse.specs.gripWidthMm != null ? `${fmt(mouse.specs.gripWidthMm)} mm grip` : "grip —"} · {mouse.specs.weightG} g</small>
-    </div>
-    <div className="shape-row-actions">
-      <button className="shape-solo" onClick={onSolo} title={`Solo ${mouse.model}`} aria-label={`Solo ${mouse.model}`}>Solo</button>
-      <button className="shape-remove" onClick={onRemove} aria-label={`Remove ${mouse.brand} ${mouse.model}`}>×</button>
-    </div>
-    <div className="shape-layer-controls">
-      <div className="shape-swatches" aria-label="Preset outline colors">
-        {COLORS.map(color => <button
-          type="button"
-          key={color}
-          className={layer.color.toLowerCase() === color.toLowerCase() ? "active" : ""}
-          style={{ "--swatch": color } as React.CSSProperties}
-          onClick={() => onChange({ ...layer, color })}
-          aria-label={`Use ${color} outline color`}
-        />)}
-        <label className="shape-color" title="Custom outline color"><input type="color" value={layer.color} onChange={event => onChange({ ...layer, color: event.target.value })}/><span style={{ background: layer.color }}>+</span></label>
+  return <section className="shape-layer-editor" style={{ "--shape-layer-color": layer.color } as React.CSSProperties}>
+    <header>
+      <div><span>Layer settings</span><b>{mouse.brand} {mouse.model}</b></div>
+      <button type="button" className="shape-editor-solo" onClick={onSolo}>Solo layer</button>
+    </header>
+    <div className="shape-editor-grid">
+      <div className="shape-editor-field shape-editor-colors">
+        <span>Outline</span>
+        <div className="shape-swatches" aria-label="Preset outline colors">
+          {COLORS.map(color => <button
+            type="button"
+            key={color}
+            className={layer.color.toLowerCase() === color.toLowerCase() ? "active" : ""}
+            style={{ "--swatch": color } as React.CSSProperties}
+            onClick={() => onChange({ ...layer, color })}
+            aria-label={`Use ${color} outline color`}
+          />)}
+          <label className="shape-color" title="Custom outline color"><input type="color" value={layer.color} onChange={event => onChange({ ...layer, color: event.target.value })}/><span style={{ background: layer.color }}>+</span></label>
+        </div>
       </div>
-      <select className="shape-line-style" value={layer.lineStyle} onChange={event => onChange({ ...layer, lineStyle: event.target.value as LineStyle })} aria-label="Line style"><option value="solid">Solid</option><option value="dash">Dash</option><option value="dot">Dot</option></select>
-      <label className="shape-opacity"><span>Opacity {Math.round(layer.opacity * 100)}%</span><input type="range" min="35" max="100" value={Math.round(layer.opacity * 100)} onChange={event => onChange({ ...layer, opacity: +event.target.value / 100 })}/></label>
-      <div className="shape-order">
-        <button type="button" onClick={() => onMove(-1)} disabled={index === 0} title="Send backward" aria-label={`Send ${mouse.model} backward`}>Back</button>
-        <button type="button" onClick={() => onMove(1)} disabled={index === total - 1} title="Bring forward" aria-label={`Bring ${mouse.model} forward`}>Front</button>
+      <label className="shape-editor-field">
+        <span>Line</span>
+        <select className="shape-line-style" value={layer.lineStyle} onChange={event => onChange({ ...layer, lineStyle: event.target.value as LineStyle })} aria-label="Line style"><option value="solid">Solid</option><option value="dash">Dash</option><option value="dot">Dot</option></select>
+      </label>
+      <label className="shape-editor-field shape-editor-opacity">
+        <span>Opacity · {Math.round(layer.opacity * 100)}%</span>
+        <input type="range" min="35" max="100" value={Math.round(layer.opacity * 100)} onChange={event => onChange({ ...layer, opacity: +event.target.value / 100 })}/>
+      </label>
+      <div className="shape-editor-field">
+        <span>Stack order</span>
+        <div className="shape-order">
+          <button type="button" onClick={() => onMove(-1)} disabled={index === 0} title="Send backward">Back</button>
+          <button type="button" onClick={() => onMove(1)} disabled={index === total - 1} title="Bring forward">Front</button>
+        </div>
       </div>
-      {duplicateColor && <span className="shape-color-warning">Duplicate color</span>}
     </div>
-  </article>;
+    {duplicateColor && <span className="shape-color-warning">Another layer uses this color. Line styles can still separate them.</span>}
+  </section>;
 }
 
 export default function ShapeLabV2({
@@ -239,6 +301,7 @@ export default function ShapeLabV2({
   const initialIds = (selectedMouseIds?.length ? selectedMouseIds : mice.slice(0, 3).map(mouse => mouse.id)).slice(0, 5);
   const initial = initialIds.map((id, index): ShapeLayer => ({ id, color: COLORS[index % COLORS.length], visible: true, opacity: .92, lineStyle: index % 3 === 1 ? "dash" : index % 3 === 2 ? "dot" : "solid" }));
   const [layers, setLayers] = useState<ShapeLayer[]>(() => sharedInitial?.layers ?? initial);
+  const [selectedLayerId, setSelectedLayerId] = useState(() => (sharedInitial?.layers ?? initial)[0]?.id ?? "");
   const [view, setView] = useState<ShapeView>(() => sharedInitial?.view ?? "top");
   const [align, setAlign] = useState<AlignMode>(() => sharedInitial?.align ?? "center");
   const [normalize, setNormalize] = useState(() => sharedInitial?.normalize ?? false);
@@ -254,6 +317,12 @@ export default function ShapeLabV2({
     onSelectedMouseIdsChange?.(layers.map(layer => layer.id));
   }, [layers, onSelectedMouseIdsChange]);
 
+  useEffect(() => {
+    if (!layers.some(layer => layer.id === selectedLayerId)) setSelectedLayerId(layers[0]?.id ?? "");
+  }, [layers, selectedLayerId]);
+
+  const selectedLayerIndex = layers.findIndex(layer => layer.id === selectedLayerId);
+  const selectedLayer = selectedLayerIndex >= 0 ? layers[selectedLayerIndex] : undefined;
   const reference = mice.find(mouse => mouse.id === referenceId) ?? mice[0];
   const similar = useMemo(() => reference ? findSimilarShapes(reference, mice, similarityMode) : [], [reference, similarityMode]);
   const selectedIds = useMemo(() => new Set(layers.map(layer => layer.id)), [layers]);
@@ -266,13 +335,16 @@ export default function ShapeLabV2({
   }, [addQuery, selectedIds]);
 
   const updateLayer = (index: number, next: ShapeLayer) => setLayers(current => current.map((layer, i) => i === index ? next : layer));
-  const addMouse = (id: string) => setLayers(current => {
-    if (current.length >= 5 || current.some(layer => layer.id === id)) return current;
-    const used = new Set(current.map(layer => layer.color.toLowerCase()));
-    const color = COLORS.find(candidate => !used.has(candidate.toLowerCase())) ?? COLORS[current.length % COLORS.length];
-    const index = current.length;
-    return [...current, { id, color, visible: true, opacity: .92, lineStyle: index % 3 === 1 ? "dash" : index % 3 === 2 ? "dot" : "solid" }];
-  });
+  const addMouse = (id: string) => {
+    setSelectedLayerId(id);
+    setLayers(current => {
+      if (current.length >= 5 || current.some(layer => layer.id === id)) return current;
+      const used = new Set(current.map(layer => layer.color.toLowerCase()));
+      const color = COLORS.find(candidate => !used.has(candidate.toLowerCase())) ?? COLORS[current.length % COLORS.length];
+      const index = current.length;
+      return [...current, { id, color, visible: true, opacity: .92, lineStyle: index % 3 === 1 ? "dash" : index % 3 === 2 ? "dot" : "solid" }];
+    });
+  };
   const moveLayer = (index: number, direction: -1 | 1) => setLayers(current => {
     const target = index + direction;
     if (target < 0 || target >= current.length) return current;
@@ -334,13 +406,20 @@ export default function ShapeLabV2({
           key={layer.id}
           layer={layer}
           index={index}
-          total={layers.length}
-          duplicateColor={layers.filter(item => item.color.toLowerCase() === layer.color.toLowerCase()).length > 1}
+          selected={layer.id === selectedLayerId}
           onChange={next => updateLayer(index, next)}
           onRemove={() => setLayers(current => current.filter((_, i) => i !== index))}
-          onMove={direction => moveLayer(index, direction)}
-          onSolo={() => soloLayer(layer.id)}
+          onSelect={() => setSelectedLayerId(layer.id)}
         />)}</div>
+        {selectedLayer && <LayerEditor
+          layer={selectedLayer}
+          index={selectedLayerIndex}
+          total={layers.length}
+          duplicateColor={layers.filter(item => item.color.toLowerCase() === selectedLayer.color.toLowerCase()).length > 1}
+          onChange={next => updateLayer(selectedLayerIndex, next)}
+          onMove={direction => moveLayer(selectedLayerIndex, direction)}
+          onSolo={() => soloLayer(selectedLayer.id)}
+        />}
         <div className="shape-add-picker">
           <label htmlFor="shape-add-search">Add mouse</label>
           <input id="shape-add-search" type="search" value={addQuery} onChange={event => setAddQuery(event.target.value)} placeholder="Search brand or model…" disabled={layers.length >= 5}/>
@@ -353,7 +432,7 @@ export default function ShapeLabV2({
             {!addCandidates.length && <p>No unselected mice match that search.</p>}
           </div> : <p className="shape-limit">Five layers selected. Remove one to add another.</p>}
         </div>
-        <p className="shape-method"><b>Measured when possible.</b> Some records have a measured or scanned outline. When Atlas only has sourced dimensions, it draws a parametric estimate instead and labels it that way.</p>
+        <details className="shape-method-disclosure"><summary>How outline quality is handled</summary><p><b>Measured when possible.</b> Some records have a measured or scanned outline. When Atlas only has sourced dimensions, it draws a parametric estimate instead and labels it that way.</p></details>
       </aside>
 
       <div className="shape-stage v5-panel">
