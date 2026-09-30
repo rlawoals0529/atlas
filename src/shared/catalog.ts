@@ -5,6 +5,7 @@ import catalogExpansion2026Q3 from "../../data/catalog.2026q3-expansion.json";
 import catalogExpansionB2026Q3 from "../../data/catalog.2026q3-expansion2.json";
 import catalogExpansionC2026Q3 from "../../data/catalog.2026q3-expansion3.json";
 import catalogExpansionD2026Q3 from "../../data/catalog.2026q3-expansion4.json";
+import catalogExpansionE2026Q3 from "../../data/catalog.2026q3-expansion5.json";
 import type { KeyboardProduct, KeyboardSwitchProduct, MouseProduct, MousepadProduct, SkateProduct } from "./types";
 
 type CatalogShard = {
@@ -23,6 +24,7 @@ const shards = [
   catalogExpansionB2026Q3,
   catalogExpansionC2026Q3,
   catalogExpansionD2026Q3,
+  catalogExpansionE2026Q3,
 ] as unknown as CatalogShard[];
 
 export const mice = shards.flatMap(shard => shard.mice ?? []) as MouseProduct[];
