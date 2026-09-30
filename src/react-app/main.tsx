@@ -14,6 +14,7 @@ import "./v04.css";
 import "./v05.css";
 import "./consumer.css";
 import "./consumer-compare.css";
+import "./product-media.css";
 import "./product-lab.css";
 import "./product-lab-entry.css";
 import "./product-intelligence-extras.css";
