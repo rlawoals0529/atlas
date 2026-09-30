@@ -1,8 +1,8 @@
 import fs from "node:fs";
-import { loadCatalog } from "./load-catalog.mjs";
+import { catalogGroups, loadCatalog } from "./load-catalog.mjs";
 
 const data = loadCatalog();
-const products = [...data.mice, ...data.mousepads, ...data.skates];
+const products = catalogGroups.flatMap(group => data[group]);
 const sourceKinds = { manufacturer: 0, independent: 0, community: 0, editorial: 0 };
 const confidence = { high: 0, medium: 0, low: 0 };
 const dates = [];
@@ -37,9 +37,7 @@ const report = {
   shards: data.shards,
   counts: {
     products: products.length,
-    mice: data.mice.length,
-    mousepads: data.mousepads.length,
-    skates: data.skates.length,
+    ...Object.fromEntries(catalogGroups.map(group => [group, data[group].length])),
     current,
   },
   sourceInstances,
@@ -59,6 +57,6 @@ const report = {
 fs.mkdirSync(new URL("../generated/", import.meta.url), { recursive: true });
 fs.writeFileSync(new URL("../generated/data-report.json", import.meta.url), JSON.stringify(report, null, 2));
 console.log(`Catalog: ${report.counts.products} products across ${report.shards.length} shards`);
-console.log(`Types: ${report.counts.mice} mice / ${report.counts.mousepads} pads / ${report.counts.skates} skates`);
+console.log(`Types: ${catalogGroups.map(group => `${report.counts[group]} ${group}`).join(" / ")}`);
 console.log(`Current-source coverage: ${report.currentCoverage.manufacturerPct}% manufacturer / ${report.currentCoverage.independentPct}% independent`);
 console.log(`Evidence: ${report.evidenceGroups} groups / ${report.sourceInstances} source instances`);
