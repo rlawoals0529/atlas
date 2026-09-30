@@ -1,0 +1,242 @@
+{
+  "mice": [
+    {
+      "id": "mouse-vaxee-xe-s-wireless-4k",
+      "slug": "vaxee-xe-s-wireless-4k",
+      "type": "mouse",
+      "brand": "VAXEE",
+      "model": "XE-S Wireless 4K",
+      "status": "current",
+      "summary": "Small, low-profile symmetrical wireless mouse with PAW3950 sensing, 4 kHz competitive polling, web configuration and unusually long 1 kHz standard-mode battery life.",
+      "tags": ["fps", "4k", "symmetrical", "small", "claw", "fingertip", "web-config"],
+      "sources": [
+        {
+          "id": "vaxee-xes-support",
+          "label": "VAXEE XE-S Wireless firmware and feature support",
+          "url": "https://www.vaxee.co/en/feature.php?c=usermanual",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "vaxee-xes-launch",
+          "label": "VAXEE XE-S Wireless introduction",
+          "url": "https://www.vaxee.co/EN/news.php?act=view&id=165",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "rtings-vaxee-xes",
+          "label": "RTINGS VAXEE XE-S Wireless 4K review",
+          "url": "https://www.rtings.com/mouse/reviews/vaxee/xe-s-wireless-4k",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "dpqp-vaxee-xes",
+          "label": "DPQP VAXEE XE-S review",
+          "url": "https://dpqp.jp/post-79642",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 118,
+        "widthMm": 64,
+        "heightMm": 36,
+        "weightG": 60,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "low",
+        "sideCurvature": "mild",
+        "sensor": "PAW3950",
+        "maxPollingHz": 4000,
+        "connectivity": ["2.4GHz", "wired"],
+        "switchType": "mechanical",
+        "mainSwitch": "Huano Black Shell Pink Dot",
+        "shellMaterial": "plastic",
+        "sideButtons": 2,
+        "webDriver": true,
+        "battery1kHours": 110
+      },
+      "fit": {
+        "handLengthCm": [16, 19],
+        "handWidthCm": [7.8, 10],
+        "grip": {
+          "palm": 65,
+          "relaxed-claw": 93,
+          "aggressive-claw": 91,
+          "pincer-claw": 88,
+          "knuckle-claw": 88,
+          "fingertip": 94,
+          "extended-fingertip": 90,
+          "palm-claw-hybrid": 79
+        },
+        "aimStyle": {"wrist": 94, "hybrid": 94, "arm": 82, "finger": 95},
+        "gameStyle": {"tactical-fps": 96, "tracking-fps": 91, "arena-fps": 92, "battle-royale": 92, "moba-rts": 74, "mmo": 38, "action": 87, "mixed": 92},
+        "coatingDry": 92,
+        "coatingSweaty": 90,
+        "clickLightness": 72,
+        "balance": "center"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["vaxee-xes-support", "vaxee-xes-launch", "rtings-vaxee-xes", "dpqp-vaxee-xes"],
+          "confidence": "high",
+          "note": "VAXEE documents PAW3950-family support, web configuration, 4 kHz competitive mode and 110 h standard-mode 1 kHz battery life. Independent sources consistently report the 118 × 64 × 36 mm shell and roughly 60–61 g mass."
+        },
+        "fit": {
+          "sourceIds": ["rtings-vaxee-xes", "dpqp-vaxee-xes", "atlas-editorial-fit"],
+          "confidence": "medium",
+          "note": "Independent reviews describe the XE-S as a low, small symmetrical shell suited especially to small/medium hands and claw/fingertip use. Atlas' numeric grip and hand-range vector remains editorial modeling."
+        }
+      }
+    }
+  ],
+  "mousepads": [
+    {
+      "id": "pad-esptiger-lei-ling",
+      "slug": "esptiger-lei-ling",
+      "type": "mousepad",
+      "brand": "ESPTIGER",
+      "model": "Lei Ling",
+      "status": "current",
+      "msrpUsd": 44.99,
+      "summary": "Speed-leaning balanced cloth pad with a coarse weave, soft INOAC SlimFlex PORON base and recessed edge stitching.",
+      "tags": ["cloth", "balanced", "speed", "poron", "soft", "stitched"],
+      "sources": [
+        {
+          "id": "esptiger-lei-ling-official",
+          "label": "ESPTIGER Lei Ling product page",
+          "url": "https://esptiger.com/products/lei-ling-balance-gaming-mousepad",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-lei-ling-normalization",
+          "label": "Atlas Lei Ling surface normalization",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "cloth",
+        "baseMaterial": "INOAC SlimFlex (PORON)",
+        "firmness": "soft",
+        "thicknessMm": 4,
+        "widthMm": 480,
+        "heightMm": 400,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 67,
+        "dynamicSpeed": 72,
+        "stoppingPower": 58,
+        "texture": 68,
+        "pressureResponse": 72,
+        "humidityResistance": 62,
+        "sleeveCompatibility": 62,
+        "xyConsistency": 86,
+        "noise": 38,
+        "skinDrag": 46,
+        "breakInChange": 26,
+        "wornZoneStability": 72,
+        "cleaningRecovery": 75
+      },
+      "evidence": {
+        "physical": {
+          "sourceIds": ["esptiger-lei-ling-official"],
+          "confidence": "high",
+          "note": "ESPTIGER publishes a 480 × 400 × 4 mm cloth surface, soft INOAC SlimFlex PORON base and recessed protective edge stitching."
+        },
+        "feel": {
+          "sourceIds": ["esptiger-lei-ling-official", "atlas-lei-ling-normalization"],
+          "confidence": "medium",
+          "note": "ESPTIGER rates Lei Ling 5/7 glide, 3/5 stopping and coarse bare-skin feel. Atlas maps those ordinal descriptions into its comparison scale; environment, wear and recovery fields remain editorial estimates rather than measured coefficients."
+        }
+      }
+    }
+  ],
+  "skates": [
+    {
+      "id": "skate-xraypad-jade-speed-dots",
+      "slug": "xraypad-jade-speed-d6-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Jade Speed D6.0 Universal Dots",
+      "status": "current",
+      "msrpUsd": 6.99,
+      "summary": "Universal 6 mm pure-PTFE speed dots with a 0.8 mm profile, intended for cloth and plastic pads and explicitly not recommended for glass surfaces.",
+      "tags": ["ptfe", "speed", "dots", "universal", "cloth", "plastic"],
+      "sources": [
+        {
+          "id": "xraypad-jade-speed-official",
+          "label": "X-Raypad Jade Speed D6.0 product page",
+          "url": "https://shop.x-raypad.com/shop/x-raypad-jade-diy-mouse-skates-universal-d6-0mm-ptfe-dots/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "xraypad-jade-family-official",
+          "label": "X-Raypad Jade series comparison",
+          "url": "https://shop.x-raypad.com/product-category/products/x-ray-gaming-mouse-pads/mouse-feet/speed-jade-series/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-jade-speed-normalization",
+          "label": "Atlas Jade Speed skate normalization",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "material": "pure-ptfe",
+        "format": "dots",
+        "thicknessMm": 0.8,
+        "cushionLayer": false,
+        "antiCollapse": false
+      },
+      "feel": {
+        "speed": 91,
+        "control": 36,
+        "noise": 42,
+        "durability": 72,
+        "freshSpeed": 94,
+        "brokenInSpeed": 89,
+        "wearRate": 34,
+        "dustSensitivity": 48
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": false,
+        "plastic": true,
+        "softBase": "conditional"
+      },
+      "evidence": {
+        "construction": {
+          "sourceIds": ["xraypad-jade-speed-official"],
+          "confidence": "high",
+          "note": "X-Raypad publishes pure PTFE construction, 6.0 mm dot diameter, 0.8 mm thickness, 40-dot package size and one-piece molded construction."
+        },
+        "feel": {
+          "sourceIds": ["xraypad-jade-speed-official", "xraypad-jade-family-official", "atlas-jade-speed-normalization"],
+          "confidence": "medium",
+          "note": "X-Raypad positions Jade as its fastest skate family and explicitly recommends Jade Speed for cloth and plastic while warning against glass. Atlas numeric speed/control, hybrid compatibility and soft-base behavior are normalized estimates; dot count materially changes feel."
+        }
+      }
+    }
+  ],
+  "keyboards": [],
+  "switches": []
+}
