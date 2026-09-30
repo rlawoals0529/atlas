@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { mice } from "../shared/catalog";
 import { alignmentOffset, findSimilarShapes, outlineFor, type AlignMode, type ShapeView, type SimilarityMode } from "../shared/shape";
 import type { MouseProduct } from "../shared/types";
@@ -178,11 +178,16 @@ function LayerRow({
 export default function ShapeLabV2({
   similarityMode,
   setSimilarityMode,
+  selectedMouseIds,
+  onSelectedMouseIdsChange,
 }: {
   similarityMode: SimilarityMode;
   setSimilarityMode: (mode: SimilarityMode) => void;
+  selectedMouseIds?: string[];
+  onSelectedMouseIdsChange?: (ids: string[]) => void;
 }) {
-  const initial = mice.slice(0, 3).map((mouse, index): ShapeLayer => ({ id: mouse.id, color: COLORS[index], visible: true, opacity: .92, lineStyle: index === 1 ? "dash" : index === 2 ? "dot" : "solid" }));
+  const initialIds = (selectedMouseIds?.length ? selectedMouseIds : mice.slice(0, 3).map(mouse => mouse.id)).slice(0, 5);
+  const initial = initialIds.map((id, index): ShapeLayer => ({ id, color: COLORS[index % COLORS.length], visible: true, opacity: .92, lineStyle: index % 3 === 1 ? "dash" : index % 3 === 2 ? "dot" : "solid" }));
   const [layers, setLayers] = useState<ShapeLayer[]>(initial);
   const [view, setView] = useState<ShapeView>("top");
   const [align, setAlign] = useState<AlignMode>("center");
@@ -193,6 +198,10 @@ export default function ShapeLabV2({
   const [showLabels, setShowLabels] = useState(true);
   const [addQuery, setAddQuery] = useState("");
   const [referenceId, setReferenceId] = useState(initial[0]?.id ?? mice[0]?.id ?? "");
+
+  useEffect(() => {
+    onSelectedMouseIdsChange?.(layers.map(layer => layer.id));
+  }, [layers, onSelectedMouseIdsChange]);
 
   const reference = mice.find(mouse => mouse.id === referenceId) ?? mice[0];
   const similar = useMemo(() => reference ? findSimilarShapes(reference, mice, similarityMode) : [], [reference, similarityMode]);
