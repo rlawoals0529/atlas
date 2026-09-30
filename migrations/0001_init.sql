@@ -2,7 +2,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS products (
   id TEXT PRIMARY KEY,
   slug TEXT NOT NULL UNIQUE,
-  type TEXT NOT NULL CHECK(type IN ('mouse','mousepad','skate')),
+  type TEXT NOT NULL CHECK(type IN ('mouse','mousepad','skate','keyboard','switch')),
   brand TEXT NOT NULL,
   model TEXT NOT NULL,
   status TEXT NOT NULL,
