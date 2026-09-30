@@ -11,12 +11,13 @@ const productFromCard = (target: Element) => {
 };
 
 const productType = (type: string): "mouse" | "mousepad" | "skate" => type === "mousepad" ? "mousepad" : type === "skate" ? "skate" : "mouse";
-
 const navLabel = (target: Element) => target.closest("button")?.textContent?.replace(/\d+/g, "").trim().toLowerCase() ?? "";
+const isNonFitSurface = (target: Element) => Boolean(target.closest(".v5-database") || target.closest(".v5-compare") || target.closest(".v5-shape-lab") || target.closest(".v5-overlay"));
 
 export default function AnalyticsBridge() {
   useEffect(() => {
     const recommendationStartedKey = "atlas.analytics.recommendation-started.v1";
+    const recommendationCompletedKey = "atlas.analytics.recommendation-completed.v1";
 
     const click = (event: MouseEvent) => {
       const target = event.target instanceof Element ? event.target : null;
@@ -24,9 +25,18 @@ export default function AnalyticsBridge() {
 
       const product = productFromCard(target);
       if (product) {
-        const sourceSurface = target.closest("main")?.querySelector(".v5-eyebrow")?.textContent?.toLowerCase().includes("recommend") ? "recommendation" : target.closest(".v5-database") ? "catalog" : "atlas";
+        const resultArticle = target.closest(".v5-result");
+        const sourceSurface = resultArticle ? "recommendation" : target.closest(".v5-database") ? "catalog" : "atlas";
         trackAtlasEvent("product_viewed", { productId: product.id, productType: productType(product.type), sourceSurface });
-        if (sourceSurface === "recommendation") trackAtlasEvent("recommendation_result_selected", { productId: product.id });
+        if (resultArticle) {
+          const rankText = resultArticle.querySelector(".v5-rank")?.textContent?.trim();
+          const fitText = resultArticle.querySelector(".v5-fit-badge b")?.textContent?.trim();
+          trackAtlasEvent("recommendation_result_selected", {
+            productId: product.id,
+            rank: rankText ? Number(rankText) || undefined : undefined,
+            fitScore: fitText ? Number(fitText) || undefined : undefined,
+          });
+        }
         return;
       }
 
@@ -64,12 +74,22 @@ export default function AnalyticsBridge() {
 
       if (target.closest(".v5-compare")) {
         const ids = [...main.querySelectorAll("select")].map(select => (select as HTMLSelectElement).value).filter(value => catalog.some(product => product.id === value));
-        if (ids.length >= 2) trackAtlasEvent("comparison_completed", { productIds: [...new Set(ids)], comparedCount: new Set(ids).size });
+        const unique = [...new Set(ids)];
+        if (unique.length >= 2) trackAtlasEvent("comparison_completed", { productIds: unique, comparedCount: unique.length });
       }
 
-      if (!sessionStorage.getItem(recommendationStartedKey) && !target.closest(".v5-database") && !target.closest(".v5-compare") && !target.closest(".v5-shape-lab")) {
-        sessionStorage.setItem(recommendationStartedKey, "1");
-        trackAtlasEvent("recommendation_started", { entrySurface: "fit" });
+      if (!isNonFitSurface(target)) {
+        if (!sessionStorage.getItem(recommendationStartedKey)) {
+          sessionStorage.setItem(recommendationStartedKey, "1");
+          trackAtlasEvent("recommendation_started", { entrySurface: "fit" });
+        }
+        queueMicrotask(() => {
+          if (sessionStorage.getItem(recommendationCompletedKey)) return;
+          const resultCount = document.querySelectorAll(".v5-results .v5-result").length;
+          if (!resultCount) return;
+          sessionStorage.setItem(recommendationCompletedKey, "1");
+          trackAtlasEvent("recommendation_completed", { resultCount, relativeMode: Boolean(document.querySelector(".v5-relative")) });
+        });
       }
     };
 
