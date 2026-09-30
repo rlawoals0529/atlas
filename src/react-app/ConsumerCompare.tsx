@@ -1,0 +1,212 @@
+import { useMemo, useState } from "react";
+import type { CatalogProduct, ProductType } from "../shared/types";
+
+type CompareRow = {
+  section: string;
+  label: string;
+  value: string;
+  bar?: number;
+};
+
+const typeLabel: Record<ProductType, string> = {
+  mouse: "mouse",
+  mousepad: "mousepad",
+  skate: "skate",
+  keyboard: "keyboard",
+  switch: "switch",
+};
+
+const titleCase = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, char => char.toUpperCase());
+const money = (value?: number) => value == null ? "—" : `$${value.toFixed(value % 1 ? 2 : 0)}`;
+const polling = (hz: number) => hz >= 1000 ? `${hz / 1000}K Hz` : `${hz} Hz`;
+const yesNo = (value?: boolean) => value == null ? "—" : value ? "Yes" : "No";
+const clamp = (value: number) => Math.max(0, Math.min(100, value));
+const scale = (value: number, min: number, max: number) => clamp(((value - min) / Math.max(1, max - min)) * 100);
+
+function coverage(product: CatalogProduct) {
+  const notes = Object.values(product.evidence ?? {});
+  const high = notes.filter(note => note.confidence === "high").length;
+  const medium = notes.filter(note => note.confidence === "medium").length;
+  const manufacturer = product.sources.filter(source => source.kind === "manufacturer").length;
+  const independent = product.sources.filter(source => source.kind === "independent").length;
+  return Math.min(100, Math.round(
+    (product.sources.length ? 28 : 0) +
+    Math.min(24, product.sources.length * 8) +
+    Math.min(28, high * 9 + medium * 4) +
+    Math.min(20, manufacturer * 7 + independent * 8),
+  ));
+}
+
+function forceText(product: Extract<CatalogProduct, { type: "switch" }>) {
+  const force = product.specs.bottomOutForce ?? product.specs.actuationForce ?? product.specs.initialForce;
+  return force ? `${force.value} ${force.unit}` : "—";
+}
+
+function rowsFor(product: CatalogProduct): CompareRow[] {
+  const common: CompareRow[] = [
+    { section: "Overview", label: "Price", value: money(product.msrpUsd) },
+    { section: "Evidence", label: "Evidence coverage", value: `${coverage(product)}/100`, bar: coverage(product) },
+    { section: "Evidence", label: "Sources", value: String(product.sources.length), bar: scale(product.sources.length, 0, 6) },
+    { section: "Evidence", label: "High-confidence groups", value: String(Object.values(product.evidence ?? {}).filter(note => note.confidence === "high").length) },
+    { section: "Evidence", label: "Independent sources", value: String(product.sources.filter(source => source.kind === "independent").length) },
+  ];
+
+  if (product.type === "mouse") return [
+    ...common,
+    { section: "Core specs", label: "Weight", value: `${product.specs.weightG} g`, bar: scale(product.specs.weightG, 30, 120) },
+    { section: "Core specs", label: "Length", value: `${product.specs.lengthMm} mm`, bar: scale(product.specs.lengthMm, 105, 140) },
+    { section: "Core specs", label: "Width", value: `${product.specs.widthMm} mm`, bar: scale(product.specs.widthMm, 50, 80) },
+    { section: "Core specs", label: "Grip width", value: `${product.specs.gripWidthMm ?? product.specs.widthMm} mm`, bar: scale(product.specs.gripWidthMm ?? product.specs.widthMm, 48, 72) },
+    { section: "Core specs", label: "Height", value: `${product.specs.heightMm} mm`, bar: scale(product.specs.heightMm, 30, 50) },
+    { section: "Shape", label: "Shape", value: titleCase(product.specs.shape) },
+    { section: "Shape", label: "Hump", value: titleCase(product.specs.hump) },
+    { section: "Shape", label: "Side curvature", value: titleCase(product.specs.sideCurvature) },
+    { section: "Shape", label: "Front flare", value: titleCase(product.specs.frontFlare) },
+    { section: "Performance", label: "Polling ceiling", value: polling(product.specs.maxPollingHz), bar: scale(product.specs.maxPollingHz, 125, 8000) },
+    { section: "Performance", label: "Sensor", value: product.specs.sensor },
+    { section: "Performance", label: "Main switches", value: product.specs.mainSwitch ?? titleCase(product.specs.switchType) },
+    { section: "Platform", label: "Connectivity", value: product.specs.connectivity.join(" · ") },
+    { section: "Platform", label: "Buttons", value: product.specs.programmableButtons != null ? String(product.specs.programmableButtons) : "—" },
+    { section: "Platform", label: "Web configurator", value: yesNo(product.specs.webDriver) },
+    { section: "Platform", label: "Battery @ 1K", value: product.specs.battery1kHours ? `${product.specs.battery1kHours} h` : "—" },
+  ];
+
+  if (product.type === "mousepad") return [
+    ...common,
+    { section: "Surface", label: "Surface class", value: titleCase(product.specs.surfaceClass) },
+    { section: "Surface", label: "Surface material", value: product.specs.surfaceMaterial },
+    { section: "Surface", label: "Base material", value: product.specs.baseMaterial },
+    { section: "Surface", label: "Firmness", value: titleCase(product.specs.firmness) },
+    { section: "Physical", label: "Size", value: `${product.specs.widthMm} × ${product.specs.heightMm} mm` },
+    { section: "Physical", label: "Thickness", value: `${product.specs.thicknessMm} mm`, bar: scale(product.specs.thicknessMm, 1, 6) },
+    { section: "Physical", label: "Stitched edges", value: yesNo(product.specs.stitchedEdges) },
+    { section: "Feel", label: "Initial speed", value: `${product.feel.staticSpeed}/100`, bar: product.feel.staticSpeed },
+    { section: "Feel", label: "Dynamic speed", value: `${product.feel.dynamicSpeed}/100`, bar: product.feel.dynamicSpeed },
+    { section: "Feel", label: "Stopping power", value: `${product.feel.stoppingPower}/100`, bar: product.feel.stoppingPower },
+    { section: "Feel", label: "Texture", value: `${product.feel.texture}/100`, bar: product.feel.texture },
+    { section: "Environment", label: "Humidity resistance", value: `${product.feel.humidityResistance}/100`, bar: product.feel.humidityResistance },
+    { section: "Environment", label: "X/Y consistency", value: `${product.feel.xyConsistency}/100`, bar: product.feel.xyConsistency },
+    { section: "Environment", label: "Sleeve compatibility", value: `${product.feel.sleeveCompatibility}/100`, bar: product.feel.sleeveCompatibility },
+    { section: "Durability", label: "Worn-zone stability", value: product.feel.wornZoneStability != null ? `${product.feel.wornZoneStability}/100` : "—", bar: product.feel.wornZoneStability },
+    { section: "Durability", label: "Cleaning recovery", value: product.feel.cleaningRecovery != null ? `${product.feel.cleaningRecovery}/100` : "—", bar: product.feel.cleaningRecovery },
+  ];
+
+  if (product.type === "skate") return [
+    ...common,
+    { section: "Construction", label: "Material", value: titleCase(product.specs.material) },
+    { section: "Construction", label: "Format", value: titleCase(product.specs.format) },
+    { section: "Construction", label: "Thickness", value: product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "—" },
+    { section: "Construction", label: "Cushion layer", value: yesNo(product.specs.cushionLayer) },
+    { section: "Construction", label: "Anti-collapse", value: yesNo(product.specs.antiCollapse) },
+    { section: "Glide", label: "Fresh speed", value: `${product.feel.freshSpeed ?? product.feel.speed}/100`, bar: product.feel.freshSpeed ?? product.feel.speed },
+    { section: "Glide", label: "Broken-in speed", value: `${product.feel.brokenInSpeed ?? product.feel.speed}/100`, bar: product.feel.brokenInSpeed ?? product.feel.speed },
+    { section: "Glide", label: "Control", value: `${product.feel.control}/100`, bar: product.feel.control },
+    { section: "Wear", label: "Durability", value: `${product.feel.durability}/100`, bar: product.feel.durability },
+    { section: "Wear", label: "Wear resistance", value: product.feel.wearRate != null ? `${100 - product.feel.wearRate}/100` : "—", bar: product.feel.wearRate != null ? 100 - product.feel.wearRate : undefined },
+    { section: "Wear", label: "Dust tolerance", value: product.feel.dustSensitivity != null ? `${100 - product.feel.dustSensitivity}/100` : "—", bar: product.feel.dustSensitivity != null ? 100 - product.feel.dustSensitivity : undefined },
+    { section: "Compatibility", label: "Cloth", value: product.compatibility.cloth ? "Compatible" : "Avoid" },
+    { section: "Compatibility", label: "Hybrid", value: product.compatibility.hybrid ? "Compatible" : "Avoid" },
+    { section: "Compatibility", label: "Glass", value: product.compatibility.glass ? "Compatible" : "Avoid" },
+    { section: "Compatibility", label: "Soft base", value: titleCase(product.compatibility.softBase) },
+  ];
+
+  if (product.type === "keyboard") return [
+    ...common,
+    { section: "Layout", label: "Form factor", value: product.specs.formFactor.toUpperCase() },
+    { section: "Layout", label: "Layout", value: product.specs.layout },
+    { section: "Switching", label: "Switch technology", value: titleCase(product.specs.switchTechnology) },
+    { section: "Switching", label: "Stock switch", value: product.specs.stockSwitch },
+    { section: "Input", label: "Polling ceiling", value: polling(product.specs.maxPollingHz), bar: scale(product.specs.maxPollingHz, 125, 8000) },
+    { section: "Input", label: "Minimum actuation", value: product.specs.minActuationMm != null ? `${product.specs.minActuationMm} mm` : "—", bar: product.specs.minActuationMm != null ? scale(product.specs.minActuationMm, 0.05, 4) : undefined },
+    { section: "Input", label: "Maximum actuation", value: product.specs.maxActuationMm != null ? `${product.specs.maxActuationMm} mm` : "—", bar: product.specs.maxActuationMm != null ? scale(product.specs.maxActuationMm, 0.05, 4) : undefined },
+    { section: "Input", label: "Actuation step", value: product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm` : "—" },
+    { section: "Input", label: "Rapid Trigger", value: yesNo(product.specs.rapidTrigger) },
+    { section: "Input", label: "SOCD", value: yesNo(product.specs.socd) },
+    { section: "Input", label: "Analog input", value: yesNo(product.specs.analogInput) },
+    { section: "Build", label: "Hot-swappable", value: yesNo(product.specs.hotSwappable) },
+    { section: "Build", label: "Case", value: product.specs.caseMaterial },
+    { section: "Build", label: "Plate", value: product.specs.plateMaterial ?? "—" },
+    { section: "Build", label: "Keycaps", value: product.specs.keycapMaterial ?? "—" },
+    { section: "Build", label: "Mount", value: product.specs.mount ?? "—" },
+    { section: "Platform", label: "Connectivity", value: product.specs.connectivity.join(" · ") },
+    { section: "Platform", label: "Web configurator", value: yesNo(product.specs.webConfigurator) },
+    { section: "Platform", label: "Software", value: product.specs.software ?? "—" },
+  ];
+
+  return [
+    ...common,
+    { section: "Switch", label: "Technology", value: titleCase(product.specs.technology) },
+    { section: "Switch", label: "Feel", value: titleCase(product.specs.feel) },
+    { section: "Force", label: "Initial force", value: product.specs.initialForce ? `${product.specs.initialForce.value} ${product.specs.initialForce.unit}` : "—" },
+    { section: "Force", label: "Actuation force", value: product.specs.actuationForce ? `${product.specs.actuationForce.value} ${product.specs.actuationForce.unit}` : "—" },
+    { section: "Force", label: "Bottom-out force", value: product.specs.bottomOutForce ? `${product.specs.bottomOutForce.value} ${product.specs.bottomOutForce.unit}` : forceText(product) },
+    { section: "Travel", label: "Pre-travel", value: product.specs.preTravelMm != null ? `${product.specs.preTravelMm} mm` : "—", bar: product.specs.preTravelMm != null ? scale(product.specs.preTravelMm, 0, 4) : undefined },
+    { section: "Travel", label: "Total travel", value: `${product.specs.totalTravelMm} mm`, bar: scale(product.specs.totalTravelMm, 2.5, 4.2) },
+    { section: "Build", label: "Factory lubed", value: yesNo(product.specs.factoryLubed) },
+    { section: "Build", label: "Rated life", value: product.specs.ratedKeystrokesM ? `${product.specs.ratedKeystrokesM}M keystrokes` : "—" },
+    { section: "Magnetic", label: "Initial flux", value: product.specs.magneticFluxGs ? `${product.specs.magneticFluxGs.initial} Gs` : "—" },
+    { section: "Magnetic", label: "Bottom-out flux", value: product.specs.magneticFluxGs ? `${product.specs.magneticFluxGs.bottomOut} Gs` : "—" },
+    { section: "Compatibility", label: "Compatibility notes", value: product.specs.compatibility?.join(" · ") ?? "Verify against the target board" },
+  ];
+}
+
+export default function ConsumerCompare({ products, onClose, onRemove }: { products: CatalogProduct[]; onClose: () => void; onRemove: (id: string) => void }) {
+  const [differencesOnly, setDifferencesOnly] = useState(false);
+  const type = products[0]?.type;
+  const rowSets = useMemo(() => products.map(rowsFor), [products]);
+  const rows = useMemo(() => {
+    if (!rowSets.length) return [] as CompareRow[];
+    return rowSets[0].filter((row, index) => {
+      if (!differencesOnly) return true;
+      const values = rowSets.map(set => set[index]?.value ?? "—");
+      return new Set(values).size > 1;
+    });
+  }, [rowSets, differencesOnly]);
+  const sections = [...new Set(rows.map(row => row.section))];
+  const specialistHref = type === "mouse" ? "#pointing" : type === "keyboard" || type === "switch" ? "#keyboard-lab" : "#product-lab";
+  const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "keyboard" || type === "switch" ? "Open Keyboard Lab" : "Open research tools";
+
+  if (!type || products.length < 2) return null;
+
+  return <div className="consumer-compare-shell" role="dialog" aria-modal="true" aria-label={`Compare ${typeLabel[type]} products`}>
+    <button className="consumer-compare-backdrop" onClick={onClose} aria-label="Close comparison"/>
+    <section className="consumer-compare-panel">
+      <header className="consumer-compare-header">
+        <div><span>RICH COMPARISON / {typeLabel[type].toUpperCase()}</span><h2>Compare the parts that actually differ.</h2><p>Atlas keeps raw specifications, modeled feel fields and evidence strength visible side-by-side. Bars show position on a fixed scale, not an overall quality score.</p></div>
+        <button className="consumer-compare-close" onClick={onClose} aria-label="Close">×</button>
+      </header>
+
+      <div className="consumer-compare-controls">
+        <label><input type="checkbox" checked={differencesOnly} onChange={event => setDifferencesOnly(event.target.checked)}/><span>Show differences only</span></label>
+        <a href={specialistHref}>{specialistLabel} →</a>
+      </div>
+
+      <div className="consumer-compare-products" style={{ "--compare-count": products.length } as React.CSSProperties}>
+        <div className="consumer-compare-axis"><span>PRODUCT</span></div>
+        {products.map(product => <article key={product.id}>
+          <button onClick={() => onRemove(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button>
+          <span>{product.brand}</span><h3>{product.model}</h3><small>{money(product.msrpUsd)} · {coverage(product)}/100 evidence</small>
+        </article>)}
+      </div>
+
+      <div className="consumer-compare-table" style={{ "--compare-count": products.length } as React.CSSProperties}>
+        {sections.map(section => <div className="consumer-compare-section" key={section}>
+          <div className="consumer-compare-section-title">{section}</div>
+          {rows.map((row, rowIndex) => row.section === section ? <div className="consumer-compare-row" key={`${section}-${row.label}`}>
+            <div className="consumer-compare-axis"><span>{row.label}</span></div>
+            {rowSets.map((set, productIndex) => {
+              const originalIndex = rowSets[0].findIndex(candidate => candidate.section === row.section && candidate.label === row.label);
+              const cell = set[originalIndex] ?? row;
+              return <div className="consumer-compare-cell" key={products[productIndex].id}>
+                <b>{cell.value}</b>
+                {cell.bar != null && <div className="consumer-compare-bar" aria-hidden="true"><i style={{ width: `${clamp(cell.bar)}%` }}/></div>}
+              </div>;
+            })}
+          </div> : null)}
+        </div>)}
+      </div>
+
+      <footer className="consumer-compare-note"><b>No automatic winner.</b><span>The meaning of a difference depends on your hand, game, surface, board compatibility and preferences. Atlas exposes the delta instead of turning it into a universal verdict.</span></footer>
+    </section>
+  </div>;
+}
