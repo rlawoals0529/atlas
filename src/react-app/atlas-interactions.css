@@ -1,0 +1,146 @@
+/* Final interaction layer: keep hover/focus behavior consistent across consumer and specialist surfaces. */
+
+.consumer-shell :is(a,button,input,select):focus-visible,
+.utility-shell :is(a,button,input,select):focus-visible,
+.pl-shell :is(a,button,input,select,textarea):focus-visible,
+.consumer-compare-shell :is(a,button,input):focus-visible,
+.atlas-utility-dock a:focus-visible,
+.atlas-validation-run-entry:focus-visible{
+  outline:2px solid rgba(13,107,87,.42)!important;
+  outline-offset:2px!important;
+  box-shadow:0 0 0 4px rgba(13,107,87,.08)!important;
+}
+
+/* Consumer database */
+.consumer-topbar nav a:hover,
+.consumer-topbar nav a:focus-visible,
+.consumer-category-tabs button:not(.active):hover,
+.consumer-filter-toggle:hover,
+.consumer-filter-check:hover,
+.consumer-toggle:hover{
+  background:#eaede9!important;
+  border-color:#c2c9c3!important;
+  color:var(--consumer-ink)!important;
+}
+
+.consumer-search:hover,
+.consumer-toolbar select:hover,
+.consumer-progressive-filters select:hover{
+  background:#fff!important;
+  border-color:#b9c1ba!important;
+}
+
+.consumer-search:focus-within,
+.consumer-toolbar select:focus,
+.consumer-progressive-filters select:focus{
+  background:#fff!important;
+  border-color:#8cb0a0!important;
+  box-shadow:0 0 0 3px rgba(13,107,87,.08)!important;
+}
+
+.consumer-product:hover,
+.consumer-product:focus-visible,
+.consumer-tool-row a:hover,
+.consumer-tool-row a:focus-visible{
+  background:#fff!important;
+  border-color:#9eaaa1!important;
+  color:var(--consumer-ink)!important;
+}
+
+/* Comparison */
+.consumer-card-compare:hover,
+.consumer-compare-close:hover,
+.consumer-compare-clear:hover,
+.consumer-compare-chip button:hover{
+  background:#eef1ed!important;
+  border-color:var(--atlas-line-strong)!important;
+  color:var(--atlas-ink)!important;
+}
+.consumer-card-compare.selected:hover,
+.consumer-compare-open:hover{
+  background:#2b302c!important;
+  border-color:#2b302c!important;
+  color:#fff!important;
+}
+.consumer-compare-controls a:hover,
+.consumer-compare-controls a:focus-visible{
+  color:#095645!important;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+/* Keyboard and sensitivity specialist surfaces */
+.utility-shell .utility-card:hover,
+.utility-shell .utility-grid article:hover,
+.utility-shell .sens-source-grid article:hover,
+.utility-shell .kb-toolbar:hover,
+.utility-shell .kb-inspector:hover,
+.utility-shell .kb-detail-art:hover,
+.utility-shell .kb-evidence:hover{
+  background:var(--atlas-card)!important;
+  border-color:var(--atlas-line)!important;
+  color:var(--atlas-ink)!important;
+  box-shadow:none!important;
+}
+.utility-shell .kb-card:hover,
+.utility-shell .kb-card:focus-visible{
+  background:var(--atlas-card)!important;
+  border-color:#9eaaa1!important;
+  color:var(--atlas-ink)!important;
+  box-shadow:0 10px 26px rgba(18,25,20,.06)!important;
+}
+.utility-shell .kb-segments button:not(.active):hover,
+.utility-shell .sens-presets button:not(.active):hover,
+.utility-shell .sens-swap:hover{
+  background:#eef1ed!important;
+  border-color:#b9c1ba!important;
+  color:var(--atlas-ink)!important;
+}
+.utility-shell .kb-toolbar input:hover,
+.utility-shell .kb-toolbar select:hover{
+  background:#fff!important;
+  border-color:#b9c1ba!important;
+  color:var(--atlas-ink)!important;
+}
+.utility-shell .kb-toolbar input:focus,
+.utility-shell .kb-toolbar select:focus{
+  background:#fff!important;
+  border-color:#8cb0a0!important;
+  color:var(--atlas-ink)!important;
+  box-shadow:0 0 0 3px rgba(13,107,87,.08)!important;
+}
+
+/* Product Lab */
+.pl-shell .pl-path-grid button:hover,
+.pl-shell .pl-card:hover,
+.pl-shell .pl-metrics article:hover,
+.pl-shell .pl-statement:hover,
+.pl-shell .pl-test-list article:hover,
+.pl-shell .pl-execution-list article:hover,
+.pl-shell .pl-integrity-grid article:hover{
+  background:#fff!important;
+  border-color:#aeb7b0!important;
+  color:var(--atlas-ink)!important;
+  box-shadow:none!important;
+}
+.pl-shell .pl-topbar nav button:hover,
+.pl-shell .pl-toggle button:not(.active):hover,
+.pl-shell .pl-card-head button:hover{
+  background:#eaede9!important;
+  color:var(--atlas-ink)!important;
+}
+.pl-shell .pl-form-grid :is(input,select,textarea):hover,
+.pl-shell .pl-execution-list :is(input,select,textarea):hover{
+  background:#fff!important;
+  border-color:#b9c1ba!important;
+  color:var(--atlas-ink)!important;
+}
+
+/* Shared utility docks */
+.atlas-utility-dock a:hover,
+.atlas-utility-dock a:focus-visible,
+.atlas-validation-run-entry:hover,
+.atlas-validation-run-entry:focus-visible{
+  filter:none!important;
+  border-color:#9eaaa1!important;
+}
