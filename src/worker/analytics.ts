@@ -26,8 +26,11 @@ const EVENT_NAMES = new Set<AtlasEventName>([
   "comparison_started",
   "comparison_completed",
   "shape_lab_used",
+  "shape_overlay_changed",
   "similarity_search_used",
   "recommendation_started",
+  "recommendation_step_completed",
+  "recommendation_abandoned",
   "recommendation_completed",
   "recommendation_result_selected",
   "outbound_product_clicked",
@@ -97,15 +100,18 @@ function validProperties(name: AtlasEventName, value: unknown): boolean {
     case "filters_changed": return typeof p.surface === "string" && p.surface.length <= 64 && Array.isArray(p.filterNames) && p.filterNames.length <= 20 && p.filterNames.every(item => typeof item === "string" && item.length <= 64) && Number.isInteger(p.activeFilterCount) && Number(p.activeFilterCount) >= 0 && Number(p.activeFilterCount) <= 30;
     case "comparison_started": return validProductIds(p.productIds);
     case "comparison_completed": return validProductIds(p.productIds) && Number.isInteger(p.comparedCount) && Number(p.comparedCount) >= 0 && Number(p.comparedCount) <= 8;
-    case "shape_lab_used": return ["opened", "overlay_changed", "alignment_changed", "view_changed"].includes(String(p.action));
+    case "shape_lab_used": return ["opened", "alignment_changed", "view_changed"].includes(String(p.action));
+    case "shape_overlay_changed": return ["top", "side", "unknown"].includes(String(p.view)) && validProductIds(p.activeProductIds) && (p.opacityPct === undefined || (typeof p.opacityPct === "number" && Number.isFinite(p.opacityPct) && p.opacityPct >= 0 && p.opacityPct <= 100));
     case "similarity_search_used": return typeof p.referenceProductId === "string" && PRODUCT_ID.test(p.referenceProductId) && ["balanced", "claw", "fingertip", "palm"].includes(String(p.mode));
     case "recommendation_started": return typeof p.entrySurface === "string" && p.entrySurface.length <= 64;
+    case "recommendation_step_completed": return typeof p.step === "string" && p.step.length > 0 && p.step.length <= 64 && Number.isInteger(p.stepIndex) && Number(p.stepIndex) >= 1 && Number(p.stepIndex) <= 30;
+    case "recommendation_abandoned": return (p.lastStep === undefined || (typeof p.lastStep === "string" && p.lastStep.length <= 64)) && Number.isInteger(p.completedSteps) && Number(p.completedSteps) >= 0 && Number(p.completedSteps) <= 30 && ["navigation", "pagehide", "unknown"].includes(String(p.reason));
     case "recommendation_completed": return Number.isInteger(p.resultCount) && Number(p.resultCount) >= 0 && Number(p.resultCount) <= 50 && typeof p.relativeMode === "boolean";
     case "recommendation_result_selected": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && (p.rank === undefined || (Number.isInteger(p.rank) && Number(p.rank) >= 1 && Number(p.rank) <= 50)) && (p.fitScore === undefined || (typeof p.fitScore === "number" && Number(p.fitScore) >= 0 && Number(p.fitScore) <= 100));
     case "outbound_product_clicked": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && ["manufacturer", "source", "retailer", "other"].includes(String(p.destinationKind));
     case "product_lab_viewed": return p.section === undefined || ["overview", "analytics", "intelligence", "validation", "decisions", "integrity"].includes(String(p.section));
-    case "validation_plan_generated": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && Number.isInteger(p.caseCount) && Number(p.caseCount) >= 0 && Number(p.caseCount) <= 200 && Number.isInteger(p.automationCandidateCount) && Number(p.automationCandidateCount) >= 0 && Number(p.automationCandidateCount) <= 200;
-    case "validation_session_started": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && Number.isInteger(p.plannedCaseCount) && Number(p.plannedCaseCount) >= 0 && Number(p.plannedCaseCount) <= 200;
+    case "validation_plan_generated": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && Number.isInteger(p.caseCount) && Number(p.caseCount) >= 0 && Number(p.caseCount) <= 300 && Number.isInteger(p.automationCandidateCount) && Number(p.automationCandidateCount) >= 0 && Number(p.automationCandidateCount) <= 300;
+    case "validation_session_started": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && Number.isInteger(p.plannedCaseCount) && Number(p.plannedCaseCount) >= 0 && Number(p.plannedCaseCount) <= 300;
     case "validation_case_recorded": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && typeof p.testId === "string" && IDENTIFIER.test(p.testId) && ["pass", "fail", "blocked", "not-run"].includes(String(p.status));
     case "defect_created": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && ["S1", "S2", "S3", "S4"].includes(String(p.severity)) && (p.linkedTestId === undefined || (typeof p.linkedTestId === "string" && IDENTIFIER.test(p.linkedTestId)));
   }

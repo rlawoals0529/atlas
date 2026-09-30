@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { AtlasAnalyticsEvent } from "../shared/analytics";
+import { ANALYTICS_PRIVACY_EVENT, analyticsCollectionState, type AtlasAnalyticsEvent } from "../shared/analytics";
 
 const ENDPOINT = "/api/analytics/events";
 const AVAILABILITY = "/api/analytics/availability";
@@ -14,6 +14,10 @@ export default function AnalyticsTransport() {
     let stopped = false;
 
     const flush = async () => {
+      if (!analyticsCollectionState().enabled) {
+        queue = [];
+        return;
+      }
       if (!resolved || !available || sending || stopped || !queue.length) return;
       sending = true;
       const batch = queue.slice(0, MAX_QUEUE);
@@ -40,12 +44,17 @@ export default function AnalyticsTransport() {
 
     const listener = (event: Event) => {
       const custom = event as CustomEvent<AtlasAnalyticsEvent>;
-      if (!custom.detail || custom.detail.eventId.startsWith("demo-")) return;
+      if (!custom.detail || custom.detail.eventId.startsWith("demo-") || !analyticsCollectionState().enabled) return;
       queue = [...queue, custom.detail].slice(-100);
       void flush();
     };
 
+    const privacy = () => {
+      if (!analyticsCollectionState().enabled) queue = [];
+    };
+
     window.addEventListener("atlas:analytics", listener);
+    window.addEventListener(ANALYTICS_PRIVACY_EVENT, privacy);
     void fetch(AVAILABILITY, { credentials: "same-origin", headers: { Accept: "application/json" } })
       .then(async response => response.ok ? response.json() as Promise<{ available?: boolean }> : { available: false })
       .then(result => { available = result.available === true; resolved = true; void flush(); })
@@ -54,6 +63,7 @@ export default function AnalyticsTransport() {
     return () => {
       stopped = true;
       window.removeEventListener("atlas:analytics", listener);
+      window.removeEventListener(ANALYTICS_PRIVACY_EVENT, privacy);
     };
   }, []);
 

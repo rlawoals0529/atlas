@@ -24,11 +24,11 @@ function RootRouter() {
   }, []);
 
   useEffect(() => {
-    const key = "atlas.analytics.session-started.v1";
+    const key = "atlas.analytics.session-started.v2";
     if (sessionStorage.getItem(key)) return;
     const visitor = analyticsVisitor();
-    trackAtlasEvent("session_started", { visitNumber: visitor.visitNumber });
-    sessionStorage.setItem(key, "1");
+    const recorded = trackAtlasEvent("session_started", { visitNumber: visitor.visitNumber });
+    if (recorded) sessionStorage.setItem(key, "1");
   }, []);
 
   return <>

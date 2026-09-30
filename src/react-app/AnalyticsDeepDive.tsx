@@ -1,17 +1,31 @@
 import { useMemo } from "react";
 import { mice } from "../shared/catalog";
-import type { AtlasAnalyticsEvent } from "../shared/analytics";
+import { summarizeAnalytics, type AtlasAnalyticsEvent } from "../shared/analytics";
 import { attributeOutboundEngagement, compareShapeLabSessionDepth, segmentBehavior, topFilterUsage } from "../shared/analyticsInsights";
 
 const display = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, char => char.toUpperCase());
 
 export default function AnalyticsDeepDive({ events }: { events: AtlasAnalyticsEvent[] }) {
+  const summary = useMemo(() => summarizeAnalytics(events), [events]);
   const depth = useMemo(() => compareShapeLabSessionDepth(events), [events]);
   const segments = useMemo(() => segmentBehavior(events), [events]);
   const attributes = useMemo(() => attributeOutboundEngagement(events, mice), [events]);
   const filters = useMemo(() => topFilterUsage(events), [events]);
 
   return <div className="pl-analytics-deep">
+    <section className="pl-card">
+      <div className="pl-card-head"><div><span>CORE KPIs</span><h3>Behavioral health signals</h3></div><small className="pl-method-label">Session-level descriptive metrics</small></div>
+      <div className="pl-kpi-grid">
+        <article><span>Activation</span><b>{summary.activationRatePct}%</b><small>session used a core discovery action</small></article>
+        <article><span>Compare completion</span><b>{summary.compareCompletionPct}%</b><small>started → 2+ products compared</small></article>
+        <article><span>Products / session</span><b>{summary.productsPerSession}</b><small>unique viewed products</small></article>
+        <article><span>Engaged sessions</span><b>{summary.engagedSessionPct}%</b><small>3+ non-session events</small></article>
+        <article><span>Outbound CTR</span><b>{summary.outboundCtrPct}%</b><small>view sessions with outbound click</small></article>
+        <article><span>Rec abandonment</span><b>{summary.recommendationAbandonmentPct}%</b><small>explicit started → abandoned</small></article>
+      </div>
+      {summary.recommendationSteps.length > 0 && <div className="pl-step-row"><span>Observed recommendation steps</span>{summary.recommendationSteps.slice(0, 8).map(row => <i key={row.step}>{display(row.step)} · {row.sessions}</i>)}</div>}
+    </section>
+
     <div className="pl-grid-2">
       <section className="pl-card">
         <div className="pl-card-head"><div><span>DEPTH</span><h3>Do Shape Lab sessions go deeper?</h3></div></div>
