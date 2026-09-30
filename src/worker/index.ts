@@ -7,8 +7,10 @@ import { RELEASE } from "../shared/release";
 import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
 import type { MouseProduct, UserProfile } from "../shared/types";
+import { analyticsApp, type AnalyticsBindings } from "./analytics";
 
-const app = new Hono();
+const app = new Hono<{ Bindings: AnalyticsBindings }>();
+type AtlasContext = Context<{ Bindings: AnalyticsBindings }>;
 
 const securityHeaders: Record<string, string> = {
   "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
@@ -27,7 +29,7 @@ app.use("/api/*", async (c, next) => {
 });
 
 const buckets = new Map<string, { count: number; resetAt: number }>();
-function enforceRateLimit(c: Context, bucket: string, limit: number, windowMs: number): Response | null {
+function enforceRateLimit(c: AtlasContext, bucket: string, limit: number, windowMs: number): Response | null {
   const now = Date.now();
   const ip = c.req.header("cf-connecting-ip") ?? "unknown";
   const key = `${bucket}:${ip}`;
@@ -89,12 +91,14 @@ function validProfile(value: unknown): value is UserProfile {
     && delta("sizeDelta") && delta("widthDelta") && delta("humpDelta") && delta("weightDelta") && delta("palmSupportDelta");
 }
 
-function queryNumber(c: Context, key: string, fallback: number, min: number, max: number): number | null {
+function queryNumber(c: AtlasContext, key: string, fallback: number, min: number, max: number): number | null {
   const raw = c.req.query(key);
   if (raw === undefined || raw === "") return fallback;
   const value = Number(raw);
   return Number.isFinite(value) && value >= min && value <= max ? value : null;
 }
+
+app.route("/api/analytics", analyticsApp);
 
 app.get("/api/health", (c) => c.json({
   ok: true,
@@ -106,6 +110,7 @@ app.get("/api/health", (c) => c.json({
   mice: mice.length,
   pads: mousepads.length,
   skates: skates.length,
+  analyticsStorage: Boolean(c.env.ANALYTICS_DB),
   averageEvidenceHealth: Math.round(catalog.reduce((sum, product) => sum + evidenceHealth(product).score, 0) / Math.max(1, catalog.length)),
 }));
 
@@ -113,6 +118,7 @@ app.get("/api/stats", (c) => c.json({
   release: RELEASE,
   catalog: catalogStats(catalog),
   types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length },
+  capabilities: { productionAnalytics: Boolean(c.env.ANALYTICS_DB) },
 }));
 
 app.get("/api/catalog", (c) => {
