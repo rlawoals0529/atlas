@@ -1,18 +1,39 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { allCatalog } from "../shared/catalog";
 import { imageForProduct } from "../shared/productImages";
+
+const productById = new Map(allCatalog.map(product => [product.id, product]));
+const sourceScore = (url: string) => {
+  const value = url.toLowerCase();
+  return (/\/products?\/|gaming-mice|gaming-keyboards|keyboard|switch/.test(value) ? 8 : 0)
+    + (/\/shop\/p\//.test(value) ? 4 : 0)
+    - (/support|manual|faq|help\.|youtube\.com|youtu\.be/.test(value) ? 6 : 0)
+    - (/blog|news|feature\.php/.test(value) ? 2 : 0);
+};
+const bestManufacturerSource = (productId: string) => {
+  const product = productById.get(productId);
+  if (!product) return undefined;
+  return product.sources.filter(source => source.kind === "manufacturer").sort((a, b) => sourceScore(b.url) - sourceScore(a.url))[0];
+};
 
 export function ProductMedia({ productId, fallback, className = "" }: { productId: string; fallback?: ReactNode; className?: string }) {
   const media = imageForProduct(productId);
+  const product = productById.get(productId);
+  const official = useMemo(() => bestManufacturerSource(productId), [productId]);
+  const src = media?.url ?? (official ? `/api/media/${encodeURIComponent(productId)}` : undefined);
+  const alt = media?.alt ?? (product ? `${product.brand} ${product.model} product image` : "Product image");
   const [failed, setFailed] = useState(false);
-
-  useEffect(() => setFailed(false), [productId]);
-
-  if (!media || failed) return fallback ? <>{fallback}</> : null;
-  return <img className={`atlas-product-image ${className}`.trim()} src={media.url} alt={media.alt} loading="lazy" decoding="async" onError={() => setFailed(true)}/>;
+  useEffect(() => setFailed(false), [productId, src]);
+  if (!src || failed) return fallback ? <>{fallback}</> : null;
+  return <img className={`atlas-product-image ${className}`.trim()} src={src} alt={alt} loading="lazy" decoding="async" onError={() => setFailed(true)}/>;
 }
 
 export function ProductImageCredit({ productId }: { productId: string }) {
   const media = imageForProduct(productId);
-  if (!media) return null;
-  return <a className="atlas-product-image-credit" href={media.sourceUrl} target="_blank" rel="noreferrer">{media.credit}<span>↗</span></a>;
+  const product = productById.get(productId);
+  const official = bestManufacturerSource(productId);
+  const href = media?.sourceUrl ?? official?.url;
+  const credit = media?.credit ?? (product && official ? `${product.brand} official product image` : undefined);
+  if (!href || !credit) return null;
+  return <a className="atlas-product-image-credit" href={href} target="_blank" rel="noreferrer">{credit}<span>↗</span></a>;
 }
