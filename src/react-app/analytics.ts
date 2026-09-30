@@ -2,6 +2,7 @@ import { ANALYTICS_SCHEMA_VERSION, type AnalyticsPrimitive, type AnalyticsSegmen
 
 const VISITOR_KEY = "atlas_visitor_v1";
 const SESSION_KEY = "atlas_session_v1";
+const SESSION_STARTED_KEY = "atlas_session_started_v1";
 const OPT_OUT_KEY = "atlas_analytics_opt_out";
 const RECOMMENDATION_STARTED_KEY = "atlas_recommendation_started_v1";
 const RECOMMENDATION_COMPLETED_KEY = "atlas_recommendation_completed_v1";
@@ -97,7 +98,10 @@ function recommendationCompleteSoon(): void {
 export function installAtlasAnalytics(): () => void {
   if (typeof document === "undefined" || analyticsDisabled()) return () => undefined;
 
-  trackAtlasEvent("session_started", { feature: "atlas" });
+  if (!sessionStorage.getItem(SESSION_STARTED_KEY)) {
+    sessionStorage.setItem(SESSION_STARTED_KEY, "1");
+    trackAtlasEvent("session_started", { feature: "atlas" });
+  }
 
   const onClick = (event: MouseEvent) => {
     const target = event.target instanceof Element ? event.target : null;
@@ -152,9 +156,10 @@ export function installAtlasAnalytics(): () => void {
 
     if (target.closest("#v5-profile")) {
       recommendationStart();
+      const control = closestLabel(target) ?? (target.name || target.type || "profile-control");
       trackAtlasEvent("filters_used", {
         feature: "fit-engine",
-        properties: { control: closestLabel(target) ?? target.name || target.type || "profile-control" },
+        properties: { control },
       });
       recommendationCompleteSoon();
       return;
