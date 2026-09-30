@@ -1,6 +1,6 @@
 # Atlas product changelog
 
-## v0.9 — Input ecosystem expansion (unreleased)
+## v0.9 — Input ecosystem expansion (released 2026-09-30)
 
 ### Consumer utilities
 - adds a dedicated **Keyboard Lab** at `#keyboard-lab` for sourced keyboard and switch research;
@@ -33,7 +33,8 @@
 - exposes keyboard/switch counts through `/api/health` and `/api/stats`, and supports them in `/api/catalog` and `/api/products/:slug`;
 - keeps mouse comparison, shape similarity and pointing-device recommendation endpoints scoped to their existing domains;
 - gates sensitivity provenance/math validation in both Atlas CI and the production deploy workflow;
-- deployment summaries now print direct Keyboard Lab and Sensitivity Lab routes.
+- deployment summaries now print direct Keyboard Lab and Sensitivity Lab routes;
+- release `e2e1038` passed Atlas CI, the shared security baseline, Cloudflare deployment and the live `/api/health` probe before the v0.9 metadata cleanup.
 
 ### Integrity boundaries
 - no fabricated keyboard latency, surface friction, hardware validation, reliability rates, market statistics or community consensus;
@@ -41,7 +42,7 @@
 - manufacturer polling ceilings are not treated as independent effective-update measurements;
 - matching cm/360 is a physical-distance match, not proof that different games or FOVs feel perceptually identical.
 
-## v0.8 — Product Lab (unreleased)
+## v0.8 — Product Lab (released 2026-09-30)
 
 ### Consumer experience
 - standardizes the public product name as **Atlas**;
