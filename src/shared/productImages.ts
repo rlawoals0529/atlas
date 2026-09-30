@@ -163,7 +163,31 @@ export const productImages: Record<string, ProductImage> = {
     sourceUrl: "https://geon.works/products/strike-he-switch",
     alt: "GEONWORKS Strike HE clicky Hall-effect switch",
     credit: "GEONWORKS official product image",
+  },,
+  "mouse-op1-8k-v2": {
+    url: "https://endgamegear.com/cdn/shop/files/OP1_Black_top_down.jpg?v=1736944464&width=2499",
+    sourceUrl: "https://endgamegear.com/products/op1-8k-v2-wired-gaming-mouse",
+    alt: "Endgame Gear OP1 8K v2 wired gaming mouse viewed from above",
+    credit: "Endgame Gear official product image",
   },
+  "mouse-zowie-za13-dw": {
+    url: "https://image.benq.com/is/image/benqco/1-za13-dw-top?%24ResponsivePreset%24=&fmt=png-alpha",
+    sourceUrl: "https://zowie.benq.com/en-us/mouse/za13-dw.html",
+    alt: "ZOWIE ZA13-DW wireless gaming mouse viewed from above",
+    credit: "ZOWIE official product image",
+  },
+  "keyboard-pulsar-es-he-70": {
+    url: "https://us.pulsar.gg/cdn/shop/files/Pulsar-eS-HE-70_ANSI-front1-ANSI_4dd1a65d-86f0-45db-987a-94be9671ff57_large.png?v=1755065886",
+    sourceUrl: "https://us.pulsar.gg/products/ansi-es-he-70-gaming-keyboard",
+    alt: "Pulsar eS HE 70 Hall-effect gaming keyboard in black",
+    credit: "Pulsar official product image",
+  },
+  "switch-gateron-magnetic-jade-gaming": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2411/21/photo/GATERONMagicJadeSwitchKS-20MagneticHallSensorSwitch1.png",
+    sourceUrl: "https://www.gateron.com/blog/detail/gateron-magnetic-switches-series-for-the-ultimate-gaming-experience",
+    alt: "Gateron Magnetic Jade Gaming Hall-effect switch",
+    credit: "Gateron official product image",
+  }
 };
 
 export const imageForProduct = (productId: string) => productImages[productId];
