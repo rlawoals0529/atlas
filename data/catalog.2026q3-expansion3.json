@@ -1,22 +1,23 @@
 {
   "mice": [
     {
-      "id": "mouse-razer-viper-v4-pro",
+      "id": "mouse-viper-v4-pro",
       "slug": "razer-viper-v4-pro",
       "type": "mouse",
       "brand": "Razer",
       "model": "Viper V4 Pro",
       "status": "current",
       "summary": "49 g symmetrical wireless esports mouse with Razer's Focus Pro 50K Optical Sensor Gen-3, Gen-4 optical switches and up to 8 kHz wired or wireless polling.",
-      "tags": ["wireless", "8k", "ultralight", "symmetrical", "optical-switch", "50k-dpi", "esports"],
+      "tags": ["wireless", "8k", "ultralight", "symmetrical", "optical-switch", "50k-dpi", "esports", "same-shell-v3-pro"],
       "sources": [
         {"id":"razer-viper-v4-pro-official","label":"Razer Viper V4 Pro product page","url":"https://www.razer.com/gaming-mice/razer-viper-v4-pro","kind":"manufacturer","checkedAt":"2026-09-30"},
         {"id":"razer-viper-v4-pro-support","label":"Razer Viper V4 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20775/","kind":"manufacturer","checkedAt":"2026-09-30"},
-        {"id":"atlas-viper-v4-fit","label":"Atlas Viper V4 Pro fit interpretation","url":"./research/FIELD_MODEL.md","kind":"editorial","checkedAt":"2026-09-30"}
+        {"id":"razer-viper-line-2026","label":"Razer Viper line comparison","url":"https://www.razer.com/blog/razer-viper-line-which-one-is-right-for-you","kind":"manufacturer","checkedAt":"2026-09-29"},
+        {"id":"atlas-editorial-fit","label":"Input Atlas fit model (provisional)","url":"./research/FIELD_MODEL.md","kind":"editorial","checkedAt":"2026-09-28"}
       ],
-      "specs": {"lengthMm":127.1,"widthMm":63.9,"heightMm":39.9,"gripWidthMm":57,"weightG":49,"shape":"symmetrical","hump":"center","frontFlare":"medium","sideCurvature":"mild","sensor":"Razer Focus Pro 50K Optical Sensor Gen-3","maxDpi":50000,"maxPollingHz":8000,"connectivity":["2.4GHz wireless","USB wired"],"switchType":"optical","mainSwitch":"Razer Optical Mouse Switches Gen-4","shellMaterial":"plastic","programmableButtons":6,"sideButtons":2,"onboardProfiles":1,"battery1kHours":180,"battery8kHours":45,"stockSkateMaterial":"100% PTFE"},
-      "fit": {"handLengthCm":[17.5,21],"handWidthCm":[8.5,11],"grip":{"palm":58,"relaxed-claw":93,"aggressive-claw":88,"pincer-claw":84,"knuckle-claw":82,"fingertip":91,"extended-fingertip":88,"palm-claw-hybrid":80},"aimStyle":{"finger":94,"wrist":94,"hybrid":95,"arm":88},"gameStyle":{"tactical-fps":95,"tracking-fps":96,"arena-fps":95,"battle-royale":95,"moba-rts":78,"mmo":42,"action":88,"mixed":92},"coatingDry":82,"coatingSweaty":78,"clickLightness":83,"clickCrispness":88,"wheelTactility":80,"liftSecurity":80,"palmSupport":52,"balance":"center"},
-      "evidence": {"specification":{"sourceIds":["razer-viper-v4-pro-official","razer-viper-v4-pro-support"],"confidence":"high","note":"Dimensions, mass, sensor ceiling, polling ceiling, button count, switches, onboard profile, battery figures and PTFE feet are manufacturer-published specifications."},"fit":{"sourceIds":["razer-viper-v4-pro-official","atlas-viper-v4-fit"],"confidence":"low","note":"Grip-width estimate, hand ranges and 0–100 fit vectors are Atlas editorial normalization for comparison, not Razer measurements."}}
+      "specs": {"lengthMm":127.1,"widthMm":63.9,"heightMm":39.9,"gripWidthMm":55.8,"weightG":49,"shape":"symmetrical","hump":"center","frontFlare":"medium","sideCurvature":"mild","sensor":"Razer Focus Pro 50K Optical Sensor Gen-3","maxDpi":50000,"maxPollingHz":8000,"connectivity":["2.4GHz wireless","USB wired"],"switchType":"optical","mainSwitch":"Razer Optical Mouse Switches Gen-4","shellMaterial":"plastic","programmableButtons":6,"sideButtons":2,"onboardProfiles":1,"battery1kHours":180,"battery8kHours":45,"stockSkateMaterial":"100% PTFE"},
+      "fit": {"handLengthCm":[17.5,21],"handWidthCm":[8.8,11.2],"grip":{"palm":68,"relaxed-claw":92,"aggressive-claw":78,"pincer-claw":72,"knuckle-claw":78,"fingertip":72,"extended-fingertip":69,"palm-claw-hybrid":89},"aimStyle":{"finger":95,"wrist":91,"hybrid":95,"arm":90},"gameStyle":{"tactical-fps":95,"tracking-fps":96,"arena-fps":96,"battle-royale":94,"moba-rts":76,"mmo":45,"action":92,"mixed":94},"coatingDry":86,"coatingSweaty":88,"clickLightness":78,"clickCrispness":86,"wheelTactility":75,"liftSecurity":80,"palmSupport":68,"balance":"center"},
+      "evidence": {"specification":{"sourceIds":["razer-viper-v4-pro-official","razer-viper-v4-pro-support"],"confidence":"high","note":"Dimensions, mass, sensor ceiling, polling ceiling, button count, switches, onboard profile, battery figures and PTFE feet are manufacturer-published specifications."},"geometry":{"sourceIds":["razer-viper-line-2026"],"confidence":"high","note":"Razer states the Viper V3 Pro SE, V3 Pro and V4 Pro share the exact mouse shape."},"fit":{"sourceIds":["razer-viper-line-2026","atlas-editorial-fit"],"confidence":"medium","note":"Atlas preserves the existing Viper V3 Pro shell fit profile because Razer confirms the shell relationship; input-generation and weight differences remain separate from shell fit."}}
     },
     {
       "id": "mouse-razer-deathadder-v4-pro",
