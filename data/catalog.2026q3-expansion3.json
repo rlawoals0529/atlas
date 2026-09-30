@@ -1,43 +1,5 @@
 {
-  "mice": [
-    {
-      "id": "mouse-viper-v4-pro",
-      "slug": "razer-viper-v4-pro",
-      "type": "mouse",
-      "brand": "Razer",
-      "model": "Viper V4 Pro",
-      "status": "current",
-      "summary": "49 g symmetrical wireless esports mouse with Razer's Focus Pro 50K Optical Sensor Gen-3, Gen-4 optical switches and up to 8 kHz wired or wireless polling.",
-      "tags": ["wireless", "8k", "ultralight", "symmetrical", "optical-switch", "50k-dpi", "esports", "same-shell-v3-pro"],
-      "sources": [
-        {"id":"razer-viper-v4-pro-official","label":"Razer Viper V4 Pro product page","url":"https://www.razer.com/gaming-mice/razer-viper-v4-pro","kind":"manufacturer","checkedAt":"2026-09-30"},
-        {"id":"razer-viper-v4-pro-support","label":"Razer Viper V4 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20775/","kind":"manufacturer","checkedAt":"2026-09-30"},
-        {"id":"razer-viper-line-2026","label":"Razer Viper line comparison","url":"https://www.razer.com/blog/razer-viper-line-which-one-is-right-for-you","kind":"manufacturer","checkedAt":"2026-09-29"},
-        {"id":"atlas-editorial-fit","label":"Input Atlas fit model (provisional)","url":"./research/FIELD_MODEL.md","kind":"editorial","checkedAt":"2026-09-28"}
-      ],
-      "specs": {"lengthMm":127.1,"widthMm":63.9,"heightMm":39.9,"gripWidthMm":55.8,"weightG":49,"shape":"symmetrical","hump":"center","frontFlare":"medium","sideCurvature":"mild","sensor":"Razer Focus Pro 50K Optical Sensor Gen-3","maxDpi":50000,"maxPollingHz":8000,"connectivity":["2.4GHz wireless","USB wired"],"switchType":"optical","mainSwitch":"Razer Optical Mouse Switches Gen-4","shellMaterial":"plastic","programmableButtons":6,"sideButtons":2,"onboardProfiles":1,"battery1kHours":180,"battery8kHours":45,"stockSkateMaterial":"100% PTFE"},
-      "fit": {"handLengthCm":[17.5,21],"handWidthCm":[8.8,11.2],"grip":{"palm":68,"relaxed-claw":92,"aggressive-claw":78,"pincer-claw":72,"knuckle-claw":78,"fingertip":72,"extended-fingertip":69,"palm-claw-hybrid":89},"aimStyle":{"finger":95,"wrist":91,"hybrid":95,"arm":90},"gameStyle":{"tactical-fps":95,"tracking-fps":96,"arena-fps":96,"battle-royale":94,"moba-rts":76,"mmo":45,"action":92,"mixed":94},"coatingDry":86,"coatingSweaty":88,"clickLightness":78,"clickCrispness":86,"wheelTactility":75,"liftSecurity":80,"palmSupport":68,"balance":"center"},
-      "evidence": {"specification":{"sourceIds":["razer-viper-v4-pro-official","razer-viper-v4-pro-support"],"confidence":"high","note":"Dimensions, mass, sensor ceiling, polling ceiling, button count, switches, onboard profile, battery figures and PTFE feet are manufacturer-published specifications."},"geometry":{"sourceIds":["razer-viper-line-2026"],"confidence":"high","note":"Razer states the Viper V3 Pro SE, V3 Pro and V4 Pro share the exact mouse shape."},"fit":{"sourceIds":["razer-viper-line-2026","atlas-editorial-fit"],"confidence":"medium","note":"Atlas preserves the existing Viper V3 Pro shell fit profile because Razer confirms the shell relationship; input-generation and weight differences remain separate from shell fit."}}
-    },
-    {
-      "id": "mouse-razer-deathadder-v4-pro",
-      "slug": "razer-deathadder-v4-pro",
-      "type": "mouse",
-      "brand": "Razer",
-      "model": "DeathAdder V4 Pro",
-      "status": "current",
-      "summary": "56 g right-handed ergonomic wireless esports mouse with Focus Pro 45K Optical Sensor Gen-2, Gen-4 optical switches and true 8 kHz wired or wireless polling.",
-      "tags": ["wireless", "8k", "ultralight", "ergonomic", "optical-switch", "45k-dpi", "esports"],
-      "sources": [
-        {"id":"razer-deathadder-v4-pro-official","label":"Razer DeathAdder V4 Pro product page","url":"https://www.razer.com/gaming-mice/razer-deathadder-v4-pro","kind":"manufacturer","checkedAt":"2026-09-30"},
-        {"id":"razer-deathadder-v4-pro-support","label":"Razer DeathAdder V4 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/19852","kind":"manufacturer","checkedAt":"2026-09-30"},
-        {"id":"atlas-deathadder-v4-fit","label":"Atlas DeathAdder V4 Pro fit interpretation","url":"./research/FIELD_MODEL.md","kind":"editorial","checkedAt":"2026-09-30"}
-      ],
-      "specs": {"lengthMm":128,"widthMm":68,"heightMm":44,"gripWidthMm":61,"weightG":56,"shape":"ergonomic","hump":"center","frontFlare":"medium","sideCurvature":"aggressive","sensor":"Razer Focus Pro 45K Optical Sensor Gen-2","maxDpi":45000,"maxPollingHz":8000,"connectivity":["2.4GHz wireless","USB wired"],"switchType":"optical","mainSwitch":"Razer Optical Mouse Switches Gen-4","shellMaterial":"plastic","programmableButtons":6,"sideButtons":2,"onboardProfiles":1,"battery1kHours":150,"battery8kHours":22,"stockSkateMaterial":"PTFE"},
-      "fit": {"handLengthCm":[17.5,21.5],"handWidthCm":[8.7,11.4],"grip":{"palm":95,"relaxed-claw":91,"aggressive-claw":76,"pincer-claw":69,"knuckle-claw":71,"fingertip":52,"extended-fingertip":58,"palm-claw-hybrid":94},"aimStyle":{"finger":68,"wrist":84,"hybrid":94,"arm":95},"gameStyle":{"tactical-fps":94,"tracking-fps":91,"arena-fps":88,"battle-royale":94,"moba-rts":80,"mmo":45,"action":90,"mixed":91},"coatingDry":84,"coatingSweaty":80,"clickLightness":81,"clickCrispness":87,"wheelTactility":83,"liftSecurity":92,"palmSupport":95,"balance":"center"},
-      "evidence": {"specification":{"sourceIds":["razer-deathadder-v4-pro-official","razer-deathadder-v4-pro-support"],"confidence":"high","note":"Dimensions, black-edition mass, sensor, polling, switches, button count, battery figures and PTFE feet are manufacturer-published specifications."},"fit":{"sourceIds":["razer-deathadder-v4-pro-official","atlas-deathadder-v4-fit"],"confidence":"low","note":"Razer identifies the shell as right-handed ergonomic; Atlas hand ranges and fit vectors are editorial comparison guidance rather than measured ergonomic outcomes."}}
-    }
-  ],
+  "mice": [],
   "mousepads": [
     {
       "id": "pad-logitech-pro-x-control",
