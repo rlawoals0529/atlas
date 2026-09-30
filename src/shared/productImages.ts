@@ -50,10 +50,28 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Gateron Magnetic Jade Pro Hall-effect switch",
     credit: "Gateron official product image",
   },
+  "switch-gateron-magnetic-jade-silent": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2605/15/products/gateron-magnetic-jade-silent-switch1.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-silent-switch-set",
+    alt: "Gateron Magnetic Jade Silent Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-jade-attraction": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2604/10/products/gateron-magnetic-jade-attraction-he-switch9-143504c316.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-attraction-he-switch-set",
+    alt: "Gateron Magnetic Jade Attraction Hall-effect switch",
+    credit: "Gateron official product image",
+  },
   "switch-geon-raw-he-40gf": {
     url: "https://geon.works/cdn/shop/files/115588790244153042_403743789.jpg?v=1714532073&width=1445",
     sourceUrl: "https://geon.works/products/geon-raw-he-switch",
     alt: "GEONWORKS Raw Hall-effect switch",
+    credit: "GEONWORKS official product image",
+  },
+  "switch-geon-strike-he": {
+    url: "https://geon.works/cdn/shop/files/GMI01671.jpg?v=1784099603&width=416",
+    sourceUrl: "https://geon.works/products/strike-he-switch",
+    alt: "GEONWORKS Strike HE clicky Hall-effect switch",
     credit: "GEONWORKS official product image",
   },
 };
