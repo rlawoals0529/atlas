@@ -18,8 +18,8 @@ for (const name of shardNames) {
   const shard = JSON.parse(fs.readFileSync(path.join(dataDir, name), "utf8"));
   for (const key of ["mice", "keyboards", "switches"]) {
     for (const product of shard[key] ?? []) {
-      if (product.status === "discontinued" || explicitImageIds.has(product.id)) continue;
-      probes.push({ id: product.id, type: product.type, label: `${product.brand} ${product.model}` });
+      if (product.status === "discontinued") continue;
+      probes.push({ id: product.id, type: product.type, label: `${product.brand} ${product.model}`, explicit: explicitImageIds.has(product.id) });
     }
   }
 }
@@ -53,4 +53,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Product media smoke test PASS: ${probes.length} official-source fallbacks returned image responses.`);
+const explicitCount = probes.filter(probe => probe.explicit).length;
+console.log(`Product media smoke test PASS: ${probes.length} products returned image responses (${explicitCount} explicit registry, ${probes.length - explicitCount} official-source resolved).`);
