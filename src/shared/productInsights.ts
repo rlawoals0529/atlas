@@ -9,14 +9,34 @@ export interface SegmentCount {
   sharePct: number;
 }
 
+export interface CatalogMatrixCell {
+  x: string;
+  y: string;
+  count: number;
+  sharePct: number;
+  denominator: number;
+}
+
+export interface FeatureAdoptionRow {
+  feature: string;
+  enabledCount: number;
+  knownCount: number;
+  unknownCount: number;
+  shareOfKnownPct: number;
+}
+
 export interface ProductPosition {
   productId: string;
   brand: string;
   model: string;
   weightG: number;
+  lengthMm: number;
+  widthMm: number;
+  heightMm: number;
   msrpUsd: number | null;
   pollingHz: number;
   shape: "symmetrical" | "ergonomic";
+  hump: MouseProduct["specs"]["hump"];
 }
 
 export interface CompetitorMatch {
@@ -55,12 +75,20 @@ export interface ProductInsights {
   wirelessSharePct: number;
   highPollingSharePct: number;
   highPollingPriceDeltaUsd: number | null;
+  weightPriceCorrelation: number | null;
+  pollingPriceCorrelation: number | null;
+  catalogBrandRepresentationHhi: number;
   shapeSegments: SegmentCount[];
   weightSegments: SegmentCount[];
   priceSegments: SegmentCount[];
   pollingSegments: SegmentCount[];
+  lifecycleSegments: SegmentCount[];
   topBrands: Array<{ brand: string; count: number; sharePct: number }>;
   sparseShapeWeightCells: Array<{ label: string; count: number }>;
+  shapeWeightMatrix: CatalogMatrixCell[];
+  shapePriceMatrix: CatalogMatrixCell[];
+  weightPriceMatrix: CatalogMatrixCell[];
+  featureAdoption: FeatureAdoptionRow[];
   positions: ProductPosition[];
   brandPositioning: BrandPositioning[];
   statements: InsightStatement[];
@@ -77,6 +105,68 @@ const average = (values: number[]) => values.length ? values.reduce((sum, value)
 const pct = (value: number, total: number) => total ? Math.round((value / total) * 1000) / 10 : 0;
 const segment = (label: string, count: number, total: number): SegmentCount => ({ label, count, sharePct: pct(count, total) });
 const isWireless = (mouse: MouseProduct) => mouse.specs.connectivity.some(value => /wireless|2\.4|bluetooth/i.test(value));
+const round2 = (value: number) => Math.round(value * 100) / 100;
+
+function pearson(pairs: Array<[number, number]>): number | null {
+  if (pairs.length < 3) return null;
+  const meanX = pairs.reduce((sum, [x]) => sum + x, 0) / pairs.length;
+  const meanY = pairs.reduce((sum, [, y]) => sum + y, 0) / pairs.length;
+  let numerator = 0;
+  let xSquare = 0;
+  let ySquare = 0;
+  for (const [x, y] of pairs) {
+    const dx = x - meanX;
+    const dy = y - meanY;
+    numerator += dx * dy;
+    xSquare += dx * dx;
+    ySquare += dy * dy;
+  }
+  if (!xSquare || !ySquare) return null;
+  return round2(numerator / Math.sqrt(xSquare * ySquare));
+}
+
+const weightBands = [
+  { label: "<50 g", matches: (mouse: MouseProduct) => mouse.specs.weightG < 50 },
+  { label: "50–59 g", matches: (mouse: MouseProduct) => mouse.specs.weightG >= 50 && mouse.specs.weightG < 60 },
+  { label: "60–69 g", matches: (mouse: MouseProduct) => mouse.specs.weightG >= 60 && mouse.specs.weightG < 70 },
+  { label: "70+ g", matches: (mouse: MouseProduct) => mouse.specs.weightG >= 70 },
+];
+
+const priceBands = [
+  { label: "<$80", matches: (mouse: MouseProduct) => mouse.msrpUsd != null && mouse.msrpUsd < 80 },
+  { label: "$80–119", matches: (mouse: MouseProduct) => mouse.msrpUsd != null && mouse.msrpUsd >= 80 && mouse.msrpUsd < 120 },
+  { label: "$120–159", matches: (mouse: MouseProduct) => mouse.msrpUsd != null && mouse.msrpUsd >= 120 && mouse.msrpUsd < 160 },
+  { label: "$160+", matches: (mouse: MouseProduct) => mouse.msrpUsd != null && mouse.msrpUsd >= 160 },
+];
+
+const shapeBands = [
+  { label: "Symmetrical", matches: (mouse: MouseProduct) => mouse.specs.shape === "symmetrical" },
+  { label: "Ergonomic", matches: (mouse: MouseProduct) => mouse.specs.shape === "ergonomic" },
+];
+
+function matrix(
+  products: MouseProduct[],
+  xBands: Array<{ label: string; matches: (mouse: MouseProduct) => boolean }>,
+  yBands: Array<{ label: string; matches: (mouse: MouseProduct) => boolean }>,
+): CatalogMatrixCell[] {
+  const denominator = products.length;
+  return yBands.flatMap(y => xBands.map(x => {
+    const count = products.filter(mouse => x.matches(mouse) && y.matches(mouse)).length;
+    return { x: x.label, y: y.label, count, sharePct: pct(count, denominator), denominator };
+  }));
+}
+
+function adoptionOptionalBoolean(products: MouseProduct[], feature: string, picker: (mouse: MouseProduct) => boolean | undefined): FeatureAdoptionRow {
+  const known = products.filter(mouse => picker(mouse) !== undefined);
+  const enabled = known.filter(mouse => picker(mouse) === true);
+  return { feature, enabledCount: enabled.length, knownCount: known.length, unknownCount: products.length - known.length, shareOfKnownPct: pct(enabled.length, known.length) };
+}
+
+function adoptionOptionalNumber(products: MouseProduct[], feature: string, picker: (mouse: MouseProduct) => number | undefined, predicate: (value: number) => boolean): FeatureAdoptionRow {
+  const known = products.filter(mouse => picker(mouse) !== undefined);
+  const enabled = known.filter(mouse => predicate(picker(mouse) as number));
+  return { feature, enabledCount: enabled.length, knownCount: known.length, unknownCount: products.length - known.length, shareOfKnownPct: pct(enabled.length, known.length) };
+}
 
 export function directCompetitorsFor(base: MouseProduct, products: MouseProduct[], limit = 6): CompetitorMatch[] {
   const candidates = products.filter(product => product.status === "current" && product.id !== base.id);
@@ -111,40 +201,24 @@ export function analyzeMouseCatalog(products: MouseProduct[]): ProductInsights {
   const brandCounts = new Map<string, number>();
   for (const mouse of current) brandCounts.set(mouse.brand, (brandCounts.get(mouse.brand) ?? 0) + 1);
 
-  const shapeSegments = [
-    segment("Symmetrical", current.filter(mouse => mouse.specs.shape === "symmetrical").length, total),
-    segment("Ergonomic", current.filter(mouse => mouse.specs.shape === "ergonomic").length, total),
-  ];
-
-  const weightBands = [
-    { label: "<50 g", matches: (mouse: MouseProduct) => mouse.specs.weightG < 50 },
-    { label: "50–59 g", matches: (mouse: MouseProduct) => mouse.specs.weightG >= 50 && mouse.specs.weightG < 60 },
-    { label: "60–69 g", matches: (mouse: MouseProduct) => mouse.specs.weightG >= 60 && mouse.specs.weightG < 70 },
-    { label: "70+ g", matches: (mouse: MouseProduct) => mouse.specs.weightG >= 70 },
-  ];
+  const shapeSegments = shapeBands.map(band => segment(band.label, current.filter(band.matches).length, total));
   const weightSegments = weightBands.map(band => segment(band.label, current.filter(band.matches).length, total));
-
-  const priceSegments = [
-    segment("<$80", priced.filter(mouse => (mouse.msrpUsd ?? Infinity) < 80).length, priced.length),
-    segment("$80–119", priced.filter(mouse => (mouse.msrpUsd ?? 0) >= 80 && (mouse.msrpUsd ?? Infinity) < 120).length, priced.length),
-    segment("$120–159", priced.filter(mouse => (mouse.msrpUsd ?? 0) >= 120 && (mouse.msrpUsd ?? Infinity) < 160).length, priced.length),
-    segment("$160+", priced.filter(mouse => (mouse.msrpUsd ?? 0) >= 160).length, priced.length),
-  ];
-
+  const priceSegments = priceBands.map(band => segment(band.label, priced.filter(band.matches).length, priced.length));
   const pollingSegments = [
     segment("1K or lower", current.filter(mouse => mouse.specs.maxPollingHz <= 1000).length, total),
     segment("2K", current.filter(mouse => mouse.specs.maxPollingHz === 2000).length, total),
     segment("4K", current.filter(mouse => mouse.specs.maxPollingHz === 4000).length, total),
     segment("8K+", current.filter(mouse => mouse.specs.maxPollingHz >= 8000).length, total),
   ];
+  const lifecycleSegments = (["current", "announced", "discontinued"] as const).map(status => segment(status, products.filter(mouse => mouse.status === status).length, products.length));
 
-  const sparseShapeWeightCells = shapeSegments.flatMap(shape => weightBands.map(band => {
-    const shapeValue = shape.label === "Symmetrical" ? "symmetrical" : "ergonomic";
-    return { label: `${shape.label} / ${band.label}`, count: current.filter(mouse => mouse.specs.shape === shapeValue && band.matches(mouse)).length };
-  })).sort((a, b) => a.count - b.count || a.label.localeCompare(b.label)).slice(0, 6);
+  const shapeWeightMatrix = matrix(current, weightBands, shapeBands);
+  const shapePriceMatrix = matrix(priced, priceBands, shapeBands);
+  const weightPriceMatrix = matrix(priced, priceBands, weightBands);
+  const sparseShapeWeightCells = shapeWeightMatrix.map(cell => ({ label: `${cell.y} / ${cell.x}`, count: cell.count })).sort((a, b) => a.count - b.count || a.label.localeCompare(b.label)).slice(0, 6);
 
   const highPollingPriceDeltaUsd = highPollingPrice != null && standardPollingPrice != null ? Math.round(highPollingPrice - standardPollingPrice) : null;
-  const positions = current.map(mouse => ({ productId: mouse.id, brand: mouse.brand, model: mouse.model, weightG: mouse.specs.weightG, msrpUsd: mouse.msrpUsd ?? null, pollingHz: mouse.specs.maxPollingHz, shape: mouse.specs.shape }));
+  const positions = current.map(mouse => ({ productId: mouse.id, brand: mouse.brand, model: mouse.model, weightG: mouse.specs.weightG, lengthMm: mouse.specs.lengthMm, widthMm: mouse.specs.widthMm, heightMm: mouse.specs.heightMm, msrpUsd: mouse.msrpUsd ?? null, pollingHz: mouse.specs.maxPollingHz, shape: mouse.specs.shape, hump: mouse.specs.hump }));
 
   const brandPositioning = [...new Set(current.map(mouse => mouse.brand))].map(brand => {
     const lineup = current.filter(mouse => mouse.brand === brand);
@@ -159,10 +233,26 @@ export function analyzeMouseCatalog(products: MouseProduct[]): ProductInsights {
     };
   }).sort((a, b) => b.currentCount - a.currentCount || a.brand.localeCompare(b.brand));
 
+  const brandRepresentationHhi = Math.round([...brandCounts.values()].reduce((sum, count) => sum + Math.pow(count / Math.max(total, 1), 2), 0) * 10_000);
+  const featureAdoption: FeatureAdoptionRow[] = [
+    { feature: "Wireless mode", enabledCount: current.filter(isWireless).length, knownCount: current.length, unknownCount: 0, shareOfKnownPct: pct(current.filter(isWireless).length, current.length) },
+    { feature: "4K+ advertised polling", enabledCount: current.filter(mouse => mouse.specs.maxPollingHz >= 4000).length, knownCount: current.length, unknownCount: 0, shareOfKnownPct: pct(current.filter(mouse => mouse.specs.maxPollingHz >= 4000).length, current.length) },
+    { feature: "8K advertised polling", enabledCount: current.filter(mouse => mouse.specs.maxPollingHz >= 8000).length, knownCount: current.length, unknownCount: 0, shareOfKnownPct: pct(current.filter(mouse => mouse.specs.maxPollingHz >= 8000).length, current.length) },
+    { feature: "Non-mechanical primary switch", enabledCount: current.filter(mouse => mouse.specs.switchType !== "mechanical").length, knownCount: current.length, unknownCount: 0, shareOfKnownPct: pct(current.filter(mouse => mouse.specs.switchType !== "mechanical").length, current.length) },
+    adoptionOptionalBoolean(current, "Web configuration", mouse => mouse.specs.webDriver),
+    adoptionOptionalBoolean(current, "Driverless configuration", mouse => mouse.specs.driverless),
+    adoptionOptionalNumber(current, "Onboard profiles", mouse => mouse.specs.onboardProfiles, value => value > 0),
+    adoptionOptionalBoolean(current, "Tilt wheel", mouse => mouse.specs.tiltWheel),
+  ];
+
+  const weightPriceCorrelation = pearson(priced.map(mouse => [mouse.specs.weightG, mouse.msrpUsd as number]));
+  const pollingPriceCorrelation = pearson(priced.map(mouse => [mouse.specs.maxPollingHz, mouse.msrpUsd as number]));
+
   const statements: InsightStatement[] = [
     { kind: "observed", title: "Current catalog mix", body: `${total} current mouse records are represented; ${priced.length} have an MSRP captured. ${pct(current.filter(isWireless).length, total)}% of current records include a wireless mode.`, evidence: ["Atlas catalog status, MSRP and connectivity fields"] },
     { kind: "observed", title: "High-polling price association", body: highPollingPriceDeltaUsd == null ? "The catalog does not yet contain enough priced products in both polling groups to compare average MSRP." : `Within the priced Atlas sample, 4K+ products average ${highPollingPriceDeltaUsd >= 0 ? "$" + highPollingPriceDeltaUsd + " more" : "$" + Math.abs(highPollingPriceDeltaUsd) + " less"} MSRP than lower-polling products. This is association, not causation.`, evidence: ["Atlas MSRP and advertised maximum polling fields"] },
-    { kind: "hypothesis", title: "Sparse combinations need customer evidence", body: "Shape × weight cells with few catalog records are useful research prompts, but curation bias, demand, manufacturing constraints and economics can all produce sparsity." },
+    { kind: "observed", title: "Catalog representation concentration", body: `The current Atlas sample has a brand-representation HHI of ${brandRepresentationHhi}. This measures curation concentration inside Atlas only; it is not a market-concentration measure.`, evidence: ["Counts of current Atlas records by brand"] },
+    { kind: "hypothesis", title: "Sparse combinations need customer evidence", body: "Shape × weight, shape × price and weight × price cells with few catalog records are useful research prompts, but curation bias, demand, manufacturing constraints and economics can all produce sparsity." },
     { kind: "evidence-needed", title: "What specifications cannot answer", body: "Opportunity sizing needs traffic, conversion, sales/rank history, customer sentiment, returns/reliability and willingness-to-pay evidence before a product recommendation is justified." },
   ];
 
@@ -174,12 +264,20 @@ export function analyzeMouseCatalog(products: MouseProduct[]): ProductInsights {
     wirelessSharePct: pct(current.filter(isWireless).length, total),
     highPollingSharePct: pct(highPolling.length, total),
     highPollingPriceDeltaUsd,
+    weightPriceCorrelation,
+    pollingPriceCorrelation,
+    catalogBrandRepresentationHhi: brandRepresentationHhi,
     shapeSegments,
     weightSegments,
     priceSegments,
     pollingSegments,
+    lifecycleSegments,
     topBrands: [...brandCounts.entries()].map(([brand, count]) => ({ brand, count, sharePct: pct(count, total) })).sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand)).slice(0, 8),
     sparseShapeWeightCells,
+    shapeWeightMatrix,
+    shapePriceMatrix,
+    weightPriceMatrix,
+    featureAdoption,
     positions,
     brandPositioning,
     statements,

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { mice } from "../shared/catalog";
 import { analyzeMouseCatalog, directCompetitorsFor } from "../shared/productInsights";
+import ProductPositionMap from "./ProductPositionMap";
 
 const money = (value: number | null) => value == null ? "—" : `$${Math.round(value)}`;
 
@@ -14,6 +15,8 @@ export default function ProductIntelligenceExtras() {
   if (!selected) return null;
 
   return <div className="pl-intel-extras">
+    <ProductPositionMap/>
+
     <section className="pl-card">
       <div className="pl-card-head"><div><span>POSITIONING</span><h3>Brand lineup snapshot</h3></div><small className="pl-method-label">Atlas current catalog · descriptive only</small></div>
       <div className="pl-position-table" role="table" aria-label="Brand positioning in Atlas current mouse sample">
