@@ -2,11 +2,13 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./AppV05";
 import ProductLab from "./ProductLab";
+import AnalyticsBridge from "./AnalyticsBridge";
 import { analyticsVisitor, trackAtlasEvent } from "../shared/analytics";
 import "./styles.css";
 import "./v04.css";
 import "./v05.css";
 import "./product-lab.css";
+import "./product-lab-entry.css";
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
@@ -28,6 +30,7 @@ function RootRouter() {
   if (hash === "#product-lab") return <ProductLab />;
 
   return <>
+    <AnalyticsBridge />
     <App />
     <a className="atlas-product-lab-entry" href="#product-lab" aria-label="Open Atlas Product Lab"><span>LAB</span><b>Product research & validation</b><i>↗</i></a>
   </>;
