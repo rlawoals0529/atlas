@@ -1,0 +1,453 @@
+{
+  "mice": [
+    {
+      "id": "mouse-wlmouse-beast-x-max",
+      "slug": "wlmouse-beast-x-max",
+      "type": "mouse",
+      "brand": "WLMOUSE",
+      "model": "Beast X Max",
+      "status": "current",
+      "msrpUsd": 145,
+      "summary": "Large ultra-light magnesium symmetrical mouse with 8 kHz wireless, PAW3950HS sensing and optical-or-mechanical switch variants.",
+      "tags": ["fps", "8k", "magnesium", "claw", "palm", "ultralight"],
+      "sources": [
+        {
+          "id": "wlmouse-beast-x-max-official",
+          "label": "WLMOUSE Beast X Max product page",
+          "url": "https://www.wlmouse.com/products/beast-max",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 126,
+        "widthMm": 65,
+        "heightMm": 39,
+        "weightG": 42,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PAW3950HS",
+        "maxPollingHz": 8000,
+        "connectivity": ["2.4GHz", "wired"],
+        "switchType": "hybrid",
+        "mainSwitch": "OMRON Optical or TTC Nihil, by variant",
+        "encoder": "TTC Dust-Proof Silver",
+        "mcu": "Nordic nRF52840",
+        "shellMaterial": "magnesium alloy",
+        "sideButtons": 2,
+        "stockSkateMaterial": "PTFE",
+        "webDriver": true
+      },
+      "fit": {
+        "handLengthCm": [18, 20],
+        "handWidthCm": [8.8, 11],
+        "grip": {
+          "palm": 82,
+          "relaxed-claw": 94,
+          "aggressive-claw": 88,
+          "pincer-claw": 82,
+          "knuckle-claw": 84,
+          "fingertip": 70,
+          "extended-fingertip": 68,
+          "palm-claw-hybrid": 92
+        },
+        "aimStyle": {"wrist": 84, "hybrid": 94, "arm": 91, "finger": 88},
+        "gameStyle": {"tactical-fps": 94, "tracking-fps": 94, "arena-fps": 93, "battle-royale": 93, "moba-rts": 72, "mmo": 42, "action": 90, "mixed": 93},
+        "coatingDry": 86,
+        "coatingSweaty": 84,
+        "clickLightness": 82,
+        "balance": "center"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["wlmouse-beast-x-max-official"],
+          "confidence": "high",
+          "note": "Dimensions, side-slit weight, material, sensor, MCU, polling, switch choices, encoder, side buttons and included PTFE skates are manufacturer-published. Solid-side variants are heavier."
+        },
+        "fit": {
+          "sourceIds": ["wlmouse-beast-x-max-official", "atlas-editorial-fit"],
+          "confidence": "medium",
+          "note": "WLMOUSE publishes an 18–20 cm ideal hand length and 'Claw Palm' grip guidance. Atlas' finer grip and hand-width vector remains editorial."
+        }
+      }
+    },
+    {
+      "id": "mouse-lamzu-inca",
+      "slug": "lamzu-inca",
+      "type": "mouse",
+      "brand": "LAMZU",
+      "model": "INCA",
+      "status": "current",
+      "msrpUsd": 119.99,
+      "summary": "Compact rear-hump symmetrical mouse with a narrow waist, PAW3950 sensor and included 8 kHz receiver, aimed primarily at claw and fingertip users.",
+      "tags": ["fps", "8k", "rear-hump", "claw", "fingertip", "compact"],
+      "sources": [
+        {
+          "id": "lamzu-inca-official",
+          "label": "LAMZU INCA product page",
+          "url": "https://lamzu.com/collections/inca/products/lamzu-inca",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "rtings-lamzu-inca",
+          "label": "RTINGS LAMZU Inca review",
+          "url": "https://www.rtings.com/mouse/reviews/lamzu/inca",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "ark-lamzu-inca",
+          "label": "Ark PC LAMZU INCA specification",
+          "url": "https://www.ark-pc.co.jp/i/50286739/",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-editorial-fit",
+          "label": "Input Atlas fit model (provisional)",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-28"
+        }
+      ],
+      "specs": {
+        "lengthMm": 122,
+        "widthMm": 63,
+        "heightMm": 40,
+        "weightG": 40,
+        "shape": "symmetrical",
+        "hump": "rear",
+        "frontFlare": "low",
+        "sideCurvature": "aggressive",
+        "sensor": "PAW3950",
+        "maxPollingHz": 8000,
+        "connectivity": ["2.4GHz", "wired"],
+        "switchType": "optical",
+        "mainSwitch": "OMRON Optical",
+        "mcu": "Nordic nRF52840",
+        "shellMaterial": "plastic",
+        "programmableButtons": 5,
+        "sideButtons": 2,
+        "tiltWheel": false,
+        "freeSpinWheel": false,
+        "webDriver": true
+      },
+      "fit": {
+        "handLengthCm": [16.5, 19.5],
+        "handWidthCm": [8, 10.2],
+        "grip": {
+          "palm": 42,
+          "relaxed-claw": 93,
+          "aggressive-claw": 97,
+          "pincer-claw": 91,
+          "knuckle-claw": 92,
+          "fingertip": 87,
+          "extended-fingertip": 82,
+          "palm-claw-hybrid": 78
+        },
+        "aimStyle": {"wrist": 95, "hybrid": 94, "arm": 80, "finger": 96},
+        "gameStyle": {"tactical-fps": 96, "tracking-fps": 91, "arena-fps": 94, "battle-royale": 91, "moba-rts": 79, "mmo": 40, "action": 90, "mixed": 93},
+        "coatingDry": 86,
+        "coatingSweaty": 84,
+        "clickLightness": 84,
+        "balance": "center"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["lamzu-inca-official", "rtings-lamzu-inca", "ark-lamzu-inca"],
+          "confidence": "high",
+          "note": "LAMZU supplies current pricing; RTINGS independently confirms the PAW3950, 8 kHz receiver, web configurator and shape character. Ark's retail specification supplies the 122 × 63 × 40 mm dimensions, ~40 g weight, OMRON optical switches and Nordic MCU."
+        },
+        "fit": {
+          "sourceIds": ["rtings-lamzu-inca", "atlas-editorial-fit"],
+          "confidence": "medium",
+          "note": "RTINGS describes the low front, narrow waist and pronounced rear hump as especially suited to claw/fingertip grips over a relatively narrow hand-size range. Numeric fit scores are Atlas editorial modeling."
+        }
+      }
+    }
+  ],
+  "mousepads": [
+    {
+      "id": "pad-esptiger-sr-tang-dao",
+      "slug": "esptiger-sr-tang-dao",
+      "type": "mousepad",
+      "brand": "ESPTIGER",
+      "model": "SR · Tang Dao",
+      "status": "current",
+      "msrpUsd": 34.99,
+      "summary": "Coarse balanced cloth surface with a mid-hardness SCR base, neutral manufacturer-rated glide and moderate stopping response.",
+      "tags": ["cloth", "balanced", "control", "tactical-fps", "tracking", "stitched"],
+      "sources": [
+        {
+          "id": "esptiger-sr-tang-dao-official",
+          "label": "ESPTIGER SR Tang Dao product page",
+          "url": "https://esptiger.com/products/sr-tang-dao-balance-gaming-mousepad",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-surface-normalization",
+          "label": "Atlas surface normalization model",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "cloth",
+        "baseMaterial": "SCR",
+        "firmness": "mid",
+        "thicknessMm": 4,
+        "widthMm": 480,
+        "heightMm": 400,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 54,
+        "dynamicSpeed": 57,
+        "stoppingPower": 60,
+        "texture": 72,
+        "pressureResponse": 48,
+        "humidityResistance": 55,
+        "sleeveCompatibility": 58,
+        "xyConsistency": 82,
+        "noise": 42,
+        "skinDrag": 48,
+        "breakInChange": 28,
+        "wornZoneStability": 68,
+        "cleaningRecovery": 72
+      },
+      "evidence": {
+        "physical": {
+          "sourceIds": ["esptiger-sr-tang-dao-official"],
+          "confidence": "high",
+          "note": "ESPTIGER publishes 480 × 400 × 4 mm dimensions, cloth surface, SCR mid base and recessed edge stitching."
+        },
+        "feel": {
+          "sourceIds": ["esptiger-sr-tang-dao-official", "atlas-surface-normalization"],
+          "confidence": "medium",
+          "note": "ESPTIGER rates glide 4/7 (neutral), stopping 3/5 (moderate), and surface feel coarse. Atlas maps those manufacturer ordinal scales into its 0–100 comparison fields; environmental and wear fields remain lower-confidence editorial estimates."
+        }
+      }
+    }
+  ],
+  "skates": [
+    {
+      "id": "skate-corepad-ctrl-series",
+      "slug": "corepad-skatez-ctrl-series",
+      "type": "skate",
+      "brand": "Corepad",
+      "model": "Skatez CTRL series",
+      "status": "current",
+      "summary": "Mouse-specific full-size pure-PTFE replacement feet heat-treated for a smoother, slightly slower and more controlled glide than Corepad's standard PRO line.",
+      "tags": ["ptfe", "control", "full-size", "mouse-specific"],
+      "sources": [
+        {
+          "id": "corepad-ctrl-official",
+          "label": "Corepad Skatez CTRL series",
+          "url": "https://www.corepad.de/en/corepad-skatez-ctrl/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "corepad-series-official",
+          "label": "Corepad Skatez series comparison",
+          "url": "https://corepad.com/corepad-skatez-replacement-ptfe-teflon-mousefeet-mouse-feet-hyperglide-hyperglides/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-skate-normalization",
+          "label": "Atlas skate normalization model",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "material": "pure-ptfe",
+        "format": "full-size",
+        "cushionLayer": false,
+        "antiCollapse": false
+      },
+      "feel": {
+        "speed": 54,
+        "control": 76,
+        "noise": 34,
+        "durability": 80,
+        "freshSpeed": 57,
+        "brokenInSpeed": 52,
+        "wearRate": 28,
+        "dustSensitivity": 42
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": true,
+        "softBase": "good"
+      },
+      "evidence": {
+        "construction": {
+          "sourceIds": ["corepad-ctrl-official", "corepad-series-official"],
+          "confidence": "high",
+          "note": "Corepad identifies CTRL as 100% PTFE, mouse-specific full-size replacement feet using a smooth heat-treated surface. Thickness varies by mouse-specific SKU and is intentionally not generalized here."
+        },
+        "feel": {
+          "sourceIds": ["corepad-series-official", "atlas-skate-normalization"],
+          "confidence": "medium",
+          "note": "Corepad explicitly positions CTRL as slightly slower with more control than PRO. Atlas numeric fields preserve that relative positioning but are not measured friction coefficients. Surface compatibility is broad for PTFE but feel varies substantially by pad and skate footprint."
+        }
+      }
+    }
+  ],
+  "keyboards": [
+    {
+      "id": "keyboard-melgeek-made68-pro-plus",
+      "slug": "melgeek-made68-pro-plus",
+      "type": "keyboard",
+      "brand": "MelGeek",
+      "model": "MADE68 Pro+",
+      "status": "current",
+      "msrpUsd": 139,
+      "summary": "65% wired Hall-effect board with 8 kHz polling, 16 kHz scan rate, 0.01 mm adjustment precision, Rapid Trigger, SOCD and multi-brand magnetic switch compatibility.",
+      "tags": ["hall-effect", "65-percent", "8k", "rapid-trigger", "socd", "hotswap", "web-config"],
+      "sources": [
+        {
+          "id": "melgeek-made68-pro-plus-official",
+          "label": "MelGeek MADE68 Pro+ product page",
+          "url": "https://www.melgeek.com/products/made68-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "melgeek-hotswap-collection",
+          "label": "MelGeek hot-swappable keyboard collection",
+          "url": "https://www.melgeek.com/collections/hot-swappable-keyboard",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "65%",
+        "layout": "68-key compact ANSI",
+        "switchTechnology": "hall-effect",
+        "stockSwitch": "TTC RGB Sacred Heart Magnetic / TTC Magneto Purple / King of Magnetic Switch Pro, by variant",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 3.4,
+        "actuationStepMm": 0.01,
+        "rapidTrigger": true,
+        "socd": true,
+        "analogInput": true,
+        "hotSwappable": true,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "ABS + PC",
+        "plateMaterial": "immersion-gold FR4",
+        "keycapMaterial": "double-shot PBT / transparent PC, by variant",
+        "mount": "gasket",
+        "webConfigurator": true,
+        "software": "MelGeek HIVE",
+        "dimensionsMm": {"width": 319, "depth": 117, "height": 40}
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["melgeek-made68-pro-plus-official", "melgeek-hotswap-collection"],
+          "confidence": "high",
+          "note": "MelGeek publishes the 65% layout, case/plate/keycap construction, gasket mount, dimensions and places MADE68 Pro+ in its hot-swappable magnetic keyboard collection."
+        },
+        "inputFeatures": {
+          "sourceIds": ["melgeek-made68-pro-plus-official"],
+          "confidence": "high",
+          "note": "8 kHz polling, 16 kHz scanning, 0.01 mm RT/adjustment precision, 0.1–3.4 mm actuation range, Rapid Trigger and Snap Tap/SOCD are manufacturer specifications. Atlas does not treat the page's latency claims as independent end-to-end measurements."
+        }
+      }
+    }
+  ],
+  "switches": [
+    {
+      "id": "switch-gateron-magnetic-black-lotus",
+      "slug": "gateron-magnetic-black-lotus-he",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Black Lotus HE",
+      "status": "current",
+      "msrpUsd": 56,
+      "summary": "Full-travel linear Hall-effect switch with a 35 gf initial force, 45 gf bottom-out and published 100–700 Gs magnetic range at a 1.2 mm PCB reference.",
+      "tags": ["hall-effect", "linear", "magnetic", "4mm", "factory-lubed"],
+      "sources": [
+        {
+          "id": "gateron-black-lotus-official",
+          "label": "Gateron Magnetic Black Lotus HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-black-lotus-he-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {"value": 35, "unit": "gf"},
+        "bottomOutForce": {"value": 45, "unit": "gf"},
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "magneticFluxGs": {"initial": 100, "bottomOut": 700, "pcbThicknessMm": 1.2},
+        "compatibility": ["Hall-effect compatibility is board-specific; verify magnet polarity, flux expectations, physical dimensions and firmware support before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-black-lotus-official"],
+          "confidence": "high",
+          "note": "Force, 4.0 mm total travel, freely adjustable pre-travel, lubrication and magnetic-flux values are Gateron specifications. Flux values include Gateron's 1.2 mm PCB reference condition."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-low-profile-magnetic-jade-pro",
+      "slug": "gateron-full-pom-low-profile-magnetic-jade-pro",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Full POM Low Profile Magnetic Jade Pro",
+      "status": "current",
+      "msrpUsd": 59.5,
+      "summary": "Low-profile linear Hall-effect switch with full-POM construction, 40 gf initial force and 3.5 mm total travel.",
+      "tags": ["hall-effect", "linear", "low-profile", "pom", "factory-lubed"],
+      "sources": [
+        {
+          "id": "gateron-lp-jade-pro-official",
+          "label": "Gateron Full POM Low Profile Magnetic Jade Pro product page",
+          "url": "https://www.gateron.com/products/gateron-full-pom-low-profile-magnetic-jade-pro-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {"value": 40, "unit": "gf"},
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100,
+        "compatibility": ["Low-profile Hall-effect switch compatibility is board-specific. Verify physical socket format, magnet orientation and firmware/flux support before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-lp-jade-pro-official"],
+          "confidence": "high",
+          "note": "Gateron publishes a 40±10 gf initial force, freely set pre-travel, 3.5±0.2 mm total travel, 18 mm spring, factory lubrication and 100 million-keystroke lifespan. Atlas stores central nominal force/travel values rather than hiding the published tolerances."
+        }
+      }
+    }
+  ]
+}
