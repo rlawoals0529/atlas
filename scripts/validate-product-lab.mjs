@@ -16,6 +16,7 @@ const validation = read("src/shared/validation.ts");
 const validationEvidence = read("src/shared/validationEvidence.ts");
 const community = read("src/shared/communityInsights.ts");
 const analytics = read("src/shared/analytics.ts");
+const analyticsContract = read("src/shared/analyticsContract.ts");
 const analyticsBridge = read("src/react-app/AnalyticsBridge.tsx");
 const analyticsInsights = read("src/shared/analyticsInsights.ts");
 const transport = read("src/react-app/AnalyticsTransport.tsx");
@@ -57,6 +58,10 @@ assert(validationEvidence.includes("should not be treated as portfolio-ready evi
 assert(validationProtocol.includes("#validation-run"), "validation protocol must document the guided runner route");
 
 assert(analytics.includes("ANALYTICS_SCHEMA_VERSION = 2"), "analytics must use the current versioned v2 event contract");
+assert(analyticsContract.includes("ANALYTICS_SCHEMA_VERSION = 2"), "Worker-safe analytics contract must match the browser event schema version");
+assert(workerAnalytics.includes('from "../shared/analyticsContract"'), "Worker analytics must load schema version from a side-effect-free contract module");
+assert(workerAnalytics.includes('import type { AtlasAnalyticsEvent, AtlasEventName } from "../shared/analytics"'), "Worker analytics may reference browser analytics only through erased type imports");
+assert(!workerAnalytics.includes('import { ANALYTICS_SCHEMA_VERSION, type AtlasAnalyticsEvent'), "Worker analytics must not runtime-import the browser analytics module");
 assert(analytics.includes("recommendation_step_completed"), "recommendation step events must remain typed");
 assert(analytics.includes("recommendation_abandoned"), "recommendation abandonment must remain typed");
 assert(analytics.includes("shape_overlay_changed"), "shape overlay changes must remain explicit events");
