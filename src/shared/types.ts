@@ -85,7 +85,7 @@ export interface MouseProduct extends BaseProduct {
   outline?: {
     top?: [number, number][];
     side?: [number, number][];
-    sourceType: "parametric" | "measured-svg" | "scan";
+    sourceType: "parametric" | "traced-reference" | "measured-svg" | "scan";
     sourceIds?: string[];
   };
   geometry?: {
