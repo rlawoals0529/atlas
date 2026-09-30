@@ -8,6 +8,42 @@ export type ProductImage = {
 // Presentation-only media registry. Canonical product specifications remain in catalog shards.
 // Remote manufacturer assets are intentionally allowed to fail gracefully in the UI.
 export const productImages: Record<string, ProductImage> = {
+  "mouse-superlight-2c": {
+    url: "https://resource.logitechg.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/gaming/en/products/pro-x-superlight-2c-pdp/gallery/pro-x-superlight-2c-mouse-top-angle-offwhite-gallery-1.png",
+    sourceUrl: "https://www.logitechg.com/en-us/shop/p/pro-x-superlight-2c",
+    alt: "Logitech G PRO X SUPERLIGHT 2c gaming mouse",
+    credit: "Logitech G official product image",
+  },
+  "mouse-gpx2": {
+    url: "https://resource.logitechg.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/gaming/en/products/pro-x-superlight-2/new-gallery-assets-2025/pro-x-superlight-2-mice-top-angle-black-gallery-1.png",
+    sourceUrl: "https://www.logitechg.com/en-us/shop/p/pro-x2-superlight-wireless-mouse.910-006628",
+    alt: "Logitech G PRO X SUPERLIGHT 2 gaming mouse",
+    credit: "Logitech G official product image",
+  },
+  "mouse-viper-v3-pro": {
+    url: "https://assets2.razerzone.com/images/pnx.assets/474a68bae599387eb85e884c484e9ce3/sequence_00000.webp",
+    sourceUrl: "https://www.razer.com/gaming-mice/razer-viper-v3-pro",
+    alt: "Razer Viper V3 Pro gaming mouse",
+    credit: "Razer official product image",
+  },
+  "mouse-op1w-4k-v2": {
+    url: "https://endgamegear.com/cdn/shop/files/EGG-OP1w-4K-Black_top_down.-3000x3000-2567b33.jpg?v=1736862604&width=3000",
+    sourceUrl: "https://endgamegear.com/products/op1w-4k-v2-wireless-gaming-mouse",
+    alt: "Endgame Gear OP1w 4K v2 wireless gaming mouse viewed from above",
+    credit: "Endgame Gear official product image",
+  },
+  "mouse-zowie-fk2-dw": {
+    url: "https://image.benq.com/is/image/benqco/1-fk2-dw-top?%24ResponsivePreset%24=&fmt=png-alpha",
+    sourceUrl: "https://zowie.benq.com/en-us/mouse/fk2-dw.html",
+    alt: "ZOWIE FK2-DW wireless gaming mouse viewed from above",
+    credit: "ZOWIE official product image",
+  },
+  "mouse-zowie-s2-dw": {
+    url: "https://image.benq.com/is/image/benqco/1-s2-dw-top?%24ResponsivePreset%24=&fmt=png-alpha",
+    sourceUrl: "https://zowie.benq.com/en-us/mouse/s2-dw.html",
+    alt: "ZOWIE S2-DW wireless gaming mouse viewed from above",
+    credit: "ZOWIE official product image",
+  },
   "mouse-wallhack-m001": {
     url: "https://wallhack.com/cdn/shop/t/68/assets/wh-m001-hero.avif?v=138427762620322925981789136467",
     sourceUrl: "https://wallhack.com/en-fr/pages/campaigns/m-001",
