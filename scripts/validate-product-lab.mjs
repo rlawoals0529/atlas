@@ -1,0 +1,88 @@
+import fs from "node:fs";
+
+const read = path => fs.readFileSync(path, "utf8");
+const assert = (condition, message) => {
+  if (!condition) {
+    console.error(`Product Lab integrity check failed: ${message}`);
+    process.exitCode = 1;
+  }
+};
+
+const app = read("src/react-app/AppV05.tsx");
+const lab = read("src/react-app/ProductLab.tsx");
+const validation = read("src/shared/validation.ts");
+const community = read("src/shared/communityInsights.ts");
+const analytics = read("src/shared/analytics.ts");
+const analyticsBridge = read("src/react-app/AnalyticsBridge.tsx");
+const analyticsInsights = read("src/shared/analyticsInsights.ts");
+const transport = read("src/react-app/AnalyticsTransport.tsx");
+const productionStatus = read("src/react-app/ProductionAnalyticsStatus.tsx");
+const workerAnalytics = read("src/worker/analytics.ts");
+const productInsights = read("src/shared/productInsights.ts");
+const productMap = read("src/react-app/ProductPositionMap.tsx");
+const wrangler = read("wrangler.jsonc");
+const analyticsSpec = read("docs/product/ANALYTICS_SPEC.md");
+const communityProtocol = read("docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md");
+
+assert(!app.includes("INPUT ATLAS"), "consumer UI must use Atlas branding only");
+assert(app.includes('const VERSION = "0.8"'), "consumer version must match current v0.8 Product Lab integration");
+assert(app.includes('href="#product-lab"'), "Product Lab must remain reachable from consumer navigation");
+
+assert(validation.includes('status: "not-run"'), "generated validation cases must initialize NOT RUN");
+assert(!/status:\s*["']pass["']/.test(validation), "validation generator must not fabricate PASS results");
+assert(validation.includes("requirementSource: RequirementSource"), "validation cases must retain requirement provenance");
+assert(validation.includes("automationSuitability: AutomationSuitability"), "validation cases must express automation judgment beyond a boolean flag");
+assert(validation.includes("environmentRequirements: string[]"), "validation cases must declare environment requirements");
+assert(validation.includes("buildValidationReport"), "real validation sessions must support a structured report builder");
+assert(validation.includes("A NOT RUN case has no execution evidence"), "validation report must keep NOT RUN semantically distinct from PASS");
+assert(lab.includes("PLANNED / NOT RUN"), "Validation Lab must visibly label generated cases as not run");
+assert(lab.includes("actualResult"), "manual execution must retain an actual-result field");
+assert(lab.includes("reproductionSteps"), "defect workflow must retain reproduction steps");
+assert(lab.includes("suspectedLayer"), "defect workflow must preserve suspected-layer uncertainty field");
+assert(lab.includes("regressionTestId"), "defect workflow must support regression linkage");
+
+assert(analytics.includes("ANALYTICS_SCHEMA_VERSION = 2"), "analytics must use the current versioned v2 event contract");
+assert(analytics.includes("recommendation_step_completed"), "recommendation step events must remain typed");
+assert(analytics.includes("recommendation_abandoned"), "recommendation abandonment must remain typed");
+assert(analytics.includes("shape_overlay_changed"), "shape overlay changes must remain explicit events");
+assert(analytics.includes("globalPrivacyControl"), "browser analytics must honor Global Privacy Control");
+assert(analytics.includes("navigator.doNotTrack"), "browser analytics must honor Do Not Track");
+assert(analytics.includes("ANALYTICS_OPT_OUT_KEY"), "Atlas must retain a local collection opt-out");
+assert(analytics.includes("DEMO_ANALYTICS_EVENTS"), "dashboard demo fixtures must remain explicit");
+assert(analytics.includes('eventId: `demo-'), "synthetic events must keep a recognizable demo prefix");
+assert(transport.includes('eventId.startsWith("demo-")'), "production transport must reject demo fixture events");
+assert(transport.includes("analyticsCollectionState().enabled"), "production transport must honor collection privacy state");
+assert(workerAnalytics.includes("Invalid analytics event batch"), "production collector must validate event batches server-side");
+assert(workerAnalytics.includes("MAX_BODY_BYTES"), "production collector must retain request-size bounds");
+assert(workerAnalytics.includes("Too many analytics requests"), "production collector must retain rate limiting");
+assert(workerAnalytics.includes("shape_overlay_changed"), "server allowlist must track the v2 event contract");
+assert(workerAnalytics.includes("recommendation_abandoned"), "server allowlist must validate abandonment events");
+assert(analyticsSpec.includes("Global Privacy Control"), "analytics privacy behavior must be documented");
+assert(analyticsSpec.includes("Activation rate"), "core KPI definitions must be documented");
+
+assert(lab.includes("DEMO / SYNTHETIC"), "analytics dashboard must visibly label synthetic data");
+assert(lab.includes("REAL / THIS BROWSER"), "browser-local analytics must remain explicitly scoped");
+assert(lab.includes("AnalyticsDeepDive"), "deeper funnel/segment/attribute analysis must stay wired into Product Analytics");
+assert(analyticsInsights.includes("compareShapeLabSessionDepth"), "Shape Lab depth cohort comparison must remain available");
+assert(analyticsInsights.includes("attributeOutboundEngagement"), "attribute-level outbound engagement must remain available");
+assert(analyticsInsights.includes("segmentBehavior"), "coarse segment behavior analysis must remain available");
+assert(productionStatus.includes("PRODUCTION / NOT CONFIGURED"), "dashboard must explicitly label absent production analytics");
+assert(productionStatus.includes("PRODUCTION / REAL"), "real production aggregate mode must remain explicitly labeled");
+assert(!productionStatus.includes("DEMO_ANALYTICS_EVENTS"), "production aggregate UI must never substitute demo fixtures");
+
+assert(productInsights.includes("CatalogMatrixCell"), "Product Intelligence must retain typed segmentation matrices");
+assert(productInsights.includes("unknownCount"), "optional feature adoption must preserve unknown fields");
+assert(productInsights.includes("catalogBrandRepresentationHhi"), "catalog concentration must remain explicitly modeled as Atlas representation");
+assert(productMap.includes("Catalog constellation"), "point-field product positioning visualization must remain available");
+assert(productMap.includes("category map, not a popularity or quality ranking"), "catalog constellation must retain its ranking caveat");
+assert(lab.includes("ProductIntelligenceExtras"), "direct competitor and positioning analysis must stay in Product Intelligence");
+assert(lab.includes("Sparse in Atlas ≠ market opportunity"), "sparse catalog segments must retain opportunity caveat");
+
+assert(community.includes("sourceId: string"), "community observations must retain a traceable source ID");
+assert(community.includes("sampleSize?: number"), "community observations must retain sample size when known");
+assert(community.includes("consensus: ConsensusIndicator"), "community evidence must retain disagreement/consensus state");
+assert(communityProtocol.includes("not representative market research"), "community protocol must reject population-level inference from convenience samples");
+
+assert(!/"ANALYTICS_DB"\s*:/.test(wrangler), "optional analytics must not gain a fake/unconfigured D1 binding");
+
+if (!process.exitCode) console.log("Product Lab integrity checks passed.");

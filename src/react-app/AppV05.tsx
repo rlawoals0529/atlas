@@ -5,7 +5,7 @@ import { recommendMice, recommendPads, recommendSkates } from "../shared/recomme
 import { alignmentOffset, findSimilarShapes, outlineFor, shapeSimilarity, type AlignMode, type ShapeView, type SimilarityMode } from "../shared/shape";
 import type { GameStyle, Grip, MouseProduct, MousepadProduct, Product, SkateProduct, UserProfile } from "../shared/types";
 
-const VERSION = "0.5";
+const VERSION = "0.8";
 
 const defaultProfile: UserProfile = {
   handLengthCm: 19,
@@ -269,8 +269,8 @@ function AppV05() {
 
   return <div className="v5-shell">
     <header className="v5-topbar">
-      <button className="v5-brand" onClick={() => setActive("fit")}><LogoMark/><span>INPUT <b>ATLAS</b></span><small>v{VERSION}</small></button>
-      <nav>{([['fit', 'Find your setup'], ['lab', 'Shape lab'], ['catalog', 'Database'], ['compare', 'Compare'], ['method', 'Method']] as const).map(([id, label]) => <button key={id} className={active === id ? "active" : ""} onClick={() => setActive(id)}>{label}{id === "catalog" && <span>{catalog.length}</span>}</button>)}</nav>
+      <button className="v5-brand" onClick={() => setActive("fit")}><LogoMark/><span><b>ATLAS</b></span><small>v{VERSION}</small></button>
+      <nav>{([['fit', 'Find your setup'], ['lab', 'Shape lab'], ['catalog', 'Database'], ['compare', 'Compare'], ['method', 'Method']] as const).map(([id, label]) => <button key={id} className={active === id ? "active" : ""} onClick={() => setActive(id)}>{label}{id === "catalog" && <span>{catalog.length}</span>}</button>)}<a className="v5-product-lab-nav" href="#product-lab">Product lab</a></nav>
       <div className="v5-top-status"><i/> evidence-aware build</div>
     </header>
 
@@ -329,7 +329,7 @@ function AppV05() {
       <section className="v5-source-explainer v5-panel"><div className="v5-section-head"><span>07</span><div><small>PROVENANCE</small><h2>Source classes</h2></div></div>{Object.entries(sourceKindMeta).map(([kind, meta]) => <div key={kind}><EvidenceBadge kind={kind as keyof typeof sourceKindMeta}/><b>{meta.label}</b><p>{meta.description}</p></div>)}</section>
     </main>}
 
-    <footer className="v5-footer"><span>INPUT ATLAS / research build v{VERSION}</span><span>{catalog.length} canonical products</span><span>Cloudflare Workers + D1</span></footer>
+    <footer className="v5-footer"><span>ATLAS / research build v{VERSION}</span><span>{catalog.length} canonical products</span><span>Cloudflare Workers + D1</span></footer>
     {selected && <ProductInspector product={selected} onClose={() => setSelectedId(null)} onOpen={openProduct}/>} 
   </div>;
 }

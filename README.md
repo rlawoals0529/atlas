@@ -1,24 +1,95 @@
-# Input Atlas
+# Atlas
 
-Gaming-peripheral research database + explainable fit engine. Input Atlas starts mouse-first, then models mousepads and skates as parts of the same aiming system rather than isolated products.
+Evidence-aware gaming-peripheral research, fit, comparison and validation workspace. Atlas starts mouse-first, then models mousepads and skates as parts of the same aiming system rather than isolated products.
 
-## Current build
+Atlas is intentionally two things at once without splitting into unrelated portfolio demos:
 
-The current catalog contains **39 gaming mice**, **16 mousepads**, **6 skate families**, 8 grip subtypes and 8 game/use profiles. It is intentionally curated rather than exhaustive: provenance, fit usefulness and maintainability matter more than inflating the product count.
+1. a consumer-facing enthusiast product for finding and comparing peripherals;
+2. a Product Lab that uses the same catalog, fit model and evidence system for product analytics, category intelligence, product operations and real hardware/system validation.
 
-The product experience includes:
+## Current build — v0.8
+
+The current catalog contains **39 gaming mice**, **16 mousepads**, **6 skate families**, 8 grip subtypes and 8 game/use profiles. It is curated rather than exhaustive: provenance, fit usefulness and maintainability matter more than inflating the product count.
+
+The consumer product includes:
 
 - explainable mouse, pad and skate recommendations based on hand size, grip subtype, game style, sensitivity and surface preference;
 - relative recommendation mode for moving smaller/larger, narrower/wider, lower/higher, lighter/heavier or changing palm support from a mouse you already own;
 - Shape Lab with top/side overlays, real scale or normalized length, center/front/rear/sensor alignment and up to five layers;
-- Balanced, Claw, Fingertip and Palm shape-similarity modes using 12 geometry components;
+- Balanced, Claw, Fingertip and Palm shape-similarity modes using multi-axis geometry;
 - direct target-geometry search;
 - product detail inspector with type-specific specs, family/revision context, fit/feel models and source provenance;
 - evidence-health scoring that keeps manufacturer, independent, community and Atlas/editorial information visibly distinct;
 - database filters for brand, shape, polling, weight, wireless status, product status, price and evidence quality;
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
-- responsive dark technical UI influenced by the interaction discipline of Sidereal and FantasyStats while remaining visually distinct;
-- installable web-app metadata, structured WebApplication metadata and an explicit research/correction workflow.
+- responsive precision-lab UI with the information discipline of Sidereal/FantasyStats while remaining visually distinct;
+- installable web-app metadata and a documented research/correction workflow.
+
+## Product Lab
+
+Open **Product lab** from the Atlas navigation or `#product-lab`.
+
+### Product Analytics
+
+Atlas now has a typed first-party behavioral event schema for meaningful product actions rather than scattered arbitrary analytics strings. The Product Lab reports recommendation funnels, feature use, product views/comparisons and repeat visits.
+
+The dashboard has explicit data modes:
+
+- **REAL / THIS BROWSER** — events actually generated in the current browser;
+- **DEMO / SYNTHETIC** — deterministic fixtures used to demonstrate/dashboard-test flows when traffic is limited.
+
+Synthetic events are never presented as production usage.
+
+An optional same-origin production collector exists under `/api/analytics`. It is disabled unless a real Cloudflare D1 database is bound as `ANALYTICS_DB`; Atlas remains fully deployable without it. The production collector validates event types/properties server-side, bounds batches/body sizes, rate-limits writes and stores no raw IP identity.
+
+See `docs/product/ANALYTICS_SPEC.md`.
+
+### Product Intelligence
+
+The Product Lab uses Atlas's sourced mouse catalog for descriptive category analysis including:
+
+- weight, MSRP, shape and polling distributions;
+- wireless and high-polling share in the current curated sample;
+- brand lineup positioning;
+- sparse shape × weight cells as **research prompts**, not automatic opportunities;
+- direct competitor sets derived from shape, weight, price, polling and connectivity parity;
+- observed findings kept separate from hypotheses and evidence still needed.
+
+Atlas-derived positioning scores are not sales/demand/market-share measurements.
+
+### System Test / Validation
+
+Atlas can derive a professional mouse validation plan from documented product capabilities across:
+
+- connectivity/enumeration/reconnect;
+- physical inputs;
+- sensor and polling boundaries;
+- configuration persistence;
+- Windows/USB compatibility;
+- power/sleep/wake where applicable;
+- post-change regression/smoke coverage.
+
+**Generated cases always begin `NOT RUN`.** They only become PASS/FAIL/BLOCKED after a person physically executes the test against a real device and records the environment and actual result.
+
+The Validation Lab stores browser-local manual sessions with firmware/receiver/OS/USB/settings context, actual results, reproduction frequency, evidence notes and linked defects. Defects keep severity and priority separate and can record reproduction steps, suspected layer, evidence references and a regression-test link. Sessions can be exported as JSON.
+
+See `docs/product/VALIDATION_PROTOCOL.md`.
+
+### Product Operations
+
+`docs/product/` contains operating artifacts grounded in actual Atlas decisions:
+
+- product brief, target users, goals/non-goals and KPIs;
+- analytics/event specification and privacy boundaries;
+- evidence-driven Now/Next/Later roadmap;
+- prioritized working backlog;
+- release criteria/checklist;
+- feedback/issue/data-correction workflow;
+- hardware validation protocol;
+- product changelog;
+- lightweight incident/postmortem template.
+
+These docs are intentionally kept proportional to the project rather than simulating a large company's process.
 
 ## Canonical data architecture
 
@@ -30,13 +101,19 @@ manufacturer / independent / community research
        data/catalog*.json shards
                  ↙    ↓     ↘
          React UI   fit engine   generated SQL
-                     ↓
-                Worker API
+             ↓         ↓
+        Product Lab  Worker API
 ```
 
-Both the runtime and maintenance scripts merge the shards. `npm run data:validate` enforces global IDs/slugs, source-definition consistency, valid evidence references, physical dimensions and 0–100 model bounds across the combined catalog.
+Both runtime and maintenance scripts merge the shards. `npm run data:validate` enforces global IDs/slugs, source-definition consistency, valid evidence references, physical dimensions and 0–100 model bounds across the combined catalog.
 
-`npm run data:report` generates `generated/data-report.json` with product counts, source-class coverage, evidence-confidence totals and the source-check date window. `npm run data:seed` produces `generated/catalog-seed.sql` on demand. Both artifacts are ignored by git; JSON research remains canonical and `migrations/0001_init.sql` remains the D1 schema migration.
+`npm run data:report` generates `generated/data-report.json` with product counts, source-class coverage, evidence-confidence totals and source-check date window. `npm run data:seed` produces `generated/catalog-seed.sql` on demand. Both artifacts are ignored by git; JSON research remains canonical.
+
+## Optional analytics storage
+
+The consumer/catalog runtime does **not** require D1.
+
+For site-wide behavioral analytics, Atlas includes optional migration `migrations/0002_analytics.sql`. If a dedicated D1 database is created and bound as `ANALYTICS_DB`, the client can send the same typed event schema to the Worker and the Worker can expose aggregate production summaries. Until that binding exists, the Product Lab remains explicit that analytics are browser-local or synthetic demo data.
 
 ## Current research additions
 
@@ -52,11 +129,12 @@ For the Gigantus V2 Pro, Razer defines Max Control, Control, Balance, Speed and 
 - Hono API on Cloudflare Workers
 - Cloudflare Workers Static Assets for the SPA
 - deterministic, explainable recommendation + geometry engines
-- prepared D1 + FTS5 schema for a later persisted catalog/search stage
-
-The current production runtime serves the bundled canonical catalog directly from the Worker, so D1 is not required to deploy the site.
+- JSON catalog shards as canonical product research
+- optional D1 storage for production behavioral analytics
 
 ## API
+
+Core product endpoints:
 
 - `GET /api/health`
 - `GET /api/stats`
@@ -67,7 +145,13 @@ The current production runtime serves the bundled canonical catalog directly fro
 - `GET /api/shape?length=122&width=59&height=39&hump=55&weight=55`
 - `POST /api/recommend` with a `UserProfile`
 
-`/api/stats` reports the current release metadata, type counts, source-class coverage, evidence-confidence mix and source-check window.
+Optional production analytics endpoints:
+
+- `GET /api/analytics/availability`
+- `POST /api/analytics/events`
+- `GET /api/analytics/summary?days=30`
+
+`/api/stats` reports release metadata, catalog/source/evidence coverage and whether production analytics storage is configured.
 
 ## Local setup
 
@@ -86,17 +170,19 @@ npm run data:seed
 npm run check
 ```
 
-CI validates every catalog shard, generates both derived artifacts, verifies they are non-empty, then runs TypeScript, Vite and a Wrangler deployment dry-run.
+CI validates every catalog shard, generates derived artifacts, audits production npm dependencies, then runs TypeScript, Vite and a Wrangler deployment dry-run. The shared account security baseline also checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
 
 ## Cloudflare deploy
 
-The current Worker has no required application secret or database binding. Locally, authenticate Wrangler and run `npm run deploy` after validation/build.
+The current consumer Worker has no required application secret or database binding. Locally, authenticate Wrangler and run `npm run deploy` after validation/build.
 
-For GitHub deployment, add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then run **Actions → Deploy Input Atlas**. The manual workflow validates the catalog, generates the data-health and SQL artifacts, runs the Worker dry-run, checks credentials and deploys with Wrangler.
+For GitHub deployment, add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then run **Actions → Deploy Atlas**. The manual workflow validates the catalog/build/Worker bundle before deploying with Wrangler.
+
+Production behavioral analytics is a separate optional step: create a D1 database, apply `migrations/0002_analytics.sql`, bind it as `ANALYTICS_DB`, establish a retention policy and verify `/api/analytics/availability` before treating dashboard aggregates as production usage.
 
 ## Research rules
 
-Read `CONTRIBUTING.md`, `research/FIELD_MODEL.md`, `research/RESEARCH_NOTES.md`, `research/SOURCE_POLICY.md`, `research/V05_RESEARCH.md` and `research/V06_DATA.md` before bulk imports.
+Read `CONTRIBUTING.md`, `research/FIELD_MODEL.md`, `research/RESEARCH_NOTES.md`, `research/SOURCE_POLICY.md`, `research/V05_RESEARCH.md`, `research/V06_DATA.md` and `docs/product/README.md` before bulk imports or major product changes.
 
 Core rules:
 
@@ -108,8 +194,11 @@ Core rules:
 - static glide, dynamic glide and stopping power are separate mousepad axes;
 - skate feel is pad-dependent and tracks fresh vs broken-in behavior where data exists;
 - 0–100 fit/feel values are comparative indices, not fabricated lab coefficients;
-- measured latency, friction, force or other physical values require explicit methodology and provenance.
+- measured latency, friction, force or other physical values require explicit methodology and provenance;
+- synthetic analytics remain visibly synthetic;
+- community observations retain source/date/conditions/evidence strength;
+- generated hardware tests are plans, not results.
 
 ## Shape data
 
-Current outline rendering uses **Input Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. No outline asset is copied from EloShapes, RTINGS or another site's scans. `MouseProduct.outline` supports sourced measured point sets (`measured-svg` / `scan`) so measured geometry can replace parametric geometry later without changing the Shape Lab interface.
+Current outline rendering uses **Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. No outline asset is copied from EloShapes, RTINGS or another site's scans. `MouseProduct.outline` supports sourced measured point sets (`measured-svg` / `scan`) so measured geometry can replace parametric geometry later without changing the Shape Lab interface.
