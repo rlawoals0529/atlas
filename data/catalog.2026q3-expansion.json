@@ -1,0 +1,464 @@
+{
+  "mice": [
+    {
+      "id": "mouse-wallhack-m001",
+      "slug": "wallhack-m001",
+      "type": "mouse",
+      "brand": "WALLHACK",
+      "model": "M-001",
+      "status": "current",
+      "msrpUsd": 189.99,
+      "summary": "Compact 53 g magnesium-alloy wireless mouse with a PAW3950, nRF54L15, 8 kHz polling and a hot-swappable two-battery receiver system.",
+      "tags": ["wireless", "8k", "magnesium", "claw", "fingertip", "paw3950", "hot-swap-battery"],
+      "sources": [
+        {
+          "id": "wallhack-m001-official",
+          "label": "WALLHACK M-001 campaign and specification page",
+          "url": "https://wallhack.com/en-fr/pages/campaigns/m-001",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-m001-fit",
+          "label": "Atlas M-001 fit interpretation",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "lengthMm": 120,
+        "widthMm": 64,
+        "heightMm": 39,
+        "gripWidthMm": 56,
+        "weightG": 53,
+        "shape": "symmetrical",
+        "hump": "center-rear",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "PixArt PAW3950",
+        "maxDpi": 30000,
+        "maxPollingHz": 8000,
+        "connectivity": ["2.4GHz wireless"],
+        "switchType": "optical",
+        "mainSwitch": "Omron D2FP-FN2 optical",
+        "encoder": "TTC Gold dustproof",
+        "mcu": "Nordic nRF54L15",
+        "shellMaterial": "AZ91D magnesium-aluminum-zinc alloy",
+        "sideButtons": 2,
+        "webDriver": true,
+        "driverless": true,
+        "stockSkateMaterial": "PTFE"
+      },
+      "geometry": {
+        "humpPositionPct": 64,
+        "humpFullness": 59,
+        "rearFlare": 53,
+        "frontFlare": 50,
+        "sideTaper": 53,
+        "buttonHeight": 46,
+        "pinkyClearance": 65,
+        "sensorOffsetMm": 0
+      },
+      "fit": {
+        "handLengthCm": [16.5, 19.8],
+        "handWidthCm": [8, 10.6],
+        "grip": {
+          "palm": 58,
+          "relaxed-claw": 94,
+          "aggressive-claw": 88,
+          "pincer-claw": 86,
+          "knuckle-claw": 84,
+          "fingertip": 91,
+          "extended-fingertip": 88,
+          "palm-claw-hybrid": 82
+        },
+        "aimStyle": {
+          "finger": 94,
+          "wrist": 92,
+          "hybrid": 93,
+          "arm": 82
+        },
+        "gameStyle": {
+          "tactical-fps": 93,
+          "tracking-fps": 95,
+          "arena-fps": 94,
+          "battle-royale": 92,
+          "moba-rts": 78,
+          "mmo": 42,
+          "action": 88,
+          "mixed": 90
+        },
+        "coatingDry": 82,
+        "coatingSweaty": 78,
+        "clickLightness": 78,
+        "clickCrispness": 84,
+        "wheelTactility": 82,
+        "liftSecurity": 76,
+        "palmSupport": 56,
+        "balance": "center"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["wallhack-m001-official"],
+          "confidence": "high",
+          "note": "Dimensions, mass, sensor, MCU, polling ceiling, switches, encoder, material and battery architecture are manufacturer-published specifications."
+        },
+        "shape": {
+          "sourceIds": ["wallhack-m001-official", "atlas-m001-fit"],
+          "confidence": "medium",
+          "note": "WALLHACK describes the shell as symmetrical, neutral and small-to-medium, with claw as the primary fit and palm/fingertip depending on hand size. Atlas geometry fields normalize that description for comparison."
+        },
+        "fit": {
+          "sourceIds": ["wallhack-m001-official", "atlas-m001-fit"],
+          "confidence": "low",
+          "note": "Hand ranges and 0–100 fit vectors are Atlas editorial guidance, not anthropometric measurements or manufacturer scores."
+        }
+      }
+    }
+  ],
+  "mousepads": [
+    {
+      "id": "pad-wallhack-sp005-black",
+      "slug": "wallhack-sp-005-black",
+      "type": "mousepad",
+      "brand": "WALLHACK",
+      "model": "SP-005 Black",
+      "status": "current",
+      "msrpUsd": 129,
+      "summary": "Speed-focused uncoated micro-etched tempered-glass pad with subtle tactile feedback, a concave silicone base and CNC-tapered edges.",
+      "tags": ["glass", "speed", "tracking", "hard-pad", "micro-etched", "uncoated"],
+      "sources": [
+        {
+          "id": "wallhack-sp005-kjp-spec",
+          "label": "WALLHACK SP-005 platform specification",
+          "url": "https://wallhack.com/en-fr/pages/campaigns/kojima",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "wallhack-sp005-current",
+          "label": "WALLHACK current SP-005 listing",
+          "url": "https://wallhack.com/en-fr/products/sp-005-black",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-sp005-feel",
+          "label": "Atlas SP-005 normalized surface interpretation",
+          "url": "./research/V06_DATA.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "glass",
+        "surfaceMaterial": "micro-etched tempered uncoated glass",
+        "baseMaterial": "concave silicone pattern",
+        "firmness": "hard",
+        "thicknessMm": 3.3,
+        "widthMm": 510,
+        "heightMm": 440,
+        "stitchedEdges": false
+      },
+      "feel": {
+        "staticSpeed": 91,
+        "dynamicSpeed": 94,
+        "stoppingPower": 30,
+        "texture": 31,
+        "pressureResponse": 8,
+        "humidityResistance": 98,
+        "sleeveCompatibility": 91,
+        "xyConsistency": 97,
+        "noise": 74,
+        "skinDrag": 68,
+        "breakInChange": 5,
+        "wornZoneStability": 95,
+        "cleaningRecovery": 98
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["wallhack-sp005-kjp-spec", "wallhack-sp005-current"],
+          "confidence": "high",
+          "note": "WALLHACK documents the SP-005 platform as 44 × 51 cm, micro-etched tempered uncoated glass with a silicone-pattern base and tapered CNC edge. The detailed campaign page lists 3.3 mm thickness while some current shop snippets surface 2.5 mm; Atlas preserves the detailed platform specification and flags the publication inconsistency."
+        },
+        "feel": {
+          "sourceIds": ["wallhack-sp005-kjp-spec", "atlas-sp005-feel"],
+          "confidence": "low",
+          "note": "WALLHACK describes a fast speed-oriented surface with slight texture. Atlas 0–100 feel fields are normalized editorial estimates, not measured friction coefficients."
+        }
+      }
+    }
+  ],
+  "skates": [
+    {
+      "id": "skate-xray-obsidian-pro-air-upe-d65",
+      "slug": "xraypad-obsidian-pro-air-upe-d65-dots",
+      "type": "skate",
+      "brand": "X-Raypad",
+      "model": "Obsidian PRO Air U-PE D6.5 Dots",
+      "status": "current",
+      "msrpUsd": 11.99,
+      "summary": "6.5 mm UHMWPE control dots with a PU-foam noise and vibration layer, tuned by X-Raypad for durable, quieter use on glass surfaces.",
+      "tags": ["uhmwpe", "dots", "glass", "control", "quiet", "foam"],
+      "sources": [
+        {
+          "id": "xray-obsidian-pro-air-upe-official",
+          "label": "X-Raypad Obsidian PRO Air U-PE D6.5 product page",
+          "url": "https://shop.x-raypad.com/shop/x-raypad-obsidian-pro-air-u-pe-universal-dot-mouse-skates-less-noise/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-obsidian-pro-air-feel",
+          "label": "Atlas Obsidian PRO Air normalized glide interpretation",
+          "url": "./research/V06_DATA.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "material": "uhmwpe",
+        "format": "dots",
+        "thicknessMm": 0.9,
+        "diameterMm": 6.5,
+        "cushionLayer": true,
+        "antiCollapse": false
+      },
+      "feel": {
+        "speed": 47,
+        "control": 84,
+        "noise": 24,
+        "durability": 91,
+        "freshSpeed": 50,
+        "brokenInSpeed": 46,
+        "wearRate": 10,
+        "dustSensitivity": 28
+      },
+      "compatibility": {
+        "cloth": true,
+        "hybrid": true,
+        "glass": true,
+        "plastic": false,
+        "softBase": "conditional"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["xray-obsidian-pro-air-upe-official"],
+          "confidence": "high",
+          "note": "UHMWPE material, 6.5 mm dot format, 0.90 ± 0.05 mm thickness, PU foam layer and glass optimization are manufacturer specifications."
+        },
+        "feel": {
+          "sourceIds": ["xray-obsidian-pro-air-upe-official", "atlas-obsidian-pro-air-feel"],
+          "confidence": "low",
+          "note": "X-Raypad positions this below Obsidian and Obsidian Air in speed and emphasizes control, quietness and wear resistance. Atlas 0–100 scores are normalized guidance rather than measured friction or acoustic data."
+        }
+      }
+    }
+  ],
+  "keyboards": [
+    {
+      "id": "keyboard-wooting-60he-v2",
+      "slug": "wooting-60he-v2",
+      "type": "keyboard",
+      "brand": "Wooting",
+      "model": "60HE v2",
+      "status": "current",
+      "msrpUsd": 179.99,
+      "summary": "Second-generation 60% Hall-effect platform with true 8 kHz polling, regular or split-spacebar layouts, FR4 plate and plastic or aluminum cases.",
+      "tags": ["hall-effect", "60-percent", "8k", "rapid-trigger", "analog", "web-config", "split-spacebar"],
+      "sources": [
+        {
+          "id": "wooting-60he-v2-official",
+          "label": "Wooting 60HE v2 product page",
+          "url": "https://wooting.io/wooting-60he-v2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "wooting-60he-v2-comparison",
+          "label": "Wooting 60HE+ versus 60HE v2 comparison",
+          "url": "https://wooting.io/post/the-difference-between-the-60he-and-the-60he-v2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "60%",
+        "layout": "ANSI / ISO; regular or split spacebar",
+        "switchTechnology": "hall-effect",
+        "stockSwitch": "Lekker Tikken Medium",
+        "maxPollingHz": 8000,
+        "rapidTrigger": true,
+        "socd": true,
+        "analogInput": true,
+        "hotSwappable": true,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "ABS plastic or aluminum, by variant",
+        "plateMaterial": "FR4",
+        "mount": "friction fit",
+        "webConfigurator": true,
+        "software": "Wootility Web / desktop"
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["wooting-60he-v2-official", "wooting-60he-v2-comparison"],
+          "confidence": "high",
+          "note": "Form factor, 8 kHz polling, case options, FR4 plate, friction-fit mount, split-spacebar option and Lekker Tikken Medium switch are manufacturer-published."
+        },
+        "inputFeatures": {
+          "sourceIds": ["wooting-60he-v2-official"],
+          "confidence": "high",
+          "note": "Rapid Trigger, analog Hall-effect input and Wootility configuration are platform features. Atlas does not treat the polling ceiling as an independent end-to-end latency measurement."
+        }
+      }
+    },
+    {
+      "id": "keyboard-nuphy-field75-he-v2",
+      "slug": "nuphy-field75-he-v2",
+      "type": "keyboard",
+      "brand": "NuPhy",
+      "model": "Field75 HE V2",
+      "status": "current",
+      "msrpUsd": 179,
+      "summary": "Industrial 75% Hall-effect keyboard with 8 kHz polling, 32 kHz scan rate, 0.005 mm Rapid Trigger precision and browser-based NuPhyIO tuning.",
+      "tags": ["hall-effect", "75-percent", "8k", "32k-scan", "rapid-trigger", "web-config", "hot-swap"],
+      "sources": [
+        {
+          "id": "nuphy-field75-he-v2-official",
+          "label": "NuPhy Field75 HE V2 product page",
+          "url": "https://pay.nuphy.com/products/nuphy-field75-he-v2-1",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "75%",
+        "layout": "ANSI, 83 keys",
+        "switchTechnology": "hall-effect",
+        "stockSwitch": "Magnetic Silver or Magnetic Jade Dragon-N",
+        "maxPollingHz": 8000,
+        "actuationStepMm": 0.005,
+        "rapidTrigger": true,
+        "hotSwappable": true,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "ABS top and bottom case",
+        "plateMaterial": "aluminum",
+        "keycapMaterial": "double-shot PBT, Cherry profile",
+        "mount": "top mount with silicone buffering",
+        "webConfigurator": true,
+        "software": "NuPhyIO",
+        "dimensionsMm": {
+          "width": 372.3,
+          "depth": 142.8,
+          "height": 40.4
+        },
+        "weightG": 1205
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["nuphy-field75-he-v2-official"],
+          "confidence": "high",
+          "note": "Layout, case/plate construction, replaceable magnetic switches, dimensions, mass and browser configuration come from NuPhy's current product specification."
+        },
+        "inputFeatures": {
+          "sourceIds": ["nuphy-field75-he-v2-official"],
+          "confidence": "high",
+          "note": "NuPhy publishes 8 kHz USB polling, 32 kHz PCB scan rate and Rapid Trigger precision down to 0.005 mm. Atlas records that 0.005 mm figure as tuning/RT precision, not a claim that physical switch travel is resolved perfectly under all conditions."
+        }
+      }
+    }
+  ],
+  "switches": [
+    {
+      "id": "switch-gateron-magnetic-jade-pro",
+      "slug": "gateron-magnetic-jade-pro",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Pro",
+      "status": "current",
+      "summary": "Linear Hall-effect switch with a 36 gf published initial force, 3.5 mm total travel, factory lubrication and N-pole-down magnetic compatibility.",
+      "tags": ["hall-effect", "linear", "magnetic", "factory-lubed", "n-pole-down"],
+      "sources": [
+        {
+          "id": "gateron-jade-pro-official",
+          "label": "Gateron Magnetic Jade Pro HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-pro-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 36,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100,
+        "magneticFluxGs": {
+          "initial": 120,
+          "bottomOut": 700,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": ["N-pole faces down toward the PCB; verify keyboard polarity and firmware compatibility before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-pro-official"],
+          "confidence": "high",
+          "note": "Initial force, total travel, magnetic-flux values, lubrication, lifespan and pole orientation are Gateron specifications."
+        }
+      }
+    },
+    {
+      "id": "switch-geon-raw-he-40gf",
+      "slug": "geon-raw-he-40gf",
+      "type": "switch",
+      "brand": "GEONWORKS",
+      "model": "Raw HE 40gf",
+      "status": "current",
+      "msrpUsd": 0.48,
+      "summary": "Light 40 gf bottom-out Hall-effect linear from GEONWORKS with 3.4 mm travel, factory lubrication and a published 160–720 Gs magnetic-flux range.",
+      "tags": ["hall-effect", "linear", "40gf", "magnetic", "factory-lubed", "2-pin"],
+      "sources": [
+        {
+          "id": "geon-raw-he-official",
+          "label": "GEONWORKS Raw HE switch product page",
+          "url": "https://geon.works/products/geon-raw-he-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 27,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "preTravelMm": 0.1,
+        "totalTravelMm": 3.4,
+        "factoryLubed": true,
+        "magneticFluxGs": {
+          "initial": 160,
+          "bottomOut": 720
+        },
+        "compatibility": ["Hall-effect compatibility is board-specific; verify magnetic polarity, sensing range and firmware support."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["geon-raw-he-official"],
+          "confidence": "high",
+          "note": "This record represents the 40 gf variant: GEON publishes 27 gf initial force, 40 gf bottom-out, 0.1–3.3 mm analog pre-travel, 3.4 mm total travel and 160/720 Gs magnetic flux. The preTravelMm field stores the published minimum adjustable point rather than implying a fixed actuation distance."
+        }
+      }
+    }
+  ]
+}

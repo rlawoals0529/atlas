@@ -1,6 +1,8 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
+import ConsumerCompare from "./ConsumerCompare";
+import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 
 const categoryMeta: Record<ProductType, { label: string; singular: string; description: string; token: string }> = {
   mouse: { label: "Mice", singular: "Mouse", description: "Shape, weight, polling and hand fit", token: "M" },
@@ -34,102 +36,66 @@ function evidenceCoverage(product: CatalogProduct) {
     Math.min(28, high * 9 + medium * 4) +
     Math.min(20, manufacturer * 7 + independent * 8),
   ));
-  return {
-    score,
-    label: score >= 82 ? "strong" : score >= 62 ? "good" : score >= 42 ? "developing" : "early",
-  };
+  return { score, label: score >= 82 ? "strong" : score >= 62 ? "good" : score >= 42 ? "developing" : "early" };
 }
 
 function productMetrics(product: CatalogProduct): [string, string][] {
   switch (product.type) {
-    case "mouse":
-      return [
-        ["Weight", `${product.specs.weightG} g`],
-        ["Polling", pollingLabel(product.specs.maxPollingHz)],
-        ["Grip", `${product.specs.gripWidthMm ?? product.specs.widthMm} mm`],
-        ["Shape", titleCase(product.specs.shape)],
-      ];
-    case "mousepad":
-      return [
-        ["Surface", titleCase(product.specs.surfaceClass)],
-        ["Glide", `${product.feel.dynamicSpeed}/100`],
-        ["Stopping", `${product.feel.stoppingPower}/100`],
-        ["Size", `${product.specs.widthMm} × ${product.specs.heightMm}`],
-      ];
-    case "skate":
-      return [
-        ["Material", titleCase(product.specs.material)],
-        ["Format", titleCase(product.specs.format)],
-        ["Glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`],
-        ["Control", `${product.feel.control}/100`],
-      ];
-    case "keyboard":
-      return [
-        ["Format", product.specs.formFactor.toUpperCase()],
-        ["Polling", pollingLabel(product.specs.maxPollingHz)],
-        ["Actuation", product.specs.minActuationMm != null ? `${product.specs.minActuationMm} mm min` : "Fixed"],
-        ["Rapid trigger", product.specs.rapidTrigger ? "Yes" : "No"],
-      ];
+    case "mouse": return [["Weight", `${product.specs.weightG} g`], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Grip", `${product.specs.gripWidthMm ?? product.specs.widthMm} mm`], ["Shape", titleCase(product.specs.shape)]];
+    case "mousepad": return [["Surface", titleCase(product.specs.surfaceClass)], ["Glide", `${product.feel.dynamicSpeed}/100`], ["Stopping", `${product.feel.stoppingPower}/100`], ["Size", `${product.specs.widthMm} × ${product.specs.heightMm}`]];
+    case "skate": return [["Material", titleCase(product.specs.material)], ["Format", titleCase(product.specs.format)], ["Glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`], ["Control", `${product.feel.control}/100`]];
+    case "keyboard": return [["Format", product.specs.formFactor.toUpperCase()], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Actuation", product.specs.minActuationMm != null ? `${product.specs.minActuationMm} mm min` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm precision` : "Adjustable"], ["Rapid trigger", product.specs.rapidTrigger ? "Yes" : "No"]];
     case "switch": {
       const force = product.specs.bottomOutForce ?? product.specs.actuationForce ?? product.specs.initialForce;
-      return [
-        ["Feel", titleCase(product.specs.feel)],
-        ["Technology", titleCase(product.specs.technology)],
-        ["Travel", `${product.specs.totalTravelMm} mm`],
-        ["Force", force ? `${force.value} ${force.unit}` : "Not listed"],
-      ];
+      return [["Feel", titleCase(product.specs.feel)], ["Technology", titleCase(product.specs.technology)], ["Travel", `${product.specs.totalTravelMm} mm`], ["Force", force ? `${force.value} ${force.unit}` : "Not listed"]];
     }
   }
 }
 
 function detailRows(product: CatalogProduct): [string, ReactNode][] {
   switch (product.type) {
-    case "mouse":
-      return [
-        ["Dimensions", `${product.specs.lengthMm} × ${product.specs.widthMm} × ${product.specs.heightMm} mm`],
-        ["Grip width", `${product.specs.gripWidthMm ?? "—"} mm`],
-        ["Weight", `${product.specs.weightG} g`],
-        ["Shape", `${titleCase(product.specs.shape)} · ${titleCase(product.specs.hump)} hump`],
-        ["Sensor", product.specs.sensor],
-        ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
-        ["Main switches", product.specs.mainSwitch ?? titleCase(product.specs.switchType)],
-        ["Connectivity", product.specs.connectivity.join(" · ")],
-      ];
-    case "mousepad":
-      return [
-        ["Surface", `${titleCase(product.specs.surfaceClass)} · ${product.specs.surfaceMaterial}`],
-        ["Base", product.specs.baseMaterial],
-        ["Firmness", titleCase(product.specs.firmness)],
-        ["Size", `${product.specs.widthMm} × ${product.specs.heightMm} mm`],
-        ["Thickness", `${product.specs.thicknessMm} mm`],
-        ["Dynamic glide", `${product.feel.dynamicSpeed}/100`],
-        ["Stopping power", `${product.feel.stoppingPower}/100`],
-        ["Humidity resistance", `${product.feel.humidityResistance}/100`],
-      ];
-    case "skate":
-      return [
-        ["Material", titleCase(product.specs.material)],
-        ["Format", titleCase(product.specs.format)],
-        ["Thickness", product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "—"],
-        ["Fresh glide", `${product.feel.freshSpeed ?? product.feel.speed}/100`],
-        ["Broken-in glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`],
-        ["Control", `${product.feel.control}/100`],
-        ["Glass compatibility", product.compatibility.glass ? "Compatible" : "Avoid"],
-        ["Soft-base behavior", titleCase(product.compatibility.softBase)],
-      ];
-    case "keyboard":
-      return [
-        ["Form factor", product.specs.formFactor.toUpperCase()],
-        ["Layout", product.specs.layout],
-        ["Switch technology", titleCase(product.specs.switchTechnology)],
-        ["Stock switch", product.specs.stockSwitch],
-        ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
-        ["Actuation range", product.specs.minActuationMm != null ? `${product.specs.minActuationMm}–${product.specs.maxActuationMm ?? "?"} mm` : "Fixed / not listed"],
-        ["Rapid Trigger", product.specs.rapidTrigger ? "Yes" : "No"],
-        ["Hot-swap", product.specs.hotSwappable ? "Yes" : "No"],
-        ["Connectivity", product.specs.connectivity.join(" · ")],
-        ["Configuration", product.specs.webConfigurator ? "Web configurator" : product.specs.software ?? "Not listed"],
-      ];
+    case "mouse": return [
+      ["Dimensions", `${product.specs.lengthMm} × ${product.specs.widthMm} × ${product.specs.heightMm} mm`],
+      ["Grip width", `${product.specs.gripWidthMm ?? "—"} mm`],
+      ["Weight", `${product.specs.weightG} g`],
+      ["Shape", `${titleCase(product.specs.shape)} · ${titleCase(product.specs.hump)} hump`],
+      ["Sensor", product.specs.sensor],
+      ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
+      ["Main switches", product.specs.mainSwitch ?? titleCase(product.specs.switchType)],
+      ["Connectivity", product.specs.connectivity.join(" · ")],
+    ];
+    case "mousepad": return [
+      ["Surface", `${titleCase(product.specs.surfaceClass)} · ${product.specs.surfaceMaterial}`],
+      ["Base", product.specs.baseMaterial],
+      ["Firmness", titleCase(product.specs.firmness)],
+      ["Size", `${product.specs.widthMm} × ${product.specs.heightMm} mm`],
+      ["Thickness", `${product.specs.thicknessMm} mm`],
+      ["Dynamic glide", `${product.feel.dynamicSpeed}/100`],
+      ["Stopping power", `${product.feel.stoppingPower}/100`],
+      ["Humidity resistance", `${product.feel.humidityResistance}/100`],
+    ];
+    case "skate": return [
+      ["Material", titleCase(product.specs.material)],
+      ["Format", titleCase(product.specs.format)],
+      ["Thickness", product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "—"],
+      ["Fresh glide", `${product.feel.freshSpeed ?? product.feel.speed}/100`],
+      ["Broken-in glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`],
+      ["Control", `${product.feel.control}/100`],
+      ["Glass compatibility", product.compatibility.glass ? "Compatible" : "Avoid"],
+      ["Soft-base behavior", titleCase(product.compatibility.softBase)],
+    ];
+    case "keyboard": return [
+      ["Form factor", product.specs.formFactor.toUpperCase()],
+      ["Layout", product.specs.layout],
+      ["Switch technology", titleCase(product.specs.switchTechnology)],
+      ["Stock switch", product.specs.stockSwitch],
+      ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
+      ["Actuation range", product.specs.minActuationMm != null ? `${product.specs.minActuationMm}–${product.specs.maxActuationMm ?? "?"} mm` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm published tuning precision` : "Adjustable / not fully specified"],
+      ["Rapid Trigger", product.specs.rapidTrigger ? "Yes" : "No"],
+      ["Hot-swap", product.specs.hotSwappable ? "Yes" : "No"],
+      ["Connectivity", product.specs.connectivity.join(" · ")],
+      ["Configuration", product.specs.webConfigurator ? "Web configurator" : product.specs.software ?? "Not listed"],
+    ];
     case "switch": {
       const force = product.specs.bottomOutForce ?? product.specs.actuationForce ?? product.specs.initialForce;
       return [
@@ -150,14 +116,18 @@ function ProductGlyph({ type }: { type: ProductType }) {
   return <div className={`consumer-glyph ${type}`} aria-hidden="true"><span>{categoryMeta[type].token}</span><i/><i/></div>;
 }
 
+function ProductVisual({ product }: { product: CatalogProduct }) {
+  return <ProductMedia productId={product.id} className={`consumer-real-image ${product.type}`} fallback={<ProductGlyph type={product.type}/>}/>;
+}
+
 function CoveragePill({ product }: { product: CatalogProduct }) {
   const coverage = evidenceCoverage(product);
   return <span className={`consumer-coverage ${coverage.label}`} title="Atlas evidence coverage heuristic"><b>{coverage.score}</b> coverage</span>;
 }
 
-function ProductCard({ product, onOpen }: { product: CatalogProduct; onOpen: (product: CatalogProduct) => void }) {
-  return <button className="consumer-product" onClick={() => onOpen(product)}>
-    <div className="consumer-product-visual"><ProductGlyph type={product.type}/><CoveragePill product={product}/></div>
+function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; onOpen: (product: CatalogProduct) => void; compared: boolean }) {
+  return <button className={`consumer-product ${compared ? "compare-selected" : ""}`} onClick={() => onOpen(product)}>
+    <div className="consumer-product-visual"><ProductVisual product={product}/><CoveragePill product={product}/></div>
     <div className="consumer-product-head"><span>{product.brand}</span><small>{categoryMeta[product.type].singular}</small></div>
     <h3>{product.model}</h3>
     <p>{product.summary}</p>
@@ -166,21 +136,18 @@ function ProductCard({ product, onOpen }: { product: CatalogProduct; onOpen: (pr
   </button>;
 }
 
-function ProductDrawer({ product, onClose }: { product: CatalogProduct; onClose: () => void }) {
+function ProductDrawer({ product, onClose, onCompare, compared }: { product: CatalogProduct; onClose: () => void; onCompare: (product: CatalogProduct) => void; compared: boolean }) {
   const coverage = evidenceCoverage(product);
   const sourcesById = new Map(product.sources.map(source => [source.id, source]));
   return <div className="consumer-drawer-shell" role="dialog" aria-modal="true" aria-label={`${product.brand} ${product.model} details`}>
-    <button className="consumer-drawer-backdrop" onClick={onClose} aria-label="Close product details"/>
+    <button className="consumer-drawer-backdrop" aria-label="Close product details" onClick={onClose}/>
     <aside className="consumer-drawer">
       <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2>{product.model}</h2></div><button onClick={onClose} aria-label="Close">×</button></header>
-      <div className="consumer-drawer-hero"><ProductGlyph type={product.type}/><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
+      <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
       <p className="consumer-drawer-summary">{product.summary}</p>
-      <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 5).map(tag => <span key={tag}>{titleCase(tag)}</span>)}</div>
-
+      <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button className="consumer-drawer-compare" onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>
-
       <section><div className="consumer-section-title"><span>EVIDENCE</span><h3>What supports this record</h3></div><div className="consumer-evidence-list">{Object.entries(product.evidence ?? {}).map(([field, note]) => <article key={field}><div><b>{titleCase(field)}</b><span className={note.confidence}>{note.confidence}</span></div>{note.note && <p>{note.note}</p>}<footer>{note.sourceIds.map(sourceId => { const source = sourcesById.get(sourceId); return source ? <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span>{source.label}<i>↗</i></a> : null; })}</footer></article>)}</div></section>
-
       <section><div className="consumer-section-title"><span>SOURCES</span><h3>Provenance ledger</h3></div><div className="consumer-source-list">{product.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span><div><b>{source.label}</b><small>checked {source.checkedAt}</small></div><i>↗</i></a>)}</div></section>
     </aside>
   </div>;
@@ -194,6 +161,8 @@ export default function AtlasConsumer() {
   const [sort, setSort] = useState<"name" | "coverage" | "price">("coverage");
   const [selected, setSelected] = useState<CatalogProduct | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
 
   const [minPolling, setMinPolling] = useState(0);
   const [maxWeight, setMaxWeight] = useState(140);
@@ -206,8 +175,24 @@ export default function AtlasConsumer() {
   const [switchTech, setSwitchTech] = useState("all");
   const [switchFeel, setSwitchFeel] = useState("all");
 
-  const brands = useMemo(() => [...new Set(allCatalog.filter(product => category === "all" || product.type === category).map(product => product.brand))].sort(), [category]);
+  const compareProducts = compareIds.map(id => allCatalog.find(product => product.id === id)).filter((product): product is CatalogProduct => Boolean(product));
+  const compared = (id: string) => compareIds.includes(id);
+  const toggleCompare = (product: CatalogProduct) => setCompareIds(current => {
+    if (current.includes(product.id)) return current.filter(id => id !== product.id);
+    const first = current.length ? allCatalog.find(item => item.id === current[0]) : null;
+    if (first && first.type !== product.type) return [product.id];
+    if (current.length >= 4) return current;
+    return [...current, product.id];
+  });
+  const removeCompare = (id: string) => {
+    setCompareIds(current => {
+      const next = current.filter(item => item !== id);
+      if (next.length < 2) setCompareOpen(false);
+      return next;
+    });
+  };
 
+  const brands = useMemo(() => [...new Set(allCatalog.filter(product => category === "all" || product.type === category).map(product => product.brand))].sort(), [category]);
   const filtered = useMemo(() => allCatalog.filter(product => {
     if (category !== "all" && product.type !== category) return false;
     if (currentOnly && product.status !== "current") return false;
@@ -241,13 +226,9 @@ export default function AtlasConsumer() {
   }), [category, currentOnly, brand, query, shape, minPolling, maxWeight, surface, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
 
   const clearCategoryFilters = () => {
-    setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setSkateMaterial("all");
-    setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all");
+    setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setSkateMaterial("all"); setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all");
   };
-
-  const selectCategory = (next: "all" | ProductType) => {
-    setCategory(next); setBrand("all"); clearCategoryFilters();
-  };
+  const selectCategory = (next: "all" | ProductType) => { setCategory(next); setBrand("all"); clearCategoryFilters(); };
 
   return <div className="consumer-shell">
     <header className="consumer-topbar">
@@ -269,10 +250,8 @@ export default function AtlasConsumer() {
       </section>
 
       <section className="consumer-catalog" id="consumer-catalog">
-        <div className="consumer-section-head"><div><span>DATABASE</span><h2>Browse the input stack</h2><p>Start broad, then reveal only the filters that matter for the category you are shopping.</p></div><strong>{filtered.length}<small> matching</small></strong></div>
-
+        <div className="consumer-section-head"><div><span>DATABASE</span><h2>Browse the input stack</h2><p>Start broad, reveal only the filters that matter, and add up to four products from one category to the richer comparison tray. Official product imagery appears where Atlas has a stable sourced asset; otherwise the interface falls back to the category glyph.</p></div><strong>{filtered.length}<small> matching</small></strong></div>
         <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? allCatalog.length : counts[type]}</span></button>)}</div>
-
         <div className="consumer-toolbar">
           <div className="consumer-search"><span>⌕</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search product, material, shape, switch, feature…"/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
@@ -290,12 +269,15 @@ export default function AtlasConsumer() {
           <button onClick={clearCategoryFilters}>Clear category filters</button>
         </div>}
 
-        {filtered.length > 0 ? <div className="consumer-grid">{filtered.map(product => <ProductCard key={product.id} product={product} onOpen={setSelected}/>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button onClick={() => { setQuery(""); setBrand("all"); clearCategoryFilters(); }}>Reset filters</button></div>}
+        {filtered.length > 0 ? <div className="consumer-grid">{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button onClick={() => { setQuery(""); setBrand("all"); clearCategoryFilters(); }}>Reset filters</button></div>}
       </section>
 
       <section className="consumer-principles"><div><span>HOW ATLAS READS DATA</span><h2>Specs are facts. Fit is context. Reviews are evidence.</h2></div><p>Atlas does not turn every reviewer opinion into a universal score. Manufacturer specifications stay labeled as manufacturer claims, independent observations remain attributed, and derived fit models are treated as guidance rather than measurements.</p><a href="#product-lab">Open research & validation →</a></section>
     </main>
 
-    {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)}/>} 
+    {compareProducts.length > 0 && <div className="consumer-compare-tray" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><div><small>{product.brand}</small><b>{product.model}</b></div><button onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button className="consumer-compare-open" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
+
+    {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)} onCompare={toggleCompare} compared={compared(selected.id)}/>} 
+    {compareOpen && compareProducts.length >= 2 && <ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/>} 
   </div>;
 }
