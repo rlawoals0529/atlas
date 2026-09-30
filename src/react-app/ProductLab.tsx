@@ -27,7 +27,7 @@ function ProductLab() {
   return <div className="pv-shell">
     <header className="pv-topbar">
       <div><span className="pv-logo">IA</span><div><b>INPUT ATLAS</b><small>RESEARCH LAB</small></div></div>
-      <nav><a href="#product-intelligence">Product intelligence</a><a href="#validation">System validation</a><a href="#">Back to Atlas</a></nav>
+      <nav><a href="#lab-product-intelligence">Product intelligence</a><a href="#lab-validation">System validation</a><a href="#">Back to Atlas</a></nav>
     </header>
 
     <main className="pv-main">
@@ -41,7 +41,7 @@ function ProductLab() {
         </div>
       </section>
 
-      <section className="pv-metrics" id="product-intelligence">
+      <section className="pv-metrics" id="lab-product-intelligence">
         <article><span>CURRENT MICE</span><b>{insights.currentCount}</b><small>Atlas catalog</small></article>
         <article><span>MEDIAN WEIGHT</span><b>{insights.medianWeightG == null ? "—" : `${insights.medianWeightG.toFixed(1)} g`}</b><small>current records</small></article>
         <article><span>MEDIAN MSRP</span><b>{insights.medianMsrpUsd == null ? "—" : `$${Math.round(insights.medianMsrpUsd)}`}</b><small>priced current records</small></article>
@@ -84,7 +84,7 @@ function ProductLab() {
         <div>{insights.topBrands.map((row, index) => <span key={row.brand}><i>{String(index + 1).padStart(2, "0")}</i><b>{row.brand}</b><em>{row.count} current mice</em></span>)}</div>
       </section>
 
-      <section className="pv-intro" id="validation">
+      <section className="pv-intro" id="lab-validation">
         <div><span className="pv-kicker">02 / SYSTEM TEST & VALIDATION</span><h2>Translate product claims into release-oriented test coverage.</h2></div>
         <p>The cases below are a reusable validation plan generated from catalog specifications. They are intentionally marked planned: Atlas does not claim a test passed until it has actually been executed on hardware with an identified environment and evidence.</p>
       </section>
