@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "checkedAt": "2026-09-30",
+  "scope": "Base hipfire yaw presets for physical cm/360 matching. Scoped/ADS/FOV conversions are intentionally excluded unless modeled separately.",
+  "games": [
+    {
+      "id": "cs2",
+      "label": "Counter-Strike 2",
+      "yaw": 0.022,
+      "decimals": 4,
+      "confidence": "high",
+      "sources": [
+        {
+          "label": "KovaaK Sensitivity Matcher — Quake/Source yaw preset",
+          "url": "https://github.com/KovaaK/SensitivityMatcher/blob/master/ReleaseAssets/bin/SensitivityMatcher.au3"
+        },
+        {
+          "label": "CS2 config package documenting m_yaw 0.022",
+          "url": "https://github.com/FNScence/CSAFAP-config-package"
+        }
+      ],
+      "note": "CS2 uses the Source/Quake-family 0.022 yaw convention for normal horizontal mouse rotation."
+    },
+    {
+      "id": "valorant",
+      "label": "VALORANT",
+      "yaw": 0.07,
+      "decimals": 4,
+      "confidence": "medium",
+      "sources": [
+        {
+          "label": "Open-source VALORANT ↔ CS2 converter reference",
+          "url": "https://github.com/arturrzufik/valorant-cs2-sens-converter"
+        },
+        {
+          "label": "Open-source FPS sensitivity formula reference",
+          "url": "https://github.com/veronicalynn0528/fps-sensitivity-formulas"
+        }
+      ],
+      "note": "The 0.07 base-yaw value is community-maintained rather than a Riot-published implementation constant; Atlas therefore labels it medium-confidence."
+    },
+    {
+      "id": "apex",
+      "label": "Apex Legends",
+      "yaw": 0.022,
+      "decimals": 4,
+      "confidence": "medium",
+      "sources": [
+        {
+          "label": "EA forum community calculation using Source/Quake sensitivity for Apex",
+          "url": "https://forums.ea.com/discussions/apex-legends-general-discussion-en/what-dpi-you-guys-are-running-in-this-game/5289142"
+        },
+        {
+          "label": "KovaaK Sensitivity Matcher — Quake/Source yaw preset",
+          "url": "https://github.com/KovaaK/SensitivityMatcher/blob/master/ReleaseAssets/bin/SensitivityMatcher.au3"
+        }
+      ],
+      "note": "Apex base mouse sensitivity is commonly matched with the Source/Quake 0.022 convention. Atlas does not apply this preset to ADS or controller ALC values."
+    }
+  ]
+}
