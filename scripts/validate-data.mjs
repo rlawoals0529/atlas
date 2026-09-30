@@ -1,8 +1,7 @@
-import { loadCatalog } from "./load-catalog.mjs";
+import { catalogGroups, loadCatalog } from "./load-catalog.mjs";
 
 const data = loadCatalog();
-const groups = ["mice", "mousepads", "skates"];
-const products = groups.flatMap((key) => data[key] ?? []);
+const products = catalogGroups.flatMap((key) => data[key] ?? []);
 const errors = [];
 const ids = new Set();
 const slugs = new Set();
@@ -14,12 +13,13 @@ const scoreKeys = new Set([
   "humpFullness","rearFlare","frontFlare","sideTaper","sideWallAngle","buttonHeight","pinkyClearance"
 ]);
 const gameKeys = ["tactical-fps","tracking-fps","arena-fps","battle-royale","moba-rts","mmo","action","mixed"];
+const typeGroup = { mouse: "mice", mousepad: "mousepads", skate: "skates", keyboard: "keyboards", switch: "switches" };
 
 for (const p of products) {
   if (ids.has(p.id)) errors.push(`duplicate id: ${p.id}`); ids.add(p.id);
   if (slugs.has(p.slug)) errors.push(`duplicate slug: ${p.slug}`); slugs.add(p.slug);
   if (!p.brand || !p.model || !p.type) errors.push(`missing identity field: ${p.id}`);
-  if (!groups.includes(p.type === "mouse" ? "mice" : p.type === "mousepad" ? "mousepads" : "skates")) errors.push(`invalid type: ${p.id}`);
+  if (!typeGroup[p.type] || !catalogGroups.includes(typeGroup[p.type])) errors.push(`invalid type: ${p.id}`);
 
   for (const s of p.sources ?? []) {
     if (!s.id || !s.label || !s.url || !s.kind || !s.checkedAt) errors.push(`${p.id}: incomplete source definition`);
@@ -53,10 +53,30 @@ for (const p of products) {
     for (const [k,v] of Object.entries(games)) if (typeof v !== "number" || v < 0 || v > 100) errors.push(`${p.id}.fit.gameStyle.${k}: invalid score`);
     if (p.specs.weightG <= 0 || p.specs.lengthMm <= 0 || p.specs.widthMm <= 0 || p.specs.heightMm <= 0) errors.push(`${p.id}: impossible physical dimensions`);
   }
+
+  if (p.type === "keyboard") {
+    if (!Number.isFinite(p.specs?.maxPollingHz) || p.specs.maxPollingHz <= 0) errors.push(`${p.id}: invalid polling ceiling`);
+    if (p.specs?.minActuationMm != null && (!Number.isFinite(p.specs.minActuationMm) || p.specs.minActuationMm < 0)) errors.push(`${p.id}: invalid minimum actuation`);
+    if (p.specs?.maxActuationMm != null && (!Number.isFinite(p.specs.maxActuationMm) || p.specs.maxActuationMm <= 0)) errors.push(`${p.id}: invalid maximum actuation`);
+    if (p.specs?.minActuationMm != null && p.specs?.maxActuationMm != null && p.specs.minActuationMm > p.specs.maxActuationMm) errors.push(`${p.id}: actuation range is reversed`);
+    if (p.specs?.dimensionsMm && (p.specs.dimensionsMm.width <= 0 || p.specs.dimensionsMm.depth <= 0 || (p.specs.dimensionsMm.height != null && p.specs.dimensionsMm.height <= 0))) errors.push(`${p.id}: invalid keyboard dimensions`);
+    if (p.specs?.weightG != null && p.specs.weightG <= 0) errors.push(`${p.id}: invalid keyboard weight`);
+  }
+
+  if (p.type === "switch") {
+    if (!Number.isFinite(p.specs?.totalTravelMm) || p.specs.totalTravelMm <= 0 || p.specs.totalTravelMm > 10) errors.push(`${p.id}: invalid switch total travel`);
+    for (const key of ["initialForce", "actuationForce", "bottomOutForce"]) {
+      const point = p.specs?.[key];
+      if (point && (!Number.isFinite(point.value) || point.value <= 0 || !["gf", "cN"].includes(point.unit))) errors.push(`${p.id}.${key}: invalid force point`);
+    }
+    if (p.specs?.preTravelMm != null && (p.specs.preTravelMm < 0 || p.specs.preTravelMm > p.specs.totalTravelMm)) errors.push(`${p.id}: invalid switch pre-travel`);
+    if (p.specs?.ratedKeystrokesM != null && p.specs.ratedKeystrokesM <= 0) errors.push(`${p.id}: invalid switch lifetime`);
+  }
 }
 
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
-console.log(`Validated ${products.length} products (${data.mice.length} mice, ${data.mousepads.length} pads, ${data.skates.length} skates) across ${data.shards.length} catalog shards and ${sourceDefs.size} source definitions.`);
+const counts = catalogGroups.map(group => `${data[group].length} ${group}`).join(", ");
+console.log(`Validated ${products.length} products (${counts}) across ${data.shards.length} catalog shards and ${sourceDefs.size} source definitions.`);
