@@ -18,5 +18,10 @@ export const mousepads = shards.flatMap(shard => shard.mousepads ?? []) as Mouse
 export const skates = shards.flatMap(shard => shard.skates ?? []) as SkateProduct[];
 export const keyboards = shards.flatMap(shard => shard.keyboards ?? []) as KeyboardProduct[];
 export const switches = shards.flatMap(shard => shard.switches ?? []) as KeyboardSwitchProduct[];
-export const pointingCatalog = [...mice, ...mousepads, ...skates];
-export const catalog = [...pointingCatalog, ...keyboards, ...switches];
+
+// Backward-compatible pointing-device catalog used by the existing consumer recommender.
+export const catalog = [...mice, ...mousepads, ...skates];
+export const pointingCatalog = catalog;
+
+// Full Atlas catalog for generic search, provenance and category utilities.
+export const allCatalog = [...catalog, ...keyboards, ...switches];
