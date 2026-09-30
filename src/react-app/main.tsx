@@ -10,6 +10,7 @@ import "./v04.css";
 import "./v05.css";
 import "./product-lab.css";
 import "./product-lab-entry.css";
+import "./product-intelligence-extras.css";
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
