@@ -1,0 +1,68 @@
+.sensitivity-shell .sens-panel,
+.sensitivity-shell .sens-panel:hover,
+.sensitivity-shell .sens-panel:focus-within{
+  background:var(--atlas-card)!important;
+  border-color:var(--atlas-line)!important;
+  color:var(--atlas-ink)!important;
+  box-shadow:none!important;
+}
+
+.sensitivity-shell .sens-panel.target,
+.sensitivity-shell .sens-panel.target:hover,
+.sensitivity-shell .sens-panel.target:focus-within{
+  background:#eef1ed!important;
+  border-color:var(--atlas-line)!important;
+  color:var(--atlas-ink)!important;
+}
+
+.sensitivity-shell .sens-panel h2,
+.sensitivity-shell .sens-panel:hover h2,
+.sensitivity-shell .sens-panel:focus-within h2,
+.sensitivity-shell .sens-panel dd,
+.sensitivity-shell .sens-result b{
+  color:var(--atlas-ink)!important;
+}
+
+.sensitivity-shell .sens-panel label,
+.sensitivity-shell .sens-panel:hover label,
+.sensitivity-shell .sens-panel:focus-within label,
+.sensitivity-shell .sens-metrics dt{
+  color:var(--atlas-muted)!important;
+}
+
+.sensitivity-shell .sens-panel input,
+.sensitivity-shell .sens-panel select,
+.sensitivity-shell .sens-matcher input,
+.sensitivity-shell .sens-matcher select{
+  background:#fafbf9!important;
+  border-color:#cfd4cf!important;
+  color:var(--atlas-ink)!important;
+  caret-color:var(--atlas-ink)!important;
+  color-scheme:light!important;
+}
+
+.sensitivity-shell .sens-panel input:hover,
+.sensitivity-shell .sens-panel select:hover,
+.sensitivity-shell .sens-matcher input:hover,
+.sensitivity-shell .sens-matcher select:hover{
+  background:#fff!important;
+  border-color:#b9c1ba!important;
+  color:var(--atlas-ink)!important;
+}
+
+.sensitivity-shell .sens-panel input:focus,
+.sensitivity-shell .sens-panel select:focus,
+.sensitivity-shell .sens-matcher input:focus,
+.sensitivity-shell .sens-matcher select:focus{
+  background:#fff!important;
+  border-color:#8cb0a0!important;
+  color:var(--atlas-ink)!important;
+  box-shadow:0 0 0 3px rgba(13,107,87,.08)!important;
+  outline:none!important;
+}
+
+.sensitivity-shell .sens-panel select option,
+.sensitivity-shell .sens-matcher select option{
+  background:#fff;
+  color:var(--atlas-ink);
+}
