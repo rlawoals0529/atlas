@@ -1,0 +1,314 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [
+    {
+      "id": "keyboard-logitech-g512-x-75",
+      "slug": "logitech-g512-x-75",
+      "type": "keyboard",
+      "brand": "Logitech G",
+      "model": "G512 X 75",
+      "status": "current",
+      "msrpUsd": 179.99,
+      "summary": "75% wired TMR analog keyboard with true 8 kHz reporting and 39 dual-swap switch beds that can mix analog TMR switches with standard 3/5-pin mechanical switches.",
+      "tags": ["tmr", "75-percent", "8k", "rapid-trigger", "analog", "dual-swap", "mechanical-compatible"],
+      "sources": [
+        {
+          "id": "logitech-g512-x-75-official",
+          "label": "Logitech G G512 X 75 product page",
+          "url": "https://www.logitechg.com/en-us/shop/p/g512-x-75-gaming-keyboard.920-013927",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "logitech-g512-x-comparison",
+          "label": "Logitech G G512 X versus PRO X TKL RAPID comparison",
+          "url": "https://www.logitechg.com/en-in/discover/learn/g512-x-vs-pro-x-tkl-rapid",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "75%",
+        "layout": "75%",
+        "switchTechnology": "tmr",
+        "stockSwitch": "TMR analog, linear or tactile; 39 dual-swap beds support standard 3/5-pin mechanical switches",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 4,
+        "rapidTrigger": true,
+        "analogInput": true,
+        "hotSwappable": true,
+        "connectivity": ["USB wired"],
+        "caseMaterial": "manufacturer does not publish chassis material on the current product page",
+        "software": "Logitech G HUB"
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["logitech-g512-x-75-official", "logitech-g512-x-comparison"],
+          "confidence": "high",
+          "note": "Logitech documents a 75% wired layout, TMR analog sensing, true 8 kHz report rate, 0.1–4.0 mm analog actuation and 39 Dual Swap switch beds. Hot-swap support is specifically scoped to those 39 beds rather than assumed for every position."
+        },
+        "inputFeatures": {
+          "sourceIds": ["logitech-g512-x-comparison"],
+          "confidence": "high",
+          "note": "Logitech's comparison material explicitly lists Rapid Trigger and Multi-Point Actuation among G512 X features. Atlas preserves the 8 kHz figure as a report-rate specification, not an independent end-to-end latency measurement."
+        }
+      }
+    },
+    {
+      "id": "keyboard-rog-falchion-ace-75-he",
+      "slug": "rog-falchion-ace-75-he",
+      "type": "keyboard",
+      "brand": "ASUS ROG",
+      "model": "Falchion Ace 75 HE",
+      "status": "current",
+      "msrpUsd": 187,
+      "summary": "75% Hall-effect keyboard with hot-swappable HFX V2/V2X magnetic switches, 8 kHz polling, Rapid Trigger, Speed Tap and 0.01 mm actuation adjustment steps.",
+      "tags": ["hall-effect", "75-percent", "8k", "rapid-trigger", "hot-swap", "0.01mm", "speed-tap"],
+      "sources": [
+        {
+          "id": "rog-falchion-75-he-official",
+          "label": "ROG Falchion Ace 75 HE product page",
+          "url": "https://rog.asus.com/us/keyboards/keyboards/compact/rog-falchion-ace-75-he/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "rog-falchion-75-he-spec",
+          "label": "ROG Falchion Ace 75 HE technical specifications",
+          "url": "https://rog.asus.com/us/keyboards/keyboards/pbt-keycaps/rog-falchion-ace-75-he/spec/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "75%",
+        "layout": "75%",
+        "switchTechnology": "hall-effect",
+        "stockSwitch": "ROG HFX V2 or HFX V2X Magnetic",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 3.5,
+        "actuationStepMm": 0.01,
+        "rapidTrigger": true,
+        "socd": true,
+        "analogInput": true,
+        "hotSwappable": true,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "manufacturer does not publish chassis material in the current specification",
+        "keycapMaterial": "ROG double-shot PBT",
+        "software": "ROG Gear Link",
+        "dimensionsMm": {
+          "width": 320,
+          "depth": 145,
+          "height": 35
+        }
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["rog-falchion-75-he-official", "rog-falchion-75-he-spec"],
+          "confidence": "high",
+          "note": "ASUS documents the 75% layout, dimensions, HFX V2/V2X options, hot-swappable ROG HE socket platform and double-shot PBT keycaps."
+        },
+        "inputFeatures": {
+          "sourceIds": ["rog-falchion-75-he-official"],
+          "confidence": "high",
+          "note": "ASUS publishes 8 kHz polling, Rapid Trigger, 0.1–3.5 mm adjustable actuation, 0.01 mm fine-tuning and Speed Tap. Atlas maps Speed Tap into the SOCD-capable field without treating ASUS's response-time marketing as an independent latency result."
+        }
+      }
+    }
+  ],
+  "switches": [
+    {
+      "id": "switch-geon-strike-he",
+      "slug": "geon-strike-he",
+      "type": "switch",
+      "brand": "GEONWORKS",
+      "model": "Strike HE",
+      "status": "current",
+      "msrpUsd": 0.38,
+      "summary": "Clicky two-pin Hall-effect switch designed around GEONWORKS' VENOM HE platform, with 35 gf operating force, 55 gf bottom-out and 3.5 mm full travel.",
+      "tags": ["hall-effect", "clicky", "2-pin", "venom-he", "factory-lubed"],
+      "sources": [
+        {
+          "id": "geon-strike-he-official",
+          "label": "GEONWORKS Strike HE switch product page",
+          "url": "https://geon.works/products/strike-he-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "clicky",
+        "actuationForce": {
+          "value": 35,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 55,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "compatibility": ["Fully compatible with GEONWORKS VENOM HE PCB; other Hall-effect keyboards may require recalibration and compatibility verification."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["geon-strike-he-official"],
+          "confidence": "high",
+          "note": "GEONWORKS publishes clicky Hall-effect operation, 35±5 gf operating force, 55±5 gf bottom-out, 3.5 mm travel, two-pin mounting and factory lubrication."
+        }
+      }
+    },
+    {
+      "id": "switch-wooting-lekker-tikken-medium",
+      "slug": "wooting-lekker-tikken-medium",
+      "type": "switch",
+      "brand": "Wooting",
+      "model": "Lekker Tikken Medium",
+      "status": "current",
+      "summary": "Closed-bottom Hall-effect linear with a 22 mm spring, 42 gf start force, 54 gf end force and full 4 mm travel, tuned for less wobble and a deeper muted sound.",
+      "tags": ["hall-effect", "linear", "closed-bottom", "4mm", "factory-lubed", "wooting"],
+      "sources": [
+        {
+          "id": "wooting-tikken-medium-official",
+          "label": "Wooting Lekker Tikken Medium product page",
+          "url": "https://wooting.io/product/wooting-lekker-tikken-medium-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 42,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 54,
+          "unit": "gf"
+        },
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "compatibility": ["Requires a keyboard with Hall sensors; verify magnet orientation and board support before use outside Wooting platforms."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["wooting-tikken-medium-official"],
+          "confidence": "high",
+          "note": "Wooting publishes a 42 gf start force, 54 gf end force, 4 mm travel, 22 mm spring and medium factory lubrication."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-silent",
+      "slug": "gateron-magnetic-jade-silent",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Silent",
+      "status": "current",
+      "summary": "Damped linear Hall-effect switch with a 33 gf initial force, 45 gf bottom-out, 3.2 mm total travel and factory lubrication for a quieter magnetic-switch build.",
+      "tags": ["hall-effect", "linear", "silent", "magnetic", "factory-lubed"],
+      "sources": [
+        {
+          "id": "gateron-jade-silent-official",
+          "label": "Gateron Magnetic Jade Silent product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-silent-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 33,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.2,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 60,
+        "magneticFluxGs": {
+          "initial": 125,
+          "bottomOut": 700,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": ["Hall-effect compatibility is board-specific; verify polarity, sensing range and firmware support."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-silent-official"],
+          "confidence": "high",
+          "note": "Gateron publishes 33±5 gf initial, 45±10 gf bottom-out, 3.2±0.2 mm travel, 125/700 Gs flux at 1.2 mm PCB thickness, factory lubrication and at least 60M keystrokes."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-jade-attraction",
+      "slug": "gateron-magnetic-jade-attraction",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade · Attraction",
+      "status": "current",
+      "summary": "Flat-force Hall-effect linear designed around a published 30 gf initial and 30 gf bottom-out force, with 3.2 mm travel and a lower 570 Gs bottom-out flux target.",
+      "tags": ["hall-effect", "linear", "flat-force", "30gf", "magnetic", "factory-lubed"],
+      "sources": [
+        {
+          "id": "gateron-jade-attraction-official",
+          "label": "Gateron Magnetic Jade Attraction product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-attraction-he-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "gateron-jade-attraction-force-note",
+          "label": "Gateron Magnetic Jade Attraction force-profile explainer",
+          "url": "https://www.gateron.com/blog/detail/magnetic-jade-attraction-he-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.2,
+        "factoryLubed": true,
+        "magneticFluxGs": {
+          "initial": 150,
+          "bottomOut": 570,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": ["Hall-effect compatibility is board-specific; the 150–570 Gs flux range differs from many Jade-family switches and should be checked against the target keyboard."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-attraction-official", "gateron-jade-attraction-force-note"],
+          "confidence": "high",
+          "note": "Gateron specifies 30±3 gf at both initial and bottom-out positions, 3.2±0.2 mm travel, 150/570 Gs flux at 1.2 mm PCB thickness and factory lubrication."
+        },
+        "forceProfile": {
+          "sourceIds": ["gateron-jade-attraction-force-note"],
+          "confidence": "high",
+          "note": "The equal start/end force is a physical force-profile characteristic, not an Atlas ranking or claim that the switch is universally better for gaming."
+        }
+      }
+    }
+  ]
+}
