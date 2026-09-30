@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./AppV05";
 import ProductLab from "./ProductLab";
 import AnalyticsBridge from "./AnalyticsBridge";
+import AnalyticsTransport from "./AnalyticsTransport";
 import { analyticsVisitor, trackAtlasEvent } from "../shared/analytics";
 import "./styles.css";
 import "./v04.css";
@@ -27,12 +28,13 @@ function RootRouter() {
     sessionStorage.setItem(key, "1");
   }, []);
 
-  if (hash === "#product-lab") return <ProductLab />;
-
   return <>
-    <AnalyticsBridge />
-    <App />
-    <a className="atlas-product-lab-entry" href="#product-lab" aria-label="Open Atlas Product Lab"><span>LAB</span><b>Product research & validation</b><i>↗</i></a>
+    <AnalyticsTransport />
+    {hash === "#product-lab" ? <ProductLab /> : <>
+      <AnalyticsBridge />
+      <App />
+      <a className="atlas-product-lab-entry" href="#product-lab" aria-label="Open Atlas Product Lab"><span>LAB</span><b>Product research & validation</b><i>↗</i></a>
+    </>}
   </>;
 }
 
