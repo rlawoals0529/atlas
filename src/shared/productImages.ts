@@ -163,7 +163,7 @@ export const productImages: Record<string, ProductImage> = {
     sourceUrl: "https://geon.works/products/strike-he-switch",
     alt: "GEONWORKS Strike HE clicky Hall-effect switch",
     credit: "GEONWORKS official product image",
-  },,
+  },
   "mouse-op1-8k-v2": {
     url: "https://endgamegear.com/cdn/shop/files/OP1_Black_top_down.jpg?v=1736944464&width=2499",
     sourceUrl: "https://endgamegear.com/products/op1-8k-v2-wired-gaming-mouse",
