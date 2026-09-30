@@ -94,13 +94,13 @@ function EvidenceBadge({ kind }: { kind: keyof typeof sourceKindMeta }) {
 function ProductCard({ product, score, onOpen, compact = false }: { product: Product; score?: number; onOpen: (product: Product) => void; compact?: boolean }) {
   const health = evidenceHealth(product);
   return <button className={`v5-product-card ${compact ? "compact" : ""}`} onClick={() => onOpen(product)}>
-    <div className="v5-product-art"><ProductMedia productId={product.id} fallback={<ProductArt product={product}/>} className={`v5-product-real-image ${product.type}`}/>{score != null && <div className="v5-fit-badge"><b>{score}</b><span>FIT</span></div>}</div>
+    <div className="v5-product-art"><ProductMedia productId={product.id} fallback={<ProductArt product={product}/>} className={`v5-product-real-image ${product.type}`}/></div>
     <div className="v5-product-copy">
-      <div className="v5-card-top"><span className="v5-eyebrow">{product.brand}</span><span className={`v5-health h${Math.floor(health.score / 20)}`}>{health.label} data</span></div>
+      <div className="v5-card-top"><span className="v5-eyebrow">{product.brand}</span><span className="v5-card-meta">{score != null && <span className="v5-fit-badge" title="Profile fit signal, not an objective product rating"><b>{score}</b><span>PROFILE FIT</span></span>}<span className={`v5-health h${Math.floor(health.score / 20)}`}>{health.label} data</span></span></div>
       <h3>{product.model}</h3>
       {!compact && <p>{product.summary}</p>}
       <div className="v5-chips">
-        {product.type === "mouse" && <><span>{product.specs.weightG} g</span><span>{pollingLabel(product.specs.maxPollingHz)}</span><span>{product.specs.gripWidthMm ?? product.specs.widthMm} mm grip</span><span>{formatHump(product.specs.hump)}</span></>}
+        {product.type === "mouse" && <><span>{product.specs.lengthMm} × {product.specs.widthMm} × {product.specs.heightMm} mm</span><span>{product.specs.weightG} g</span><span>{pollingLabel(product.specs.maxPollingHz)}</span><span>{product.specs.gripWidthMm ?? product.specs.widthMm} mm grip</span><span>{formatHump(product.specs.hump)}</span></>}
         {product.type === "mousepad" && <><span>{product.specs.surfaceClass}</span><span>{product.specs.firmness}</span><span>{product.feel.dynamicSpeed}/100 glide</span><span>{product.feel.stoppingPower}/100 stop</span></>}
         {product.type === "skate" && <><span>{product.specs.material.replaceAll("-", " ")}</span><span>{product.specs.format}</span><span>{product.feel.brokenInSpeed ?? product.feel.speed}/100 glide</span></>}
       </div>
@@ -196,9 +196,19 @@ function AppV05() {
   const [sort, setSort] = useState<"name" | "weight" | "polling" | "price" | "evidence">("name");
 
   const [compareIds, setCompareIds] = useState<[string, string]>([mice[0]?.id ?? "", mice[1]?.id ?? ""]);
+  const [shapeMouseIds, setShapeMouseIds] = useState<string[]>(() => mice.slice(0, 3).map(mouse => mouse.id));
 
   const selected = selectedId ? catalog.find(product => product.id === selectedId) ?? null : null;
   const openProduct = (product: Product) => setSelectedId(product.id);
+  const addMouseToShapeLab = (mouse: MouseProduct) => {
+    setShapeMouseIds(current => current.includes(mouse.id) ? current : [...current, mouse.id].slice(-5));
+    setActive("lab");
+  };
+  const compareMouseShape = (mouse: MouseProduct) => {
+    const partner = mouseRec.find(result => result.product.id !== mouse.id)?.product as MouseProduct | undefined;
+    setShapeMouseIds(partner ? [mouse.id, partner.id] : [mouse.id]);
+    setActive("lab");
+  };
   const update = <K extends keyof UserProfile>(key: K, value: UserProfile[K]) => setProfile(current => ({ ...current, [key]: value }));
   const updateRelative = <K extends keyof UserProfile["relative"]>(key: K, value: UserProfile["relative"][K]) => setProfile(current => ({ ...current, relative: { ...current.relative, [key]: value } }));
 
@@ -267,13 +277,13 @@ function AppV05() {
           {relativeMode && <div className="v5-relative"><label>Current mouse<select value={profile.relative.currentMouseId ?? ""} onChange={event => updateRelative("currentMouseId", event.target.value || undefined)}><option value="">Choose…</option>{mice.map(mouse => <option value={mouse.id} key={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label><DeltaControl label="Size" value={profile.relative.sizeDelta} onChange={value => updateRelative("sizeDelta", value)} low="smaller" high="larger"/><DeltaControl label="Grip width" value={profile.relative.widthDelta} onChange={value => updateRelative("widthDelta", value)} low="narrower" high="wider"/><DeltaControl label="Hump" value={profile.relative.humpDelta} onChange={value => updateRelative("humpDelta", value)} low="lower" high="taller"/><DeltaControl label="Weight" value={profile.relative.weightDelta} onChange={value => updateRelative("weightDelta", value)} low="lighter" high="heavier"/><DeltaControl label="Palm support" value={profile.relative.palmSupportDelta} onChange={value => updateRelative("palmSupportDelta", value)} low="less" high="more"/></div>}
         </aside>
 
-        <div className="v5-results"><div className="v5-section-head"><span>02</span><div><small>EXPLAINABLE RANKING</small><h2>Best mouse matches</h2></div><em>no universal winner</em></div>{mouseRec.slice(0, 5).map((result, index) => <article className="v5-result v5-panel" key={result.product.id}><span className="v5-rank">{String(index + 1).padStart(2, "0")}</span><ProductCard product={result.product} score={result.score} onOpen={openProduct}/><div className="v5-why"><div><b>WHY IT FITS</b>{result.reasons.slice(0, 3).map(reason => <p key={reason}>+ {reason}</p>)}</div>{result.cautions[0] && <div className="watch"><b>WATCH</b><p>{result.cautions[0]}</p></div>}</div>{result.breakdown && <div className="v5-breakdown">{Object.entries(result.breakdown).map(([label, value]) => <div key={label}><span>{label}</span><Meter value={value}/><b>{value}</b></div>)}</div>}</article>)}</div>
+        <div className="v5-results"><div className="v5-section-head"><span>02</span><div><small>EXPLAINABLE RANKING</small><h2>Best mouse matches</h2></div><em>profile fit, not product rating</em></div>{mouseRec.slice(0, 5).map((result, index) => <article className="v5-result v5-panel" key={result.product.id}><span className="v5-rank">{String(index + 1).padStart(2, "0")}</span><ProductCard product={result.product} score={result.score} onOpen={openProduct}/><div className="v5-result-actions"><button type="button" onClick={() => compareMouseShape(result.product)}>Compare shape</button><button type="button" className="primary" onClick={() => addMouseToShapeLab(result.product)}>Add to Shape Lab</button></div><div className="v5-why"><div><b>WHY IT FITS</b>{result.reasons.slice(0, 3).map(reason => <p key={reason}>+ {reason}</p>)}</div>{result.cautions[0] && <div className="watch"><b>WATCH</b><p>{result.cautions[0]}</p></div>}</div>{result.breakdown && <div className="v5-breakdown">{Object.entries(result.breakdown).map(([label, value]) => <div key={label}><span>{label}</span><Meter value={value}/><b>{value}</b></div>)}</div>}</article>)}</div>
       </section>
 
       <section className="v5-stack v5-panel"><div className="v5-section-head"><span>03</span><div><small>SYSTEM MATCH</small><h2>Complete the aiming surface</h2></div><em>mouse × pad × skate</em></div><div className="v5-stack-grid">{topPad && <div><span className="v5-label">PAD MATCH</span><ProductCard product={topPad} score={padRec[0].score} onOpen={openProduct}/><FeelGrid rows={[["Initial", topPad.feel.staticSpeed], ["Dynamic", topPad.feel.dynamicSpeed], ["Stopping", topPad.feel.stoppingPower]]}/></div>}<div className="v5-stack-x">×<small>INTERACTION<br/>MODEL</small></div>{skateRec[0] && <div><span className="v5-label">SKATE MATCH</span><ProductCard product={skateRec[0].product} score={skateRec[0].score} onOpen={openProduct}/><p className="v5-stack-note">{skateRec[0].cautions[0] ?? "Compatibility and broken-in behavior are part of the score."}</p></div>}</div></section>
     </main>}
 
-    {active === "lab" && <ShapeLabV2 similarityMode={similarityMode} setSimilarityMode={setSimilarityMode}/>} 
+    {active === "lab" && <ShapeLabV2 similarityMode={similarityMode} setSimilarityMode={setSimilarityMode} selectedMouseIds={shapeMouseIds} onSelectedMouseIdsChange={setShapeMouseIds}/>} 
 
     {active === "catalog" && <main className="v5-main v5-page">
       <section className="v5-page-head"><div><div className="v5-kicker">CANONICAL DATASET</div><h1>Peripheral database</h1><p>Filter the products by the dimensions and platform traits that matter, then open any record to see provenance, evidence health and family context.</p></div><div className="v5-head-stat"><b>{filtered.length}</b><span>matching records</span></div></section>
