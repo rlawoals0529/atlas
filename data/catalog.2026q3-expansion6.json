@@ -1,0 +1,260 @@
+{
+  "switches": [
+    {
+      "id": "switch-wooting-lekker-v2-l45",
+      "slug": "wooting-lekker-v2-l45",
+      "type": "switch",
+      "brand": "Wooting",
+      "model": "Lekker V2 L45",
+      "status": "current",
+      "summary": "Light linear Hall-effect switch with a 30 gf starting force, 45 gf end force and 4.0 mm travel, designed for compatible Hall-sensor keyboards rather than standard mechanical PCBs.",
+      "tags": ["hall-effect", "linear", "light", "factory-lubed", "wooting"],
+      "sources": [
+        {
+          "id": "wooting-lekker-v2-l45-official",
+          "label": "Wooting Lekker V2 L45 product page",
+          "url": "https://wooting.io/product/lekker-switch-l45-v2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 30, "unit": "gf" },
+        "bottomOutForce": { "value": 45, "unit": "gf" },
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "compatibility": ["Requires a compatible Hall-effect keyboard; Wooting explicitly states it is not compatible with standard mechanical keyboards."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["wooting-lekker-v2-l45-official"],
+          "confidence": "high",
+          "note": "Wooting publishes the 30–45 gf physical force range, 4.0 mm travel, contactless Hall-effect construction and lubrication. These values describe switch feel and travel, not electrical actuation latency."
+        }
+      }
+    },
+    {
+      "id": "switch-wooting-lekker-v2-l60",
+      "slug": "wooting-lekker-v2-l60",
+      "type": "switch",
+      "brand": "Wooting",
+      "model": "Lekker V2 L60",
+      "status": "current",
+      "summary": "Medium linear Hall-effect switch with a 40 gf starting force, 60 gf end force and 4.0 mm travel, positioned as the firmer Lekker V2 option for compatible Hall-sensor boards.",
+      "tags": ["hall-effect", "linear", "medium", "factory-lubed", "wooting"],
+      "sources": [
+        {
+          "id": "wooting-lekker-v2-l60-official",
+          "label": "Wooting Lekker V2 L60 product page",
+          "url": "https://wooting.io/product/lekker-switch-l60-v2",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 40, "unit": "gf" },
+        "bottomOutForce": { "value": 60, "unit": "gf" },
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "compatibility": ["Requires a compatible Hall-effect keyboard; Wooting explicitly states it is not compatible with standard mechanical keyboards."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["wooting-lekker-v2-l60-official"],
+          "confidence": "high",
+          "note": "Wooting publishes the 40–60 gf physical force range, 4.0 mm travel, contactless Hall-effect construction and lubrication. The spring-weight difference should not be treated as a latency difference."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-delta-light",
+      "slug": "gateron-magnetic-jade-delta-light",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Delta Light",
+      "status": "current",
+      "summary": "Light-version linear Jade Delta Hall-effect switch with a published 33 gf operating force, 3.5 mm travel and 150M-cycle rating.",
+      "tags": ["hall-effect", "linear", "light", "factory-lubed", "jade-delta"],
+      "sources": [
+        {
+          "id": "gateron-jade-delta-official",
+          "label": "Gateron Magnetic Jade Delta product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-delta-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 33, "unit": "gf" },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": { "initial": 120, "bottomOut": 700, "pcbThicknessMm": 1.2 },
+        "compatibility": ["Gateron specifies N-pole-down magnetic compatibility; verify keyboard polarity, flux curve, sensor calibration and firmware support before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-delta-official"],
+          "confidence": "high",
+          "note": "Gateron publishes 33±5 gf operating force for the Light version, 3.5±0.1 mm travel, 150M minimum cycles, factory lubrication and 120→700 GS magnetic flux at 1.2 mm PCB thickness. Atlas stores nominal values and keeps the published tolerances in this note."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-delta-dark",
+      "slug": "gateron-magnetic-jade-delta-dark",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Delta Dark",
+      "status": "current",
+      "summary": "Firmer Jade Delta Hall-effect variant with a published 38 gf operating force while retaining the 3.5 mm travel and 150M-cycle platform.",
+      "tags": ["hall-effect", "linear", "medium", "factory-lubed", "jade-delta"],
+      "sources": [
+        {
+          "id": "gateron-jade-delta-official",
+          "label": "Gateron Magnetic Jade Delta product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-delta-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 38, "unit": "gf" },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": { "initial": 120, "bottomOut": 700, "pcbThicknessMm": 1.2 },
+        "compatibility": ["Gateron specifies N-pole-down magnetic compatibility; verify keyboard polarity, flux curve, sensor calibration and firmware support before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-delta-official"],
+          "confidence": "high",
+          "note": "Gateron publishes 38±5 gf operating force for the Dark version, 3.5±0.1 mm travel, 150M minimum cycles, factory lubrication and 120→700 GS magnetic flux at 1.2 mm PCB thickness. Atlas stores nominal values and keeps the published tolerances in this note."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-genty-silent",
+      "slug": "gateron-magnetic-genty-silent",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Genty Silent",
+      "status": "current",
+      "summary": "Silent linear Hall-effect switch using mute pads and a dual-rail structure, with 35 gf initial force, 3.7 mm travel and a 100M-cycle rating.",
+      "tags": ["hall-effect", "linear", "silent", "factory-lubed", "dual-rail"],
+      "sources": [
+        {
+          "id": "gateron-genty-silent-official",
+          "label": "Gateron Magnetic Genty Silent product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-genty-silent-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 35, "unit": "gf" },
+        "totalTravelMm": 3.7,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100,
+        "compatibility": ["Gateron specifies N-pole-down Hall-effect compatibility; verify the target keyboard's magnetic polarity and supported switch calibration before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-genty-silent-official"],
+          "confidence": "high",
+          "note": "Gateron publishes 35±5 gf initial force, 3.7±0.2 mm travel, factory lubrication and 100M-cycle life. The silent construction is a physical/acoustic feature, not a claim of lower input latency."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-ruby",
+      "slug": "gateron-magnetic-jade-ruby",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Ruby",
+      "status": "current",
+      "summary": "Linear Hall-effect Jade variant with 36 gf initial force, 50 gf bottom-out force, 3.5 mm travel and a 150M-cycle rating.",
+      "tags": ["hall-effect", "linear", "medium", "factory-lubed", "jade-ruby"],
+      "sources": [
+        {
+          "id": "gateron-jade-ruby-official",
+          "label": "Gateron Magnetic Jade Ruby product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-ruby-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 36, "unit": "gf" },
+        "bottomOutForce": { "value": 50, "unit": "gf" },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": { "initial": 120, "bottomOut": 700, "pcbThicknessMm": 1.2 },
+        "compatibility": ["Hall-effect compatibility remains board-specific; verify magnet polarity, supported magnetic range and firmware calibration before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-ruby-official"],
+          "confidence": "high",
+          "note": "Gateron publishes 36±5 gf initial force, 50±10 gf bottom-out force, 3.5±0.1 mm travel, 150M cycles, factory lubrication and 120→700 GS flux at 1.2 mm PCB thickness."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-max",
+      "slug": "gateron-magnetic-jade-max",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Max",
+      "status": "current",
+      "summary": "Linear Hall-effect Jade variant with a transparent housing, dual-rail-like stability treatment, 36 gf initial force and 3.5 mm total travel.",
+      "tags": ["hall-effect", "linear", "medium", "factory-lubed", "jade-max"],
+      "sources": [
+        {
+          "id": "gateron-jade-max-comparison",
+          "label": "Gateron Magnetic Jade / Pro / Max comparison",
+          "url": "https://www.gateron.com/blog/detail/gateron-magnetic-switches-gateron-magnetic-jade-pro-switch-vs-gateron-magnetic-jade-pro-switch-vs-gateron-magnetic-jade-max-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "gateron-magnetic-series-overview",
+          "label": "Gateron magnetic switch series overview",
+          "url": "https://www.gateron.com/blog/detail/gateron-magnetic-switches-series-for-the-ultimate-gaming-experience",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": { "value": 36, "unit": "gf" },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "compatibility": ["Hall-effect compatibility remains board-specific; verify magnetic polarity, sensing range and firmware support before purchase."]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-max-comparison", "gateron-magnetic-series-overview"],
+          "confidence": "high",
+          "note": "Gateron publishes a nominal 36 gf initial force, 3.5 mm total travel, factory lubrication and 150M-cycle life for Jade Max. Housing/stability descriptions are manufacturer design claims rather than Atlas measurements."
+        }
+      }
+    }
+  ]
+}
