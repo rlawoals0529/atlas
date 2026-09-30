@@ -2,7 +2,9 @@ import { useMemo, useState } from "react";
 import { catalog, mice, mousepads, skates } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, familyFor, productSearchText, sourceKindMeta } from "../shared/productMeta";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
-import { alignmentOffset, findSimilarShapes, outlineFor, shapeSimilarity, type AlignMode, type ShapeView, type SimilarityMode } from "../shared/shape";
+import { shapeSimilarity, type SimilarityMode } from "../shared/shape";
+import ShapeLabV2, { ShapeCanvas, type ShapeLayer } from "./ShapeLabV2";
+import { ProductMedia } from "./ProductMedia";
 import type { GameStyle, Grip, MouseProduct, MousepadProduct, Product, SkateProduct, UserProfile } from "../shared/types";
 
 const VERSION = "0.8";
@@ -92,7 +94,7 @@ function EvidenceBadge({ kind }: { kind: keyof typeof sourceKindMeta }) {
 function ProductCard({ product, score, onOpen, compact = false }: { product: Product; score?: number; onOpen: (product: Product) => void; compact?: boolean }) {
   const health = evidenceHealth(product);
   return <button className={`v5-product-card ${compact ? "compact" : ""}`} onClick={() => onOpen(product)}>
-    <div className="v5-product-art"><ProductArt product={product}/>{score != null && <div className="v5-fit-badge"><b>{score}</b><span>FIT</span></div>}</div>
+    <div className="v5-product-art"><ProductMedia productId={product.id} fallback={<ProductArt product={product}/>} className={`v5-product-real-image ${product.type}`}/>{score != null && <div className="v5-fit-badge"><b>{score}</b><span>FIT</span></div>}</div>
     <div className="v5-product-copy">
       <div className="v5-card-top"><span className="v5-eyebrow">{product.brand}</span><span className={`v5-health h${Math.floor(health.score / 20)}`}>{health.label} data</span></div>
       <h3>{product.model}</h3>
@@ -106,28 +108,16 @@ function ProductCard({ product, score, onOpen, compact = false }: { product: Pro
   </button>;
 }
 
-function ShapeOverlay({ selected, view, align, normalize }: { selected: MouseProduct[]; view: ShapeView; align: AlignMode; normalize: boolean }) {
-  const W = 900, H = 470, pad = 48;
-  const palette = ["#b9ff66", "#69dcff", "#9a88ff", "#ffad6a", "#ff70af"];
-  const maxLength = Math.max(...selected.map(mouse => mouse.specs.lengthMm), 130);
-  const maxDim = view === "top" ? Math.max(...selected.map(mouse => mouse.specs.widthMm), 75) : Math.max(...selected.map(mouse => mouse.specs.heightMm), 48);
-  const scale = Math.min((W - pad * 2) / (normalize ? 130 : maxLength), (H - pad * 2) / (normalize ? 80 : maxDim));
-  const originX = W / 2;
-  const originY = view === "top" ? H / 2 : H * .78;
-  const paths = selected.map((mouse, index) => {
-    const norm = normalize ? 125 / mouse.specs.lengthMm : 1;
-    const anchor = alignmentOffset(mouse, align) * norm;
-    const coords = outlineFor(mouse, view).map(([x, y]) => `${((x * norm - anchor) * scale + originX).toFixed(1)},${(y * norm * scale + originY).toFixed(1)}`).join(" ");
-    return { mouse, color: palette[index % palette.length], coords };
-  });
-  return <div className="v5-overlay">
-    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${view} view mouse shape overlay`}>
-      <g className="v5-grid-lines"><line x1={originX} y1="20" x2={originX} y2={H - 20}/><line x1="20" y1={originY} x2={W - 20} y2={originY}/></g>
-      {paths.map(({ mouse, color, coords }) => <polygon key={mouse.id} points={coords} fill={color} fillOpacity=".055" stroke={color} strokeOpacity=".92" strokeWidth="2" vectorEffect="non-scaling-stroke"/>)}
-    </svg>
-    <div className="v5-overlay-meta"><span>{normalize ? "NORMALIZED LENGTH" : "REAL SCALE"}</span><span>{align.toUpperCase()} ALIGNED</span><span>{view.toUpperCase()} VIEW</span></div>
-    <div className="v5-overlay-legend">{paths.map(({ mouse, color }) => <span key={mouse.id}><i style={{ background: color }}/>{mouse.brand} <b>{mouse.model}</b></span>)}</div>
-  </div>;
+function ShapeOverlay({ selected, normalize = false }: { selected: MouseProduct[]; normalize?: boolean; view?: "top" | "side"; align?: "center" | "front" | "rear" | "sensor" }) {
+  const colors = ["#0f766e", "#315f8c", "#6d5fa3", "#a35f13", "#9f3d62"];
+  const layers: ShapeLayer[] = selected.map((mouse, index) => ({
+    id: mouse.id,
+    color: colors[index % colors.length],
+    visible: true,
+    opacity: .94,
+    lineStyle: index === 1 ? "dash" : index === 2 ? "dot" : "solid",
+  }));
+  return <ShapeCanvas layers={layers} view="top" align="center" normalize={normalize} showDimensions/>;
 }
 
 function SpecRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -143,7 +133,7 @@ function ProductInspector({ product, onClose, onOpen }: { product: Product; onCl
     <button className="v5-inspector-backdrop" aria-label="Close product details" onClick={onClose}/>
     <aside className="v5-inspector">
       <div className="v5-inspector-head"><div><span className="v5-eyebrow">{product.brand} / {product.type}</span><h2>{product.model}</h2></div><button className="v5-icon-button" onClick={onClose} aria-label="Close">×</button></div>
-      <div className="v5-detail-hero"><ProductArt product={product}/><div className="v5-detail-score"><b>{health.score}</b><span>DATA HEALTH</span><small>{health.label}</small></div></div>
+      <div className="v5-detail-hero"><ProductMedia productId={product.id} fallback={<ProductArt product={product}/>} className={`v5-detail-real-image ${product.type}`}/><div className="v5-detail-score"><b>{health.score}</b><span>DATA HEALTH</span><small>{health.label}</small></div></div>
       <div className="v5-detail-summary"><p>{product.summary}</p><div className="v5-chips"><span>{product.status}</span><span>{money(product.msrpUsd)} MSRP</span>{(product.tags ?? []).slice(0, 4).map(tag => <span key={tag}>{tag}</span>)}</div></div>
 
       {family && <section className="v5-detail-section"><div className="v5-detail-title"><span>LINEAGE</span><h3>{family.label}</h3></div><p className="v5-family-note">{family.relationship}</p>{siblings.length > 0 && <div className="v5-family-list">{siblings.map(item => <button key={item.id} onClick={() => onOpen(item)}><span>{item.brand}</span><b>{item.model}</b><small>open record →</small></button>)}</div>}</section>}
@@ -194,14 +184,7 @@ function AppV05() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [relativeMode, setRelativeMode] = useState(false);
 
-  const [similarBaseId, setSimilarBaseId] = useState(mice[0]?.id ?? "");
   const [similarityMode, setSimilarityMode] = useState<SimilarityMode>("balanced");
-  const [overlayIds, setOverlayIds] = useState<string[]>(mice.slice(0, 3).map(mouse => mouse.id));
-  const [overlayView, setOverlayView] = useState<ShapeView>("top");
-  const [overlayAlign, setOverlayAlign] = useState<AlignMode>("center");
-  const [overlayNormalize, setOverlayNormalize] = useState(false);
-  const [shapeTarget, setShapeTarget] = useState({ length: 122, gripWidth: 58, height: 39, hump: 58, weight: 55 });
-
   const [dbType, setDbType] = useState<"all" | "mouse" | "mousepad" | "skate">("mouse");
   const [query, setQuery] = useState("");
   const [brandFilter, setBrandFilter] = useState("all");
@@ -223,17 +206,6 @@ function AppV05() {
   const padRec = useMemo(() => recommendPads(profile), [profile]);
   const topPad = padRec[0]?.product as MousepadProduct | undefined;
   const skateRec = useMemo(() => topPad ? recommendSkates(topPad, profile) : [], [topPad, profile]);
-
-  const similarBase = mice.find(mouse => mouse.id === similarBaseId) ?? mice[0];
-  const similarShapes = useMemo(() => similarBase ? findSimilarShapes(similarBase, mice, similarityMode) : [], [similarBase, similarityMode]);
-  const overlayMice = overlayIds.map(id => mice.find(mouse => mouse.id === id)).filter((mouse): mouse is MouseProduct => Boolean(mouse));
-
-  const targetMatches = useMemo(() => mice.map(mouse => {
-    const hump = mouse.geometry?.humpPositionPct ?? (mouse.specs.hump === "rear" ? 78 : mouse.specs.hump === "center-rear" ? 65 : mouse.specs.hump === "front" ? 35 : 50);
-    const gripWidth = mouse.specs.gripWidthMm ?? mouse.specs.widthMm;
-    const dist = Math.sqrt(((mouse.specs.lengthMm - shapeTarget.length) / 8) ** 2 + ((gripWidth - shapeTarget.gripWidth) / 5) ** 2 + ((mouse.specs.heightMm - shapeTarget.height) / 4) ** 2 + ((hump - shapeTarget.hump) / 15) ** 2 + ((mouse.specs.weightG - shapeTarget.weight) / 15) ** 2);
-    return { mouse, hump, gripWidth, score: Math.round(Math.max(0, 100 - dist * 18)) };
-  }).sort((a, b) => b.score - a.score), [shapeTarget]);
 
   const brands = useMemo(() => [...new Set(catalog.filter(product => dbType === "all" || product.type === dbType).map(product => product.brand))].sort(), [dbType]);
   const filtered = useMemo(() => {
@@ -301,14 +273,7 @@ function AppV05() {
       <section className="v5-stack v5-panel"><div className="v5-section-head"><span>03</span><div><small>SYSTEM MATCH</small><h2>Complete the aiming surface</h2></div><em>mouse × pad × skate</em></div><div className="v5-stack-grid">{topPad && <div><span className="v5-label">PAD MATCH</span><ProductCard product={topPad} score={padRec[0].score} onOpen={openProduct}/><FeelGrid rows={[["Initial", topPad.feel.staticSpeed], ["Dynamic", topPad.feel.dynamicSpeed], ["Stopping", topPad.feel.stoppingPower]]}/></div>}<div className="v5-stack-x">×<small>INTERACTION<br/>MODEL</small></div>{skateRec[0] && <div><span className="v5-label">SKATE MATCH</span><ProductCard product={skateRec[0].product} score={skateRec[0].score} onOpen={openProduct}/><p className="v5-stack-note">{skateRec[0].cautions[0] ?? "Compatibility and broken-in behavior are part of the score."}</p></div>}</div></section>
     </main>}
 
-    {active === "lab" && <main className="v5-main v5-page">
-      <section className="v5-page-head"><div><div className="v5-kicker">GEOMETRY WORKBENCH</div><h1>Shape Lab</h1><p>Compare real-scale or normalized outlines, change similarity weighting by grip style, and inspect the geometry dimensions driving every result.</p></div><div className="v5-head-stat"><b>{mice.length}</b><span>modeled shapes</span></div></section>
-      <section className="v5-lab-grid"><aside className="v5-lab-controls v5-panel"><div className="v5-section-head"><span>01</span><div><small>REFERENCE</small><h2>Shape context</h2></div></div><label>Reference mouse<select value={similarBaseId} onChange={event => setSimilarBaseId(event.target.value)}>{mice.map(mouse => <option value={mouse.id} key={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label><span className="v5-label">SIMILARITY MODE</span><div className="v5-mode-grid">{(Object.keys(similarityLabels) as SimilarityMode[]).map(mode => <button key={mode} className={similarityMode === mode ? "selected" : ""} onClick={() => setSimilarityMode(mode)}>{similarityLabels[mode]}</button>)}</div><div className="v5-lab-options"><label>View<select value={overlayView} onChange={event => setOverlayView(event.target.value as ShapeView)}><option value="top">Top</option><option value="side">Side</option></select></label><label>Align<select value={overlayAlign} onChange={event => setOverlayAlign(event.target.value as AlignMode)}><option value="center">Center</option><option value="sensor">Sensor</option><option value="front">Front</option><option value="rear">Rear</option></select></label></div><label className="v5-check">Normalize to same length<input type="checkbox" checked={overlayNormalize} onChange={event => setOverlayNormalize(event.target.checked)}/></label><div className="v5-layer-list"><span className="v5-label">OVERLAY LAYERS</span>{[0,1,2,3,4].map(index => <select key={index} value={overlayIds[index] ?? ""} onChange={event => setOverlayIds(current => { const next = [...current]; if (event.target.value) next[index] = event.target.value; else next.splice(index, 1); return next.filter(Boolean).slice(0, 5); })}><option value="">Layer {index + 1}: none</option>{mice.map(mouse => <option value={mouse.id} key={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select>)}</div><p className="v5-info-note"><b>Atlas-parametric outlines.</b> Current geometry is derived from our own dimensional/shape fields. The schema supports measured SVG or scan geometry later without replacing the interface.</p></aside>
-        <div className="v5-lab-work"><section className="v5-panel v5-overlay-panel"><div className="v5-section-head"><span>02</span><div><small>LIVE CANVAS</small><h2>Overlay</h2></div></div><ShapeOverlay selected={overlayMice} view={overlayView} align={overlayAlign} normalize={overlayNormalize}/></section><section className="v5-panel v5-similar-panel"><div className="v5-section-head"><span>03</span><div><small>{similarityLabels[similarityMode].toUpperCase()} WEIGHTING</small><h2>Closest shapes</h2></div></div><div className="v5-similar-list">{similarShapes.slice(0, 8).map((result, index) => <button key={result.mouse.id} onClick={() => setOverlayIds([similarBase.id, result.mouse.id])}><span className="v5-rank">{String(index + 1).padStart(2, "0")}</span><div><small>{result.mouse.brand}</small><h3>{result.mouse.model}</h3><p>{result.reasons.slice(0, 2).join(" · ") || "Close composite geometry"}</p><em>{result.differences.slice(0, 2).join(" · ")}</em></div><div className="v5-sim-score"><b>{result.score}</b><span>SHAPE</span></div></button>)}</div>{similarShapes[0] && <div className="v5-component-panel"><div><span className="v5-label">TOP MATCH COMPONENTS</span><b>{similarShapes[0].mouse.brand} {similarShapes[0].mouse.model}</b></div><div className="v5-component-grid">{Object.entries(similarShapes[0].components).sort((a, b) => b[1] - a[1]).map(([key, value]) => <div key={key}><span>{key.replace(/([A-Z])/g, " $1")}</span><Meter value={value}/><b>{Math.round(value)}</b></div>)}</div></div>}</section></div>
-      </section>
-
-      <section className="v5-target v5-panel"><div className="v5-section-head"><span>04</span><div><small>DIRECT GEOMETRY SEARCH</small><h2>Build a target shape</h2></div></div><div className="v5-target-grid"><div className="v5-target-controls">{([['Length', 'length', 108, 135, 'mm'], ['Grip width', 'gripWidth', 50, 72, 'mm'], ['Height', 'height', 32, 47, 'mm'], ['Hump position', 'hump', 25, 85, '% rear'], ['Weight', 'weight', 30, 120, 'g']] as const).map(([label, key, min, max, unit]) => <label key={key}><span>{label}<b>{shapeTarget[key]} {unit}</b></span><input type="range" min={min} max={max} value={shapeTarget[key]} onChange={event => setShapeTarget(current => ({ ...current, [key]: +event.target.value }))}/></label>)}</div><div className="v5-target-results">{targetMatches.slice(0, 5).map((result, index) => <button key={result.mouse.id} onClick={() => openProduct(result.mouse)}><span>{index + 1}</span><div><small>{result.mouse.brand}</small><b>{result.mouse.model}</b><em>{result.mouse.specs.lengthMm} L · {result.gripWidth} grip · {result.mouse.specs.heightMm} H · {Math.round(result.hump)}% hump</em></div><strong>{result.score}</strong></button>)}</div></div></section>
-    </main>}
+    {active === "lab" && <ShapeLabV2 similarityMode={similarityMode} setSimilarityMode={setSimilarityMode}/>} 
 
     {active === "catalog" && <main className="v5-main v5-page">
       <section className="v5-page-head"><div><div className="v5-kicker">CANONICAL DATASET</div><h1>Peripheral database</h1><p>Filter the products by the dimensions and platform traits that matter, then open any record to see provenance, evidence health and family context.</p></div><div className="v5-head-stat"><b>{filtered.length}</b><span>matching records</span></div></section>

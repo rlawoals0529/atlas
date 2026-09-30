@@ -26,6 +26,7 @@ import "./atlas-unified-theme.css";
 import "./sensitivity-fixes.css";
 import "./atlas-interactions.css";
 import "./atlas-ux-refresh.css";
+import "./shape-lab-v2.css";
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
