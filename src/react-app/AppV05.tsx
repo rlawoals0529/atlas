@@ -185,8 +185,6 @@ function AppV05() {
   const [relativeMode, setRelativeMode] = useState(false);
 
   const [similarityMode, setSimilarityMode] = useState<SimilarityMode>("balanced");
-  const [shapeTarget, setShapeTarget] = useState({ length: 122, gripWidth: 58, height: 39, hump: 58, weight: 55 });
-
   const [dbType, setDbType] = useState<"all" | "mouse" | "mousepad" | "skate">("mouse");
   const [query, setQuery] = useState("");
   const [brandFilter, setBrandFilter] = useState("all");
@@ -208,13 +206,6 @@ function AppV05() {
   const padRec = useMemo(() => recommendPads(profile), [profile]);
   const topPad = padRec[0]?.product as MousepadProduct | undefined;
   const skateRec = useMemo(() => topPad ? recommendSkates(topPad, profile) : [], [topPad, profile]);
-
-  const targetMatches = useMemo(() => mice.map(mouse => {
-    const hump = mouse.geometry?.humpPositionPct ?? (mouse.specs.hump === "rear" ? 78 : mouse.specs.hump === "center-rear" ? 65 : mouse.specs.hump === "front" ? 35 : 50);
-    const gripWidth = mouse.specs.gripWidthMm ?? mouse.specs.widthMm;
-    const dist = Math.sqrt(((mouse.specs.lengthMm - shapeTarget.length) / 8) ** 2 + ((gripWidth - shapeTarget.gripWidth) / 5) ** 2 + ((mouse.specs.heightMm - shapeTarget.height) / 4) ** 2 + ((hump - shapeTarget.hump) / 15) ** 2 + ((mouse.specs.weightG - shapeTarget.weight) / 15) ** 2);
-    return { mouse, hump, gripWidth, score: Math.round(Math.max(0, 100 - dist * 18)) };
-  }).sort((a, b) => b.score - a.score), [shapeTarget]);
 
   const brands = useMemo(() => [...new Set(catalog.filter(product => dbType === "all" || product.type === dbType).map(product => product.brand))].sort(), [dbType]);
   const filtered = useMemo(() => {
