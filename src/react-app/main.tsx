@@ -23,6 +23,7 @@ import "./atlas-interactions.css";
 import "./atlas-ux-refresh.css";
 import "./shape-lab-v2.css";
 import "./atlas-readability.css";
+import "./atlas-polish.css";
 
 const PointingApp = lazy(() => import("./AppV05"));
 const ProductLab = lazy(() => import("./ProductLab"));
