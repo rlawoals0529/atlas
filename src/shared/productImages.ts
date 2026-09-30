@@ -20,6 +20,18 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Logitech G PRO X2 SUPERSTRIKE gaming mouse",
     credit: "Logitech G official product image",
   },
+  "mouse-razer-viper-v4-pro": {
+    url: "https://dl.razerzone.com/src2/20779/20779-02-en-v1.png",
+    sourceUrl: "https://mysupport.razer.com/app/answers/detail/a_id/20775/",
+    alt: "Razer Viper V4 Pro gaming mouse in black and white",
+    credit: "Razer official support image",
+  },
+  "pad-logitech-pro-x-control": {
+    url: "https://resource.logitechg.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/gaming/en/products/pro-x-control-pdp/gallery/pro-x-control-mouse-pad-top-angle-gallery-1.png",
+    sourceUrl: "https://www.logitechg.com/en-us/shop/p/pro-x-control-gaming-mousepad.943-001617",
+    alt: "Logitech G PRO X CONTROL gaming mousepad",
+    credit: "Logitech G official product image",
+  },
   "keyboard-wooting-60he-v2": {
     url: "https://wooting.io/_next/image?q=90&url=https%3A%2F%2Fwooting-website.ams3.cdn.digitaloceanspaces.com%2Fproducts%2Fkeyboards%2F60HEv2%2F60he-v2_og-and-split.webp&w=3840",
     sourceUrl: "https://wooting.io/wooting-60he-v2",
