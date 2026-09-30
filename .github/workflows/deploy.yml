@@ -2,6 +2,10 @@ name: Deploy Atlas
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Atlas CI"]
+    types: [completed]
+    branches: [main]
 
 env:
   NODE_VERSION: 22
@@ -9,14 +13,20 @@ env:
 permissions:
   contents: read
 
+concurrency:
+  group: atlas-production-deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -24,24 +34,58 @@ jobs:
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
-      - name: Validate catalog and Worker bundle
+      - name: Validate catalog, evidence and Worker bundle
         run: |
           npm run data:validate
+          npm run community:validate
           npm run product:validate
           npm run data:report
           npm run data:seed
           test -s generated/data-report.json
           test -s generated/catalog-seed.sql
           npm run check
-      - name: Verify Cloudflare credentials are configured
+      - name: Detect Cloudflare deployment credentials
+        id: cloudflare
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          test -n "$CLOUDFLARE_API_TOKEN" || (echo "Missing CLOUDFLARE_API_TOKEN repository secret" && exit 1)
-          test -n "$CLOUDFLARE_ACCOUNT_ID" || (echo "Missing CLOUDFLARE_ACCOUNT_ID repository secret" && exit 1)
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          if [[ -n "$CLOUDFLARE_API_TOKEN" && -n "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Atlas Workers deployment skipped"
+              echo "Cloudflare credentials are not configured for this repository."
+              echo "Add \`CLOUDFLARE_API_TOKEN\` and \`CLOUDFLARE_ACCOUNT_ID\` as repository secrets, then re-run this workflow."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Deploy to Cloudflare Workers
-        run: npx wrangler deploy
+        id: deploy
+        if: steps.cloudflare.outputs.configured == 'true'
+        shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -o pipefail
+          npx wrangler deploy 2>&1 | tee /tmp/atlas-wrangler-deploy.log
+          DEPLOY_URL="$(grep -Eo 'https://[A-Za-z0-9.-]+\.workers\.dev' /tmp/atlas-wrangler-deploy.log | tail -n 1 || true)"
+          if [[ -z "$DEPLOY_URL" ]]; then
+            echo "Wrangler completed without a detectable workers.dev URL." >&2
+            exit 1
+          fi
+          echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Atlas live deployment"
+            echo "- $DEPLOY_URL"
+            echo "- Product Lab: ${DEPLOY_URL}/#product-lab"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify deployed health endpoint
+        if: steps.cloudflare.outputs.configured == 'true'
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 2 --retry-all-errors "${{ steps.deploy.outputs.url }}/api/health"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo "Health check: PASS" >> "$GITHUB_STEP_SUMMARY"
