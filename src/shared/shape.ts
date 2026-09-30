@@ -15,51 +15,81 @@ const geometryValue = (m: MouseProduct, key: keyof NonNullable<MouseProduct["geo
 };
 
 /**
- * Parametric outline built only from Input Atlas' own dimensions/geometry model.
- * It is deliberately labelled approximate. A future measured SVG/scan can replace
- * these points via MouseProduct.outline without changing the overlay UI.
+ * Parametric fallback outline built from Atlas dimensions and geometry fields.
+ * Explicit measured/scan outlines always win in outlineFor(). The fallback uses
+ * denser rounded stations than the old archetype so the published length, width,
+ * grip width and height drive the visible shell instead of a generic slab shape.
  */
+const smooth = (t: number) => {
+  const n = clamp(t);
+  return n * n * (3 - 2 * n);
+};
+const interpolateStations = (p: number, stations: [number, number][]) => {
+  const index = stations.findIndex(([x]) => x >= p);
+  if (index <= 0) return stations[0][1];
+  if (index < 0) return stations[stations.length - 1][1];
+  const [x1, y1] = stations[index - 1];
+  const [x2, y2] = stations[index];
+  const t = smooth((p - x1) / Math.max(.0001, x2 - x1));
+  return y1 + (y2 - y1) * t;
+};
+
 export function topOutline(mouse: MouseProduct): Point[] {
   const L = mouse.specs.lengthMm;
   const W = mouse.specs.widthMm;
-  const GW = gripWidth(mouse);
-  const frontFlare = mouse.geometry?.frontFlare ?? ({ low: 30, medium: 55, high: 78 }[mouse.specs.frontFlare]);
-  const rearFlare = mouse.geometry?.rearFlare ?? 58;
-  const taper = mouse.geometry?.sideTaper ?? (mouse.specs.sideCurvature === "aggressive" ? 72 : mouse.specs.sideCurvature === "mild" ? 52 : 34);
+  const GW = Math.min(W, gripWidth(mouse));
+  const frontFlare = (mouse.geometry?.frontFlare ?? ({ low: 30, medium: 55, high: 78 }[mouse.specs.frontFlare])) / 100;
+  const rearFlare = (mouse.geometry?.rearFlare ?? 58) / 100;
+  const taper = (mouse.geometry?.sideTaper ?? (mouse.specs.sideCurvature === "aggressive" ? 72 : mouse.specs.sideCurvature === "mild" ? 52 : 34)) / 100;
+  const waist = Math.min(W * .47, GW * .5) * (1 - taper * .015);
+  const frontShoulder = W * (.41 + frontFlare * .055);
+  const rearShoulder = W * (.42 + rearFlare * .065);
+  const stations: [number, number][] = [
+    [0, W * (.18 + frontFlare * .025)],
+    [.035, W * (.27 + frontFlare * .035)],
+    [.09, W * (.37 + frontFlare * .045)],
+    [.17, frontShoulder],
+    [.28, Math.max(waist * 1.035, W * .405)],
+    [.43, waist],
+    [.55, waist * .985],
+    [.66, Math.max(waist * 1.035, W * .405)],
+    [.78, rearShoulder],
+    [.88, W * (.40 + rearFlare * .045)],
+    [.95, W * (.31 + rearFlare * .025)],
+    [1, W * .18],
+  ];
+  const samples = Array.from({ length: 49 }, (_, index) => index / 48);
   const ergo = mouse.specs.shape === "ergonomic";
-  const leftBias = ergo ? .035 * W : 0;
-  const rightBias = ergo ? -.015 * W : 0;
-  const half = (x: number) => {
-    const p = x / L;
-    if (p < .17) return W * (.37 + frontFlare / 100 * .08 + p * .12);
-    if (p < .55) {
-      const t = (p - .17) / .38;
-      return (W * .45) * (1 - t) + (GW * .5) * t - taper / 100 * W * .025 * Math.sin(t * Math.PI);
-    }
-    const t = (p - .55) / .45;
-    return (GW * .5) * (1 - t) + W * (.40 + rearFlare / 100 * .095) * Math.sin((1 - t) * Math.PI / 2) * t + W * .19 * t;
-  };
-  const xs = [0, .06, .13, .22, .34, .48, .62, .75, .87, .95, 1].map(v => v * L);
-  const top = xs.map(x => [x, -half(x) + (x / L) * rightBias] as Point);
-  const bottom = [...xs].reverse().map(x => [x, half(x) + (x / L) * leftBias] as Point);
-  return [...top, ...bottom];
+  const right = samples.map(p => {
+    const half = interpolateStations(p, stations);
+    const asymmetry = ergo ? W * .018 * Math.sin(p * Math.PI) : 0;
+    return [p * L, -(half - asymmetry)] as Point;
+  });
+  const left = [...samples].reverse().map(p => {
+    const half = interpolateStations(p, stations);
+    const asymmetry = ergo ? W * .032 * Math.sin(p * Math.PI) : 0;
+    return [p * L, half + asymmetry] as Point;
+  });
+  return [...right, ...left];
 }
 
 export function sideOutline(mouse: MouseProduct): Point[] {
   const L = mouse.specs.lengthMm;
   const H = mouse.specs.heightMm;
   const front = frontHeight(mouse);
-  const hp = clamp(humpPct(mouse) / 100, .22, .84) * L;
-  const fullness = (mouse.geometry?.humpFullness ?? 55) / 100;
-  const xs = [0, .05, .12, .2, .3, .4, .5, .6, .7, .8, .9, 1].map(v => v * L);
-  const upper = xs.map(x => {
-    const sigma = L * (.20 + fullness * .055);
-    const hump = (H - front) * Math.exp(-((x - hp) ** 2) / (2 * sigma * sigma));
-    const nose = front * (.70 + .30 * Math.sin(Math.min(1, x / (L * .22)) * Math.PI / 2));
-    const rearDrop = x > hp ? H * Math.pow((x - hp) / (L - hp), 1.55) * .68 : 0;
-    return [x, -(Math.min(H, nose + hump) - rearDrop)] as Point;
+  const hp = clamp(humpPct(mouse) / 100, .25, .82);
+  const fullness = clamp((mouse.geometry?.humpFullness ?? 55) / 100);
+  const samples = Array.from({ length: 49 }, (_, index) => index / 48);
+  const upper = samples.map(p => {
+    const noseRise = .48 + .52 * smooth(p / .16);
+    const deck = front * noseRise * (1 - .08 * smooth((p - .18) / .30));
+    const sigma = .16 + fullness * .07;
+    const hump = Math.max(0, H - front * .9) * Math.exp(-((p - hp) ** 2) / (2 * sigma * sigma));
+    const rearFall = p <= hp ? 1 : 1 - .72 * smooth((p - hp) / Math.max(.01, 1 - hp));
+    const shellHeight = Math.max(H * .16, Math.min(H, (deck + hump) * rearFall));
+    return [p * L, -shellHeight] as Point;
   });
-  const lower = [...xs].reverse().map(x => [x, 0] as Point);
+  const lower = [...samples].reverse().map(p => [p * L, 0] as Point);
   return [...upper, ...lower];
 }
 
