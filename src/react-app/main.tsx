@@ -23,6 +23,7 @@ import "./production-analytics.css";
 import "./utility-labs.css";
 import "./atlas-unified-theme.css";
 import "./sensitivity-fixes.css";
+import "./atlas-interactions.css";
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
