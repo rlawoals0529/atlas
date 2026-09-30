@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "observedAt": "2026-09-30",
+  "scope": "Small qualitative surface-research pilot focused on the WALLHACK SP-004. The goal is to preserve reviewer and owner conditions and disagreement, not estimate population sentiment or convert subjective reports into friction measurements.",
+  "methodology": {
+    "selection": "Purposive sampling of an independent review plus a detailed long-term owner report for a glass mousepad already present in the Atlas catalog. Public X/Twitter discovery was also checked, but only directly attributable product observations should enter the dataset.",
+    "interpretation": "Each row records one bounded observation. Glide, dust behavior, skate interaction and durability remain condition-dependent; Atlas does not average them into a universal glasspad score.",
+    "limitations": [
+      "The sample is not random or representative of all SP-004 owners or all glasspad users.",
+      "Glasspad feel can change with skate material and geometry, dust, skin or sleeve contact, humidity, pressure and unit-level variation.",
+      "Reviewer and owner reports are not substitutes for Atlas-controlled friction, wear or surface metrology.",
+      "Self-reported usage duration and maintenance behavior are not independently verified.",
+      "X/Twitter search indexing is incomplete, so absence of a retrievable post is not evidence that a reviewer never discussed a product."
+    ]
+  },
+  "insights": [
+    {
+      "id": "surface-sp004-glide-prosettings",
+      "productId": "pad-wallhack-sp004",
+      "attribute": "glide",
+      "sentiment": "mixed",
+      "summary": "ProSettings' review unit felt extremely fast and smooth, but the reviewer explicitly documented that other reviewers discussing the pad on Twitter reported materially different relative-speed impressions versus the SkyPAD 3.0.",
+      "sourceId": "prosettings-sp004-review",
+      "sourceUrl": "https://prosettings.net/reviews/wallhack-sp-004/",
+      "sourceLabel": "ProSettings WALLHACK SP-004 review",
+      "sourceType": "review",
+      "observedAt": "2026-09-30",
+      "conditions": "One review unit; the page discloses that the product was supplied by the manufacturer. Atlas records the reviewer's stated disagreement with other reviewers rather than choosing one ordering as ground truth.",
+      "evidenceStrength": "independent-measurement",
+      "sampleSize": 1,
+      "consensus": "disagreement",
+      "disagreementNote": "The review itself says reviewer experiences were unusually split on whether SP-004 felt faster or slower than the prior SkyPAD 3.0, with humidity and person-to-person conditions noted as possible contributors."
+    },
+    {
+      "id": "surface-sp004-skates-prosettings",
+      "productId": "pad-wallhack-sp004",
+      "attribute": "skate-compatibility",
+      "sentiment": "mixed",
+      "summary": "The ProSettings reviewer found glass highly revealing of imperfect skates and debris, describing rough skate or dust contact as immediately noticeable rather than treating the pad's glide as independent from the mouse feet.",
+      "sourceId": "prosettings-sp004-review",
+      "sourceUrl": "https://prosettings.net/reviews/wallhack-sp-004/",
+      "sourceLabel": "ProSettings WALLHACK SP-004 review",
+      "sourceType": "review",
+      "observedAt": "2026-09-30",
+      "conditions": "One review unit and the reviewer's own skate combinations; qualitative surface interaction, not a controlled skate matrix.",
+      "evidenceStrength": "anecdotal",
+      "sampleSize": 1,
+      "consensus": "single-source"
+    },
+    {
+      "id": "surface-sp004-dust-owner-2025",
+      "productId": "pad-wallhack-sp004",
+      "attribute": "dust-sensitivity",
+      "sentiment": "mixed",
+      "summary": "A long-term owner reported very low friction but also frequent scratch feedback from fine debris in a dusty environment, leading them to wipe the surface repeatedly during play sessions.",
+      "sourceId": "reddit-sp004-250-hours-2025",
+      "sourceUrl": "https://www.reddit.com/r/MousepadReview/comments/1pgrrey/sp004_verdict_250_hours_playtime/",
+      "sourceLabel": "r/MousepadReview SP-004 long-term owner report",
+      "sourceType": "reddit",
+      "publishedAt": "2025-12-07",
+      "observedAt": "2026-09-30",
+      "conditions": "Owner lists two mice, multiple skate types, 1000 DPI/1 kHz polling and a dusty local environment. Cleaning frequency is self-reported.",
+      "evidenceStrength": "anecdotal",
+      "sampleSize": 1,
+      "consensus": "single-source"
+    },
+    {
+      "id": "surface-sp004-glide-owner-2025",
+      "productId": "pad-wallhack-sp004",
+      "attribute": "glide",
+      "sentiment": "positive",
+      "summary": "The same long-term owner described extremely low static and dynamic resistance and preferred the pad for tracking-heavy games, while also reporting that micro-adjustments and stopping were demanding for their setup.",
+      "sourceId": "reddit-sp004-250-hours-2025",
+      "sourceUrl": "https://www.reddit.com/r/MousepadReview/comments/1pgrrey/sp004_verdict_250_hours_playtime/",
+      "sourceLabel": "r/MousepadReview SP-004 long-term owner report",
+      "sourceType": "reddit",
+      "publishedAt": "2025-12-07",
+      "observedAt": "2026-09-30",
+      "conditions": "Subjective owner preference across CS2, Apex, Arena Breakout and Rainbow Six Siege; not a friction measurement or universal game-fit conclusion.",
+      "evidenceStrength": "anecdotal",
+      "sampleSize": 1,
+      "consensus": "directional"
+    },
+    {
+      "id": "surface-sp004-durability-owner-2025",
+      "productId": "pad-wallhack-sp004",
+      "attribute": "durability",
+      "sentiment": "positive",
+      "summary": "The owner reported no visible dents or scratches and a consistent-feeling surface after extended use, which is useful long-term anecdotal evidence but does not establish a population durability rate.",
+      "sourceId": "reddit-sp004-250-hours-2025",
+      "sourceUrl": "https://www.reddit.com/r/MousepadReview/comments/1pgrrey/sp004_verdict_250_hours_playtime/",
+      "sourceLabel": "r/MousepadReview SP-004 long-term owner report",
+      "sourceType": "reddit",
+      "publishedAt": "2025-12-07",
+      "observedAt": "2026-09-30",
+      "conditions": "The post title references 250+ hours while the body also mentions 400+ hours. Atlas preserves that inconsistency instead of presenting one precise verified duration.",
+      "evidenceStrength": "anecdotal",
+      "sampleSize": 1,
+      "consensus": "single-source"
+    }
+  ]
+}
