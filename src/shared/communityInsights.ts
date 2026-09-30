@@ -1,6 +1,7 @@
 export type CommunityAttribute =
   | "shape"
   | "size"
+  | "grip-fit"
   | "weight"
   | "weight-balance"
   | "coating"
@@ -16,7 +17,9 @@ export type CommunityAttribute =
   | "price-value";
 
 export type Sentiment = "positive" | "mixed" | "negative" | "neutral";
-export type EvidenceStrength = "anecdotal" | "repeated-observation" | "broad-community-pattern";
+export type EvidenceStrength = "anecdotal" | "repeated-observation" | "structured-sample" | "independent-measurement";
+export type ConsensusIndicator = "single-source" | "disagreement" | "directional" | "cross-source-consensus";
+export type CommunitySourceType = "reddit" | "forum" | "review" | "video" | "support-thread" | "other";
 
 export interface CommunityInsight {
   id: string;
@@ -24,14 +27,19 @@ export interface CommunityInsight {
   attribute: CommunityAttribute;
   sentiment: Sentiment;
   summary: string;
+  sourceId: string;
   sourceUrl: string;
   sourceLabel: string;
-  sourceType: "reddit" | "forum" | "review" | "video" | "other";
+  sourceType: CommunitySourceType;
+  publishedAt?: string;
   observedAt: string;
   conditions?: string;
   evidenceStrength: EvidenceStrength;
   sampleSize?: number;
+  consensus: ConsensusIndicator;
   disagreementNote?: string;
+  quote?: string;
+  quoteUse?: "short-verbatim" | "paraphrase";
 }
 
 export interface CommunityInsightAggregate {
@@ -42,8 +50,19 @@ export interface CommunityInsightAggregate {
   negative: number;
   neutral: number;
   sourceCount: number;
+  sourceTypeCount: number;
+  consensus: ConsensusIndicator;
   summary: string;
   limitation: string;
+}
+
+function consensusFor(group: CommunityInsight[]): ConsensusIndicator {
+  if (new Set(group.map(row => row.sourceId)).size <= 1) return "single-source";
+  const directional = group.filter(row => row.sentiment !== "neutral");
+  const sentimentKinds = new Set(directional.map(row => row.sentiment));
+  if (sentimentKinds.has("positive") && sentimentKinds.has("negative")) return "disagreement";
+  if (group.some(row => row.consensus === "cross-source-consensus") && new Set(group.map(row => row.sourceType)).size >= 2) return "cross-source-consensus";
+  return "directional";
 }
 
 export function aggregateCommunityInsights(rows: CommunityInsight[]): CommunityInsightAggregate[] {
@@ -59,13 +78,18 @@ export function aggregateCommunityInsights(rows: CommunityInsight[]): CommunityI
     const first = group[0];
     const counts = { positive: 0, mixed: 0, negative: 0, neutral: 0 };
     for (const row of group) counts[row.sentiment] += 1;
+    const sourceCount = new Set(group.map(row => row.sourceId)).size;
+    const sourceTypeCount = new Set(group.map(row => row.sourceType)).size;
+    const consensus = consensusFor(group);
     return {
       productId: first.productId,
       attribute: first.attribute,
       ...counts,
-      sourceCount: new Set(group.map(row => row.sourceUrl)).size,
-      summary: `${group.length} traceable observation${group.length === 1 ? "" : "s"} recorded for ${first.attribute}.`,
-      limitation: "Community observations are directional evidence, not representative market research. Preserve source, date, conditions and disagreement before drawing a product conclusion.",
+      sourceCount,
+      sourceTypeCount,
+      consensus,
+      summary: `${group.length} traceable observation${group.length === 1 ? "" : "s"} from ${sourceCount} source${sourceCount === 1 ? "" : "s"} recorded for ${first.attribute}.`,
+      limitation: "Community observations are directional evidence, not representative market research. Source selection, self-selection and shared talking points can create apparent consensus; preserve source, date, conditions, sample size and disagreement before drawing a product conclusion.",
     };
   });
 }
