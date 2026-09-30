@@ -1,6 +1,6 @@
 export const RELEASE = {
-  productUi: "0.5",
-  dataLayer: "0.6",
-  label: "0.6",
+  productUi: "0.8",
+  dataLayer: "0.8",
+  label: "0.8",
   researchCutoff: "2026-09-29",
 } as const;
