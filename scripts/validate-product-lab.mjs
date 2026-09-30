@@ -10,6 +10,7 @@ const assert = (condition, message) => {
 
 const app = read("src/react-app/AppV05.tsx");
 const main = read("src/react-app/main.tsx");
+const globalNav = read("src/react-app/AtlasGlobalNav.tsx");
 const lab = read("src/react-app/ProductLab.tsx");
 const keyboardLab = read("src/react-app/KeyboardLab.tsx");
 const sensitivityLab = read("src/react-app/SensitivityLab.tsx");
@@ -39,8 +40,10 @@ assert(app.includes('href="#product-lab"'), "Product Lab must remain reachable f
 
 assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain routable");
 assert(main.includes('hash === "#sensitivity"'), "Sensitivity Lab must remain routable");
-assert(main.includes('href="#keyboard-lab"'), "consumer utility dock must expose Keyboard Lab");
-assert(main.includes('href="#sensitivity"'), "consumer utility dock must expose Sensitivity Lab");
+assert(globalNav.includes('href: "#keyboard-lab"'), "global navigation must expose Keyboard Lab");
+assert(globalNav.includes('href: "#sensitivity"'), "global navigation must expose Sensitivity Lab");
+assert(globalNav.includes('href: "#pointing"'), "global navigation must expose Setup / Shape Lab");
+assert(globalNav.includes('href: "#product-lab"'), "global navigation must expose Product Lab");
 assert(keyboardLab.includes("ThereminGoat"), "Keyboard Lab must retain expert switch-review provenance");
 assert(keyboardLab.includes("does not copy composite scores into a universal ranking"), "Keyboard Lab must reject universal switch ranking inference");
 assert(keyboardLab.includes("Actuation is not latency"), "Keyboard Lab must keep actuation and latency semantically separate");

@@ -8,6 +8,7 @@ import KeyboardLab from "./KeyboardLab";
 import SensitivityLab from "./SensitivityLab";
 import AnalyticsBridge from "./AnalyticsBridge";
 import AnalyticsTransport from "./AnalyticsTransport";
+import AtlasGlobalNav from "./AtlasGlobalNav";
 import { analyticsVisitor, trackAtlasEvent } from "../shared/analytics";
 import "./styles.css";
 import "./v04.css";
@@ -24,6 +25,7 @@ import "./utility-labs.css";
 import "./atlas-unified-theme.css";
 import "./sensitivity-fixes.css";
 import "./atlas-interactions.css";
+import "./atlas-ux-refresh.css";
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
@@ -50,18 +52,13 @@ function RootRouter() {
 
   return <>
     <AnalyticsTransport />
+    <AtlasGlobalNav hash={hash}/>
     {validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : productLab ? <>
       <ProductLab />
       <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
     </> : pointingApp ? <>
       <AnalyticsBridge />
       <PointingApp />
-      <div className="atlas-utility-dock" aria-label="Atlas labs">
-        <a href="#"><span>HOME</span><b>Unified database</b><i>↗</i></a>
-        <a href="#keyboard-lab"><span>KEY</span><b>Keyboard lab</b><i>↗</i></a>
-        <a href="#sensitivity"><span>SENS</span><b>Sensitivity lab</b><i>↗</i></a>
-        <a href="#product-lab"><span>LAB</span><b>Product research & validation</b><i>↗</i></a>
-      </div>
     </> : <>
       <AnalyticsBridge />
       <AtlasConsumer />
