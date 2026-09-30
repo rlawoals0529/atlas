@@ -85,10 +85,12 @@ jobs:
             echo "- Sensitivity Lab: ${DEPLOY_URL}/#sensitivity"
             echo "- Product Lab: ${DEPLOY_URL}/#product-lab"
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Verify deployed health endpoint
+      - name: Verify deployed release and health endpoint
         if: steps.cloudflare.outputs.configured == 'true'
         shell: bash
         run: |
-          curl --fail --silent --show-error --retry 5 --retry-delay 2 --retry-all-errors "${{ steps.deploy.outputs.url }}/api/health"
-          echo >> "$GITHUB_STEP_SUMMARY"
-          echo "Health check: PASS" >> "$GITHUB_STEP_SUMMARY"
+          node scripts/verify-deployed-health.mjs "${{ steps.deploy.outputs.url }}" | tee /tmp/atlas-health-verification.log
+          {
+            echo
+            echo "Health check: PASS — deployed release metadata matches this repository checkout."
+          } >> "$GITHUB_STEP_SUMMARY"

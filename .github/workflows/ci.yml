@@ -32,6 +32,8 @@ jobs:
         run: npm run sensitivity:validate
       - name: Validate Product Lab integrity rules
         run: npm run product:validate
+      - name: Validate deployment verifier syntax
+        run: node --check scripts/verify-deployed-health.mjs
       - name: Generate catalog quality report
         run: npm run data:report
       - name: Generate SQL seed artifact
