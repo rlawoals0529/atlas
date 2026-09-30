@@ -109,3 +109,17 @@ input::-moz-selection,textarea::-moz-selection{background:#b9d4c8;color:#101814}
 .v5-result-actions button.primary:hover{border-color:#175748;background:#175748;color:#fff}
 .v5-product-card .v5-chips span:first-child{font-variant-numeric:tabular-nums}
 @media(max-width:780px){.v5-card-meta{justify-content:flex-start}.v5-card-top{align-items:flex-start;flex-direction:column}.v5-result-actions{justify-content:stretch}.v5-result-actions button{flex:1}}
+
+
+/* Keyboard Lab browse cards: product first, provenance in the inspector. */
+.keyboard-shell .kb-card-art{min-height:210px;padding:18px 22px;background:#f1f3f0!important}
+.keyboard-shell .kb-card-art .atlas-product-image{width:100%;height:190px;max-height:190px;padding:6px 14px;object-fit:contain;filter:drop-shadow(0 12px 20px rgba(24,34,28,.1))}
+.keyboard-shell .kb-card-copy{display:flex;min-height:235px;flex-direction:column;padding:18px 18px 15px}
+.keyboard-shell .kb-card-copy>span{color:#718078!important;font-size:7px!important;letter-spacing:.09em!important}
+.keyboard-shell .kb-card h2{margin:5px 0 2px!important;color:#1f2522!important;font-size:1.18rem!important;line-height:1.12}
+.keyboard-shell .kb-card .kb-chip-row{margin-top:10px}
+.keyboard-shell .kb-card .kb-chip-row span{background:#f7f9f6!important;border-color:#d8ded9!important;color:#56635c!important}
+.keyboard-shell .kb-card p{min-height:0!important;margin:13px 0 0!important;color:#69746e!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.keyboard-shell .kb-card footer{margin-top:auto!important;padding-top:14px!important;border-color:#e1e5e1!important;color:#87918b!important}
+.keyboard-shell .kb-card footer i{margin-left:auto;color:#1e6f5c!important}
+@media(max-width:700px){.keyboard-shell .kb-card-art{min-height:180px}.keyboard-shell .kb-card-art .atlas-product-image{height:165px;max-height:165px}.keyboard-shell .kb-card-copy{min-height:0}}
