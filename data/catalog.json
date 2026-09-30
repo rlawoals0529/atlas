@@ -2705,10 +2705,10 @@
         },
         {
           "id": "fk2-dim",
-          "label": "FK2-DW dimensional cross-check",
-          "url": "https://www.eloshapes.com/mouse/compare?p=zowie-fk2-dw",
+          "label": "FK2-DW dimensional specification cross-check",
+          "url": "https://gaminggear.bg/zowie-fk2-dw-4k-bezjichna-geimarska-mishka-11845",
           "kind": "independent",
-          "checkedAt": "2026-09-28"
+          "checkedAt": "2026-09-30"
         },
         {
           "id": "atlas-editorial-fit",
@@ -2742,7 +2742,8 @@
         "driverless": true,
         "battery1kHours": 80,
         "battery4kHours": 24,
-        "stockSkateMaterial": "PTFE"
+        "stockSkateMaterial": "PTFE",
+        "frontHeightMm": 29.2
       },
       "geometry": {
         "humpPositionPct": 52,
@@ -2804,7 +2805,8 @@
             "zowie-fk2",
             "fk2-dim"
           ],
-          "confidence": "high"
+          "confidence": "high",
+          "note": "Overall and annotated shell dimensions are cross-checked against a current retailer listing of ZOWIE's dimension graphic. The retailer mirror is a specification cross-check, not an independent physical measurement."
         },
         "fit": {
           "sourceIds": [
@@ -2843,10 +2845,10 @@
         },
         {
           "id": "s2-dim",
-          "label": "S2-DW dimensional cross-check",
-          "url": "https://esportsmice.com/shapes",
+          "label": "S2-DW dimensional specification cross-check",
+          "url": "https://24h.pchome.com.tw/prod/DCAN33-A900I3IXZ",
           "kind": "independent",
-          "checkedAt": "2026-09-28"
+          "checkedAt": "2026-09-30"
         },
         {
           "id": "atlas-editorial-fit",
@@ -2857,10 +2859,10 @@
         }
       ],
       "specs": {
-        "lengthMm": 122,
-        "widthMm": 64,
-        "heightMm": 38,
-        "gripWidthMm": 56,
+        "lengthMm": 120,
+        "widthMm": 64.2,
+        "heightMm": 38.1,
+        "gripWidthMm": 59,
         "weightG": 65,
         "shape": "symmetrical",
         "hump": "center-rear",
@@ -2880,7 +2882,8 @@
         "driverless": true,
         "battery1kHours": 80,
         "battery4kHours": 24,
-        "stockSkateMaterial": "PTFE"
+        "stockSkateMaterial": "PTFE",
+        "frontHeightMm": 31
       },
       "geometry": {
         "humpPositionPct": 66,
@@ -2942,7 +2945,8 @@
             "zowie-s2",
             "s2-dim"
           ],
-          "confidence": "high"
+          "confidence": "high",
+          "note": "Corrected to the current 120 × 64.2 × 38.1 mm shell specification and 59 mm middle/grip width. The retailer mirror reproduces ZOWIE's annotated dimension graphic; it is a specification cross-check, not an independent physical measurement."
         },
         "fit": {
           "sourceIds": [
@@ -2981,10 +2985,10 @@
         },
         {
           "id": "za13-dim",
-          "label": "ZA13-DW dimensional review cross-check",
-          "url": "https://www.reddit.com/r/MouseReview/comments/1ir4j1n/zowie_za13dw_4k_review/",
-          "kind": "community",
-          "checkedAt": "2026-09-28"
+          "label": "ZA13-DW dimensional specification cross-check",
+          "url": "https://24h.pchome.com.tw/prod/DCAN33-A900I3ITB",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
         },
         {
           "id": "atlas-editorial-fit",
@@ -2998,7 +3002,7 @@
         "lengthMm": 121.7,
         "widthMm": 62.8,
         "heightMm": 40.2,
-        "gripWidthMm": 53,
+        "gripWidthMm": 57,
         "weightG": 65,
         "shape": "symmetrical",
         "hump": "rear",
@@ -3018,7 +3022,8 @@
         "driverless": true,
         "battery1kHours": 80,
         "battery4kHours": 24,
-        "stockSkateMaterial": "PTFE"
+        "stockSkateMaterial": "PTFE",
+        "frontHeightMm": 29.1
       },
       "geometry": {
         "humpPositionPct": 80,
@@ -3080,7 +3085,8 @@
             "zowie-za13",
             "za13-dim"
           ],
-          "confidence": "high"
+          "confidence": "high",
+          "note": "Annotated shell dimensions are cross-checked against a current retailer mirror of ZOWIE's dimension graphic, including 57 mm middle/grip width and 29.1 mm front height. This is a specification cross-check, not an independent physical measurement."
         },
         "fit": {
           "sourceIds": [
