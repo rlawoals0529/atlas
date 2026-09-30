@@ -61,11 +61,11 @@ const dashFor = (style: LineStyle) => style === "dash" ? "10 5" : style === "dot
 const fmt = (value: number) => Number.isInteger(value) ? String(value) : value.toFixed(1);
 const fallbackMouse = (mouse: MouseProduct) => <span className="shape-fallback">{mouse.brand.slice(0, 1)}{mouse.model.slice(0, 1)}</span>;
 const qualityLabel = (mouse: MouseProduct, view: ShapeView) => {
-  if (!mouse.outline?.[view]?.length) return "PARAMETRIC ESTIMATE";
-  if (mouse.outline.sourceType === "traced-reference") return "TRACED REFERENCE";
-  if (mouse.outline.sourceType === "measured-svg") return "MEASURED";
-  if (mouse.outline.sourceType === "scan") return "MEASURED SCAN";
-  return "PARAMETRIC ESTIMATE";
+  if (!mouse.outline?.[view]?.length) return "Parametric estimate";
+  if (mouse.outline.sourceType === "traced-reference") return "Traced reference";
+  if (mouse.outline.sourceType === "measured-svg") return "Measured";
+  if (mouse.outline.sourceType === "scan") return "Measured scan";
+  return "Parametric estimate";
 };
 
 function layerMouse(layer: ShapeLayer) {
@@ -189,7 +189,7 @@ function LayerRow({
 }) {
   const mouse = layerMouse(layer);
   if (!mouse) return null;
-  return <article className={`shape-layer ${layer.visible ? "" : "muted"}`}>
+  return <article className={`shape-layer ${layer.visible ? "" : "muted"}`} style={{ "--shape-layer-color": layer.color } as React.CSSProperties}>
     <button className="shape-eye" onClick={() => onChange({ ...layer, visible: !layer.visible })} aria-label={layer.visible ? "Hide mouse" : "Show mouse"}>{layer.visible ? "●" : "○"}</button>
     <div className="shape-layer-thumb"><ProductMedia productId={mouse.id} fallback={fallbackMouse(mouse)}/></div>
     <div className="shape-layer-main">
@@ -198,7 +198,7 @@ function LayerRow({
       <small>{fmt(mouse.specs.lengthMm)} × {fmt(mouse.specs.widthMm)} × {fmt(mouse.specs.heightMm)} mm · {mouse.specs.gripWidthMm != null ? `${fmt(mouse.specs.gripWidthMm)} mm grip` : "grip —"} · {mouse.specs.weightG} g</small>
     </div>
     <div className="shape-row-actions">
-      <button onClick={onSolo} title={`Solo ${mouse.model}`} aria-label={`Solo ${mouse.model}`}>S</button>
+      <button className="shape-solo" onClick={onSolo} title={`Solo ${mouse.model}`} aria-label={`Solo ${mouse.model}`}>Solo</button>
       <button className="shape-remove" onClick={onRemove} aria-label={`Remove ${mouse.brand} ${mouse.model}`}>×</button>
     </div>
     <div className="shape-layer-controls">
@@ -214,12 +214,12 @@ function LayerRow({
         <label className="shape-color" title="Custom outline color"><input type="color" value={layer.color} onChange={event => onChange({ ...layer, color: event.target.value })}/><span style={{ background: layer.color }}>+</span></label>
       </div>
       <select className="shape-line-style" value={layer.lineStyle} onChange={event => onChange({ ...layer, lineStyle: event.target.value as LineStyle })} aria-label="Line style"><option value="solid">Solid</option><option value="dash">Dash</option><option value="dot">Dot</option></select>
-      <label className="shape-opacity"><span>{Math.round(layer.opacity * 100)}%</span><input type="range" min="35" max="100" value={Math.round(layer.opacity * 100)} onChange={event => onChange({ ...layer, opacity: +event.target.value / 100 })}/></label>
+      <label className="shape-opacity"><span>Opacity {Math.round(layer.opacity * 100)}%</span><input type="range" min="35" max="100" value={Math.round(layer.opacity * 100)} onChange={event => onChange({ ...layer, opacity: +event.target.value / 100 })}/></label>
       <div className="shape-order">
         <button type="button" onClick={() => onMove(-1)} disabled={index === 0} title="Send backward" aria-label={`Send ${mouse.model} backward`}>Back</button>
         <button type="button" onClick={() => onMove(1)} disabled={index === total - 1} title="Bring forward" aria-label={`Bring ${mouse.model} forward`}>Front</button>
       </div>
-      {duplicateColor && <span className="shape-color-warning">duplicate color</span>}
+      {duplicateColor && <span className="shape-color-warning">Duplicate color</span>}
     </div>
   </article>;
 }
@@ -313,7 +313,7 @@ export default function ShapeLabV2({
   };
 
   return <main className="v5-main v5-page shape-lab-v2">
-    <section className="v5-page-head"><div><div className="v5-kicker">GEOMETRY WORKBENCH</div><h1>Shape Lab</h1><p>Stack up to five mice, line them up the way you want, and compare the shell at real scale or normalized length. The dimensions stay visible so the overlay is still tied to the catalog data.</p></div><div className="v5-head-stat"><b>{mice.length}</b><span>catalog shapes</span></div></section>
+    <section className="v5-page-head"><div><div className="v5-kicker">Geometry workbench</div><h1>Shape Lab</h1><p>Stack up to five mice, line them up the way you want, and compare the shell at real scale or normalized length. The dimensions stay visible so the overlay is still tied to the catalog data.</p></div><div className="v5-head-stat"><b>{mice.length}</b><span>catalog shapes</span></div></section>
 
     <section className="shape-toolbar v5-panel">
       <div className="shape-segments" aria-label="Shape view">{(["top", "side"] as ShapeView[]).map(item => <button key={item} className={view === item ? "active" : ""} onClick={() => setView(item)}>{item === "top" ? "Top view" : "Side view"}</button>)}</div>
@@ -329,7 +329,7 @@ export default function ShapeLabV2({
 
     <section className="shape-workbench">
       <aside className="shape-layers v5-panel">
-        <div className="shape-panel-head"><div><span>COMPARE SET</span><h2>Mouse layers</h2></div><b>{layers.length}/5</b></div>
+        <div className="shape-panel-head"><div><span>Compare set</span><h2>Mouse layers</h2></div><b>{layers.length}/5</b></div>
         <div className="shape-layer-list">{layers.map((layer, index) => <LayerRow
           key={layer.id}
           layer={layer}
@@ -357,7 +357,7 @@ export default function ShapeLabV2({
       </aside>
 
       <div className="shape-stage v5-panel">
-        <div className="shape-stage-head"><div><span>LIVE OVERLAY</span><h2>{view === "top" ? "Top-shell comparison" : "Side-profile comparison"}</h2></div><div><span>{normalize ? "NORMALIZED LENGTH" : "REAL SCALE"}</span><span>{align.toUpperCase()} ALIGNED</span></div></div>
+        <div className="shape-stage-head"><div><span>Live overlay</span><h2>{view === "top" ? "Top-shell comparison" : "Side-profile comparison"}</h2></div><div><span>{normalize ? "Normalized length" : "Real scale"}</span><span>{`${align[0].toUpperCase()}${align.slice(1)} aligned`}</span></div></div>
         <ShapeCanvas layers={layers} view={view} align={align} normalize={normalize} showDimensions={showDimensions} showFills={showFills} showLabels={showLabels}/>
         <div className="shape-spec-strip">{layers.filter(layer => layer.visible).map(layer => {
           const mouse = layerMouse(layer); if (!mouse) return null;
@@ -371,7 +371,7 @@ export default function ShapeLabV2({
     </section>
 
     <section className="shape-similar v5-panel">
-      <div className="shape-similar-head"><div><span>SHAPE SEARCH</span><h2>Find close geometry</h2><p>Add a match without rebuilding the rest of your comparison stack.</p></div><label>Reference<select value={referenceId} onChange={event => setReferenceId(event.target.value)}>{mice.map(mouse => <option key={mouse.id} value={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label></div>
+      <div className="shape-similar-head"><div><span>Shape search</span><h2>Find close geometry</h2><p>Add a match without rebuilding the rest of your comparison stack.</p></div><label>Reference<select value={referenceId} onChange={event => setReferenceId(event.target.value)}>{mice.map(mouse => <option key={mouse.id} value={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label></div>
       <div className="shape-mode-row">{(Object.keys(similarityLabels) as SimilarityMode[]).map(mode => <button key={mode} className={mode === similarityMode ? "active" : ""} onClick={() => setSimilarityMode(mode)}>{similarityLabels[mode]}</button>)}</div>
       <div className="shape-similar-grid">{similar.slice(0, 8).map((result, index) => {
         const alreadyAdded = selectedIds.has(result.mouse.id);
