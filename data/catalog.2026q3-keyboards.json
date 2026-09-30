@@ -6,7 +6,7 @@
       "type": "keyboard",
       "brand": "Wooting",
       "model": "80HE+",
-      "status": "announced",
+      "status": "current",
       "summary": "Current 80% analog Hall-effect platform with true 8 kHz polling, per-key adjustable actuation and a revised FR4/foam build around Lekker Tikken Medium switches.",
       "tags": ["hall-effect", "analog", "rapid-trigger", "8k", "web-config", "hotswap"],
       "sources": [
@@ -20,7 +20,7 @@
       ],
       "specs": {
         "formFactor": "80%",
-        "layout": "ANSI",
+        "layout": "ANSI / ISO / JIS options",
         "switchTechnology": "hall-effect",
         "stockSwitch": "Lekker Tikken Medium",
         "maxPollingHz": 8000,
@@ -28,10 +28,11 @@
         "maxActuationMm": 4,
         "actuationStepMm": 0.1,
         "rapidTrigger": true,
+        "socd": true,
         "analogInput": true,
         "hotSwappable": true,
         "connectivity": ["USB-C wired"],
-        "caseMaterial": "PCR ABS plastic or zinc alloy, by variant",
+        "caseMaterial": "ABS plastic or zinc alloy, by variant",
         "plateMaterial": "FR4",
         "keycapMaterial": "double-shot PBT",
         "mount": "silicone gasket",
@@ -42,12 +43,12 @@
         "platform": {
           "sourceIds": ["wooting-80he-plus-official"],
           "confidence": "high",
-          "note": "Manufacturer-published layout, switch, plate, mount, keycap and configuration details."
+          "note": "Manufacturer-published layout options, switch, plate, mount, keycap and case details."
         },
         "inputFeatures": {
           "sourceIds": ["wooting-80he-plus-official"],
           "confidence": "high",
-          "note": "8 kHz capability and 0.1–4.0 mm per-key actuation range are manufacturer specifications; Atlas does not convert Wooting latency marketing into an independent measurement."
+          "note": "True 8 kHz capability and 0.1–4.0 mm per-key actuation range are manufacturer specifications. Atlas does not re-label Wooting's 0.125 ms input-speed claim as an independent end-to-end latency measurement."
         }
       }
     },
@@ -63,8 +64,8 @@
       "sources": [
         {
           "id": "razer-huntsman-v3-pro-tkl-8k-official",
-          "label": "Razer Huntsman V3 Pro Tenkeyless 8KHz product page",
-          "url": "https://www.razer.com/gaming-keyboards/razer-huntsman-v3-pro-tenkeyless-8khz",
+          "label": "Razer Huntsman V3 Pro Tenkeyless 8KHz support/product specification",
+          "url": "https://mysupport.razer.com/app/answers/detail/a_id/19797/~/razer-huntsman-v3-pro-tenkeyless-8-khz-%7C-rz03-0552-support-%26-faqs",
           "kind": "manufacturer",
           "checkedAt": "2026-09-30"
         },
@@ -91,19 +92,20 @@
         "connectivity": ["USB-C wired"],
         "caseMaterial": "5052 aluminum alloy top case",
         "keycapMaterial": "double-shot PBT",
-        "webConfigurator": false,
-        "software": "Razer Synapse 4"
+        "software": "Razer Synapse 4",
+        "dimensionsMm": { "width": 363, "depth": 139, "height": 38 },
+        "weightG": 981
       },
       "evidence": {
         "platform": {
           "sourceIds": ["razer-huntsman-v3-pro-tkl-8k-official", "rtings-huntsman-v3-pro-8k-review"],
           "confidence": "high",
-          "note": "Official switch/feature specifications are cross-checked against an independent retail-unit review."
+          "note": "Official switch, polling, actuation, case, dimensions and feature specifications are cross-checked against an independent retail-unit review where applicable."
         },
         "independentReview": {
           "sourceIds": ["rtings-huntsman-v3-pro-8k-review"],
           "confidence": "medium",
-          "note": "RTINGS reports high-end raw gaming performance and independently confirms the TKL variant, 8 kHz capability and non-hot-swappable optical implementation. This is one tested unit under RTINGS methodology v1.4.3, not a reliability-rate claim."
+          "note": "RTINGS independently confirms the non-hot-swappable optical implementation and reports very low, consistent latency on its tested unit. RTINGS also measured an effective update-rate ceiling below the advertised polling ceiling, so Atlas keeps polling specification and independent performance observations separate."
         }
       }
     },
@@ -114,6 +116,7 @@
       "brand": "Keychron",
       "model": "Q1 HE 8K",
       "status": "current",
+      "msrpUsd": 229.99,
       "summary": "Wired 75% aluminum Hall-effect keyboard with 8 kHz polling, Rapid Trigger, analog gamepad input and Keychron's browser-based Launcher configuration.",
       "tags": ["hall-effect", "75-percent", "8k", "rapid-trigger", "web-config", "aluminum"],
       "sources": [
@@ -149,6 +152,7 @@
         "caseMaterial": "aluminum",
         "plateMaterial": "aluminum",
         "keycapMaterial": "OSA double-shot PBT",
+        "mount": "gasket",
         "webConfigurator": true,
         "software": "Keychron Launcher",
         "dimensionsMm": { "width": 327.53, "depth": 145 },
@@ -158,12 +162,12 @@
         "platform": {
           "sourceIds": ["keychron-q1-he-8k-official"],
           "confidence": "high",
-          "note": "Dimensions, weight, materials, stock switch and wired 8 kHz capability come from Keychron's product specification."
+          "note": "Price, dimensions, weight, materials, stock switch and wired 8 kHz capability come from Keychron's product specification."
         },
         "inputFeatures": {
           "sourceIds": ["keychron-q1-he-8k-official", "keychron-launcher-he-guide"],
           "confidence": "high",
-          "note": "Keychron documents 0.1–3.35 mm adjustable actuation, 0.01 mm sensitivity, Rapid Trigger and LKP/analog features. Hot-swap compatibility is explicitly limited to the supported Keychron magnetic switch family on the product page."
+          "note": "Keychron documents 0.1–3.35 mm adjustable actuation, 0.01 mm sensitivity, Rapid Trigger, analog gamepad behavior and LKP/Snap Click features. Magnetic hot-swap support is implementation-specific and should be checked against Keychron's current compatibility guidance."
         }
       }
     }
@@ -202,7 +206,7 @@
         "factoryLubed": true,
         "ratedKeystrokesM": 150,
         "magneticFluxGs": { "initial": 120, "bottomOut": 700, "pcbThicknessMm": 1.2 },
-        "compatibility": ["N-pole-down Hall-effect keyboards; verify keyboard-specific switch support before purchase"]
+        "compatibility": ["Hall-effect compatibility is board-specific; verify polarity, supported flux curve and keyboard firmware before purchase."]
       },
       "evidence": {
         "specification": {
@@ -250,7 +254,7 @@
         "specification": {
           "sourceIds": ["cherry-mx2a-red-official"],
           "confidence": "high",
-          "note": "Atlas preserves CHERRY's published cN units rather than silently relabeling them as gram-force."
+          "note": "Atlas preserves CHERRY's published cN units rather than silently relabeling them as gram-force. CHERRY specifies more than 100 million keystrokes; the catalog stores the conservative 100M floor rather than inventing a larger exact number."
         }
       }
     }
