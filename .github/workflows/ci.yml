@@ -35,7 +35,9 @@ jobs:
       - name: Validate product media coverage
         run: npm run media:validate
       - name: Validate deployment verifier syntax
-        run: node --check scripts/verify-deployed-health.mjs
+        run: |
+          node --check scripts/verify-deployed-health.mjs
+          node --check scripts/verify-deployed-media.mjs
       - name: Generate catalog quality report
         run: npm run data:report
       - name: Generate SQL seed artifact
