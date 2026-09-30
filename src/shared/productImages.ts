@@ -50,6 +50,12 @@ export const productImages: Record<string, ProductImage> = {
     alt: "ESPTIGER SR Tang Dao orange gaming mousepad",
     credit: "ESPTIGER official product image",
   },
+  "pad-esptiger-lei-ling": {
+    url: "https://esptiger.com/cdn/shop/products/2_7edfb364-50de-45c3-8fc0-549e9753dadb.webp?v=1705364922&width=1946",
+    sourceUrl: "https://esptiger.com/products/lei-ling-balance-gaming-mousepad",
+    alt: "ESPTIGER Lei Ling gaming mousepad",
+    credit: "ESPTIGER official product image",
+  },
   "keyboard-wooting-60he-v2": {
     url: "https://wooting.io/_next/image?q=90&url=https%3A%2F%2Fwooting-website.ams3.cdn.digitaloceanspaces.com%2Fproducts%2Fkeyboards%2F60HEv2%2F60he-v2_og-and-split.webp&w=3840",
     sourceUrl: "https://wooting.io/wooting-60he-v2",
