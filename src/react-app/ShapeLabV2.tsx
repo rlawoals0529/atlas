@@ -10,6 +10,53 @@ const similarityLabels: Record<SimilarityMode, string> = { balanced: "Balanced",
 type LineStyle = "solid" | "dash" | "dot";
 export type ShapeLayer = { id: string; color: string; visible: boolean; opacity: number; lineStyle: LineStyle };
 
+type ShapeShareState = {
+  layers: ShapeLayer[];
+  view: ShapeView;
+  align: AlignMode;
+  normalize: boolean;
+  showDimensions: boolean;
+  showImages: boolean;
+  showFills: boolean;
+  showLabels: boolean;
+  similarityMode?: SimilarityMode;
+  referenceId?: string;
+};
+
+const readShapeShareState = (): ShapeShareState | null => {
+  if (typeof window === "undefined") return null;
+  const raw = new URL(window.location.href).searchParams.get("shape");
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial<ShapeShareState>;
+    const validIds = new Set(mice.map(mouse => mouse.id));
+    const layers = Array.isArray(parsed.layers)
+      ? parsed.layers.filter(layer => layer && validIds.has(layer.id)).slice(0, 5).map((layer, index): ShapeLayer => ({
+          id: layer.id,
+          color: /^#[0-9a-f]{6}$/i.test(layer.color ?? "") ? layer.color : COLORS[index % COLORS.length],
+          visible: layer.visible !== false,
+          opacity: Math.max(.35, Math.min(1, Number(layer.opacity) || .92)),
+          lineStyle: layer.lineStyle === "dash" || layer.lineStyle === "dot" ? layer.lineStyle : "solid",
+        }))
+      : [];
+    if (!layers.length) return null;
+    return {
+      layers,
+      view: parsed.view === "side" ? "side" : "top",
+      align: parsed.align === "sensor" || parsed.align === "front" || parsed.align === "rear" ? parsed.align : "center",
+      normalize: Boolean(parsed.normalize),
+      showDimensions: parsed.showDimensions !== false,
+      showImages: parsed.showImages !== false,
+      showFills: Boolean(parsed.showFills),
+      showLabels: parsed.showLabels !== false,
+      similarityMode: parsed.similarityMode,
+      referenceId: typeof parsed.referenceId === "string" && validIds.has(parsed.referenceId) ? parsed.referenceId : layers[0].id,
+    };
+  } catch {
+    return null;
+  }
+};
+
 const dashFor = (style: LineStyle) => style === "dash" ? "10 5" : style === "dot" ? "2 5" : undefined;
 const fmt = (value: number) => Number.isInteger(value) ? String(value) : value.toFixed(1);
 const fallbackMouse = (mouse: MouseProduct) => <span className="shape-fallback">{mouse.brand.slice(0, 1)}{mouse.model.slice(0, 1)}</span>;
@@ -188,18 +235,20 @@ export default function ShapeLabV2({
   selectedMouseIds?: string[];
   onSelectedMouseIdsChange?: (ids: string[]) => void;
 }) {
+  const [sharedInitial] = useState<ShapeShareState | null>(() => readShapeShareState());
   const initialIds = (selectedMouseIds?.length ? selectedMouseIds : mice.slice(0, 3).map(mouse => mouse.id)).slice(0, 5);
   const initial = initialIds.map((id, index): ShapeLayer => ({ id, color: COLORS[index % COLORS.length], visible: true, opacity: .92, lineStyle: index % 3 === 1 ? "dash" : index % 3 === 2 ? "dot" : "solid" }));
-  const [layers, setLayers] = useState<ShapeLayer[]>(initial);
-  const [view, setView] = useState<ShapeView>("top");
-  const [align, setAlign] = useState<AlignMode>("center");
-  const [normalize, setNormalize] = useState(false);
-  const [showDimensions, setShowDimensions] = useState(true);
-  const [showImages, setShowImages] = useState(true);
-  const [showFills, setShowFills] = useState(false);
-  const [showLabels, setShowLabels] = useState(true);
+  const [layers, setLayers] = useState<ShapeLayer[]>(() => sharedInitial?.layers ?? initial);
+  const [view, setView] = useState<ShapeView>(() => sharedInitial?.view ?? "top");
+  const [align, setAlign] = useState<AlignMode>(() => sharedInitial?.align ?? "center");
+  const [normalize, setNormalize] = useState(() => sharedInitial?.normalize ?? false);
+  const [showDimensions, setShowDimensions] = useState(() => sharedInitial?.showDimensions ?? true);
+  const [showImages, setShowImages] = useState(() => sharedInitial?.showImages ?? true);
+  const [showFills, setShowFills] = useState(() => sharedInitial?.showFills ?? false);
+  const [showLabels, setShowLabels] = useState(() => sharedInitial?.showLabels ?? true);
   const [addQuery, setAddQuery] = useState("");
-  const [referenceId, setReferenceId] = useState(initial[0]?.id ?? mice[0]?.id ?? "");
+  const [referenceId, setReferenceId] = useState(() => sharedInitial?.referenceId ?? initial[0]?.id ?? mice[0]?.id ?? "");
+  const [shareStatus, setShareStatus] = useState("");
 
   useEffect(() => {
     onSelectedMouseIdsChange?.(layers.map(layer => layer.id));
@@ -240,6 +289,27 @@ export default function ShapeLabV2({
     setShowImages(true);
     setShowFills(false);
     setShowLabels(true);
+    setShareStatus("");
+  };
+  const copyShareLink = async () => {
+    const url = new URL(window.location.href);
+    const state: ShapeShareState = { layers, view, align, normalize, showDimensions, showImages, showFills, showLabels, similarityMode, referenceId };
+    url.searchParams.set("shape", JSON.stringify(state));
+    const value = url.toString();
+    try {
+      await navigator.clipboard.writeText(value);
+      setShareStatus("Link copied");
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+      setShareStatus("Link copied");
+    }
   };
 
   return <main className="v5-main v5-page shape-lab-v2">
@@ -253,6 +323,7 @@ export default function ShapeLabV2({
       <label className="shape-toggle"><input type="checkbox" checked={showFills} onChange={event => setShowFills(event.target.checked)}/><span>Fills</span></label>
       <label className="shape-toggle"><input type="checkbox" checked={showLabels} onChange={event => setShowLabels(event.target.checked)}/><span>Labels</span></label>
       <label className="shape-toggle"><input type="checkbox" checked={showImages} onChange={event => setShowImages(event.target.checked)}/><span>Images</span></label>
+      <button className="shape-share" type="button" onClick={copyShareLink}>{shareStatus || "Copy share link"}</button>
       <button className="shape-reset" type="button" onClick={resetView}>Reset view</button>
     </section>
 
