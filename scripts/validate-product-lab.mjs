@@ -11,6 +11,8 @@ const assert = (condition, message) => {
 const app = read("src/react-app/AppV05.tsx");
 const main = read("src/react-app/main.tsx");
 const lab = read("src/react-app/ProductLab.tsx");
+const keyboardLab = read("src/react-app/KeyboardLab.tsx");
+const sensitivityLab = read("src/react-app/SensitivityLab.tsx");
 const validationRunner = read("src/react-app/ValidationRunner.tsx");
 const validation = read("src/shared/validation.ts");
 const validationEvidence = read("src/shared/validationEvidence.ts");
@@ -28,10 +30,26 @@ const wrangler = read("wrangler.jsonc");
 const analyticsSpec = read("docs/product/ANALYTICS_SPEC.md");
 const communityProtocol = read("docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md");
 const validationProtocol = read("docs/product/VALIDATION_PROTOCOL.md");
+const sensitivityData = read("data/sensitivity-games.json");
+const catalogMigration = read("migrations/0001_init.sql");
 
 assert(!app.includes("INPUT ATLAS"), "consumer UI must use Atlas branding only");
 assert(app.includes('const VERSION = "0.8"'), "consumer version must match current v0.8 Product Lab integration");
 assert(app.includes('href="#product-lab"'), "Product Lab must remain reachable from consumer navigation");
+
+assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain routable");
+assert(main.includes('hash === "#sensitivity"'), "Sensitivity Lab must remain routable");
+assert(main.includes('href="#keyboard-lab"'), "consumer utility dock must expose Keyboard Lab");
+assert(main.includes('href="#sensitivity"'), "consumer utility dock must expose Sensitivity Lab");
+assert(keyboardLab.includes("ThereminGoat"), "Keyboard Lab must retain expert switch-review provenance");
+assert(keyboardLab.includes("does not copy composite scores into a universal ranking"), "Keyboard Lab must reject universal switch ranking inference");
+assert(keyboardLab.includes("Actuation is not latency"), "Keyboard Lab must keep actuation and latency semantically separate");
+assert(keyboardLab.includes("HE compatibility is not universal"), "Keyboard Lab must keep magnetic switch compatibility caveats visible");
+assert(sensitivityLab.includes("base horizontal turn distance only"), "Sensitivity Lab must keep the base-hipfire conversion boundary visible");
+assert(sensitivityLab.includes("cm/360"), "Sensitivity Lab must expose physical turn distance");
+assert(sensitivityData.includes('"confidence": "medium"'), "community-maintained yaw presets must retain explicit confidence labels");
+assert(sensitivityData.toLowerCase().includes("base hipfire"), "sensitivity source data must reject scoped/ADS inference");
+assert(catalogMigration.includes("'keyboard','switch'"), "fresh D1 catalog schema must allow keyboard and switch records");
 
 assert(validation.includes('status: "not-run"'), "generated validation cases must initialize NOT RUN");
 assert(!/status:\s*["']pass["']/.test(validation), "validation generator must not fabricate PASS results");
@@ -101,6 +119,7 @@ assert(lab.includes("Sparse in Atlas ≠ market opportunity"), "sparse catalog s
 assert(community.includes("sourceId: string"), "community observations must retain a traceable source ID");
 assert(community.includes("sampleSize?: number"), "community observations must retain sample size when known");
 assert(community.includes("consensus: ConsensusIndicator"), "community evidence must retain disagreement/consensus state");
+assert(community.includes('"x-post"'), "community evidence schema must be able to distinguish X/Twitter observations");
 assert(communityProtocol.includes("not representative market research"), "community protocol must reject population-level inference from convenience samples");
 
 assert(!/"ANALYTICS_DB"\s*:/.test(wrangler), "optional analytics must not gain a fake/unconfigured D1 binding");

@@ -1,4 +1,4 @@
-import type { Confidence, Product, SourceKind } from "./types";
+import type { CatalogProduct, Confidence, SourceKind } from "./types";
 
 export const sourceKindMeta: Record<SourceKind, { short: string; label: string; description: string }> = {
   manufacturer: { short: "M", label: "Manufacturer", description: "Official specifications, manuals, compatibility and product claims." },
@@ -71,7 +71,7 @@ export function familyFor(productId: string) {
   return productFamilies.find(family => family.memberIds.includes(productId));
 }
 
-export function evidenceHealth(product: Product) {
+export function evidenceHealth(product: CatalogProduct) {
   const evidence = Object.values(product.evidence ?? {});
   const sourceKinds = new Set(product.sources.map(source => source.kind));
   const confidence = evidence.length
@@ -84,7 +84,7 @@ export function evidenceHealth(product: Product) {
   return { score, label, sourceKinds: [...sourceKinds], evidenceCount: evidence.length, sourceCount: product.sources.length };
 }
 
-export function evidenceRows(product: Product) {
+export function evidenceRows(product: CatalogProduct) {
   return Object.entries(product.evidence ?? {}).map(([field, note]) => ({
     field,
     confidence: note.confidence,
@@ -93,7 +93,7 @@ export function evidenceRows(product: Product) {
   }));
 }
 
-export function productSearchText(product: Product) {
+export function productSearchText(product: CatalogProduct) {
   const family = familyFor(product.id);
   return [
     product.brand,

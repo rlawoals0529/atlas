@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const dataDir = fileURLToPath(new URL("../data/", import.meta.url));
+export const catalogGroups = ["mice", "mousepads", "skates", "keyboards", "switches"];
 
 export function loadCatalog() {
   const files = fs.readdirSync(dataDir)
@@ -13,17 +14,11 @@ export function loadCatalog() {
       return a.localeCompare(b);
     });
 
-  const merged = { mice: [], mousepads: [], skates: [], shards: [] };
+  const merged = { mice: [], mousepads: [], skates: [], keyboards: [], switches: [], shards: [] };
   for (const file of files) {
     const payload = JSON.parse(fs.readFileSync(path.join(dataDir, file), "utf8"));
-    merged.mice.push(...(payload.mice ?? []));
-    merged.mousepads.push(...(payload.mousepads ?? []));
-    merged.skates.push(...(payload.skates ?? []));
-    merged.shards.push({ file, counts: {
-      mice: payload.mice?.length ?? 0,
-      mousepads: payload.mousepads?.length ?? 0,
-      skates: payload.skates?.length ?? 0,
-    }});
+    for (const group of catalogGroups) merged[group].push(...(payload[group] ?? []));
+    merged.shards.push({ file, counts: Object.fromEntries(catalogGroups.map(group => [group, payload[group]?.length ?? 0])) });
   }
 
   if (!files.length) throw new Error("No data/catalog*.json files found.");

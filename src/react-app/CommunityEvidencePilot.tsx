@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { catalog } from "../shared/catalog";
-import { communityAggregates, communityInsights, communityPilot, communityPilotProductIds } from "../shared/communityData";
+import { communityAggregates, communityInsights, communityPilotProductIds, pilotForProduct } from "../shared/communityData";
 
 const productName = (id: string) => {
   const product = catalog.find(item => item.id === id);
@@ -15,6 +15,7 @@ export default function CommunityEvidencePilot() {
   const aggregates = useMemo(() => communityAggregates.filter(row => row.productId === productId), [productId]);
   const sources = useMemo(() => new Set(rows.map(row => row.sourceId)).size, [rows]);
   const sourceTypes = useMemo(() => new Set(rows.map(row => row.sourceType)).size, [rows]);
+  const pilot = pilotForProduct(productId);
 
   if (!productId) return null;
 
@@ -55,9 +56,9 @@ export default function CommunityEvidencePilot() {
 
     <div className="pl-community-method">
       <b>Research boundary</b>
-      <p>{communityPilot.scope}</p>
-      <p>{communityPilot.methodology.interpretation}</p>
-      <small>Observed {communityPilot.observedAt}. {communityPilot.methodology.limitations[0]} {communityPilot.methodology.limitations[2]}</small>
+      <p>{pilot.scope}</p>
+      <p>{pilot.methodology.interpretation}</p>
+      <small>Observed {pilot.observedAt}. {pilot.methodology.limitations[0]} {pilot.methodology.limitations[2]}</small>
     </div>
   </section>;
 }

@@ -1,4 +1,4 @@
-export type ProductType = "mouse" | "mousepad" | "skate";
+export type ProductType = "mouse" | "mousepad" | "skate" | "keyboard" | "switch";
 export type SourceKind = "manufacturer" | "independent" | "community" | "editorial";
 export type Confidence = "high" | "medium" | "low";
 export type Grip =
@@ -89,7 +89,7 @@ export interface MouseProduct extends BaseProduct {
     sourceIds?: string[];
   };
   geometry?: {
-    humpPositionPct?: number; // 0 = front, 100 = rear
+    humpPositionPct?: number;
     humpFullness?: number;
     rearFlare?: number;
     frontFlare?: number;
@@ -97,7 +97,7 @@ export interface MouseProduct extends BaseProduct {
     sideWallAngle?: number;
     buttonHeight?: number;
     pinkyClearance?: number;
-    sensorOffsetMm?: number; // positive = forward of geometric center
+    sensorOffsetMm?: number;
   };
   fit: {
     handLengthCm: [number, number];
@@ -184,7 +184,69 @@ export interface SkateProduct extends BaseProduct {
   evidence: Record<string, EvidenceNote>;
 }
 
-export type Product = MouseProduct | MousepadProduct | SkateProduct;
+export type KeyboardSwitchTechnology = "mechanical" | "hall-effect" | "optical-analog" | "tmr" | "other";
+export type KeyboardFormFactor = "60%" | "65%" | "75%" | "80%" | "tkl" | "96%" | "full-size" | "other";
+
+export interface KeyboardProduct extends BaseProduct {
+  type: "keyboard";
+  specs: {
+    formFactor: KeyboardFormFactor;
+    layout: string;
+    switchTechnology: KeyboardSwitchTechnology;
+    stockSwitch: string;
+    maxPollingHz: number;
+    minActuationMm?: number;
+    maxActuationMm?: number;
+    actuationStepMm?: number;
+    rapidTrigger: boolean;
+    socd?: boolean;
+    analogInput?: boolean;
+    hotSwappable: boolean;
+    connectivity: string[];
+    caseMaterial: string;
+    plateMaterial?: string;
+    keycapMaterial?: string;
+    mount?: string;
+    webConfigurator?: boolean;
+    software?: string;
+    dimensionsMm?: { width: number; depth: number; height?: number };
+    weightG?: number;
+  };
+  evidence: Record<string, EvidenceNote>;
+}
+
+export interface SwitchForcePoint {
+  value: number;
+  unit: "gf" | "cN";
+}
+
+export interface KeyboardSwitchProduct extends BaseProduct {
+  type: "switch";
+  specs: {
+    technology: KeyboardSwitchTechnology;
+    feel: "linear" | "tactile" | "clicky";
+    initialForce?: SwitchForcePoint;
+    actuationForce?: SwitchForcePoint;
+    bottomOutForce?: SwitchForcePoint;
+    preTravelMm?: number;
+    totalTravelMm: number;
+    factoryLubed?: boolean;
+    ratedKeystrokesM?: number;
+    magneticFluxGs?: {
+      initial: number;
+      bottomOut: number;
+      pcbThicknessMm?: number;
+    };
+    compatibility?: string[];
+  };
+  evidence: Record<string, EvidenceNote>;
+}
+
+export type PointingProduct = MouseProduct | MousepadProduct | SkateProduct;
+// Preserve the established consumer/recommendation meaning of Product.
+export type Product = PointingProduct;
+// Use CatalogProduct only where Atlas intentionally spans all hardware categories.
+export type CatalogProduct = PointingProduct | KeyboardProduct | KeyboardSwitchProduct;
 
 export interface RelativePreference {
   currentMouseId?: string;

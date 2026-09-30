@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import type { Context } from "hono";
-import { catalog, mice, mousepads, skates } from "../shared/catalog";
+import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { evidenceHealth, familyFor, productSearchText } from "../shared/productMeta";
 import { RELEASE } from "../shared/release";
 import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
-import type { MouseProduct, UserProfile } from "../shared/types";
+import type { CatalogProduct, MouseProduct, UserProfile } from "../shared/types";
 import { analyticsApp, type AnalyticsBindings } from "./analytics";
 
 const app = new Hono<{ Bindings: AnalyticsBindings }>();
@@ -106,28 +106,30 @@ app.get("/api/health", (c) => c.json({
   productUi: RELEASE.productUi,
   dataLayer: RELEASE.dataLayer,
   researchCutoff: RELEASE.researchCutoff,
-  products: catalog.length,
+  products: allCatalog.length,
   mice: mice.length,
   pads: mousepads.length,
   skates: skates.length,
+  keyboards: keyboards.length,
+  switches: switches.length,
   analyticsStorage: Boolean(c.env.ANALYTICS_DB),
-  averageEvidenceHealth: Math.round(catalog.reduce((sum, product) => sum + evidenceHealth(product).score, 0) / Math.max(1, catalog.length)),
+  averageEvidenceHealth: Math.round(allCatalog.reduce((sum, product) => sum + evidenceHealth(product).score, 0) / Math.max(1, allCatalog.length)),
 }));
 
 app.get("/api/stats", (c) => c.json({
   release: RELEASE,
-  catalog: catalogStats(catalog),
-  types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length },
+  catalog: catalogStats(allCatalog),
+  types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length, keyboards: keyboards.length, switches: switches.length },
   capabilities: { productionAnalytics: Boolean(c.env.ANALYTICS_DB) },
 }));
 
 app.get("/api/catalog", (c) => {
   const type = c.req.query("type");
-  if (type && !["mouse", "mousepad", "skate"].includes(type)) return c.json({ error: "Invalid product type" }, 400);
+  if (type && !["mouse", "mousepad", "skate", "keyboard", "switch"].includes(type)) return c.json({ error: "Invalid product type" }, 400);
   const rawQuery = c.req.query("q") ?? "";
   if (rawQuery.length > 120) return c.json({ error: "Search query is too long" }, 400);
   const q = rawQuery.trim().toLowerCase();
-  const base = type === "mouse" ? mice : type === "mousepad" ? mousepads : type === "skate" ? skates : catalog;
+  const base: CatalogProduct[] = type === "mouse" ? mice : type === "mousepad" ? mousepads : type === "skate" ? skates : type === "keyboard" ? keyboards : type === "switch" ? switches : allCatalog;
   const data = q ? base.filter((product) => productSearchText(product).includes(q)) : base;
   return c.json({ data, count: data.length });
 });
@@ -135,7 +137,7 @@ app.get("/api/catalog", (c) => {
 app.get("/api/products/:slug", (c) => {
   const slug = c.req.param("slug");
   if (slug.length > 120 || !/^[a-z0-9-]+$/i.test(slug)) return c.json({ error: "Invalid product identifier" }, 400);
-  const product = catalog.find((item) => item.slug === slug);
+  const product = allCatalog.find((item) => item.slug === slug);
   if (!product) return c.json({ error: "Not found" }, 404);
   const family = familyFor(product.id);
   return c.json({
@@ -143,7 +145,7 @@ app.get("/api/products/:slug", (c) => {
     evidenceHealth: evidenceHealth(product),
     family: family ? {
       ...family,
-      members: family.memberIds.map(id => catalog.find(item => item.id === id)).filter(Boolean),
+      members: family.memberIds.map(id => allCatalog.find(item => item.id === id)).filter(Boolean),
     } : null,
   });
 });
