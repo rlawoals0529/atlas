@@ -58,3 +58,10 @@
 .shape-similar-grid>button>div:nth-child(3){min-width:0}.shape-similar-grid small{color:#728078;font:600 7px "DM Mono",monospace;text-transform:uppercase}.shape-similar-grid b{display:block;overflow:hidden;margin:2px 0;color:#202723;font-size:11px;white-space:nowrap;text-overflow:ellipsis}.shape-similar-grid p{margin:0;color:#66736b;font-size:8px;line-height:1.4}.shape-similar-grid em{display:block;margin-top:4px;color:#78847c;font:500 7px "DM Mono",monospace;font-style:normal}.shape-similar-grid strong{display:grid;place-items:center;width:38px;height:38px;border:1px solid #b7c9bf;border-radius:50%;background:#eaf2ee;color:#1a604e;font-size:12px}
 @media(max-width:1100px){.shape-workbench{grid-template-columns:1fr}.shape-layers{position:static}.shape-layer{grid-template-columns:28px 48px minmax(0,1fr) 30px 70px 58px 28px}}
 @media(max-width:760px){.shape-toolbar{align-items:stretch;flex-wrap:wrap}.shape-segments{width:100%}.shape-segments button{flex:1}.shape-layer{grid-template-columns:28px 44px minmax(0,1fr) 30px 28px}.shape-line-style,.shape-opacity{grid-column:3}.shape-remove{grid-column:5;grid-row:1}.shape-spec-strip{grid-template-columns:1fr}.shape-similar-grid{grid-template-columns:1fr}.shape-similar-head{display:grid}.shape-similar-head select{min-width:0;width:100%}}
+
+/* Real media also replaces procedural art in recommendations and pointing product details. */
+.v5-product-art .v5-product-real-image{width:100%;height:100%;padding:14px 18px;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(24,34,28,.1))}
+.v5-product-art .v5-product-real-image.mouse{padding:12px 24px}
+.v5-product-art .v5-product-real-image.mousepad{padding:16px}
+.v5-product-art .v5-product-real-image.skate{padding:18px}
+.v5-detail-hero .v5-detail-real-image{width:min(240px,58%);height:150px;padding:10px;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(24,34,28,.1))}
