@@ -1,0 +1,437 @@
+/* Readability pass: humanist type, stronger contrast, and calmer hierarchy.
+   Loaded last so it can cleanly override older experiment-era styles. */
+:root{
+  --atlas-sans:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --atlas-mono:"DM Mono","Cascadia Mono",Consolas,monospace;
+  --atlas-paper:#f2f4f0;
+  --atlas-card:#ffffff;
+  --atlas-card-soft:#f8faf7;
+  --atlas-ink:#17201b;
+  --atlas-text:#2b352f;
+  --atlas-muted:#56635c;
+  --atlas-dim:#66736b;
+  --atlas-line:#d2d9d3;
+  --atlas-line-strong:#b5c0b8;
+  --atlas-accent:#0c6b56;
+  --atlas-accent-soft:#e7f1ec;
+  --atlas-blue:#376f92;
+  --atlas-purple:#665d91;
+  --atlas-amber:#98621f;
+  --atlas-rose:#923f60;
+}
+
+html,body,button,input,select,textarea{
+  font-family:var(--atlas-sans);
+}
+body{
+  color:var(--atlas-ink);
+  background:var(--atlas-paper);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+:is(.consumer-shell,.v5-shell,.utility-shell,.pl-shell,.atlas-global-nav){
+  font-family:var(--atlas-sans);
+  color:var(--atlas-ink);
+}
+:is(.consumer-shell,.v5-shell,.utility-shell,.pl-shell) p{
+  color:var(--atlas-muted);
+}
+
+/* Navigation: the old 7–10px hierarchy looked technical but was too faint in practice. */
+.atlas-global-nav{
+  border-color:var(--atlas-line);
+  background:rgba(248,250,247,.97);
+}
+.atlas-global-brand b{
+  font:700 15px/1.15 var(--atlas-sans);
+  letter-spacing:.025em;
+}
+.atlas-global-brand small{
+  color:var(--atlas-muted);
+  font:500 10px/1.25 var(--atlas-mono);
+  letter-spacing:.015em;
+}
+.atlas-global-nav nav a{
+  min-width:104px;
+  padding:8px 12px 9px;
+  color:#4b5851;
+}
+.atlas-global-nav nav a b{
+  font:600 12px/1.2 var(--atlas-sans);
+}
+.atlas-global-nav nav a small{
+  color:#66736b;
+  font:500 9px/1.25 var(--atlas-mono);
+  letter-spacing:0;
+}
+.atlas-global-nav nav a.active{
+  border-color:#aebfb5;
+  background:#fff;
+  color:#143e33;
+}
+.atlas-global-nav nav a.active small{color:#416b5c}
+.atlas-global-status{
+  color:#56635c;
+  font:500 10px var(--atlas-mono);
+}
+.v5-topbar nav button{
+  color:#536058!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  letter-spacing:0!important;
+}
+
+/* General page hierarchy. */
+.v5-page-head h1{
+  color:var(--atlas-ink)!important;
+  font-family:var(--atlas-sans);
+  font-weight:700;
+  letter-spacing:-.045em;
+}
+.v5-page-head p{
+  color:var(--atlas-muted)!important;
+  font-size:15px!important;
+  line-height:1.6!important;
+}
+.v5-kicker,.v5-label,.v5-eyebrow,.v5-section-head>span{
+  color:var(--atlas-accent)!important;
+  font-family:var(--atlas-mono);
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.07em!important;
+  text-transform:none!important;
+}
+
+/* Consumer catalog: keep supporting information readable without making it louder than titles. */
+.consumer-product-head small,
+.consumer-drawer-hero small,
+.consumer-detail-grid span{
+  color:#5f6c64!important;
+  font-size:10px!important;
+  letter-spacing:.035em!important;
+  text-transform:none!important;
+}
+.consumer-metrics span{
+  color:#5f6c64!important;
+  font-size:9.5px!important;
+  letter-spacing:.04em!important;
+}
+.consumer-coverage,
+.consumer-tag-row span,
+.consumer-evidence-list a{
+  color:#4f5c55!important;
+  font-size:10px!important;
+}
+.consumer-section-title span{
+  font-size:10px!important;
+  letter-spacing:.055em!important;
+}
+.consumer-evidence-list article>div>span,
+.consumer-evidence-list a span,
+.consumer-source-list>a>span{
+  color:#56635c!important;
+  font-size:9px!important;
+  text-transform:none!important;
+}
+.consumer-source-list small{
+  color:#66736b!important;
+  font-size:9.5px!important;
+}
+
+/* Shape Lab: larger labels, stronger secondary text, and color that carries meaning. */
+.shape-toolbar,
+.shape-layers,
+.shape-stage,
+.shape-similar{
+  border-color:var(--atlas-line)!important;
+}
+.shape-toolbar{
+  background:#fbfcfa!important;
+}
+.shape-toolbar>label{
+  color:#536058;
+  font:600 10px var(--atlas-sans);
+  letter-spacing:.02em;
+  text-transform:none;
+}
+.shape-toolbar select,
+.shape-add-picker>input,
+.shape-similar-head select{
+  color:var(--atlas-ink);
+  font-size:12px;
+}
+.shape-segments button,
+.shape-mode-row button,
+.shape-reset,
+.shape-share{
+  font-family:var(--atlas-sans);
+  font-size:11px;
+  font-weight:600;
+}
+.shape-segments button.active,
+.shape-mode-row button.active{
+  border-color:#aec3b8;
+  background:var(--atlas-accent-soft);
+  color:#155442;
+  box-shadow:none;
+}
+.shape-toggle{
+  color:#405048!important;
+  font-size:11px!important;
+  font-weight:600!important;
+}
+.shape-share{
+  min-height:36px;
+  background:var(--atlas-accent);
+}
+.shape-panel-head span,
+.shape-stage-head span,
+.shape-similar-head span{
+  color:#56635c;
+  font:500 10px var(--atlas-mono);
+  letter-spacing:.035em;
+  text-transform:none;
+}
+.shape-panel-head h2,
+.shape-stage-head h2,
+.shape-similar-head h2{
+  color:var(--atlas-ink);
+  font-family:var(--atlas-sans);
+  font-size:22px;
+  font-weight:650;
+}
+.shape-panel-head>b{
+  color:#4e5b54;
+  font:500 10px var(--atlas-mono);
+}
+.shape-layer{
+  position:relative;
+  border-color:#d5ddd6;
+  border-left:3px solid var(--shape-layer-color,#b5c0b8);
+  background:#fafcf9;
+}
+.shape-layer:hover{
+  border-color:#afbbb2;
+  border-left-color:var(--shape-layer-color,#8ba398);
+  background:#fff;
+}
+.shape-layer.muted{opacity:.62}
+.shape-layer-main>span{
+  color:#5b685f;
+  font:500 9.5px var(--atlas-mono);
+  letter-spacing:.02em;
+  text-transform:none;
+}
+.shape-layer-name{
+  color:var(--atlas-ink);
+  font:650 13px/1.2 var(--atlas-sans);
+}
+.shape-layer-main small{
+  color:#5e6b63;
+  font-size:10px;
+  line-height:1.35;
+}
+.shape-eye,.shape-remove,.shape-row-actions>button{
+  color:#45534c;
+  border-color:#cbd5cd;
+}
+.shape-row-actions .shape-solo{
+  width:auto;
+  min-width:42px;
+  padding:0 8px;
+  color:#285a49;
+  font:600 10px var(--atlas-sans);
+}
+.shape-row-actions .shape-remove{
+  font-size:16px;
+}
+.shape-swatches>button,
+.shape-color,
+.shape-color span{
+  width:22px;
+  height:22px;
+}
+.shape-swatches>button.active{
+  box-shadow:0 0 0 2px #fff,0 0 0 4px #52635a;
+}
+.shape-color span{
+  font:700 12px var(--atlas-sans);
+}
+.shape-line-style{
+  flex-basis:82px;
+  width:82px;
+  height:30px;
+  color:#3f4d46;
+  font:500 10px var(--atlas-sans);
+}
+.shape-opacity{
+  grid-template-columns:auto minmax(72px,1fr);
+  min-width:150px;
+  color:#4f5c55;
+  font:500 9.5px var(--atlas-mono);
+}
+.shape-opacity span{white-space:nowrap}
+.shape-order button{
+  width:48px;
+  min-width:48px;
+  min-height:30px;
+  color:#46534c;
+  font:600 9.5px var(--atlas-sans);
+}
+.shape-color-warning{
+  color:#855618;
+  font:600 9px var(--atlas-sans);
+  letter-spacing:0;
+  text-transform:none;
+}
+.shape-add-picker>label{
+  color:#536058;
+  font:600 10px var(--atlas-sans);
+  letter-spacing:.02em;
+  text-transform:none;
+}
+.shape-add-results>button{
+  border-color:#d8dfd9;
+  background:#fafcf9;
+}
+.shape-add-results small{
+  color:#5e6b63;
+  font:500 9px var(--atlas-mono);
+  text-transform:none;
+}
+.shape-add-results b{
+  color:var(--atlas-ink);
+  font-size:12px;
+  font-weight:650;
+}
+.shape-add-results em{
+  color:#66736b;
+  font:500 9px var(--atlas-mono);
+}
+.shape-add-results strong{
+  border-color:#a9c1b4;
+  background:#edf5f1;
+  color:#155844;
+}
+.shape-add-results>p,.shape-limit{
+  color:#5c6961;
+  font-size:10.5px;
+}
+.shape-method{
+  color:#59665f;
+  font-size:11px;
+  line-height:1.55;
+}
+.shape-method b{color:#26362e}
+.shape-stage-head>div:last-child span{
+  border-color:#ced8d0;
+  background:#f5f8f5;
+  color:#536058;
+  font:500 8.5px var(--atlas-mono);
+  letter-spacing:.015em;
+}
+.shape-canvas{
+  border-color:#cfd8d1;
+  background:#fcfdfb;
+}
+.shape-grid line{stroke:#dde3de}
+.shape-grid line.axis{stroke:#b7c3bb;stroke-width:1.15}
+.shape-outline-label{
+  font:600 11px var(--atlas-sans);
+  stroke:#fcfdfb;
+  stroke-width:4px;
+}
+.shape-dimensions text{
+  font:500 10px var(--atlas-mono);
+  stroke:#fcfdfb;
+  stroke-width:4px;
+}
+.shape-dimensions line{stroke-width:1.15}
+.shape-empty{
+  color:#56635c;
+  font-size:13px;
+}
+.shape-spec-strip article{
+  border-color:#d7ded8;
+  background:#fafcf9;
+}
+.shape-spec-strip span{
+  color:#5b685f;
+  font:500 9px var(--atlas-mono);
+  text-transform:none;
+}
+.shape-spec-strip b{
+  color:var(--atlas-ink);
+  font-size:12px;
+  font-weight:650;
+}
+.shape-spec-strip small{
+  color:#58665e;
+  font-size:10px;
+}
+.shape-spec-strip em{
+  color:#536058;
+  font:500 8.5px var(--atlas-mono);
+  letter-spacing:.01em;
+  text-transform:none;
+}
+.shape-spec-strip .atlas-product-image-credit{
+  color:#5e6b63;
+  font-size:8.5px;
+}
+.shape-similar-head>div>p{
+  color:#59665f;
+  font-size:11px;
+  line-height:1.45;
+}
+.shape-similar-head label{
+  color:#536058;
+  font:600 10px var(--atlas-sans);
+  text-transform:none;
+}
+.shape-rank{
+  color:#5e6b63;
+  font:500 9.5px var(--atlas-mono);
+}
+.shape-similar-grid small{
+  color:#5d6a62;
+  font:500 9px var(--atlas-mono);
+  text-transform:none;
+}
+.shape-similar-grid b{
+  color:var(--atlas-ink);
+  font-size:13px;
+  font-weight:650;
+}
+.shape-similar-grid p{
+  color:#536058;
+  font-size:10.5px;
+  line-height:1.4;
+}
+.shape-similar-grid em{
+  color:#647169;
+  font:500 9px var(--atlas-mono);
+}
+.shape-similar-grid strong{
+  border-color:#a9c1b4;
+  background:#edf5f1;
+  color:#155844;
+}
+
+/* Keep focus easy to find without the old neon treatment. */
+.shape-lab-v2 :is(button,input,select):focus-visible,
+.atlas-global-nav a:focus-visible{
+  outline:2px solid rgba(12,107,86,.52);
+  outline-offset:2px;
+  box-shadow:0 0 0 4px rgba(12,107,86,.08);
+}
+
+@media(max-width:760px){
+  .atlas-global-brand small,.atlas-global-status{display:none}
+  .atlas-global-nav{gap:12px;padding-inline:14px}
+  .atlas-global-nav nav a{min-width:92px;padding-inline:9px}
+  .atlas-global-nav nav a b{font-size:11px}
+  .shape-panel-head h2,.shape-stage-head h2,.shape-similar-head h2{font-size:20px}
+  .shape-layer-main small{white-space:normal}
+  .shape-opacity{min-width:130px}
+}
