@@ -123,6 +123,8 @@ For the Viper line, manufacturer documentation confirms the Viper V3 Pro SE, V3 
 
 For the Gigantus V2 Pro, Razer defines Max Control, Control, Balance, Speed and Max Speed. The official ordering and common physical platform are retained. Atlas 0–100 surface values are explicitly low-confidence normalized interpolation, **not measured friction coefficients**. See `research/V06_DATA.md` for the mapping and limitations.
 
+Atlas also includes a traceable 2026 Q3 qualitative community-evidence pilot for the Viper V3 Pro, G Pro X Superlight 2 and OP1w 4K v2. Individual observations preserve source, date, conditions, disagreement and evidence strength; the pilot is not treated as representative market sentiment or reliability-rate data.
+
 ## Runtime stack
 
 - React 19 + TypeScript + Vite
@@ -165,20 +167,24 @@ Optional production analytics endpoints:
 
 ```bash
 npm run data:validate
+npm run community:validate
+npm run product:validate
 npm run data:report
 npm run data:seed
 npm run check
 ```
 
-CI validates every catalog shard, generates derived artifacts, audits production npm dependencies, then runs TypeScript, Vite and a Wrangler deployment dry-run. The shared account security baseline also checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
+CI validates every catalog shard and the community evidence pilot, generates derived artifacts, audits production npm dependencies, then runs TypeScript, Vite and a Wrangler deployment dry-run. The shared account security baseline also checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
 
 ## Cloudflare deploy
 
-The current consumer Worker has no required application secret or database binding. Locally, authenticate Wrangler and run `npm run deploy` after validation/build.
+Atlas is configured as a Cloudflare Worker with static SPA assets. A successful deployment produces a public `*.workers.dev` URL that can be used to test the same Worker/API/UI bundle that would run in production.
 
-For GitHub deployment, add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then run **Actions → Deploy Atlas**. The manual workflow validates the catalog/build/Worker bundle before deploying with Wrangler.
+For GitHub deployment, add repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. After those credentials exist, **Deploy Atlas** runs automatically after a successful **Atlas CI** run on `main`; it can also be started manually from GitHub Actions. The workflow validates Atlas again, deploys with Wrangler, extracts the resulting `workers.dev` URL, health-checks `/api/health`, and prints both the live site and `/#product-lab` links in the Actions job summary.
 
-Production behavioral analytics is a separate optional step: create a D1 database, apply `migrations/0002_analytics.sql`, bind it as `ANALYTICS_DB`, establish a retention policy and verify `/api/analytics/availability` before treating dashboard aggregates as production usage.
+If the Cloudflare secrets have not been configured yet, the deployment workflow exits successfully without deploying and explains the missing one-time setup in its job summary instead of turning ordinary development commits red.
+
+The current consumer Worker has no required application secret or database binding. Production behavioral analytics is a separate optional step: create a D1 database, apply `migrations/0002_analytics.sql`, bind it as `ANALYTICS_DB`, establish a retention policy and verify `/api/analytics/availability` before treating dashboard aggregates as production usage.
 
 ## Research rules
 
