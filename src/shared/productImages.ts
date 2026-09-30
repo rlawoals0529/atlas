@@ -20,7 +20,7 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Logitech G PRO X2 SUPERSTRIKE gaming mouse",
     credit: "Logitech G official product image",
   },
-  "mouse-razer-viper-v4-pro": {
+  "mouse-viper-v4-pro": {
     url: "https://dl.razerzone.com/src2/20779/20779-02-en-v1.png",
     sourceUrl: "https://mysupport.razer.com/app/answers/detail/a_id/20775/",
     alt: "Razer Viper V4 Pro gaming mouse in black and white",
