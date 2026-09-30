@@ -16,7 +16,7 @@ function Matrix({ title, rows }: { title: string; rows: CatalogMatrixCell[] }) {
       <span/>{xs.map(x => <b key={x}>{x}</b>)}
       {ys.flatMap(y => [<b key={`${y}-label`} className="row-label">{y}</b>, ...xs.map(x => {
         const cell = rows.find(row => row.x === x && row.y === y)!;
-        return <span key={`${x}-${y}`} className="cell" title={`${y} / ${x}: ${cell.count} of ${cell.denominator} records`} style={{ "--cell-alpha": String(.08 + .72 * (cell.count / max)) } as CSSProperties}><i>{cell.count}</i><small>{cell.sharePct}%</small></span>;
+        return <span key={`${x}-${y}`} className="cell" title={`${y} / ${x}: ${cell.count} of ${cell.denominator} records`} style={{ "--cell-alpha": String(.07 + .36 * (cell.count / max)) } as CSSProperties}><i>{cell.count}</i><small>{cell.sharePct}%</small></span>;
       })])}
     </div>
   </section>;
