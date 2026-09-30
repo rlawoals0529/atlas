@@ -26,6 +26,24 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Wooting 60HE v2 regular and split-spacebar keyboards",
     credit: "Wooting official product image",
   },
+  "keyboard-logitech-g512-x-75": {
+    url: "https://resource.logitechg.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g512-x-75-98-pdp/g512-x-75/gallery/g512-x-75-black-top-angle-gallery-1.png",
+    sourceUrl: "https://www.logitechg.com/en-us/shop/p/g512-x-75-gaming-keyboard",
+    alt: "Logitech G G512 X 75 TMR analog mechanical gaming keyboard",
+    credit: "Logitech G official product image",
+  },
+  "keyboard-rog-falchion-ace-75-he": {
+    url: "https://dlcdnwebimgs.asus.com/files/media/202511/4cfcf855-ca9a-45ec-a2bc-c533d8865305/v1/img/kv.jpg",
+    sourceUrl: "https://rog.asus.com/us/keyboards/keyboards/compact/rog-falchion-ace-75-he/",
+    alt: "Black and white ASUS ROG Falchion Ace 75 HE gaming keyboards",
+    credit: "ASUS ROG official product image",
+  },
+  "keyboard-nuphy-field75-he-v2": {
+    url: "https://pay.nuphy.com/cdn/shop/files/Field75_V2_HE_v3_f5f5f5_800x.webp?v=1775816795",
+    sourceUrl: "https://pay.nuphy.com/products/nuphy-field75-he-v2-1",
+    alt: "NuPhy Field75 HE V2 magnetic gaming keyboard",
+    credit: "NuPhy official product image",
+  },
   "switch-gateron-magnetic-jade-pro": {
     url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-pro-switch-magnetic-hallsensor-switch-mechanical-keyboard-wooting.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
     sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-pro-switch-set",
