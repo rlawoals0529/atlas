@@ -216,8 +216,8 @@ function LayerRow({
       <select className="shape-line-style" value={layer.lineStyle} onChange={event => onChange({ ...layer, lineStyle: event.target.value as LineStyle })} aria-label="Line style"><option value="solid">Solid</option><option value="dash">Dash</option><option value="dot">Dot</option></select>
       <label className="shape-opacity"><span>{Math.round(layer.opacity * 100)}%</span><input type="range" min="35" max="100" value={Math.round(layer.opacity * 100)} onChange={event => onChange({ ...layer, opacity: +event.target.value / 100 })}/></label>
       <div className="shape-order">
-        <button type="button" onClick={() => onMove(-1)} disabled={index === 0} title="Send backward">Back</button>
-        <button type="button" onClick={() => onMove(1)} disabled={index === total - 1} title="Bring forward">Front</button>
+        <button type="button" onClick={() => onMove(-1)} disabled={index === 0} title="Send backward" aria-label={`Send ${mouse.model} backward`}>Back</button>
+        <button type="button" onClick={() => onMove(1)} disabled={index === total - 1} title="Bring forward" aria-label={`Bring ${mouse.model} forward`}>Front</button>
       </div>
       {duplicateColor && <span className="shape-color-warning">duplicate color</span>}
     </div>
@@ -313,7 +313,7 @@ export default function ShapeLabV2({
   };
 
   return <main className="v5-main v5-page shape-lab-v2">
-    <section className="v5-page-head"><div><div className="v5-kicker">GEOMETRY WORKBENCH</div><h1>Shape Lab</h1><p>Layer mice at real scale, control each outline independently, and keep sourced dimensions visible while comparing shell geometry.</p></div><div className="v5-head-stat"><b>{mice.length}</b><span>catalog shapes</span></div></section>
+    <section className="v5-page-head"><div><div className="v5-kicker">GEOMETRY WORKBENCH</div><h1>Shape Lab</h1><p>Stack up to five mice, line them up the way you want, and compare the shell at real scale or normalized length. The dimensions stay visible so the overlay is still tied to the catalog data.</p></div><div className="v5-head-stat"><b>{mice.length}</b><span>catalog shapes</span></div></section>
 
     <section className="shape-toolbar v5-panel">
       <div className="shape-segments" aria-label="Shape view">{(["top", "side"] as ShapeView[]).map(item => <button key={item} className={view === item ? "active" : ""} onClick={() => setView(item)}>{item === "top" ? "Top view" : "Side view"}</button>)}</div>
@@ -353,7 +353,7 @@ export default function ShapeLabV2({
             {!addCandidates.length && <p>No unselected mice match that search.</p>}
           </div> : <p className="shape-limit">Five layers selected. Remove one to add another.</p>}
         </div>
-        <p className="shape-method"><b>Outline quality is explicit.</b> Atlas uses an explicit measured or scanned outline when the record carries one. Otherwise the curve is generated from sourced dimensions and Atlas geometry fields, and is labeled as a parametric estimate rather than a measurement.</p>
+        <p className="shape-method"><b>Measured when possible.</b> Some records have a measured or scanned outline. When Atlas only has sourced dimensions, it draws a parametric estimate instead and labels it that way.</p>
       </aside>
 
       <div className="shape-stage v5-panel">
@@ -371,7 +371,7 @@ export default function ShapeLabV2({
     </section>
 
     <section className="shape-similar v5-panel">
-      <div className="shape-similar-head"><div><span>SHAPE SEARCH</span><h2>Find close geometry</h2><p>Adding a result keeps the rest of your comparison stack intact.</p></div><label>Reference<select value={referenceId} onChange={event => setReferenceId(event.target.value)}>{mice.map(mouse => <option key={mouse.id} value={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label></div>
+      <div className="shape-similar-head"><div><span>SHAPE SEARCH</span><h2>Find close geometry</h2><p>Add a match without rebuilding the rest of your comparison stack.</p></div><label>Reference<select value={referenceId} onChange={event => setReferenceId(event.target.value)}>{mice.map(mouse => <option key={mouse.id} value={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label></div>
       <div className="shape-mode-row">{(Object.keys(similarityLabels) as SimilarityMode[]).map(mode => <button key={mode} className={mode === similarityMode ? "active" : ""} onClick={() => setSimilarityMode(mode)}>{similarityLabels[mode]}</button>)}</div>
       <div className="shape-similar-grid">{similar.slice(0, 8).map((result, index) => {
         const alreadyAdded = selectedIds.has(result.mouse.id);
