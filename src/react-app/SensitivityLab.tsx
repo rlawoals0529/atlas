@@ -6,7 +6,7 @@ const number = (value: string, fallback: number) => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
-const fmt = (value: number | null, digits = 3) => value == null ? "—" : value.toFixed(digits).replace(/\.0+$|(?<=\.[0-9]*?)0+$/g, "");
+const fmt = (value: number | null, digits = 3) => value == null ? "—" : Number(value.toFixed(digits)).toString();
 
 export default function SensitivityLab() {
   const [sourceGameId, setSourceGameId] = useState("cs2");
