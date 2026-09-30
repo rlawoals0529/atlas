@@ -17,6 +17,8 @@ export interface CommunityPilotData {
 }
 
 export const communityPilots = [rawMousePilot, rawSurfacePilot] as unknown as CommunityPilotData[];
+// Backward compatibility for consumers that still refer to the original mouse pilot.
+export const communityPilot = communityPilots[0];
 export const communityInsights = communityPilots.flatMap(pilot => pilot.insights);
 export const communityAggregates = aggregateCommunityInsights(communityInsights);
 export const communityPilotProductIds = [...new Set(communityInsights.map(row => row.productId))];
