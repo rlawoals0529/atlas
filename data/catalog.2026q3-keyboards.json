@@ -1,0 +1,258 @@
+{
+  "keyboards": [
+    {
+      "id": "keyboard-wooting-80he-plus",
+      "slug": "wooting-80he-plus",
+      "type": "keyboard",
+      "brand": "Wooting",
+      "model": "80HE+",
+      "status": "announced",
+      "summary": "Current 80% analog Hall-effect platform with true 8 kHz polling, per-key adjustable actuation and a revised FR4/foam build around Lekker Tikken Medium switches.",
+      "tags": ["hall-effect", "analog", "rapid-trigger", "8k", "web-config", "hotswap"],
+      "sources": [
+        {
+          "id": "wooting-80he-plus-official",
+          "label": "Wooting 80HE+ product page",
+          "url": "https://wooting.io/wooting-80he-plus",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "80%",
+        "layout": "ANSI",
+        "switchTechnology": "hall-effect",
+        "stockSwitch": "Lekker Tikken Medium",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 4,
+        "actuationStepMm": 0.1,
+        "rapidTrigger": true,
+        "analogInput": true,
+        "hotSwappable": true,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "PCR ABS plastic or zinc alloy, by variant",
+        "plateMaterial": "FR4",
+        "keycapMaterial": "double-shot PBT",
+        "mount": "silicone gasket",
+        "webConfigurator": true,
+        "software": "Wootility Web / desktop"
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["wooting-80he-plus-official"],
+          "confidence": "high",
+          "note": "Manufacturer-published layout, switch, plate, mount, keycap and configuration details."
+        },
+        "inputFeatures": {
+          "sourceIds": ["wooting-80he-plus-official"],
+          "confidence": "high",
+          "note": "8 kHz capability and 0.1–4.0 mm per-key actuation range are manufacturer specifications; Atlas does not convert Wooting latency marketing into an independent measurement."
+        }
+      }
+    },
+    {
+      "id": "keyboard-razer-huntsman-v3-pro-tkl-8khz",
+      "slug": "razer-huntsman-v3-pro-tenkeyless-8khz",
+      "type": "keyboard",
+      "brand": "Razer",
+      "model": "Huntsman V3 Pro Tenkeyless 8KHz",
+      "status": "current",
+      "summary": "TKL analog-optical gaming keyboard with 8 kHz polling, Rapid Trigger, Snap Tap and a 0.1–4.0 mm adjustable actuation range.",
+      "tags": ["optical-analog", "rapid-trigger", "8k", "tkl", "snap-tap"],
+      "sources": [
+        {
+          "id": "razer-huntsman-v3-pro-tkl-8k-official",
+          "label": "Razer Huntsman V3 Pro Tenkeyless 8KHz product page",
+          "url": "https://www.razer.com/gaming-keyboards/razer-huntsman-v3-pro-tenkeyless-8khz",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "rtings-huntsman-v3-pro-8k-review",
+          "label": "RTINGS Razer Huntsman V3 Pro 8KHz review",
+          "url": "https://www.rtings.com/keyboard/reviews/razer/huntsman-v3-pro-8khz-wired",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "tkl",
+        "layout": "ANSI",
+        "switchTechnology": "optical-analog",
+        "stockSwitch": "Razer Analog Optical Switches Gen-2",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 4,
+        "rapidTrigger": true,
+        "socd": true,
+        "analogInput": true,
+        "hotSwappable": false,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "5052 aluminum alloy top case",
+        "keycapMaterial": "double-shot PBT",
+        "webConfigurator": false,
+        "software": "Razer Synapse 4"
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["razer-huntsman-v3-pro-tkl-8k-official", "rtings-huntsman-v3-pro-8k-review"],
+          "confidence": "high",
+          "note": "Official switch/feature specifications are cross-checked against an independent retail-unit review."
+        },
+        "independentReview": {
+          "sourceIds": ["rtings-huntsman-v3-pro-8k-review"],
+          "confidence": "medium",
+          "note": "RTINGS reports high-end raw gaming performance and independently confirms the TKL variant, 8 kHz capability and non-hot-swappable optical implementation. This is one tested unit under RTINGS methodology v1.4.3, not a reliability-rate claim."
+        }
+      }
+    },
+    {
+      "id": "keyboard-keychron-q1-he-8k",
+      "slug": "keychron-q1-he-8k",
+      "type": "keyboard",
+      "brand": "Keychron",
+      "model": "Q1 HE 8K",
+      "status": "current",
+      "summary": "Wired 75% aluminum Hall-effect keyboard with 8 kHz polling, Rapid Trigger, analog gamepad input and Keychron's browser-based Launcher configuration.",
+      "tags": ["hall-effect", "75-percent", "8k", "rapid-trigger", "web-config", "aluminum"],
+      "sources": [
+        {
+          "id": "keychron-q1-he-8k-official",
+          "label": "Keychron Q1 HE 8K product page",
+          "url": "https://www.keychron.com/products/keychron-q1-he-8k-magnetic-switch-keyboard",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "keychron-launcher-he-guide",
+          "label": "Keychron Launcher HE mode guide",
+          "url": "https://www.keychron.com/pages/how-to-use-he-mode-on-keychron-launcher",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "75%",
+        "layout": "ANSI",
+        "switchTechnology": "hall-effect",
+        "stockSwitch": "Keychron Ultra-fast Lime Magnetic",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 3.35,
+        "actuationStepMm": 0.01,
+        "rapidTrigger": true,
+        "socd": true,
+        "analogInput": true,
+        "hotSwappable": true,
+        "connectivity": ["USB-C wired"],
+        "caseMaterial": "aluminum",
+        "plateMaterial": "aluminum",
+        "keycapMaterial": "OSA double-shot PBT",
+        "webConfigurator": true,
+        "software": "Keychron Launcher",
+        "dimensionsMm": { "width": 327.53, "depth": 145 },
+        "weightG": 1860
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["keychron-q1-he-8k-official"],
+          "confidence": "high",
+          "note": "Dimensions, weight, materials, stock switch and wired 8 kHz capability come from Keychron's product specification."
+        },
+        "inputFeatures": {
+          "sourceIds": ["keychron-q1-he-8k-official", "keychron-launcher-he-guide"],
+          "confidence": "high",
+          "note": "Keychron documents 0.1–3.35 mm adjustable actuation, 0.01 mm sensitivity, Rapid Trigger and LKP/analog features. Hot-swap compatibility is explicitly limited to the supported Keychron magnetic switch family on the product page."
+        }
+      }
+    }
+  ],
+  "switches": [
+    {
+      "id": "switch-gateron-magnetic-jade-emerald",
+      "slug": "gateron-magnetic-jade-emerald",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Emerald",
+      "status": "current",
+      "summary": "Heavy-tactile Hall-effect switch pairing a magnetic sensing stem with a mechanical tactile leaf; board compatibility still depends on magnetic polarity and PCB implementation.",
+      "tags": ["hall-effect", "tactile", "magnetic", "factory-lubed", "theremingoat-reviewed"],
+      "sources": [
+        {
+          "id": "gateron-jade-emerald-official",
+          "label": "Gateron Magnetic Jade Emerald product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-emerald-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "theremingoat-jade-emerald-review",
+          "label": "ThereminGoat Magnetic Jade Emerald review",
+          "url": "https://www.theremingoat.com/blog/gateron-magnetic-jade-emerald-switch-review",
+          "kind": "independent",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "tactile",
+        "actuationForce": { "value": 55, "unit": "gf" },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": { "initial": 120, "bottomOut": 700, "pcbThicknessMm": 1.2 },
+        "compatibility": ["N-pole-down Hall-effect keyboards; verify keyboard-specific switch support before purchase"]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["gateron-jade-emerald-official"],
+          "confidence": "high",
+          "note": "Force, travel, lubrication, lifespan and magnetic-flux values are Gateron specifications, not Atlas measurements."
+        },
+        "reviewContext": {
+          "sourceIds": ["theremingoat-jade-emerald-review"],
+          "confidence": "medium",
+          "note": "ThereminGoat's review found a technically clean but lighter-than-marketed tactile impression whose bottom-out can dominate the bump. Atlas stores the bounded observation rather than importing the review's numeric score as an objective quality metric."
+        }
+      }
+    },
+    {
+      "id": "switch-cherry-mx2a-red",
+      "slug": "cherry-mx2a-red",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX2A Red",
+      "status": "current",
+      "summary": "Traditional linear MX mechanical switch with published cN force values, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": ["mechanical", "linear", "mx", "factory-lubed"],
+      "sources": [
+        {
+          "id": "cherry-mx2a-red-official",
+          "label": "CHERRY MX2A Red product page",
+          "url": "https://www.cherry.de/en-us/product/mx2a-red",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "initialForce": { "value": 30, "unit": "cN" },
+        "actuationForce": { "value": 45, "unit": "cN" },
+        "bottomOutForce": { "value": 100, "unit": "cN" },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["cherry-mx2a-red-official"],
+          "confidence": "high",
+          "note": "Atlas preserves CHERRY's published cN units rather than silently relabeling them as gram-force."
+        }
+      }
+    }
+  ]
+}
