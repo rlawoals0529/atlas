@@ -1,6 +1,6 @@
-# Contributing to Input Atlas
+# Contributing to Atlas
 
-Input Atlas treats product research as evidence, not copywriting. Small, reviewable corrections are preferred over large untraceable imports.
+Atlas treats product research as evidence, not filler. Small, reviewable corrections are better than large imports that are hard to trace.
 
 ## Product data
 
@@ -35,3 +35,12 @@ Keep static/initial movement, dynamic glide and stopping separate. Skate feel is
 ## Corrections
 
 A correction should include the product ID, field(s) being changed, source URL, date checked, whether the value is manufacturer-claimed or independently measured, and any methodology needed to interpret it. If two credible sources disagree, preserve the disagreement in the evidence note rather than silently picking the more convenient number.
+
+
+## Writing and UI copy
+
+Match the voice that is already there before rewriting anything. Keep copy plain, specific and a little conversational where that fits the screen. Do not add generic enthusiasm, polished filler or claims that the data cannot support.
+
+A good edit should usually do one of three things: make the meaning clearer, remove repetition, or replace vague wording with something concrete. Preserve useful caveats and technical terms. Avoid rewriting a sentence just to make it sound more formal.
+
+For agent-assisted work, `AGENTS.md` contains the short version of these rules plus the UI-fit checks that should be run before shipping.
