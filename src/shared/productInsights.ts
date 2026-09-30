@@ -1,3 +1,4 @@
+import { shapeSimilarity } from "./shape";
 import type { MouseProduct } from "./types";
 
 export type FindingKind = "observed" | "hypothesis" | "evidence-needed" | "recommendation";
@@ -16,6 +17,27 @@ export interface ProductPosition {
   msrpUsd: number | null;
   pollingHz: number;
   shape: "symmetrical" | "ergonomic";
+}
+
+export interface CompetitorMatch {
+  productId: string;
+  brand: string;
+  model: string;
+  score: number;
+  shapeScore: number;
+  weightDeltaG: number;
+  priceDeltaUsd: number | null;
+  pollingRatio: number;
+  rationale: string[];
+}
+
+export interface BrandPositioning {
+  brand: string;
+  currentCount: number;
+  medianWeightG: number | null;
+  medianMsrpUsd: number | null;
+  wirelessSharePct: number;
+  highPollingSharePct: number;
 }
 
 export interface InsightStatement {
@@ -40,6 +62,7 @@ export interface ProductInsights {
   topBrands: Array<{ brand: string; count: number; sharePct: number }>;
   sparseShapeWeightCells: Array<{ label: string; count: number }>;
   positions: ProductPosition[];
+  brandPositioning: BrandPositioning[];
   statements: InsightStatement[];
 }
 
@@ -53,8 +76,28 @@ const median = (values: number[]) => {
 const average = (values: number[]) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
 const pct = (value: number, total: number) => total ? Math.round((value / total) * 1000) / 10 : 0;
 const segment = (label: string, count: number, total: number): SegmentCount => ({ label, count, sharePct: pct(count, total) });
-
 const isWireless = (mouse: MouseProduct) => mouse.specs.connectivity.some(value => /wireless|2\.4|bluetooth/i.test(value));
+
+export function directCompetitorsFor(base: MouseProduct, products: MouseProduct[], limit = 6): CompetitorMatch[] {
+  const candidates = products.filter(product => product.status === "current" && product.id !== base.id);
+  return candidates.map(candidate => {
+    const shape = shapeSimilarity(base, candidate, "balanced");
+    const weightDeltaG = candidate.specs.weightG - base.specs.weightG;
+    const priceDeltaUsd = base.msrpUsd != null && candidate.msrpUsd != null ? candidate.msrpUsd - base.msrpUsd : null;
+    const weightScore = Math.max(0, 100 - Math.abs(weightDeltaG) * 3.5);
+    const priceScore = priceDeltaUsd == null ? 65 : Math.max(0, 100 - Math.abs(priceDeltaUsd) * 0.7);
+    const pollingRatio = Math.min(base.specs.maxPollingHz, candidate.specs.maxPollingHz) / Math.max(base.specs.maxPollingHz, candidate.specs.maxPollingHz);
+    const pollingScore = pollingRatio * 100;
+    const connectivityScore = isWireless(base) === isWireless(candidate) ? 100 : 45;
+    const score = Math.round(shape.score * .52 + weightScore * .18 + priceScore * .12 + pollingScore * .1 + connectivityScore * .08);
+    const rationale = [
+      `${shape.score}% balanced shape similarity`,
+      Math.abs(weightDeltaG) <= 5 ? "very similar weight" : `${Math.abs(weightDeltaG).toFixed(1)} g ${weightDeltaG > 0 ? "heavier" : "lighter"}`,
+      priceDeltaUsd == null ? "price comparison incomplete" : Math.abs(priceDeltaUsd) <= 20 ? "similar MSRP band" : `$${Math.abs(Math.round(priceDeltaUsd))} ${priceDeltaUsd > 0 ? "higher" : "lower"} MSRP`,
+    ];
+    return { productId: candidate.id, brand: candidate.brand, model: candidate.model, score, shapeScore: shape.score, weightDeltaG, priceDeltaUsd, pollingRatio, rationale };
+  }).sort((a, b) => b.score - a.score || b.shapeScore - a.shapeScore || a.productId.localeCompare(b.productId)).slice(0, limit);
+}
 
 export function analyzeMouseCatalog(products: MouseProduct[]): ProductInsights {
   const current = products.filter(product => product.status === "current");
@@ -101,39 +144,26 @@ export function analyzeMouseCatalog(products: MouseProduct[]): ProductInsights {
   })).sort((a, b) => a.count - b.count || a.label.localeCompare(b.label)).slice(0, 6);
 
   const highPollingPriceDeltaUsd = highPollingPrice != null && standardPollingPrice != null ? Math.round(highPollingPrice - standardPollingPrice) : null;
-  const positions = current.map(mouse => ({
-    productId: mouse.id,
-    brand: mouse.brand,
-    model: mouse.model,
-    weightG: mouse.specs.weightG,
-    msrpUsd: mouse.msrpUsd ?? null,
-    pollingHz: mouse.specs.maxPollingHz,
-    shape: mouse.specs.shape,
-  }));
+  const positions = current.map(mouse => ({ productId: mouse.id, brand: mouse.brand, model: mouse.model, weightG: mouse.specs.weightG, msrpUsd: mouse.msrpUsd ?? null, pollingHz: mouse.specs.maxPollingHz, shape: mouse.specs.shape }));
+
+  const brandPositioning = [...new Set(current.map(mouse => mouse.brand))].map(brand => {
+    const lineup = current.filter(mouse => mouse.brand === brand);
+    const lineupPriced = lineup.flatMap(mouse => mouse.msrpUsd == null ? [] : [mouse.msrpUsd]);
+    return {
+      brand,
+      currentCount: lineup.length,
+      medianWeightG: median(lineup.map(mouse => mouse.specs.weightG)),
+      medianMsrpUsd: median(lineupPriced),
+      wirelessSharePct: pct(lineup.filter(isWireless).length, lineup.length),
+      highPollingSharePct: pct(lineup.filter(mouse => mouse.specs.maxPollingHz >= 4000).length, lineup.length),
+    };
+  }).sort((a, b) => b.currentCount - a.currentCount || a.brand.localeCompare(b.brand));
 
   const statements: InsightStatement[] = [
-    {
-      kind: "observed",
-      title: "Current catalog mix",
-      body: `${total} current mouse records are represented; ${priced.length} have an MSRP captured. ${pct(current.filter(isWireless).length, total)}% of current records include a wireless mode.`,
-      evidence: ["Atlas catalog status, MSRP and connectivity fields"],
-    },
-    {
-      kind: "observed",
-      title: "High-polling price association",
-      body: highPollingPriceDeltaUsd == null ? "The catalog does not yet contain enough priced products in both polling groups to compare average MSRP." : `Within the priced Atlas sample, 4K+ products average ${highPollingPriceDeltaUsd >= 0 ? "$" + highPollingPriceDeltaUsd + " more" : "$" + Math.abs(highPollingPriceDeltaUsd) + " less"} MSRP than lower-polling products. This is association, not causation.`,
-      evidence: ["Atlas MSRP and advertised maximum polling fields"],
-    },
-    {
-      kind: "hypothesis",
-      title: "Sparse combinations need customer evidence",
-      body: "Shape × weight cells with few catalog records are useful research prompts, but curation bias, demand, manufacturing constraints and economics can all produce sparsity.",
-    },
-    {
-      kind: "evidence-needed",
-      title: "What specifications cannot answer",
-      body: "Opportunity sizing needs traffic, conversion, sales/rank history, customer sentiment, returns/reliability and willingness-to-pay evidence before a product recommendation is justified.",
-    },
+    { kind: "observed", title: "Current catalog mix", body: `${total} current mouse records are represented; ${priced.length} have an MSRP captured. ${pct(current.filter(isWireless).length, total)}% of current records include a wireless mode.`, evidence: ["Atlas catalog status, MSRP and connectivity fields"] },
+    { kind: "observed", title: "High-polling price association", body: highPollingPriceDeltaUsd == null ? "The catalog does not yet contain enough priced products in both polling groups to compare average MSRP." : `Within the priced Atlas sample, 4K+ products average ${highPollingPriceDeltaUsd >= 0 ? "$" + highPollingPriceDeltaUsd + " more" : "$" + Math.abs(highPollingPriceDeltaUsd) + " less"} MSRP than lower-polling products. This is association, not causation.`, evidence: ["Atlas MSRP and advertised maximum polling fields"] },
+    { kind: "hypothesis", title: "Sparse combinations need customer evidence", body: "Shape × weight cells with few catalog records are useful research prompts, but curation bias, demand, manufacturing constraints and economics can all produce sparsity." },
+    { kind: "evidence-needed", title: "What specifications cannot answer", body: "Opportunity sizing needs traffic, conversion, sales/rank history, customer sentiment, returns/reliability and willingness-to-pay evidence before a product recommendation is justified." },
   ];
 
   return {
@@ -151,6 +181,7 @@ export function analyzeMouseCatalog(products: MouseProduct[]): ProductInsights {
     topBrands: [...brandCounts.entries()].map(([brand, count]) => ({ brand, count, sharePct: pct(count, total) })).sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand)).slice(0, 8),
     sparseShapeWeightCells,
     positions,
+    brandPositioning,
     statements,
   };
 }
