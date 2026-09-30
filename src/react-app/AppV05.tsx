@@ -329,7 +329,7 @@ function AppV05() {
       <section className="v5-source-explainer v5-panel"><div className="v5-section-head"><span>07</span><div><small>PROVENANCE</small><h2>Source classes</h2></div></div>{Object.entries(sourceKindMeta).map(([kind, meta]) => <div key={kind}><EvidenceBadge kind={kind as keyof typeof sourceKindMeta}/><b>{meta.label}</b><p>{meta.description}</p></div>)}</section>
     </main>}
 
-    <footer className="v5-footer"><span>INPUT ATLAS / research build v{VERSION}</span><span>{catalog.length} canonical products</span><span>Cloudflare Workers + D1</span></footer>
+    <footer className="v5-footer"><span>ATLAS / research build v{VERSION}</span><span>{catalog.length} canonical products</span><span>Cloudflare Workers + D1</span></footer>
     {selected && <ProductInspector product={selected} onClose={() => setSelectedId(null)} onOpen={openProduct}/>} 
   </div>;
 }

@@ -21,6 +21,7 @@ import {
   type ValidationSession,
   type ValidationStatus,
 } from "../shared/validation";
+import ProductIntelligenceExtras from "./ProductIntelligenceExtras";
 
 const SESSION_KEY = "atlas.validation.sessions.v1";
 const DEFECT_KEY = "atlas.validation.defects.v1";
@@ -106,6 +107,8 @@ function IntelligencePanel() {
       <article><span>DATA HEALTH</span><b>{evidence.evidenceHealthAverage}/100</b><small>evidence average</small></article>
     </section>
 
+    <ProductIntelligenceExtras/>
+
     <div className="pl-grid-2"><SegmentBars title="Weight mix" rows={insights.weightSegments}/><SegmentBars title="MSRP mix" rows={insights.priceSegments}/><SegmentBars title="Polling mix" rows={insights.pollingSegments}/><SegmentBars title="Shape mix" rows={insights.shapeSegments}/></div>
 
     <div className="pl-grid-2">
@@ -125,10 +128,11 @@ function ValidationPanel() {
   const [sessions, setSessions] = useState<ValidationSession[]>(() => safeLoad<ValidationSession[]>(SESSION_KEY, []));
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [defects, setDefects] = useState<DefectReport[]>(() => safeLoad<DefectReport[]>(DEFECT_KEY, []));
-  const [defectDraft, setDefectDraft] = useState({ title: "", expected: "", actual: "", frequency: "", severity: "S3" as DefectSeverity, priority: "P2" as DefectPriority, linkedTestId: "" });
+  const [defectDraft, setDefectDraft] = useState({ title: "", expected: "", actual: "", frequency: "", severity: "S3" as DefectSeverity, priority: "P2" as DefectPriority, linkedTestId: "", reproSteps: "", suspectedLayer: "", regressionTestId: "", evidenceNote: "", evidenceUrl: "" });
   const activeSession = sessions.find(item => item.id === activeSessionId) ?? null;
 
   useEffect(() => { if (selectedMouse) setEnvironment(value => ({ ...value, pollingHz: selectedMouse.specs.maxPollingHz })); }, [selectedMouse]);
+  useEffect(() => { if (selectedMouse) trackAtlasEvent("validation_plan_generated", { productId: selectedMouse.id, caseCount: cases.length, automationCandidateCount: cases.filter(test => test.automationCandidate).length }); }, [selectedMouse?.id, cases.length]);
 
   const startSession = () => {
     if (!selectedMouse) return;
@@ -152,18 +156,20 @@ function ValidationPanel() {
       productId: selectedMouse.id,
       title: defectDraft.title,
       environment,
-      reproductionSteps: [],
+      reproductionSteps: defectDraft.reproSteps.split("\n").map(step => step.trim()).filter(Boolean),
       expectedBehavior: defectDraft.expected,
       actualBehavior: defectDraft.actual,
       frequency: defectDraft.frequency,
       severity: defectDraft.severity,
       priority: defectDraft.priority,
-      evidence: [],
+      evidence: defectDraft.evidenceNote || defectDraft.evidenceUrl ? [{ kind: "note", label: defectDraft.evidenceNote || "Evidence reference", uri: defectDraft.evidenceUrl || undefined }] : [],
+      suspectedLayer: defectDraft.suspectedLayer || undefined,
       linkedTestId: defectDraft.linkedTestId || undefined,
+      regressionTestId: defectDraft.regressionTestId || undefined,
       createdAt: new Date().toISOString(),
     };
     const next = [defect, ...defects]; setDefects(next); safeSave(DEFECT_KEY, next);
-    setDefectDraft({ title: "", expected: "", actual: "", frequency: "", severity: "S3", priority: "P2", linkedTestId: "" });
+    setDefectDraft({ title: "", expected: "", actual: "", frequency: "", severity: "S3", priority: "P2", linkedTestId: "", reproSteps: "", suspectedLayer: "", regressionTestId: "", evidenceNote: "", evidenceUrl: "" });
     trackAtlasEvent("defect_created", { productId: selectedMouse.id, severity: defect.severity, linkedTestId: defect.linkedTestId });
   };
 
@@ -189,6 +195,12 @@ function ValidationPanel() {
         <label>Receiver firmware<input value={environment.receiverVersion ?? ""} onChange={event => setEnvironment({ ...environment, receiverVersion: event.target.value })} placeholder="If applicable"/></label>
         <label>Connection mode<input value={environment.connectionMode ?? ""} onChange={event => setEnvironment({ ...environment, connectionMode: event.target.value })} placeholder="Wired / 2.4 GHz / Bluetooth"/></label>
         <label>Polling Hz<input type="number" value={environment.pollingHz ?? ""} onChange={event => setEnvironment({ ...environment, pollingHz: Number(event.target.value) || undefined })}/></label>
+        <label>OS build<input value={environment.osBuild ?? ""} onChange={event => setEnvironment({ ...environment, osBuild: event.target.value })} placeholder="e.g. 24H2 build"/></label>
+        <label>Host / system<input value={environment.host ?? ""} onChange={event => setEnvironment({ ...environment, host: event.target.value })} placeholder="Test PC / laptop"/></label>
+        <label>USB path / hub<input value={environment.usbPath ?? ""} onChange={event => setEnvironment({ ...environment, usbPath: event.target.value })} placeholder="Direct rear I/O / hub / controller"/></label>
+        <label>DPI<input type="number" value={environment.dpi ?? ""} onChange={event => setEnvironment({ ...environment, dpi: Number(event.target.value) || undefined })}/></label>
+        <label>Configuration software<input value={environment.softwareVersion ?? ""} onChange={event => setEnvironment({ ...environment, softwareVersion: event.target.value })} placeholder="App/browser + version"/></label>
+        <label>Environment notes<input value={environment.notes ?? ""} onChange={event => setEnvironment({ ...environment, notes: event.target.value })} placeholder="Surface, receiver placement, anything material"/></label>
       </div>
       <div className="pl-validation-summary"><span><b>{cases.length}</b> planned cases</span><span><b>{p0}</b> P0</span><span><b>{automation}</b> automation candidates</span><button className="pl-primary" onClick={startSession}>Start manual validation session</button></div>
     </section>
@@ -197,10 +209,10 @@ function ValidationPanel() {
 
     {activeSession && <section className="pl-card"><div className="pl-card-head"><span>EXECUTION</span><h3>Manual session · {productName(activeSession.productId)}</h3><button onClick={downloadSession}>Export report JSON</button></div><div className="pl-execution-list">{activeSession.executions.map(execution => {
       const test = cases.find(item => item.id === execution.testId);
-      return <article key={execution.testId}><div><b>{execution.testId}</b><span>{test?.title}</span></div><label>Status<select value={execution.status} onChange={event => updateExecution(execution.testId, { status: event.target.value as ValidationStatus })}><option value="not-run">NOT RUN</option><option value="pass">PASS</option><option value="fail">FAIL</option><option value="blocked">BLOCKED</option></select></label><label>Actual result<textarea value={execution.actualResult} onChange={event => updateExecution(execution.testId, { actualResult: event.target.value })} placeholder="Record only what you physically observed."/></label><label>Reproduction frequency<input value={execution.reproductionFrequency ?? ""} onChange={event => updateExecution(execution.testId, { reproductionFrequency: event.target.value })} placeholder="e.g. 7/10 attempts"/></label></article>;
+      return <article key={execution.testId}><div><b>{execution.testId}</b><span>{test?.title}</span></div><label>Status<select value={execution.status} onChange={event => updateExecution(execution.testId, { status: event.target.value as ValidationStatus })}><option value="not-run">NOT RUN</option><option value="pass">PASS</option><option value="fail">FAIL</option><option value="blocked">BLOCKED</option></select></label><label>Actual result<textarea value={execution.actualResult} onChange={event => updateExecution(execution.testId, { actualResult: event.target.value })} placeholder="Record only what you physically observed."/></label><label>Reproduction frequency<input value={execution.reproductionFrequency ?? ""} onChange={event => updateExecution(execution.testId, { reproductionFrequency: event.target.value })} placeholder="e.g. 7/10 attempts"/></label><label>Evidence note<input value={execution.evidence[0]?.label ?? ""} onChange={event => updateExecution(execution.testId, { evidence: event.target.value ? [{ kind: "note", label: event.target.value }] : [] })} placeholder="Screenshot/log/measurement reference"/></label></article>;
     })}</div></section>}
 
-    <section className="pl-card"><div className="pl-card-head"><span>DEFECTS</span><h3>Professional bug report</h3></div><div className="pl-form-grid"><label>Title<input value={defectDraft.title} onChange={event => setDefectDraft({ ...defectDraft, title: event.target.value })}/></label><label>Linked test<select value={defectDraft.linkedTestId} onChange={event => setDefectDraft({ ...defectDraft, linkedTestId: event.target.value })}><option value="">None</option>{cases.map(test => <option key={test.id} value={test.id}>{test.id}</option>)}</select></label><label>Severity<select value={defectDraft.severity} onChange={event => setDefectDraft({ ...defectDraft, severity: event.target.value as DefectSeverity })}><option>S1</option><option>S2</option><option>S3</option><option>S4</option></select></label><label>Priority<select value={defectDraft.priority} onChange={event => setDefectDraft({ ...defectDraft, priority: event.target.value as DefectPriority })}><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></label><label className="wide">Expected behavior<textarea value={defectDraft.expected} onChange={event => setDefectDraft({ ...defectDraft, expected: event.target.value })}/></label><label className="wide">Actual behavior<textarea value={defectDraft.actual} onChange={event => setDefectDraft({ ...defectDraft, actual: event.target.value })}/></label><label>Frequency<input value={defectDraft.frequency} onChange={event => setDefectDraft({ ...defectDraft, frequency: event.target.value })} placeholder="Always / intermittent / 3 of 10"/></label></div><button className="pl-primary" onClick={createDefect}>Save defect locally</button>{defects.length > 0 && <div className="pl-defects">{defects.slice(0, 5).map(defect => <span key={defect.id}><b>{defect.severity} · {defect.priority}</b>{defect.title}<em>{productName(defect.productId)}</em></span>)}</div>}</section>
+    <section className="pl-card"><div className="pl-card-head"><span>DEFECTS</span><h3>Professional bug report</h3></div><div className="pl-form-grid"><label>Title<input value={defectDraft.title} onChange={event => setDefectDraft({ ...defectDraft, title: event.target.value })}/></label><label>Linked test<select value={defectDraft.linkedTestId} onChange={event => setDefectDraft({ ...defectDraft, linkedTestId: event.target.value })}><option value="">None</option>{cases.map(test => <option key={test.id} value={test.id}>{test.id}</option>)}</select></label><label>Severity<select value={defectDraft.severity} onChange={event => setDefectDraft({ ...defectDraft, severity: event.target.value as DefectSeverity })}><option>S1</option><option>S2</option><option>S3</option><option>S4</option></select></label><label>Priority<select value={defectDraft.priority} onChange={event => setDefectDraft({ ...defectDraft, priority: event.target.value as DefectPriority })}><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></label><label className="wide">Expected behavior<textarea value={defectDraft.expected} onChange={event => setDefectDraft({ ...defectDraft, expected: event.target.value })}/></label><label className="wide">Actual behavior<textarea value={defectDraft.actual} onChange={event => setDefectDraft({ ...defectDraft, actual: event.target.value })}/></label><label>Frequency<input value={defectDraft.frequency} onChange={event => setDefectDraft({ ...defectDraft, frequency: event.target.value })} placeholder="Always / intermittent / 3 of 10"/></label><label className="wide">Reproduction steps<textarea value={defectDraft.reproSteps} onChange={event => setDefectDraft({ ...defectDraft, reproSteps: event.target.value })} placeholder="One step per line. Record the real path to reproduce."/></label><label>Suspected layer<input value={defectDraft.suspectedLayer} onChange={event => setDefectDraft({ ...defectDraft, suspectedLayer: event.target.value })} placeholder="Only if evidence supports it"/></label><label>Regression test<select value={defectDraft.regressionTestId} onChange={event => setDefectDraft({ ...defectDraft, regressionTestId: event.target.value })}><option value="">Not assigned</option>{cases.map(test => <option key={test.id} value={test.id}>{test.id}</option>)}</select></label><label>Evidence note<input value={defectDraft.evidenceNote} onChange={event => setDefectDraft({ ...defectDraft, evidenceNote: event.target.value })} placeholder="What the evidence shows"/></label><label>Evidence reference<input value={defectDraft.evidenceUrl} onChange={event => setDefectDraft({ ...defectDraft, evidenceUrl: event.target.value })} placeholder="Optional local/external reference"/></label></div><button className="pl-primary" onClick={createDefect}>Save defect locally</button>{defects.length > 0 && <div className="pl-defects">{defects.slice(0, 5).map(defect => <span key={defect.id}><b>{defect.severity} · {defect.priority}</b>{defect.title}<em>{productName(defect.productId)}</em></span>)}</div>}</section>
   </div>;
 }
 
