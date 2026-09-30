@@ -1,6 +1,7 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./AppV05";
+import PointingApp from "./AppV05";
+import AtlasConsumer from "./AtlasConsumer";
 import ProductLab from "./ProductLab";
 import ValidationRunner from "./ValidationRunner";
 import KeyboardLab from "./KeyboardLab";
@@ -11,6 +12,7 @@ import { analyticsVisitor, trackAtlasEvent } from "../shared/analytics";
 import "./styles.css";
 import "./v04.css";
 import "./v05.css";
+import "./consumer.css";
 import "./product-lab.css";
 import "./product-lab-entry.css";
 import "./product-intelligence-extras.css";
@@ -39,20 +41,25 @@ function RootRouter() {
   const validationRunner = hash === "#validation-run";
   const keyboardLab = hash === "#keyboard-lab";
   const sensitivityLab = hash === "#sensitivity";
+  const pointingApp = hash === "#pointing";
 
   return <>
     <AnalyticsTransport />
     {validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : productLab ? <>
       <ProductLab />
       <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
-    </> : <>
+    </> : pointingApp ? <>
       <AnalyticsBridge />
-      <App />
+      <PointingApp />
       <div className="atlas-utility-dock" aria-label="Atlas labs">
+        <a href="#"><span>HOME</span><b>Unified database</b><i>↗</i></a>
         <a href="#keyboard-lab"><span>KEY</span><b>Keyboard lab</b><i>↗</i></a>
         <a href="#sensitivity"><span>SENS</span><b>Sensitivity lab</b><i>↗</i></a>
         <a href="#product-lab"><span>LAB</span><b>Product research & validation</b><i>↗</i></a>
       </div>
+    </> : <>
+      <AnalyticsBridge />
+      <AtlasConsumer />
     </>}
   </>;
 }
