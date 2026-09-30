@@ -21,8 +21,11 @@ function ProductVisual({ product }: { product: KeyboardLabProduct }) {
 }
 
 function Chips({ product }: { product: KeyboardLabProduct }) {
-  if (product.type === "switch") return <><span>{human(product.specs.technology)}</span><span>{human(product.specs.feel)}</span><span>{force(product.specs.actuationForce)} actuation</span><span>{product.specs.totalTravelMm} mm travel</span></>;
-  return <><span>{product.specs.formFactor}</span><span>{human(product.specs.switchTechnology)}</span><span>{polling(product.specs.maxPollingHz)}</span>{product.specs.rapidTrigger && <span>rapid trigger</span>}</>;
+  if (product.type === "switch") {
+    const silent = [product.model, product.summary, ...(product.tags ?? [])].join(" ").toLowerCase().includes("silent");
+    return <><span>{human(product.specs.technology)}</span><span>{human(product.specs.feel)}</span>{silent && <span>silent</span>}<span>{force(product.specs.actuationForce)} actuation</span><span>{product.specs.totalTravelMm} mm travel</span>{product.specs.compatibility?.length ? <span>board compatibility varies</span> : null}</>;
+  }
+  return <><span>{product.specs.formFactor}</span><span>{human(product.specs.switchTechnology)}</span><span>{polling(product.specs.maxPollingHz)}</span>{product.specs.minActuationMm != null && <span>{product.specs.minActuationMm} mm min</span>}{product.specs.rapidTrigger && <span>rapid trigger</span>}</>;
 }
 
 function Specs({ product }: { product: KeyboardLabProduct }) {
@@ -113,9 +116,15 @@ export default function KeyboardLab() {
 
       <section className="kb-grid">{filtered.map(product => {
         const health = evidenceHealth(product);
-        return <button className="kb-card" key={product.id} onClick={() => setSelected(product)}>
-          <div className="kb-card-art"><ProductVisual product={product}/><span className={`kb-health h${Math.floor(health.score/20)}`}>{health.label}</span></div>
-          <div className="kb-card-copy"><span>{product.brand} / {product.type}</span><h2>{product.model}</h2><p>{product.summary}</p><div className="kb-chip-row"><Chips product={product}/></div><footer><b>{health.sourceCount} sources</b><span>{health.evidenceCount} evidence groups</span><i>open record →</i></footer></div>
+        return <button className="kb-card" key={product.id} onClick={() => setSelected(product)} aria-label={`Open ${product.brand} ${product.model} record`}>
+          <div className="kb-card-art"><ProductVisual product={product}/></div>
+          <div className="kb-card-copy">
+            <span>{product.brand} · {product.type}</span>
+            <h2>{product.model}</h2>
+            <div className="kb-chip-row"><Chips product={product}/></div>
+            <p>{product.summary}</p>
+            <footer><span>{health.sourceCount} source{health.sourceCount === 1 ? "" : "s"}</span><i>View details →</i></footer>
+          </div>
         </button>;
       })}</section>
 
