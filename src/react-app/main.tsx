@@ -1,11 +1,6 @@
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import PointingApp from "./AppV05";
 import AtlasConsumer from "./AtlasConsumer";
-import ProductLab from "./ProductLab";
-import ValidationRunner from "./ValidationRunner";
-import KeyboardLab from "./KeyboardLab";
-import SensitivityLab from "./SensitivityLab";
 import AnalyticsBridge from "./AnalyticsBridge";
 import AnalyticsTransport from "./AnalyticsTransport";
 import AtlasGlobalNav from "./AtlasGlobalNav";
@@ -27,6 +22,21 @@ import "./sensitivity-fixes.css";
 import "./atlas-interactions.css";
 import "./atlas-ux-refresh.css";
 import "./shape-lab-v2.css";
+
+const PointingApp = lazy(() => import("./AppV05"));
+const ProductLab = lazy(() => import("./ProductLab"));
+const ValidationRunner = lazy(() => import("./ValidationRunner"));
+const KeyboardLab = lazy(() => import("./KeyboardLab"));
+const SensitivityLab = lazy(() => import("./SensitivityLab"));
+
+function ToolFallback() {
+  return <main className="v5-main v5-page">
+    <section className="v5-panel" role="status" aria-live="polite">
+      <div className="v5-kicker">ATLAS</div>
+      <p>Loading tool…</p>
+    </section>
+  </main>;
+}
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
@@ -51,19 +61,21 @@ function RootRouter() {
   const sensitivityLab = hash === "#sensitivity";
   const pointingApp = hash === "#pointing";
 
+  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : productLab ? <>
+    <ProductLab />
+    <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
+  </> : pointingApp ? <>
+    <AnalyticsBridge />
+    <PointingApp />
+  </> : <>
+    <AnalyticsBridge />
+    <AtlasConsumer />
+  </>;
+
   return <>
     <AnalyticsTransport />
     <AtlasGlobalNav hash={hash}/>
-    {validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : productLab ? <>
-      <ProductLab />
-      <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
-    </> : pointingApp ? <>
-      <AnalyticsBridge />
-      <PointingApp />
-    </> : <>
-      <AnalyticsBridge />
-      <AtlasConsumer />
-    </>}
+    <Suspense fallback={<ToolFallback />}>{route}</Suspense>
   </>;
 }
 
