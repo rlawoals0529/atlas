@@ -22,7 +22,7 @@ export interface SensitivityDataset {
   games: SensitivityGame[];
 }
 
-export const sensitivityDataset = rawGames as SensitivityDataset;
+export const sensitivityDataset = rawGames as unknown as SensitivityDataset;
 export const sensitivityGames = sensitivityDataset.games;
 
 export function gameById(id: string) {
