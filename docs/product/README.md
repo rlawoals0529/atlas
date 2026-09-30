@@ -12,6 +12,7 @@ This folder documents how Atlas is actually being built and operated. It is not 
 - `DECISIONS.md` — lightweight records for architecture/research decisions that materially changed Atlas.
 - `VALIDATION_PROTOCOL.md` — hardware/system validation workflow, requirement provenance, execution evidence, defect reporting and selective automation.
 - `COMMUNITY_EVIDENCE_PROTOCOL.md` — evidence schema, sampling/consensus limitations and ingestion rules before community research scales.
+- `COMMUNITY_PILOT_2026Q3.md` — first real qualitative-evidence pilot across three current mice, including findings, disagreements and limits.
 - `RESEARCH_CORRECTION_WORKFLOW.md` — canonical data/evidence correction process.
 - `RELEASE_CHECKLIST.md` — concrete release gates for consumer, evidence, analytics, validation, engineering and security.
 - `CHANGELOG.md` — consumer, research, analytics, validation and infrastructure release history/limitations.
@@ -28,5 +29,5 @@ This folder documents how Atlas is actually being built and operated. It is not 
 7. Capability-derived hardware tests begin `NOT RUN`. PASS/FAIL requires a real physical execution record.
 8. Severity and backlog/test priority remain separate concepts.
 9. Automation is used where host-visible behavior is repeatable; physical feel and intermittent hardware behavior remain manual-first.
-10. Community observations remain traceable evidence, not population sentiment.
+10. Community observations remain traceable evidence, not population sentiment; the 2026 Q3 pilot demonstrates this with real sources and disagreement handling.
 11. Portfolio value is a byproduct of building a useful, well-operated product; it is not sufficient justification for a feature.
