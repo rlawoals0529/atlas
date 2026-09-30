@@ -95,3 +95,9 @@ jobs:
             echo
             echo "Health check: PASS — deployed release metadata matches this repository checkout."
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify deployed product media fallbacks
+        if: steps.cloudflare.outputs.configured == 'true'
+        shell: bash
+        run: |
+          node scripts/verify-deployed-media.mjs "${{ steps.deploy.outputs.url }}" | tee /tmp/atlas-media-verification.log
+          echo "Product media probes: PASS — every catalog product using the official-source fallback returned an image response." >> "$GITHUB_STEP_SUMMARY"
