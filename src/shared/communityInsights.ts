@@ -14,12 +14,19 @@ export type CommunityAttribute =
   | "battery"
   | "software"
   | "qc-reliability"
-  | "price-value";
+  | "price-value"
+  | "glide"
+  | "stopping-power"
+  | "texture"
+  | "skate-compatibility"
+  | "dust-sensitivity"
+  | "skin-sleeve"
+  | "durability";
 
 export type Sentiment = "positive" | "mixed" | "negative" | "neutral";
 export type EvidenceStrength = "anecdotal" | "repeated-observation" | "structured-sample" | "independent-measurement";
 export type ConsensusIndicator = "single-source" | "disagreement" | "directional" | "cross-source-consensus";
-export type CommunitySourceType = "reddit" | "forum" | "review" | "video" | "support-thread" | "other";
+export type CommunitySourceType = "reddit" | "forum" | "review" | "video" | "x-post" | "support-thread" | "other";
 
 export interface CommunityInsight {
   id: string;
