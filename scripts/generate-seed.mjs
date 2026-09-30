@@ -1,9 +1,9 @@
 import fs from "node:fs";
-import { loadCatalog } from "./load-catalog.mjs";
+import { catalogGroups, loadCatalog } from "./load-catalog.mjs";
 
 const catalog = loadCatalog();
 const esc = (v) => String(v).replaceAll("'", "''");
-const products = [...catalog.mice, ...catalog.mousepads, ...catalog.skates];
+const products = catalogGroups.flatMap(group => catalog[group]);
 const sourceMap = new Map();
 for (const p of products) for (const s of p.sources) sourceMap.set(s.id, s);
 let sql = "BEGIN TRANSACTION;\n";
