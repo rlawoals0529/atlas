@@ -22,6 +22,7 @@ import {
   type ValidationStatus,
 } from "../shared/validation";
 import ProductIntelligenceExtras from "./ProductIntelligenceExtras";
+import AnalyticsDeepDive from "./AnalyticsDeepDive";
 
 const SESSION_KEY = "atlas.validation.sessions.v1";
 const DEFECT_KEY = "atlas.validation.defects.v1";
@@ -64,10 +65,11 @@ function AnalyticsPanel() {
     return () => window.removeEventListener("atlas:analytics", refresh);
   }, []);
 
-  const summary = useMemo<AnalyticsSummary>(() => {
+  const events = useMemo(() => {
     void revision;
-    return summarizeAnalytics(mode === "demo" ? DEMO_ANALYTICS_EVENTS : localAnalyticsEvents(), mode);
+    return mode === "demo" ? DEMO_ANALYTICS_EVENTS : localAnalyticsEvents();
   }, [mode, revision]);
+  const summary = useMemo<AnalyticsSummary>(() => summarizeAnalytics(events, mode), [events, mode]);
 
   return <div className="pl-stack">
     <section className="pl-callout">
@@ -89,6 +91,8 @@ function AnalyticsPanel() {
       <section className="pl-card"><div className="pl-card-head"><span>PRODUCTS</span><h3>Most viewed</h3></div><div className="pl-table">{summary.topViewedProducts.length ? summary.topViewedProducts.map(row => <div key={row.productId}><span>{productName(row.productId)}</span><b>{row.count}</b><em>views</em></div>) : <p className="pl-empty">No product-view events recorded yet.</p>}</div></section>
       <section className="pl-card"><div className="pl-card-head"><span>COMPARE</span><h3>Most compared</h3></div><div className="pl-table">{summary.topComparedProducts.length ? summary.topComparedProducts.map(row => <div key={row.productId}><span>{productName(row.productId)}</span><b>{row.count}</b><em>comparisons</em></div>) : <p className="pl-empty">No comparison-complete events recorded yet.</p>}</div></section>
     </div>
+
+    <AnalyticsDeepDive events={events}/>
 
     <section className="pl-integrity-note"><b>Privacy boundary</b><p>No name, email, IP-derived identity, raw search text, exact hand measurement or fingerprint is stored by this client event model. Segmentation uses coarse product-relevant buckets. The anonymous visitor ID is random first-party storage used only for repeat-visit analysis.</p></section>
   </div>;
