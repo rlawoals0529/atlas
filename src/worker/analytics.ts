@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { Context } from "hono";
-import { ANALYTICS_SCHEMA_VERSION, type AtlasAnalyticsEvent, type AtlasEventName } from "../shared/analytics";
+import { ANALYTICS_SCHEMA_VERSION } from "../shared/analyticsContract";
+import type { AtlasAnalyticsEvent, AtlasEventName } from "../shared/analytics";
 
 type Statement = {
   bind: (...values: unknown[]) => Statement;
@@ -107,7 +108,7 @@ function validProperties(name: AtlasEventName, value: unknown): boolean {
     case "recommendation_step_completed": return typeof p.step === "string" && p.step.length > 0 && p.step.length <= 64 && Number.isInteger(p.stepIndex) && Number(p.stepIndex) >= 1 && Number(p.stepIndex) <= 30;
     case "recommendation_abandoned": return (p.lastStep === undefined || (typeof p.lastStep === "string" && p.lastStep.length <= 64)) && Number.isInteger(p.completedSteps) && Number(p.completedSteps) >= 0 && Number(p.completedSteps) <= 30 && ["navigation", "pagehide", "unknown"].includes(String(p.reason));
     case "recommendation_completed": return Number.isInteger(p.resultCount) && Number(p.resultCount) >= 0 && Number(p.resultCount) <= 50 && typeof p.relativeMode === "boolean";
-    case "recommendation_result_selected": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && (p.rank === undefined || (Number.isInteger(p.rank) && Number(p.rank) >= 1 && Number(p.rank) <= 50)) && (p.fitScore === undefined || (typeof p.fitScore === "number" && Number(p.fitScore) >= 0 && Number(p.fitScore) <= 100));
+    case "recommendation_result_selected": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && (p.rank === undefined || (Number.isInteger(p.rank) && Number(p.rank) >= 1 && Number(p.rank) <= 50)) && (p.fitScore === undefined || (typeof p.fitScore === "number" && Number.isFinite(p.fitScore) && p.fitScore >= 0 && p.fitScore <= 100));
     case "outbound_product_clicked": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && ["manufacturer", "source", "retailer", "other"].includes(String(p.destinationKind));
     case "product_lab_viewed": return p.section === undefined || ["overview", "analytics", "intelligence", "validation", "decisions", "integrity"].includes(String(p.section));
     case "validation_plan_generated": return typeof p.productId === "string" && PRODUCT_ID.test(p.productId) && Number.isInteger(p.caseCount) && Number(p.caseCount) >= 0 && Number(p.caseCount) <= 300 && Number.isInteger(p.automationCandidateCount) && Number(p.automationCandidateCount) >= 0 && Number(p.automationCandidateCount) <= 300;
