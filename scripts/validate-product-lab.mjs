@@ -9,8 +9,11 @@ const assert = (condition, message) => {
 };
 
 const app = read("src/react-app/AppV05.tsx");
+const main = read("src/react-app/main.tsx");
 const lab = read("src/react-app/ProductLab.tsx");
+const validationRunner = read("src/react-app/ValidationRunner.tsx");
 const validation = read("src/shared/validation.ts");
+const validationEvidence = read("src/shared/validationEvidence.ts");
 const community = read("src/shared/communityInsights.ts");
 const analytics = read("src/shared/analytics.ts");
 const analyticsBridge = read("src/react-app/AnalyticsBridge.tsx");
@@ -23,6 +26,7 @@ const productMap = read("src/react-app/ProductPositionMap.tsx");
 const wrangler = read("wrangler.jsonc");
 const analyticsSpec = read("docs/product/ANALYTICS_SPEC.md");
 const communityProtocol = read("docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md");
+const validationProtocol = read("docs/product/VALIDATION_PROTOCOL.md");
 
 assert(!app.includes("INPUT ATLAS"), "consumer UI must use Atlas branding only");
 assert(app.includes('const VERSION = "0.8"'), "consumer version must match current v0.8 Product Lab integration");
@@ -40,6 +44,17 @@ assert(lab.includes("actualResult"), "manual execution must retain an actual-res
 assert(lab.includes("reproductionSteps"), "defect workflow must retain reproduction steps");
 assert(lab.includes("suspectedLayer"), "defect workflow must preserve suspected-layer uncertainty field");
 assert(lab.includes("regressionTestId"), "defect workflow must support regression linkage");
+assert(main.includes('hash === "#validation-run"'), "guided physical validation runner must remain routable");
+assert(main.includes('href="#validation-run"'), "Product Lab must expose the guided physical validation runner");
+assert(validationRunner.includes("P0 first"), "guided runner must retain a P0-first execution mode");
+assert(validationRunner.includes("Resume local evidence"), "guided runner must allow locally persisted sessions to be resumed");
+assert(validationRunner.includes("Export Markdown"), "guided runner must support a human-readable evidence export");
+assert(validationRunner.includes("Actual observed result"), "guided runner must require an explicit observed-result field");
+assert(validationEvidence.includes("Actual observed result is missing."), "execution integrity must reject status-only records without an actual observation");
+assert(validationEvidence.includes("Failure reproduction frequency is missing."), "failed executions must require reproduction-frequency context");
+assert(validationEvidence.includes("buildValidationReportMarkdown"), "validation evidence must support a Markdown report builder");
+assert(validationEvidence.includes("should not be treated as portfolio-ready evidence yet"), "incomplete execution records must be visibly excluded from portfolio-ready evidence");
+assert(validationProtocol.includes("#validation-run"), "validation protocol must document the guided runner route");
 
 assert(analytics.includes("ANALYTICS_SCHEMA_VERSION = 2"), "analytics must use the current versioned v2 event contract");
 assert(analytics.includes("recommendation_step_completed"), "recommendation step events must remain typed");

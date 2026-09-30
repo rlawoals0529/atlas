@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./AppV05";
 import ProductLab from "./ProductLab";
+import ValidationRunner from "./ValidationRunner";
 import AnalyticsBridge from "./AnalyticsBridge";
 import AnalyticsTransport from "./AnalyticsTransport";
 import { analyticsVisitor, trackAtlasEvent } from "../shared/analytics";
@@ -31,9 +32,15 @@ function RootRouter() {
     if (recorded) sessionStorage.setItem(key, "1");
   }, []);
 
+  const productLab = hash === "#product-lab";
+  const validationRunner = hash === "#validation-run";
+
   return <>
     <AnalyticsTransport />
-    {hash === "#product-lab" ? <ProductLab /> : <>
+    {validationRunner ? <ValidationRunner /> : productLab ? <>
+      <ProductLab />
+      <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
+    </> : <>
       <AnalyticsBridge />
       <App />
       <a className="atlas-product-lab-entry" href="#product-lab" aria-label="Open Atlas Product Lab"><span>LAB</span><b>Product research & validation</b><i>↗</i></a>

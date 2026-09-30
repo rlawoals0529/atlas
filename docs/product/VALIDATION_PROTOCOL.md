@@ -8,6 +8,23 @@ It may only become PASS, FAIL or BLOCKED after a person physically executes it a
 
 Catalog specifications can generate requirements and coverage. They cannot generate test results.
 
+## Guided physical runner
+
+Atlas exposes a dedicated guided execution surface at `#validation-run` in addition to the broader Product Lab.
+
+The runner uses the same browser-local validation sessions and defects as Product Lab, but makes the evidence workflow explicit:
+
+1. declare the real device and execution environment;
+2. record at minimum the OS and actual connection mode before creating a session;
+3. start with P0 enumeration/input/recovery paths or expand to the full capability-derived plan;
+4. execute the physical steps and record the actual observed result rather than copying the expected result;
+5. record failure reproduction frequency when a case fails;
+6. attach a traceable evidence reference when available;
+7. resume saved browser-local sessions instead of starting over;
+8. export structured JSON or a human-readable Markdown validation report.
+
+A changed status is not, by itself, a complete evidence record. Atlas checks executed cases for an observation, timestamp and core environment context. Failed cases also need reproduction-frequency context. Incomplete executed records remain visible in the report and are explicitly not treated as portfolio-ready evidence.
+
 ## Test case fields
 
 Atlas validation cases carry:
@@ -66,7 +83,21 @@ Before claiming an execution result, record what is relevant and actually known:
 - configuration software/browser version where relevant;
 - surface and power state when relevant.
 
-Unknown fields remain unknown; do not fill them with assumptions.
+The guided runner requires the OS and connection mode before a new physical session can be created. Other fields remain conditional on what is relevant and actually known. Unknown fields remain unknown; do not fill them with assumptions.
+
+## Execution-record completeness
+
+For an executed case to pass Atlas's minimum evidence-integrity check:
+
+- status must no longer be `NOT RUN`;
+- an actual observed result must be written;
+- an execution timestamp must exist;
+- OS / host environment context must be present;
+- connection mode must be present;
+- a FAIL must include reproduction-frequency context;
+- a regression marked passed/failed must include notes describing the change or recheck.
+
+An evidence attachment/reference is encouraged and counted separately from record completeness because some deterministic functional checks can be credibly documented with a detailed observation alone. When a method depends on logs, measurements, screenshots or video, the appropriate evidence should still be captured.
 
 ## Methods
 
@@ -106,6 +137,12 @@ Capability-derived coverage includes:
 - declared-cycle/declared-duration reliability checks.
 
 Long-duration and repeated-cycle claims must record the actual duration/cycle count. The plan itself is not evidence of endurance.
+
+## P0-first execution
+
+The guided runner defaults to a P0-first view. This is an execution convenience, not a statement that P1/P2 cases are unimportant.
+
+P0 emphasizes release-path failures such as enumeration, basic input, reconnect recovery and wireless recovery where applicable. After core paths are exercised, expand to the full plan for polling, sensor behavior, configuration persistence, compatibility, power and reliability coverage.
 
 ## Automation strategy
 
@@ -165,4 +202,6 @@ Do not promote a suspected layer into a root-cause statement unless evidence est
 
 `buildValidationReport()` creates a structured report from one real manual session. It counts PASS/FAIL/BLOCKED only from statuses the tester recorded and keeps NOT RUN visible. The report states the tested environment and limitations, and links defects only when they apply to the product/session coverage.
 
-The current Product Lab also exports its persisted manual session JSON. The report format can be wired directly into richer HTML/PDF output later without changing the integrity rule.
+The Product Lab exports structured session JSON. The guided runner at `#validation-run` exports that same evidence model as JSON and also builds a Markdown validation report with environment context, execution totals, per-case record-integrity warnings, defects and limitations.
+
+Neither export upgrades an incomplete execution into valid evidence. If an executed case is missing required observation/environment details, the Markdown report flags it explicitly rather than presenting it as complete portfolio evidence.
