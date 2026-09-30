@@ -1,5 +1,46 @@
 # Atlas product changelog
 
+## v0.9 — Input ecosystem expansion (unreleased)
+
+### Consumer utilities
+- adds a dedicated **Keyboard Lab** at `#keyboard-lab` for sourced keyboard and switch research;
+- adds a dedicated **Sensitivity Lab** at `#sensitivity` for source-to-target DPI/sensitivity conversion using physical cm/360;
+- adds a compact utility dock from the existing consumer surface without changing the current mouse/pad/skate recommendation flow;
+- keeps the new surfaces in the existing Atlas precision-product visual language rather than introducing a generic dashboard aesthetic.
+
+### Keyboard / switch catalog
+- adds first-class `keyboard` and `switch` product types, catalog loading, validation, reporting, generated SQL and Worker API exposure;
+- starts with sourced records for Wooting 80HE+, Razer Huntsman V3 Pro Tenkeyless 8KHz, Keychron Q1 HE 8K, Gateron Magnetic Jade Emerald and CHERRY MX2A Red;
+- preserves published force units (`gf` vs `cN`) and separates polling/actuation specifications from independently measured performance;
+- explicitly treats Hall-effect switch compatibility as board/firmware/sensing-implementation dependent;
+- uses ThereminGoat review observations as expert qualitative evidence without importing composite rankings as an Atlas universal quality score.
+
+### Surface / reviewer evidence
+- adds a separate qualitative glasspad pilot around the WALLHACK SP-004;
+- records reviewer disagreement, skate/debris interaction, dust sensitivity and long-term owner conditions without converting them into population rates or fabricated friction measurements;
+- extends the community evidence schema to distinguish direct `x-post` observations;
+- documents public X/Twitter indexing limitations and keeps limited-edition/variant observations separate from the standard product.
+
+### Sensitivity methodology
+- converts base hipfire sensitivity through game yaw, source/target DPI and physical turn distance rather than opaque lookup ratios;
+- exposes eDPI, cm/360 and inches/360;
+- adds initial CS2, VALORANT and Apex presets with source-specific confidence labels;
+- deliberately excludes ADS, scoped, per-optic, FOV/perceptual and controller equivalence from this first pass;
+- adds deterministic validation that conversion preserves unrounded cm/360.
+
+### Data / infrastructure
+- adds a forward D1 catalog migration for keyboard/switch product types and expands the fresh schema constraint;
+- exposes keyboard/switch counts through `/api/health` and `/api/stats`, and supports them in `/api/catalog` and `/api/products/:slug`;
+- keeps mouse comparison, shape similarity and pointing-device recommendation endpoints scoped to their existing domains;
+- gates sensitivity provenance/math validation in both Atlas CI and the production deploy workflow;
+- deployment summaries now print direct Keyboard Lab and Sensitivity Lab routes.
+
+### Integrity boundaries
+- no fabricated keyboard latency, surface friction, hardware validation, reliability rates, market statistics or community consensus;
+- minimum actuation distance is never labeled as latency;
+- manufacturer polling ceilings are not treated as independent effective-update measurements;
+- matching cm/360 is a physical-distance match, not proof that different games or FOVs feel perceptually identical.
+
 ## v0.8 — Product Lab (unreleased)
 
 ### Consumer experience
