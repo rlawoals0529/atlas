@@ -26,11 +26,29 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Razer Viper V4 Pro gaming mouse in black and white",
     credit: "Razer official support image",
   },
+  "mouse-wlmouse-beast-x-max": {
+    url: "https://www.wlmouse.com/cdn/shop/files/max_6aaf780e-f0d8-4857-ae3e-e189612e6b28.jpg?v=1755482399&width=2000",
+    sourceUrl: "https://www.wlmouse.com/products/beast-max",
+    alt: "WLMOUSE Beast X Max magnesium gaming mouse",
+    credit: "WLMOUSE official product image",
+  },
+  "mouse-lamzu-inca": {
+    url: "https://lamzu.com/cdn/shop/files/INCA_800X800_1.jpg?v=1740597300",
+    sourceUrl: "https://lamzu.com/collections/inca/products/lamzu-inca",
+    alt: "LAMZU INCA wireless gaming mouse",
+    credit: "LAMZU official product image",
+  },
   "pad-logitech-pro-x-control": {
     url: "https://resource.logitechg.com/w_544%2Ch_466%2Car_7%3A6%2Cc_pad%2Cq_auto%2Cf_auto%2Cdpr_1.0/d_transparent.gif/content/dam/gaming/en/products/pro-x-control-pdp/gallery/pro-x-control-mouse-pad-top-angle-gallery-1.png",
     sourceUrl: "https://www.logitechg.com/en-us/shop/p/pro-x-control-gaming-mousepad.943-001617",
     alt: "Logitech G PRO X CONTROL gaming mousepad",
     credit: "Logitech G official product image",
+  },
+  "pad-esptiger-sr-tang-dao": {
+    url: "https://esptiger.com/cdn/shop/files/ET-MP-TANGDAO-SR-ORANGE_1_49241cdf-a24f-46e3-86ad-4ea9c21bd28e.webp?v=1709007355&width=1946",
+    sourceUrl: "https://esptiger.com/products/sr-tang-dao-balance-gaming-mousepad",
+    alt: "ESPTIGER SR Tang Dao orange gaming mousepad",
+    credit: "ESPTIGER official product image",
   },
   "keyboard-wooting-60he-v2": {
     url: "https://wooting.io/_next/image?q=90&url=https%3A%2F%2Fwooting-website.ams3.cdn.digitaloceanspaces.com%2Fproducts%2Fkeyboards%2F60HEv2%2F60he-v2_og-and-split.webp&w=3840",
@@ -56,6 +74,12 @@ export const productImages: Record<string, ProductImage> = {
     alt: "NuPhy Field75 HE V2 magnetic gaming keyboard",
     credit: "NuPhy official product image",
   },
+  "keyboard-melgeek-made68-pro-plus": {
+    url: "https://cdn.shopify.com/s/files/1/0078/2863/5712/files/MelGeek_MADE68_Pro_gaming_keyboard_1.jpg?v=1782373870",
+    sourceUrl: "https://www.melgeek.com/products/made68-pro",
+    alt: "MelGeek MADE68 Pro Plus Hall-effect gaming keyboard",
+    credit: "MelGeek official product image",
+  },
   "switch-gateron-magnetic-jade-pro": {
     url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-pro-switch-magnetic-hallsensor-switch-mechanical-keyboard-wooting.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
     sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-pro-switch-set",
@@ -72,6 +96,18 @@ export const productImages: Record<string, ProductImage> = {
     url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2604/10/products/gateron-magnetic-jade-attraction-he-switch9-143504c316.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
     sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-attraction-he-switch-set",
     alt: "Gateron Magnetic Jade Attraction Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-black-lotus": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2609/10/photo/gateron-magnetic-black-lotus-switch-set71.webp",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-black-lotus-he-switch-set",
+    alt: "Gateron Magnetic Black Lotus Hall-effect switch set",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-low-profile-magnetic-jade-pro": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2411/14/products/bbfdabdb8f.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-full-pom-low-profile-magnetic-jade-pro-switch-set",
+    alt: "Gateron Full POM Low Profile Magnetic Jade Pro Hall-effect switch",
     credit: "Gateron official product image",
   },
   "switch-geon-raw-he-40gf": {
