@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import ConsumerCompare from "./ConsumerCompare";
+import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 
 const categoryMeta: Record<ProductType, { label: string; singular: string; description: string; token: string }> = {
   mouse: { label: "Mice", singular: "Mouse", description: "Shape, weight, polling and hand fit", token: "M" },
@@ -43,7 +44,7 @@ function productMetrics(product: CatalogProduct): [string, string][] {
     case "mouse": return [["Weight", `${product.specs.weightG} g`], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Grip", `${product.specs.gripWidthMm ?? product.specs.widthMm} mm`], ["Shape", titleCase(product.specs.shape)]];
     case "mousepad": return [["Surface", titleCase(product.specs.surfaceClass)], ["Glide", `${product.feel.dynamicSpeed}/100`], ["Stopping", `${product.feel.stoppingPower}/100`], ["Size", `${product.specs.widthMm} × ${product.specs.heightMm}`]];
     case "skate": return [["Material", titleCase(product.specs.material)], ["Format", titleCase(product.specs.format)], ["Glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`], ["Control", `${product.feel.control}/100`]];
-    case "keyboard": return [["Format", product.specs.formFactor.toUpperCase()], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Actuation", product.specs.minActuationMm != null ? `${product.specs.minActuationMm} mm min` : "Fixed"], ["Rapid trigger", product.specs.rapidTrigger ? "Yes" : "No"]];
+    case "keyboard": return [["Format", product.specs.formFactor.toUpperCase()], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Actuation", product.specs.minActuationMm != null ? `${product.specs.minActuationMm} mm min` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm precision` : "Adjustable"], ["Rapid trigger", product.specs.rapidTrigger ? "Yes" : "No"]];
     case "switch": {
       const force = product.specs.bottomOutForce ?? product.specs.actuationForce ?? product.specs.initialForce;
       return [["Feel", titleCase(product.specs.feel)], ["Technology", titleCase(product.specs.technology)], ["Travel", `${product.specs.totalTravelMm} mm`], ["Force", force ? `${force.value} ${force.unit}` : "Not listed"]];
@@ -54,26 +55,69 @@ function productMetrics(product: CatalogProduct): [string, string][] {
 function detailRows(product: CatalogProduct): [string, ReactNode][] {
   switch (product.type) {
     case "mouse": return [
-      ["Dimensions", `${product.specs.lengthMm} × ${product.specs.widthMm} × ${product.specs.heightMm} mm`], ["Grip width", `${product.specs.gripWidthMm ?? "—"} mm`], ["Weight", `${product.specs.weightG} g`], ["Shape", `${titleCase(product.specs.shape)} · ${titleCase(product.specs.hump)} hump`], ["Sensor", product.specs.sensor], ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)], ["Main switches", product.specs.mainSwitch ?? titleCase(product.specs.switchType)], ["Connectivity", product.specs.connectivity.join(" · ")],
+      ["Dimensions", `${product.specs.lengthMm} × ${product.specs.widthMm} × ${product.specs.heightMm} mm`],
+      ["Grip width", `${product.specs.gripWidthMm ?? "—"} mm`],
+      ["Weight", `${product.specs.weightG} g`],
+      ["Shape", `${titleCase(product.specs.shape)} · ${titleCase(product.specs.hump)} hump`],
+      ["Sensor", product.specs.sensor],
+      ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
+      ["Main switches", product.specs.mainSwitch ?? titleCase(product.specs.switchType)],
+      ["Connectivity", product.specs.connectivity.join(" · ")],
     ];
     case "mousepad": return [
-      ["Surface", `${titleCase(product.specs.surfaceClass)} · ${product.specs.surfaceMaterial}`], ["Base", product.specs.baseMaterial], ["Firmness", titleCase(product.specs.firmness)], ["Size", `${product.specs.widthMm} × ${product.specs.heightMm} mm`], ["Thickness", `${product.specs.thicknessMm} mm`], ["Dynamic glide", `${product.feel.dynamicSpeed}/100`], ["Stopping power", `${product.feel.stoppingPower}/100`], ["Humidity resistance", `${product.feel.humidityResistance}/100`],
+      ["Surface", `${titleCase(product.specs.surfaceClass)} · ${product.specs.surfaceMaterial}`],
+      ["Base", product.specs.baseMaterial],
+      ["Firmness", titleCase(product.specs.firmness)],
+      ["Size", `${product.specs.widthMm} × ${product.specs.heightMm} mm`],
+      ["Thickness", `${product.specs.thicknessMm} mm`],
+      ["Dynamic glide", `${product.feel.dynamicSpeed}/100`],
+      ["Stopping power", `${product.feel.stoppingPower}/100`],
+      ["Humidity resistance", `${product.feel.humidityResistance}/100`],
     ];
     case "skate": return [
-      ["Material", titleCase(product.specs.material)], ["Format", titleCase(product.specs.format)], ["Thickness", product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "—"], ["Fresh glide", `${product.feel.freshSpeed ?? product.feel.speed}/100`], ["Broken-in glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`], ["Control", `${product.feel.control}/100`], ["Glass compatibility", product.compatibility.glass ? "Compatible" : "Avoid"], ["Soft-base behavior", titleCase(product.compatibility.softBase)],
+      ["Material", titleCase(product.specs.material)],
+      ["Format", titleCase(product.specs.format)],
+      ["Thickness", product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "—"],
+      ["Fresh glide", `${product.feel.freshSpeed ?? product.feel.speed}/100`],
+      ["Broken-in glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`],
+      ["Control", `${product.feel.control}/100`],
+      ["Glass compatibility", product.compatibility.glass ? "Compatible" : "Avoid"],
+      ["Soft-base behavior", titleCase(product.compatibility.softBase)],
     ];
     case "keyboard": return [
-      ["Form factor", product.specs.formFactor.toUpperCase()], ["Layout", product.specs.layout], ["Switch technology", titleCase(product.specs.switchTechnology)], ["Stock switch", product.specs.stockSwitch], ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)], ["Actuation range", product.specs.minActuationMm != null ? `${product.specs.minActuationMm}–${product.specs.maxActuationMm ?? "?"} mm` : "Fixed / not listed"], ["Rapid Trigger", product.specs.rapidTrigger ? "Yes" : "No"], ["Hot-swap", product.specs.hotSwappable ? "Yes" : "No"], ["Connectivity", product.specs.connectivity.join(" · ")], ["Configuration", product.specs.webConfigurator ? "Web configurator" : product.specs.software ?? "Not listed"],
+      ["Form factor", product.specs.formFactor.toUpperCase()],
+      ["Layout", product.specs.layout],
+      ["Switch technology", titleCase(product.specs.switchTechnology)],
+      ["Stock switch", product.specs.stockSwitch],
+      ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
+      ["Actuation range", product.specs.minActuationMm != null ? `${product.specs.minActuationMm}–${product.specs.maxActuationMm ?? "?"} mm` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm published tuning precision` : "Adjustable / not fully specified"],
+      ["Rapid Trigger", product.specs.rapidTrigger ? "Yes" : "No"],
+      ["Hot-swap", product.specs.hotSwappable ? "Yes" : "No"],
+      ["Connectivity", product.specs.connectivity.join(" · ")],
+      ["Configuration", product.specs.webConfigurator ? "Web configurator" : product.specs.software ?? "Not listed"],
     ];
     case "switch": {
       const force = product.specs.bottomOutForce ?? product.specs.actuationForce ?? product.specs.initialForce;
-      return [["Technology", titleCase(product.specs.technology)], ["Feel", titleCase(product.specs.feel)], ["Force", force ? `${force.value} ${force.unit}` : "—"], ["Pre-travel", product.specs.preTravelMm != null ? `${product.specs.preTravelMm} mm` : "—"], ["Total travel", `${product.specs.totalTravelMm} mm`], ["Factory lubed", product.specs.factoryLubed == null ? "—" : product.specs.factoryLubed ? "Yes" : "No"], ["Rated life", product.specs.ratedKeystrokesM ? `${product.specs.ratedKeystrokesM}M keystrokes` : "—"], ["Compatibility", product.specs.compatibility?.join(" · ") ?? "Verify against the target board"]];
+      return [
+        ["Technology", titleCase(product.specs.technology)],
+        ["Feel", titleCase(product.specs.feel)],
+        ["Force", force ? `${force.value} ${force.unit}` : "—"],
+        ["Pre-travel", product.specs.preTravelMm != null ? `${product.specs.preTravelMm} mm` : "—"],
+        ["Total travel", `${product.specs.totalTravelMm} mm`],
+        ["Factory lubed", product.specs.factoryLubed == null ? "—" : product.specs.factoryLubed ? "Yes" : "No"],
+        ["Rated life", product.specs.ratedKeystrokesM ? `${product.specs.ratedKeystrokesM}M keystrokes` : "—"],
+        ["Compatibility", product.specs.compatibility?.join(" · ") ?? "Verify against the target board"],
+      ];
     }
   }
 }
 
 function ProductGlyph({ type }: { type: ProductType }) {
   return <div className={`consumer-glyph ${type}`} aria-hidden="true"><span>{categoryMeta[type].token}</span><i/><i/></div>;
+}
+
+function ProductVisual({ product }: { product: CatalogProduct }) {
+  return <ProductMedia productId={product.id} className={`consumer-real-image ${product.type}`} fallback={<ProductGlyph type={product.type}/>}/>;
 }
 
 function CoveragePill({ product }: { product: CatalogProduct }) {
@@ -83,7 +127,7 @@ function CoveragePill({ product }: { product: CatalogProduct }) {
 
 function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; onOpen: (product: CatalogProduct) => void; compared: boolean }) {
   return <button className={`consumer-product ${compared ? "compare-selected" : ""}`} onClick={() => onOpen(product)}>
-    <div className="consumer-product-visual"><ProductGlyph type={product.type}/><CoveragePill product={product}/></div>
+    <div className="consumer-product-visual"><ProductVisual product={product}/><CoveragePill product={product}/></div>
     <div className="consumer-product-head"><span>{product.brand}</span><small>{categoryMeta[product.type].singular}</small></div>
     <h3>{product.model}</h3>
     <p>{product.summary}</p>
@@ -99,7 +143,7 @@ function ProductDrawer({ product, onClose, onCompare, compared }: { product: Cat
     <button className="consumer-drawer-backdrop" aria-label="Close product details" onClick={onClose}/>
     <aside className="consumer-drawer">
       <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2>{product.model}</h2></div><button onClick={onClose} aria-label="Close">×</button></header>
-      <div className="consumer-drawer-hero"><ProductGlyph type={product.type}/><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
+      <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
       <p className="consumer-drawer-summary">{product.summary}</p>
       <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button className="consumer-drawer-compare" onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>
@@ -206,7 +250,7 @@ export default function AtlasConsumer() {
       </section>
 
       <section className="consumer-catalog" id="consumer-catalog">
-        <div className="consumer-section-head"><div><span>DATABASE</span><h2>Browse the input stack</h2><p>Start broad, reveal only the filters that matter, and add up to four products from one category to the richer comparison tray.</p></div><strong>{filtered.length}<small> matching</small></strong></div>
+        <div className="consumer-section-head"><div><span>DATABASE</span><h2>Browse the input stack</h2><p>Start broad, reveal only the filters that matter, and add up to four products from one category to the richer comparison tray. Official product imagery appears where Atlas has a stable sourced asset; otherwise the interface falls back to the category glyph.</p></div><strong>{filtered.length}<small> matching</small></strong></div>
         <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? allCatalog.length : counts[type]}</span></button>)}</div>
         <div className="consumer-toolbar">
           <div className="consumer-search"><span>⌕</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search product, material, shape, switch, feature…"/></div>
