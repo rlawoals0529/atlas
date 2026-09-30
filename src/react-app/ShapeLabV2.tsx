@@ -13,11 +13,13 @@ export type ShapeLayer = { id: string; color: string; visible: boolean; opacity:
 const dashFor = (style: LineStyle) => style === "dash" ? "10 5" : style === "dot" ? "2 5" : undefined;
 const fmt = (value: number) => Number.isInteger(value) ? String(value) : value.toFixed(1);
 const fallbackMouse = (mouse: MouseProduct) => <span className="shape-fallback">{mouse.brand.slice(0, 1)}{mouse.model.slice(0, 1)}</span>;
-const qualityLabel = (mouse: MouseProduct) => mouse.outline?.sourceType === "measured-svg"
-  ? "MEASURED"
-  : mouse.outline?.sourceType === "scan"
-    ? "MEASURED SCAN"
-    : "PARAMETRIC ESTIMATE";
+const qualityLabel = (mouse: MouseProduct, view: ShapeView) => {
+  if (!mouse.outline?.[view]?.length) return "PARAMETRIC ESTIMATE";
+  if (mouse.outline.sourceType === "traced-reference") return "TRACED REFERENCE";
+  if (mouse.outline.sourceType === "measured-svg") return "MEASURED";
+  if (mouse.outline.sourceType === "scan") return "MEASURED SCAN";
+  return "PARAMETRIC ESTIMATE";
+};
 
 function layerMouse(layer: ShapeLayer) {
   return mice.find(mouse => mouse.id === layer.id);
@@ -290,7 +292,7 @@ export default function ShapeLabV2({
           const mouse = layerMouse(layer); if (!mouse) return null;
           return <article key={mouse.id} style={{ "--shape-color": layer.color } as React.CSSProperties}>
             {showImages && <div className="shape-spec-image"><ProductMedia productId={mouse.id} fallback={fallbackMouse(mouse)}/></div>}
-            <div><span>{mouse.brand}</span><b>{mouse.model}</b><small>{fmt(mouse.specs.lengthMm)} L · {fmt(mouse.specs.widthMm)} W · {fmt(mouse.specs.heightMm)} H · {mouse.specs.gripWidthMm != null ? `${fmt(mouse.specs.gripWidthMm)} grip` : "grip —"} · {mouse.specs.weightG} g</small><em title={mouse.outline?.sourceIds?.join(", ")}>{qualityLabel(mouse)}</em></div>
+            <div><span>{mouse.brand}</span><b>{mouse.model}</b><small>{fmt(mouse.specs.lengthMm)} L · {fmt(mouse.specs.widthMm)} W · {fmt(mouse.specs.heightMm)} H · {mouse.specs.gripWidthMm != null ? `${fmt(mouse.specs.gripWidthMm)} grip` : "grip —"} · {mouse.specs.weightG} g</small><em title={mouse.outline?.sourceIds?.join(", ")}>{qualityLabel(mouse, view)}</em></div>
             {showImages && <ProductImageCredit productId={mouse.id}/>}
           </article>;
         })}</div>
