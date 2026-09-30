@@ -1,0 +1,388 @@
+{
+  "mice": [
+    {
+      "id": "mouse-razer-viper-v4-pro",
+      "slug": "razer-viper-v4-pro",
+      "type": "mouse",
+      "brand": "Razer",
+      "model": "Viper V4 Pro",
+      "status": "current",
+      "summary": "49 g symmetrical wireless esports mouse with Razer's Focus Pro 50K Optical Sensor Gen-3, Gen-4 optical switches and up to 8 kHz wired or wireless polling.",
+      "tags": ["wireless", "8k", "ultralight", "symmetrical", "optical-switch", "50k-dpi", "esports"],
+      "sources": [
+        {
+          "id": "razer-viper-v4-pro-official",
+          "label": "Razer Viper V4 Pro product page",
+          "url": "https://www.razer.com/gaming-mice/razer-viper-v4-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "razer-viper-v4-pro-support",
+          "label": "Razer Viper V4 Pro support specification",
+          "url": "https://mysupport.razer.com/app/answers/detail/a_id/20775/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-viper-v4-fit",
+          "label": "Atlas Viper V4 Pro fit interpretation",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "lengthMm": 127.1,
+        "widthMm": 63.9,
+        "heightMm": 39.9,
+        "gripWidthMm": 57,
+        "weightG": 49,
+        "shape": "symmetrical",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "mild",
+        "sensor": "Razer Focus Pro 50K Optical Sensor Gen-3",
+        "maxDpi": 50000,
+        "maxPollingHz": 8000,
+        "connectivity": ["2.4GHz wireless", "USB wired"],
+        "switchType": "optical",
+        "mainSwitch": "Razer Optical Mouse Switches Gen-4",
+        "shellMaterial": "plastic",
+        "programmableButtons": 6,
+        "sideButtons": 2,
+        "onboardProfiles": 1,
+        "battery1kHours": 180,
+        "battery8kHours": 45,
+        "stockSkateMaterial": "100% PTFE"
+      },
+      "fit": {
+        "handLengthCm": [17.5, 21.0],
+        "handWidthCm": [8.5, 11.0],
+        "grip": {
+          "palm": 58,
+          "relaxed-claw": 93,
+          "aggressive-claw": 88,
+          "pincer-claw": 84,
+          "knuckle-claw": 82,
+          "fingertip": 91,
+          "extended-fingertip": 88,
+          "palm-claw-hybrid": 80
+        },
+        "aimStyle": {"finger": 94, "wrist": 94, "hybrid": 95, "arm": 88},
+        "gameStyle": {"tactical-fps": 95, "tracking-fps": 96, "arena-fps": 95, "battle-royale": 95, "moba-rts": 78, "mmo": 42, "action": 88, "mixed": 92},
+        "coatingDry": 82,
+        "coatingSweaty": 78,
+        "clickLightness": 83,
+        "clickCrispness": 88,
+        "wheelTactility": 80,
+        "liftSecurity": 80,
+        "palmSupport": 52,
+        "balance": "center"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["razer-viper-v4-pro-official", "razer-viper-v4-pro-support"],
+          "confidence": "high",
+          "note": "Dimensions, mass, sensor ceiling, polling ceiling, button count, switches, onboard profile, battery figures and PTFE feet are manufacturer-published specifications."
+        },
+        "fit": {
+          "sourceIds": ["razer-viper-v4-pro-official", "atlas-viper-v4-fit"],
+          "confidence": "low",
+          "note": "Grip-width estimate, hand ranges and 0–100 fit vectors are Atlas editorial normalization for comparison, not Razer measurements."
+        }
+      }
+    },
+    {
+      "id": "mouse-razer-deathadder-v4-pro",
+      "slug": "razer-deathadder-v4-pro",
+      "type": "mouse",
+      "brand": "Razer",
+      "model": "DeathAdder V4 Pro",
+      "status": "current",
+      "summary": "56 g right-handed ergonomic wireless esports mouse with Focus Pro 45K Optical Sensor Gen-2, Gen-4 optical switches and true 8 kHz wired or wireless polling.",
+      "tags": ["wireless", "8k", "ultralight", "ergonomic", "optical-switch", "45k-dpi", "esports"],
+      "sources": [
+        {
+          "id": "razer-deathadder-v4-pro-official",
+          "label": "Razer DeathAdder V4 Pro product page",
+          "url": "https://www.razer.com/gaming-mice/razer-deathadder-v4-pro",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "razer-deathadder-v4-pro-support",
+          "label": "Razer DeathAdder V4 Pro support specification",
+          "url": "https://mysupport.razer.com/app/answers/detail/a_id/19852",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-deathadder-v4-fit",
+          "label": "Atlas DeathAdder V4 Pro fit interpretation",
+          "url": "./research/FIELD_MODEL.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "lengthMm": 128,
+        "widthMm": 68,
+        "heightMm": 44,
+        "gripWidthMm": 61,
+        "weightG": 56,
+        "shape": "ergonomic",
+        "hump": "center",
+        "frontFlare": "medium",
+        "sideCurvature": "aggressive",
+        "sensor": "Razer Focus Pro 45K Optical Sensor Gen-2",
+        "maxDpi": 45000,
+        "maxPollingHz": 8000,
+        "connectivity": ["2.4GHz wireless", "USB wired"],
+        "switchType": "optical",
+        "mainSwitch": "Razer Optical Mouse Switches Gen-4",
+        "shellMaterial": "plastic",
+        "programmableButtons": 6,
+        "sideButtons": 2,
+        "onboardProfiles": 1,
+        "battery1kHours": 150,
+        "battery8kHours": 22,
+        "stockSkateMaterial": "PTFE"
+      },
+      "fit": {
+        "handLengthCm": [17.5, 21.5],
+        "handWidthCm": [8.7, 11.4],
+        "grip": {
+          "palm": 95,
+          "relaxed-claw": 91,
+          "aggressive-claw": 76,
+          "pincer-claw": 69,
+          "knuckle-claw": 71,
+          "fingertip": 52,
+          "extended-fingertip": 58,
+          "palm-claw-hybrid": 94
+        },
+        "aimStyle": {"finger": 68, "wrist": 84, "hybrid": 94, "arm": 95},
+        "gameStyle": {"tactical-fps": 94, "tracking-fps": 91, "arena-fps": 88, "battle-royale": 94, "moba-rts": 80, "mmo": 45, "action": 90, "mixed": 91},
+        "coatingDry": 84,
+        "coatingSweaty": 80,
+        "clickLightness": 81,
+        "clickCrispness": 87,
+        "wheelTactility": 83,
+        "liftSecurity": 92,
+        "palmSupport": 95,
+        "balance": "center"
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["razer-deathadder-v4-pro-official", "razer-deathadder-v4-pro-support"],
+          "confidence": "high",
+          "note": "Dimensions, black-edition mass, sensor, polling, switches, button count, battery figures and PTFE feet are manufacturer-published specifications."
+        },
+        "fit": {
+          "sourceIds": ["razer-deathadder-v4-pro-official", "atlas-deathadder-v4-fit"],
+          "confidence": "low",
+          "note": "Razer identifies the shell as right-handed ergonomic; Atlas hand ranges and fit vectors are editorial comparison guidance rather than measured ergonomic outcomes."
+        }
+      }
+    }
+  ],
+  "mousepads": [
+    {
+      "id": "pad-logitech-pro-x-control",
+      "slug": "logitech-pro-x-control",
+      "type": "mousepad",
+      "brand": "Logitech G",
+      "model": "PRO X CONTROL",
+      "status": "current",
+      "msrpUsd": 59.99,
+      "summary": "Control-oriented 400 × 460 mm cloth pad with an omnidirectional knit, 6 mm SlimFlex foam base and subsurface stitched edges.",
+      "tags": ["cloth", "control", "6mm", "slimflex", "stitched", "esports"],
+      "sources": [
+        {
+          "id": "logitech-pro-x-control-official",
+          "label": "Logitech G PRO X CONTROL product page",
+          "url": "https://www.logitechg.com/en-us/shop/p/pro-x-control-gaming-mousepad.943-001617",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "atlas-pro-x-control-feel",
+          "label": "Atlas PRO X CONTROL normalized surface interpretation",
+          "url": "./research/V06_DATA.md",
+          "kind": "editorial",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "surfaceClass": "cloth",
+        "surfaceMaterial": "omnidirectional knit cloth",
+        "baseMaterial": "SlimFlex foam with non-slip base",
+        "firmness": "mid",
+        "thicknessMm": 6,
+        "widthMm": 460,
+        "heightMm": 400,
+        "stitchedEdges": true
+      },
+      "feel": {
+        "staticSpeed": 43,
+        "dynamicSpeed": 47,
+        "stoppingPower": 78,
+        "texture": 34,
+        "pressureResponse": 68,
+        "humidityResistance": 65,
+        "sleeveCompatibility": 88,
+        "xyConsistency": 88,
+        "noise": 20,
+        "skinDrag": 28,
+        "breakInChange": 20,
+        "wornZoneStability": 72,
+        "cleaningRecovery": 76
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": ["logitech-pro-x-control-official"],
+          "confidence": "high",
+          "note": "Size, 6 mm SlimFlex foam, omnidirectional knit, stitched-edge construction and non-slip base are Logitech specifications."
+        },
+        "feel": {
+          "sourceIds": ["logitech-pro-x-control-official", "atlas-pro-x-control-feel"],
+          "confidence": "low",
+          "note": "Logitech positions the pad for control. Atlas 0–100 glide, stopping and environmental fields are normalized editorial guidance, not measured friction coefficients."
+        }
+      }
+    },
+    {
+      "id": "pad-razer-gigantus-v2-pro-max-control",
+      "slug": "razer-gigantus-v2-pro-max-control",
+      "type": "mousepad",
+      "brand": "Razer",
+      "model": "Gigantus V2 Pro · Max Control",
+      "status": "current",
+      "summary": "Max-control version of Razer's 500 × 480 × 4 mm Gigantus V2 Pro platform, using a specialized cloth weave and tuned GlideCore foam.",
+      "tags": ["cloth", "max-control", "stitched", "glidecore", "500x480"],
+      "sources": [{"id":"razer-gigantus-v2-pro-support","label":"Razer Gigantus V2 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20789/","kind":"manufacturer","checkedAt":"2026-09-30"},{"id":"atlas-gigantus-v2-pro-feel","label":"Atlas Gigantus V2 Pro rating normalization","url":"./research/V06_DATA.md","kind":"editorial","checkedAt":"2026-09-30"}],
+      "specs": {"surfaceClass":"cloth","surfaceMaterial":"specialized Max Control cloth weave","baseMaterial":"GlideCore foam","firmness":"mid","thicknessMm":4,"widthMm":500,"heightMm":480,"stitchedEdges":true},
+      "feel": {"staticSpeed":34,"dynamicSpeed":38,"stoppingPower":84,"texture":44,"pressureResponse":53,"humidityResistance":63,"sleeveCompatibility":86,"xyConsistency":84,"noise":22,"skinDrag":37,"breakInChange":20,"wornZoneStability":70,"cleaningRecovery":75},
+      "evidence": {"specification":{"sourceIds":["razer-gigantus-v2-pro-support"],"confidence":"high","note":"Razer publishes a 500 × 480 × 4 mm platform with five named speed ratings, rating-specific surface weaves, tuned GlideCore foam and low-profile stitched edges."},"feel":{"sourceIds":["razer-gigantus-v2-pro-support","atlas-gigantus-v2-pro-feel"],"confidence":"low","note":"The Max Control label establishes relative placement within Razer's family. Atlas 0–100 behavior fields are editorial normalization, not laboratory friction data."}}
+    },
+    {
+      "id": "pad-razer-gigantus-v2-pro-control",
+      "slug": "razer-gigantus-v2-pro-control",
+      "type": "mousepad",
+      "brand": "Razer",
+      "model": "Gigantus V2 Pro · Control",
+      "status": "current",
+      "summary": "Control-rated Gigantus V2 Pro with a specialized cloth weave, tuned GlideCore foam and 500 × 480 × 4 mm dimensions.",
+      "tags": ["cloth", "control", "stitched", "glidecore", "500x480"],
+      "sources": [{"id":"razer-gigantus-v2-pro-support","label":"Razer Gigantus V2 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20789/","kind":"manufacturer","checkedAt":"2026-09-30"},{"id":"atlas-gigantus-v2-pro-feel","label":"Atlas Gigantus V2 Pro rating normalization","url":"./research/V06_DATA.md","kind":"editorial","checkedAt":"2026-09-30"}],
+      "specs": {"surfaceClass":"cloth","surfaceMaterial":"specialized Control cloth weave","baseMaterial":"GlideCore foam","firmness":"mid","thicknessMm":4,"widthMm":500,"heightMm":480,"stitchedEdges":true},
+      "feel": {"staticSpeed":44,"dynamicSpeed":48,"stoppingPower":74,"texture":40,"pressureResponse":52,"humidityResistance":64,"sleeveCompatibility":87,"xyConsistency":85,"noise":21,"skinDrag":34,"breakInChange":20,"wornZoneStability":71,"cleaningRecovery":75},
+      "evidence": {"specification":{"sourceIds":["razer-gigantus-v2-pro-support"],"confidence":"high","note":"Razer publishes the shared dimensions, five speed ratings, rating-specific surface weave, tuned GlideCore foam and stitched-edge construction."},"feel":{"sourceIds":["razer-gigantus-v2-pro-support","atlas-gigantus-v2-pro-feel"],"confidence":"low","note":"Atlas uses Razer's Control designation only as a relative family anchor; 0–100 behavior fields are editorial normalization."}}
+    },
+    {
+      "id": "pad-razer-gigantus-v2-pro-balance",
+      "slug": "razer-gigantus-v2-pro-balance",
+      "type": "mousepad",
+      "brand": "Razer",
+      "model": "Gigantus V2 Pro · Balance",
+      "status": "current",
+      "summary": "Middle-speed Gigantus V2 Pro variant pairing a Balance-specific cloth weave with tuned GlideCore foam in a 500 × 480 × 4 mm format.",
+      "tags": ["cloth", "balance", "stitched", "glidecore", "500x480"],
+      "sources": [{"id":"razer-gigantus-v2-pro-support","label":"Razer Gigantus V2 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20789/","kind":"manufacturer","checkedAt":"2026-09-30"},{"id":"atlas-gigantus-v2-pro-feel","label":"Atlas Gigantus V2 Pro rating normalization","url":"./research/V06_DATA.md","kind":"editorial","checkedAt":"2026-09-30"}],
+      "specs": {"surfaceClass":"cloth","surfaceMaterial":"specialized Balance cloth weave","baseMaterial":"GlideCore foam","firmness":"mid","thicknessMm":4,"widthMm":500,"heightMm":480,"stitchedEdges":true},
+      "feel": {"staticSpeed":56,"dynamicSpeed":60,"stoppingPower":61,"texture":36,"pressureResponse":51,"humidityResistance":65,"sleeveCompatibility":88,"xyConsistency":87,"noise":20,"skinDrag":31,"breakInChange":19,"wornZoneStability":72,"cleaningRecovery":76},
+      "evidence": {"specification":{"sourceIds":["razer-gigantus-v2-pro-support"],"confidence":"high","note":"Razer publishes the shared dimensions, five speed ratings, rating-specific surface weave, tuned GlideCore foam and stitched-edge construction."},"feel":{"sourceIds":["razer-gigantus-v2-pro-support","atlas-gigantus-v2-pro-feel"],"confidence":"low","note":"Balance is Razer's middle family rating. Atlas numeric behavior fields are relative editorial guidance, not measurements."}}
+    },
+    {
+      "id": "pad-razer-gigantus-v2-pro-speed",
+      "slug": "razer-gigantus-v2-pro-speed",
+      "type": "mousepad",
+      "brand": "Razer",
+      "model": "Gigantus V2 Pro · Speed",
+      "status": "current",
+      "summary": "Speed-rated Gigantus V2 Pro with a faster specialized cloth weave and tuned GlideCore foam in a 500 × 480 × 4 mm format.",
+      "tags": ["cloth", "speed", "stitched", "glidecore", "500x480"],
+      "sources": [{"id":"razer-gigantus-v2-pro-support","label":"Razer Gigantus V2 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20789/","kind":"manufacturer","checkedAt":"2026-09-30"},{"id":"atlas-gigantus-v2-pro-feel","label":"Atlas Gigantus V2 Pro rating normalization","url":"./research/V06_DATA.md","kind":"editorial","checkedAt":"2026-09-30"}],
+      "specs": {"surfaceClass":"cloth","surfaceMaterial":"specialized Speed cloth weave","baseMaterial":"GlideCore foam","firmness":"mid","thicknessMm":4,"widthMm":500,"heightMm":480,"stitchedEdges":true},
+      "feel": {"staticSpeed":68,"dynamicSpeed":73,"stoppingPower":47,"texture":31,"pressureResponse":49,"humidityResistance":66,"sleeveCompatibility":90,"xyConsistency":88,"noise":19,"skinDrag":27,"breakInChange":18,"wornZoneStability":73,"cleaningRecovery":76},
+      "evidence": {"specification":{"sourceIds":["razer-gigantus-v2-pro-support"],"confidence":"high","note":"Razer publishes the shared dimensions, five speed ratings, rating-specific surface weave, tuned GlideCore foam and stitched-edge construction."},"feel":{"sourceIds":["razer-gigantus-v2-pro-support","atlas-gigantus-v2-pro-feel"],"confidence":"low","note":"Speed denotes relative placement in Razer's five-pad family. Atlas numeric behavior fields are editorial guidance."}}
+    },
+    {
+      "id": "pad-razer-gigantus-v2-pro-max-speed",
+      "slug": "razer-gigantus-v2-pro-max-speed",
+      "type": "mousepad",
+      "brand": "Razer",
+      "model": "Gigantus V2 Pro · Max Speed",
+      "status": "current",
+      "summary": "Fastest Gigantus V2 Pro rating, with a Max Speed-specific cloth weave and tuned GlideCore foam on the same 500 × 480 × 4 mm platform.",
+      "tags": ["cloth", "max-speed", "stitched", "glidecore", "500x480"],
+      "sources": [{"id":"razer-gigantus-v2-pro-support","label":"Razer Gigantus V2 Pro support specification","url":"https://mysupport.razer.com/app/answers/detail/a_id/20789/","kind":"manufacturer","checkedAt":"2026-09-30"},{"id":"atlas-gigantus-v2-pro-feel","label":"Atlas Gigantus V2 Pro rating normalization","url":"./research/V06_DATA.md","kind":"editorial","checkedAt":"2026-09-30"}],
+      "specs": {"surfaceClass":"cloth","surfaceMaterial":"specialized Max Speed cloth weave","baseMaterial":"GlideCore foam","firmness":"mid","thicknessMm":4,"widthMm":500,"heightMm":480,"stitchedEdges":true},
+      "feel": {"staticSpeed":80,"dynamicSpeed":85,"stoppingPower":35,"texture":27,"pressureResponse":47,"humidityResistance":67,"sleeveCompatibility":91,"xyConsistency":89,"noise":18,"skinDrag":24,"breakInChange":17,"wornZoneStability":74,"cleaningRecovery":77},
+      "evidence": {"specification":{"sourceIds":["razer-gigantus-v2-pro-support"],"confidence":"high","note":"Razer publishes the shared dimensions, five speed ratings, rating-specific surface weave, tuned GlideCore foam and stitched-edge construction."},"feel":{"sourceIds":["razer-gigantus-v2-pro-support","atlas-gigantus-v2-pro-feel"],"confidence":"low","note":"Max Speed is Razer's fastest named family rating. Atlas 0–100 fields preserve that relative ordering without claiming measured friction."}}
+    }
+  ],
+  "skates": [],
+  "keyboards": [
+    {
+      "id": "keyboard-logitech-pro-x2-rapid",
+      "slug": "logitech-pro-x2-rapid",
+      "type": "keyboard",
+      "brand": "Logitech G",
+      "model": "PRO X2 RAPID",
+      "status": "current",
+      "msrpUsd": 229.99,
+      "summary": "Wired TKL magnetic-analog keyboard with 8 kHz scan and USB reporting, 0.1–4.0 mm adjustable actuation, Rapid Trigger and Key Priority/SOCD controls.",
+      "tags": ["magnetic-analog", "tkl", "8k", "rapid-trigger", "socd", "pbt", "aluminum-plate"],
+      "sources": [
+        {
+          "id": "logitech-pro-x2-rapid-official",
+          "label": "Logitech G PRO X2 RAPID product page",
+          "url": "https://www.logitechg.com/en-ca/shop/p/pro-x2-rapid",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        },
+        {
+          "id": "logitech-pro-x2-rapid-us-category",
+          "label": "Logitech G current US gaming keyboard catalog",
+          "url": "https://www.logitechg.com/en-us/shop/c/gaming-keyboards",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "formFactor": "tkl",
+        "layout": "Tenkeyless",
+        "switchTechnology": "other",
+        "stockSwitch": "Factory-lubed KS-20 POM magnetic analog linear switches",
+        "maxPollingHz": 8000,
+        "minActuationMm": 0.1,
+        "maxActuationMm": 4,
+        "actuationStepMm": 0.05,
+        "rapidTrigger": true,
+        "socd": true,
+        "analogInput": true,
+        "hotSwappable": false,
+        "connectivity": ["USB wired"],
+        "caseMaterial": "manufacturer does not identify full chassis material on the cited product page",
+        "plateMaterial": "aluminum",
+        "keycapMaterial": "double-shot PBT",
+        "software": "Logitech G HUB"
+      },
+      "evidence": {
+        "platform": {
+          "sourceIds": ["logitech-pro-x2-rapid-official", "logitech-pro-x2-rapid-us-category"],
+          "confidence": "high",
+          "note": "Logitech publishes the TKL form, wired connection, 8 kHz scan/reporting, aluminum key plate, double-shot PBT caps and factory-lubed KS-20 POM magnetic analog switches."
+        },
+        "inputFeatures": {
+          "sourceIds": ["logitech-pro-x2-rapid-official"],
+          "confidence": "high",
+          "note": "Logitech documents 0.1–4.0 mm adjustable actuation in 0.05 mm increments, Rapid Trigger and Key Priority. Atlas uses technology='other' because the cited manufacturer material describes magnetic analog sensing without naming Hall effect or TMR."
+        }
+      }
+    }
+  ],
+  "switches": []
+}
