@@ -20,7 +20,7 @@
       ],
       "specs": {
         "formFactor": "80%",
-        "layout": "ANSI / ISO / JIS options",
+        "layout": "ANSI / ISO",
         "switchTechnology": "hall-effect",
         "stockSwitch": "Lekker Tikken Medium",
         "maxPollingHz": 8000,
@@ -43,7 +43,7 @@
         "platform": {
           "sourceIds": ["wooting-80he-plus-official"],
           "confidence": "high",
-          "note": "Manufacturer-published layout options, switch, plate, mount, keycap and case details."
+          "note": "Manufacturer-published ANSI/ISO layout options, switch, plate, mount, keycap and case details."
         },
         "inputFeatures": {
           "sourceIds": ["wooting-80he-plus-official"],
