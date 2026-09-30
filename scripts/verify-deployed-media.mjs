@@ -31,16 +31,12 @@ async function worker() {
   while (nextIndex < probes.length) {
     const probe = probes[nextIndex++];
     try {
-      if (probe.explicit) {
-        console.log(`PASS registry: ${probe.type} ${probe.id} (pinned manufacturer asset)`);
-        continue;
-      }
       const response = await fetch(`${base}/api/media/${probe.id}`, { redirect: "follow", signal: AbortSignal.timeout(20_000) });
       const contentType = response.headers.get("content-type") ?? "";
       if (!response.ok || !contentType.startsWith("image/")) {
         failures.push(`${probe.id} (${probe.label}): HTTP ${response.status}, content-type ${contentType || "(none)"}`);
       } else {
-        console.log(`PASS fallback: ${probe.type} ${probe.id} (${contentType})`);
+        console.log(`PASS media: ${probe.type} ${probe.id} (${probe.explicit ? "pinned" : "resolved"} · ${contentType})`);
       }
       await response.body?.cancel();
     } catch (error) {
@@ -52,10 +48,10 @@ async function worker() {
 await Promise.all(Array.from({ length: Math.min(4, probes.length) }, () => worker()));
 
 if (failures.length) {
-  console.error(`Product media smoke test failed for ${failures.length}/${probes.filter(probe => !probe.explicit).length} official-source fallback products:`);
+  console.error(`Product media smoke test failed for ${failures.length}/${probes.length} current/announced input-hardware products:`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
 const explicitCount = probes.filter(probe => probe.explicit).length;
-console.log(`Product media smoke test PASS: ${explicitCount} products use pinned manufacturer assets; ${probes.length - explicitCount} official-source fallbacks returned image responses.`);
+console.log(`Product media smoke test PASS: all ${probes.length} current/announced mice, keyboards and switches returned image responses (${explicitCount} pinned assets; ${probes.length - explicitCount} official-source resolutions).`);
