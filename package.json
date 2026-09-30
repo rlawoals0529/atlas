@@ -11,7 +11,8 @@
     "cf-typegen": "wrangler types",
     "data:seed": "node scripts/generate-seed.mjs",
     "data:report": "node scripts/data-report.mjs",
-    "data:validate": "node scripts/validate-data.mjs"
+    "data:validate": "node scripts/validate-data.mjs",
+    "product:validate": "node scripts/validate-product-lab.mjs"
   },
   "dependencies": {
     "hono": "4.13.11",
