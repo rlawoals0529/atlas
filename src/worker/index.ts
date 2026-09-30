@@ -6,7 +6,7 @@ import { evidenceHealth, familyFor, productSearchText } from "../shared/productM
 import { RELEASE } from "../shared/release";
 import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
-import type { MouseProduct, Product, UserProfile } from "../shared/types";
+import type { CatalogProduct, MouseProduct, UserProfile } from "../shared/types";
 import { analyticsApp, type AnalyticsBindings } from "./analytics";
 
 const app = new Hono<{ Bindings: AnalyticsBindings }>();
@@ -129,7 +129,7 @@ app.get("/api/catalog", (c) => {
   const rawQuery = c.req.query("q") ?? "";
   if (rawQuery.length > 120) return c.json({ error: "Search query is too long" }, 400);
   const q = rawQuery.trim().toLowerCase();
-  const base: Product[] = type === "mouse" ? mice : type === "mousepad" ? mousepads : type === "skate" ? skates : type === "keyboard" ? keyboards : type === "switch" ? switches : allCatalog;
+  const base: CatalogProduct[] = type === "mouse" ? mice : type === "mousepad" ? mousepads : type === "skate" ? skates : type === "keyboard" ? keyboards : type === "switch" ? switches : allCatalog;
   const data = q ? base.filter((product) => productSearchText(product).includes(q)) : base;
   return c.json({ data, count: data.length });
 });
