@@ -55,16 +55,29 @@ export default function ProductPositionMap() {
           const x = scale(point.weightG, Math.floor(weightMin / 10) * 10, Math.ceil(weightMax / 10) * 10, left, width - right);
           const y = scale(point.msrpUsd ?? 0, 0, Math.ceil(priceMax / 50) * 50, height - bottom, top);
           const radius = clamp(5 + Math.log2(Math.max(1, point.pollingHz / 1000)) * 1.6, 5, 11);
+          const tooltipWidth = 178;
+          const tooltipX = x > width - tooltipWidth - right - 8 ? x - tooltipWidth - 13 : x + 13;
+          const tooltipY = clamp(y - 25, top + 2, height - bottom - 54);
+          const displayName = `${point.brand} ${point.model}`.length > 28 ? `${point.brand} ${point.model}`.slice(0, 27) + "…" : `${point.brand} ${point.model}`;
           return <g className={`product-dot ${point.shape}`} key={point.productId} tabIndex={0} role="listitem" aria-label={`${point.brand} ${point.model}, ${point.weightG} grams, $${point.msrpUsd} MSRP, ${point.pollingHz} hertz polling`}>
-            <circle cx={x} cy={y} r={radius}/><circle className="halo" cx={x} cy={y} r={radius + 5}/><title>{point.brand} {point.model} · {point.weightG} g · ${point.msrpUsd} MSRP · {point.pollingHz / 1000}K Hz · {point.shape}</title>
+            {point.shape === "ergonomic"
+              ? <rect className="glyph" x={x - radius * .7} y={y - radius * .7} width={radius * 1.4} height={radius * 1.4} rx="1.5" transform={`rotate(45 ${x} ${y})`}/>
+              : <circle className="glyph" cx={x} cy={y} r={radius}/>}
+            <circle className="halo" cx={x} cy={y} r={radius + 6}/>
+            <g className="map-tooltip" transform={`translate(${tooltipX} ${tooltipY})`} aria-hidden="true">
+              <rect width={tooltipWidth} height="48" rx="8"/>
+              <text x="10" y="17" className="map-tooltip-title">{displayName}</text>
+              <text x="10" y="34" className="map-tooltip-meta">{point.weightG} g · $${point.msrpUsd} · {point.pollingHz >= 1000 ? `${point.pollingHz / 1000}K` : point.pollingHz} Hz · {point.shape}</text>
+            </g>
+            <title>{point.brand} {point.model} · {point.weightG} g · $${point.msrpUsd} MSRP · {point.pollingHz / 1000}K Hz · {point.shape}</title>
           </g>;
         })}
         <text className="axis-label" x={(left + width - right) / 2} y={height - 6} textAnchor="middle">WEIGHT (G)</text>
         <text className="axis-label" transform={`translate(14 ${(top + height - bottom) / 2}) rotate(-90)`} textAnchor="middle">MSRP (USD)</text>
       </svg>
     </div>
-    <div className="pl-map-legend"><span><i className="symmetrical"/>Symmetrical</span><span><i className="ergonomic"/>Ergonomic</span><span>Dot size reflects advertised polling tier</span><b>{filtered.length} visible / {priced.length} priced current records</b></div>
-    <p className="pl-caption">Each dot is a real catalog record. Position is based on sourced weight/MSRP fields; dot size uses the advertised polling ceiling. This is a category map, not a popularity or quality ranking.</p>
+    <div className="pl-map-legend"><span><i className="symmetrical"/>Symmetrical</span><span><i className="ergonomic"/>Ergonomic</span><span>Glyph size reflects advertised polling tier</span><b>{filtered.length} visible / {priced.length} priced current records</b></div>
+    <p className="pl-caption">Each glyph is a real catalog record. Position is based on sourced weight/MSRP fields; glyph size uses the advertised polling ceiling. Shape family is encoded by both color and geometry. This is a category map, not a popularity or quality ranking.</p>
 
     <div className="pl-matrix-grid"><Matrix title="Shape × price" rows={insights.shapePriceMatrix}/><Matrix title="Weight × price" rows={insights.weightPriceMatrix}/></div>
 
