@@ -36,7 +36,7 @@ Every community/customer observation must retain:
 - `directional`: multiple sources point similarly, but representativeness is not established;
 - `cross-source-consensus`: multiple source types support a similar observation and the underlying records remain traceable.
 
-Even `cross-source-consensus` is **not** equivalent to population sentiment or market share.
+Even `cross-source-consensus` is **not representative market research** and is not equivalent to population sentiment or market share.
 
 ## Collection rules
 
