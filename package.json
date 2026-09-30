@@ -13,6 +13,7 @@
     "data:report": "node scripts/data-report.mjs",
     "data:validate": "node scripts/validate-data.mjs",
     "community:validate": "node scripts/validate-community-insights.mjs",
+    "sensitivity:validate": "node scripts/validate-sensitivity.mjs",
     "product:validate": "node scripts/validate-product-lab.mjs"
   },
   "dependencies": {
