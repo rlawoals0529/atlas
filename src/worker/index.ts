@@ -173,62 +173,9 @@ async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl
   mediaCache.set(product.id, resolved);
   return resolved;
 }
-app.route("/api/analytics", analyticsApp);");
-  const patterns = [
-    new RegExp('<meta[^>]+(?:property|name)=["\\\\\']' + escaped + '["\\\\\'][^>]+content=["\\\\\']([^"\\\\\']+)["\\\\\'][^>]*>', "i"),
-    new RegExp('<meta[^>]+content=["\\\\\']([^"\\\\\']+)["\\\\\'][^>]+(?:property|name)=["\\\\\']' + escaped + '["\\\\\'][^>]*>', "i"),
-  ];
-  for (const pattern of patterns) {
-    const match = html.match(pattern);
-    if (match?.[1]) return decodeHtml(match[1]);
-  }
-  return null;
-}
-
-function imageCandidateFromHtml(html: string): string | null {
-  for (const key of ["og:image:secure_url", "og:image", "twitter:image"]) {
-    const value = metaContent(html, key);
-    if (value) return value;
-  }
-  const imageSrc = html.match(/<link[^>]+rel=["\']image_src["\'][^>]+href=["\']([^"\']+)["\']/i)
-    ?? html.match(/<link[^>]+href=["\']([^"\']+)["\'][^>]+rel=["\']image_src["\']/i);
-  if (imageSrc?.[1]) return decodeHtml(imageSrc[1]);
-  const jsonImage = html.match(/"image"\\s*:\\s*"([^"]+)"/i) ?? html.match(/"image"\\s*:\\s*\\[\\s*"([^"]+)"/i);
-  return jsonImage?.[1] ? decodeHtml(jsonImage[1].replaceAll("\\\\/", "/")) : null;
-}
-
-function sourceScore(url: string): number {
-  const value = url.toLowerCase();
-  let score = 0;
-  if (/\\/products?\\/|gaming-mice|gaming-keyboards|keyboard|switch/.test(value)) score += 8;
-  if (/\\/shop\\/p\\//.test(value)) score += 4;
-  if (/support|manual|faq|help\\.|youtube\\.com|youtu\\.be/.test(value)) score -= 6;
-  if (/blog|news|feature\\.php/.test(value)) score -= 2;
-  return score;
-}
-
-function officialSource(product: CatalogProduct): string | null {
-  const sources = product.sources.filter(source => source.kind === "manufacturer").map(source => source.url).filter(url => safeHttpsUrl(url)).sort((a, b) => sourceScore(b) - sourceScore(a));
-  return sources[0] ?? null;
-}
-
-async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl: string; sourceUrl: string } | null> {
-  const cached = mediaCache.get(product.id);
-  if (cached && cached.expiresAt > Date.now()) return cached;
-  const sourceUrl = officialSource(product);
-  if (!sourceUrl) return null;
-  const response = await fetch(sourceUrl, { redirect: "follow", headers: { "Accept": "text/html,application/xhtml+xml", "User-Agent": "Atlas product-media resolver" } });
-  if (!response.ok || !(response.headers.get("content-type") ?? "").includes("text/html")) return null;
-  const html = (await response.text()).slice(0, 2_000_000);
-  const candidate = imageCandidateFromHtml(html);
-  const imageUrl = candidate ? safeHttpsUrl(candidate, sourceUrl) : null;
-  if (!imageUrl) return null;
-  const resolved = { imageUrl, sourceUrl, expiresAt: Date.now() + MEDIA_TTL_MS };
-  mediaCache.set(product.id, resolved);
-  return resolved;
-}
-
 app.route("/api/analytics", analyticsApp);
+
+
 
 app.get("/api/media/:id", async (c) => {
   const id = c.req.param("id");
