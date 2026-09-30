@@ -44,6 +44,11 @@ export function effectiveDpi(dpi: number, sensitivity: number) {
   return dpi * sensitivity;
 }
 
+export function sensitivityForCm360(dpi: number, targetCm360: number, yaw: number) {
+  if (![dpi, targetCm360, yaw].every(value => Number.isFinite(value) && value > 0)) return null;
+  return (360 * 2.54) / (dpi * yaw * targetCm360);
+}
+
 export function convertSensitivity(params: {
   sourceSensitivity: number;
   sourceDpi: number;
