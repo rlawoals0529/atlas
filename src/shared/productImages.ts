@@ -188,6 +188,46 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Gateron Magnetic Jade Gaming Hall-effect switch",
     credit: "Gateron official product image",
   }
+  "keyboard-razer-huntsman-v3-pro-tkl-8khz": {
+    url: "https://assets3.razerzone.com/iajuRCuAMNuncojOMjSjzRZzBNY=/1920x1280/https%3A%2F%2Fmedias-p1.phoenix.razer.com%2Fsys-master-phoenix-images-container%2Fhb9%2Fh24%2F9980311076894%2Fhuntsman-v3-pro-tkl-8khz-b-500x500.png",
+    sourceUrl: "https://www.razer.com/gaming-keyboards/razer-huntsman-v3-pro-8khz/RZ03-05520200-R3U1",
+    alt: "Razer Huntsman V3 Pro Tenkeyless 8KHz gaming keyboard",
+    credit: "Razer official product image",
+  },
+  "mouse-naga-v2-pro": {
+    url: "https://assets3.razerzone.com/0BTnfDndkuUtHnVK3MKm8F39AGw=/1920x1280/https%3A%2F%2Fmedias-p1.phoenix.razer.com%2Fsys-master-phoenix-images-container%2Fhb2%2Fhb9%2F9529652379678%2Fnaga-v2-pro-2-500x500.png",
+    sourceUrl: "https://www.razer.com/ca-en/gaming-mice/razer-naga-v2-pro/RZ01-04400100-R3U1",
+    alt: "Razer Naga V2 Pro wireless gaming mouse",
+    credit: "Razer official product image",
+  },
+  "mouse-basilisk-v3-pro-35k": {
+    url: "https://assets3.razerzone.com/QrFFO4KLgcSlv8V4Zhksri9dTK8=/1920x1280/https%3A%2F%2Fmedias-p1.phoenix.razer.com%2Fsys-master-phoenix-images-container%2Fh5a%2Fh1c%2F9821720576030%2Fbasilisk-v3-pro-35k-500x500.png",
+    sourceUrl: "https://www.razer.com/gaming-mice/razer-basilisk-v3-pro-35k/RZ01-05240100-R3U1",
+    alt: "Razer Basilisk V3 Pro 35K wireless gaming mouse",
+    credit: "Razer official product image",
+  },
+  "mouse-lamzu-maya-x": {
+    url: "https://lamzu.com/cdn/shop/files/Maya_X_8K_800X800_1_fe247b9f-fe79-4da4-b7f1-28e7c768c322-397886.jpg?v=1751524797",
+    sourceUrl: "https://lamzu.com/products/lamzu-maya-x",
+    alt: "LAMZU MAYA X 8K gaming mouse",
+    credit: "LAMZU official product image",
+  },
+};
+
+export const productMediaSourceOverrides: Record<string, string> = {
+  "mouse-vaxee-xe-s-wireless-4k": "https://www.vaxee.co/EN/product.php?act=view&id=227",
+  "mouse-vaxee-xe-v2": "https://www.vaxee.co/en/product.php?act=view&id=271",
+  "mouse-xm2w-4k-v2": "https://www.endgamegear.com/en-at/gaming-mice/xm2w-4k-v2",
+  "mouse-scimitar-se": "https://www.corsair.com/us/en/p/gaming-mouse/ch-9314014-ww/scimitar-elite-wireless-se-mmo-gaming-mouse-gun-metal-ch-9314014-ww",
+  "mouse-corsair-sabre-v2-pro-mg": "https://www.corsair.com/us/en/p/gaming-mouse/ch-931g100-ww/sabre-v2-pro-wireless-magnesium-alloy-gaming-mouse-black-ch-931g100-ww",
+  "mouse-ulx-competition-medium": "https://finalmouse.com/products/ulx-competition-overview",
+  "mouse-akitsu-small": "https://arbiterstudio.com/products/akitsu-carbon-fiber-8k-wireless-gaming-mouse",
+  "mouse-mchose-l7-pro": "https://www.mchose.store/products/mchose-l7-series-ultra-lightweight-wireless-gaming-mouse",
+  "mouse-g502-x-plus": "https://www.logitechg.com/en-us/shop/p/g502-x-plus-wireless-lightforce",
+  "mouse-gpx2-dex": "https://www.logitechg.com/en-us/shop/p/pro-x-superlight-2-dex.910-007328",
+  "keyboard-logitech-pro-x2-rapid": "https://www.logitechg.com/en-us/shop/c/gaming-keyboards",
 };
 
 export const imageForProduct = (productId: string) => productImages[productId];
+export const mediaSourceForProduct = (productId: string) => productMediaSourceOverrides[productId];
+
