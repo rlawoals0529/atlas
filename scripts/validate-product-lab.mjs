@@ -12,7 +12,9 @@ const app = read("src/react-app/AppV05.tsx");
 const lab = read("src/react-app/ProductLab.tsx");
 const validation = read("src/shared/validation.ts");
 const analytics = read("src/shared/analytics.ts");
+const analyticsInsights = read("src/shared/analyticsInsights.ts");
 const transport = read("src/react-app/AnalyticsTransport.tsx");
+const productionStatus = read("src/react-app/ProductionAnalyticsStatus.tsx");
 const workerAnalytics = read("src/worker/analytics.ts");
 const wrangler = read("wrangler.jsonc");
 
@@ -28,7 +30,7 @@ assert(lab.includes("reproductionSteps"), "defect workflow must retain reproduct
 assert(lab.includes("suspectedLayer"), "defect workflow must preserve suspected-layer uncertainty field");
 assert(lab.includes("regressionTestId"), "defect workflow must support regression linkage");
 
-assert(analytics.includes('DEMO_ANALYTICS_EVENTS'), "dashboard demo fixtures must remain explicit");
+assert(analytics.includes("DEMO_ANALYTICS_EVENTS"), "dashboard demo fixtures must remain explicit");
 assert(analytics.includes('eventId: `demo-'), "synthetic events must keep a recognizable demo prefix");
 assert(transport.includes('eventId.startsWith("demo-")'), "production transport must reject demo fixture events");
 assert(workerAnalytics.includes("Invalid analytics event batch"), "production collector must validate event batches server-side");
@@ -37,6 +39,14 @@ assert(workerAnalytics.includes("Too many analytics requests"), "production coll
 
 assert(lab.includes("DEMO / SYNTHETIC"), "analytics dashboard must visibly label synthetic data");
 assert(lab.includes("REAL / THIS BROWSER"), "browser-local analytics must remain explicitly scoped");
+assert(lab.includes("AnalyticsDeepDive"), "deeper funnel/segment/attribute analysis must stay wired into Product Analytics");
+assert(analyticsInsights.includes("compareShapeLabSessionDepth"), "Shape Lab depth cohort comparison must remain available");
+assert(analyticsInsights.includes("attributeOutboundEngagement"), "attribute-level outbound engagement must remain available");
+assert(analyticsInsights.includes("segmentBehavior"), "coarse segment behavior analysis must remain available");
+assert(productionStatus.includes("PRODUCTION / NOT CONFIGURED"), "dashboard must explicitly label absent production analytics");
+assert(productionStatus.includes("PRODUCTION / REAL"), "real production aggregate mode must remain explicitly labeled");
+assert(!productionStatus.includes("DEMO_ANALYTICS_EVENTS"), "production aggregate UI must never substitute demo fixtures");
+
 assert(lab.includes("ProductIntelligenceExtras"), "direct competitor and brand-positioning analysis must stay in Product Intelligence");
 assert(lab.includes("Sparse in Atlas ≠ market opportunity"), "sparse catalog segments must retain opportunity caveat");
 
