@@ -126,7 +126,7 @@ function CoveragePill({ product }: { product: CatalogProduct }) {
 }
 
 function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; onOpen: (product: CatalogProduct) => void; compared: boolean }) {
-  return <button className={`consumer-product ${compared ? "compare-selected" : ""}`} onClick={() => onOpen(product)}>
+  return <button className={`consumer-product ${compared ? "compare-selected" : ""}`} data-product-type={product.type} onClick={() => onOpen(product)}>
     <div className="consumer-product-visual"><ProductVisual product={product}/><CoveragePill product={product}/></div>
     <div className="consumer-product-head"><span>{product.brand}</span><small>{categoryMeta[product.type].singular}</small></div>
     <h3>{product.model}</h3>
@@ -240,18 +240,24 @@ export default function AtlasConsumer() {
     <main>
       <section className="consumer-hero">
         <div className="consumer-hero-copy"><span className="consumer-kicker">PERIPHERAL DATABASE + DECISION TOOLS</span><h1>Find gear by <em>what matters,</em><br/>not what is trending.</h1><p>Browse specs, fit signals, surface behavior, switch characteristics and source provenance across the PC input stack. Atlas keeps manufacturer claims, independent findings and modeled guidance visibly separate.</p><div className="consumer-hero-actions"><button onClick={() => document.getElementById("consumer-catalog")?.scrollIntoView({ behavior: "smooth" })}>Browse database</button><a href="#pointing">Build a mouse setup</a></div></div>
-        <div className="consumer-hero-panel"><span>CATALOG COVERAGE</span><strong>{allCatalog.length}</strong><small>canonical product records</small><div>{(Object.keys(categoryMeta) as ProductType[]).map(type => <button key={type} onClick={() => { selectCategory(type); document.getElementById("consumer-catalog")?.scrollIntoView({ behavior: "smooth" }); }}><span>{categoryMeta[type].label}</span><b>{counts[type]}</b></button>)}</div></div>
+        <div className="consumer-hero-panel"><span>CATALOG COVERAGE</span><strong>{allCatalog.length}</strong><small>canonical product records</small><div>{(Object.keys(categoryMeta) as ProductType[]).map(type => <button key={type} data-category={type} onClick={() => { selectCategory(type); document.getElementById("consumer-catalog")?.scrollIntoView({ behavior: "smooth" }); }}><span>{categoryMeta[type].label}</span><b>{counts[type]}</b></button>)}</div></div>
       </section>
 
-      <section className="consumer-tool-row" aria-label="Atlas tools">
-        <a href="#pointing"><span>01</span><div><b>Setup finder + Shape Lab</b><small>Mouse fit, pad/skate pairing and outline comparison</small></div><i>→</i></a>
-        <a href="#keyboard-lab"><span>02</span><div><b>Keyboard Lab</b><small>Rapid Trigger, HE/TMR platforms and switch research</small></div><i>→</i></a>
-        <a href="#sensitivity"><span>03</span><div><b>Sensitivity Lab</b><small>cm/360, DPI, yaw and cross-game conversion</small></div><i>→</i></a>
+      <section className="consumer-tools" aria-labelledby="consumer-tools-heading">
+        <div className="consumer-tools-head">
+          <div><span>Tools</span><h2 id="consumer-tools-heading">Explore input hardware</h2></div>
+          <p>Pick the tool that matches what you are comparing. The color marks the section; the numbers are only navigation order.</p>
+        </div>
+        <div className="consumer-tool-row" aria-label="Atlas tools">
+          <a className="tool-mouse" href="#pointing"><span>01</span><div><b>Setup finder + Shape Lab</b><small>Mouse fit, pad/skate pairing and outline comparison</small></div><i>→</i></a>
+          <a className="tool-keyboard" href="#keyboard-lab"><span>02</span><div><b>Keyboard Lab</b><small>Rapid Trigger, HE/TMR platforms and switch research</small></div><i>→</i></a>
+          <a className="tool-sensitivity" href="#sensitivity"><span>03</span><div><b>Sensitivity Lab</b><small>cm/360, DPI, yaw and cross-game conversion</small></div><i>→</i></a>
+        </div>
       </section>
 
       <section className="consumer-catalog" id="consumer-catalog">
         <div className="consumer-section-head"><div><span>DATABASE</span><h2>Browse the input stack</h2><p>Start broad, reveal only the filters that matter, and add up to four products from one category to the richer comparison tray. Official product imagery appears where Atlas has a stable sourced asset; otherwise the interface falls back to the category glyph.</p></div><strong>{filtered.length}<small> matching</small></strong></div>
-        <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? allCatalog.length : counts[type]}</span></button>)}</div>
+        <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} data-category={type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? allCatalog.length : counts[type]}</span></button>)}</div>
         <div className="consumer-toolbar">
           <div className="consumer-search"><span>⌕</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search product, material, shape, switch, feature…"/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>

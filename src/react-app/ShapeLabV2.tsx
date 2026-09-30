@@ -80,6 +80,7 @@ export function ShapeCanvas({
   showDimensions = true,
   showFills = false,
   showLabels = true,
+  selectedId,
 }: {
   layers: ShapeLayer[];
   view: ShapeView;
@@ -88,6 +89,7 @@ export function ShapeCanvas({
   showDimensions?: boolean;
   showFills?: boolean;
   showLabels?: boolean;
+  selectedId?: string;
 }) {
   const W = 960, H = 560, pad = 62;
   const visible = layers.map(layer => ({ layer, mouse: layerMouse(layer) })).filter((item): item is { layer: ShapeLayer; mouse: MouseProduct } => Boolean(item.mouse && item.layer.visible));
@@ -153,6 +155,7 @@ export function ShapeCanvas({
       </g>
       {paths.map(({ layer, mouse, coords }) => <polygon
         key={mouse.id}
+        className={mouse.id === selectedId ? "selected" : undefined}
         points={coords}
         fill={layer.color}
         fillOpacity={showFills ? Math.max(.025, layer.opacity * .055) : 0}
@@ -170,7 +173,7 @@ export function ShapeCanvas({
         const x = Math.max(16, Math.min(W - width - 16, box.minX + 4));
         const y = labelPositions.get(mouse.id) ?? Math.max(24, box.minY - 10);
         const displaced = Math.abs(y - (box.minY - 10)) > 5;
-        return <g className="shape-outline-label-group" key={`label-${mouse.id}`} opacity={Math.max(.55, layer.opacity)}>
+        return <g className={`shape-outline-label-group ${mouse.id === selectedId ? "selected" : ""}`} key={`label-${mouse.id}`} opacity={Math.max(.55, layer.opacity)}>
           {displaced && <path className="shape-label-leader" d={`M ${x + 8} ${y + 4} L ${box.minX + 2} ${Math.max(20, box.minY - 3)}`} stroke={layer.color}/>}
           <rect className="shape-label-chip" x={x} y={y - 14} width={width} height="20" rx="6" stroke={layer.color}/>
           <text className="shape-outline-label" x={x + 9} y={y} fill={layer.color}>{label}</text>
@@ -222,6 +225,7 @@ function LayerRow({
       <span>{String(index + 1).padStart(2, "0")} · {mouse.brand}</span>
       <b className="shape-layer-name">{mouse.model}</b>
       <small>{fmt(mouse.specs.lengthMm)} × {fmt(mouse.specs.widthMm)} × {fmt(mouse.specs.heightMm)} mm · {mouse.specs.weightG} g</small>
+      <i className="shape-layer-style-preview" data-style={layer.lineStyle} aria-hidden="true"/>
     </button>
     <button className="shape-remove" onClick={onRemove} aria-label={`Remove ${mouse.brand} ${mouse.model}`}>×</button>
   </article>;
@@ -266,12 +270,21 @@ function LayerEditor({
           <label className="shape-color" title="Custom outline color"><input type="color" value={layer.color} onChange={event => onChange({ ...layer, color: event.target.value })}/><span style={{ background: layer.color }}>+</span></label>
         </div>
       </div>
-      <label className="shape-editor-field">
-        <span>Line</span>
-        <select className="shape-line-style" value={layer.lineStyle} onChange={event => onChange({ ...layer, lineStyle: event.target.value as LineStyle })} aria-label="Line style"><option value="solid">Solid</option><option value="dash">Dash</option><option value="dot">Dot</option></select>
-      </label>
+      <div className="shape-editor-field shape-editor-lines">
+        <span>Line style</span>
+        <div className="shape-line-buttons" aria-label="Line style">
+          {(["solid", "dash", "dot"] as LineStyle[]).map(style => <button
+            type="button"
+            key={style}
+            className={layer.lineStyle === style ? "active" : ""}
+            onClick={() => onChange({ ...layer, lineStyle: style })}
+            aria-pressed={layer.lineStyle === style}
+            title={style[0].toUpperCase() + style.slice(1)}
+          ><i data-style={style}/><span>{style[0].toUpperCase() + style.slice(1)}</span></button>)}
+        </div>
+      </div>
       <label className="shape-editor-field shape-editor-opacity">
-        <span>Opacity · {Math.round(layer.opacity * 100)}%</span>
+        <span>Opacity <b>{Math.round(layer.opacity * 100)}%</b></span>
         <input type="range" min="35" max="100" value={Math.round(layer.opacity * 100)} onChange={event => onChange({ ...layer, opacity: +event.target.value / 100 })}/>
       </label>
       <div className="shape-editor-field">
@@ -312,6 +325,7 @@ export default function ShapeLabV2({
   const [addQuery, setAddQuery] = useState("");
   const [referenceId, setReferenceId] = useState(() => sharedInitial?.referenceId ?? initial[0]?.id ?? mice[0]?.id ?? "");
   const [shareStatus, setShareStatus] = useState("");
+  const [canvasFocused, setCanvasFocused] = useState(false);
 
   useEffect(() => {
     onSelectedMouseIdsChange?.(layers.map(layer => layer.id));
@@ -399,7 +413,7 @@ export default function ShapeLabV2({
       <button className="shape-reset" type="button" onClick={resetView}>Reset view</button>
     </section>
 
-    <section className="shape-workbench">
+    <section className={`shape-workbench ${canvasFocused ? "canvas-focused" : ""}`}>
       <aside className="shape-layers v5-panel">
         <div className="shape-panel-head"><div><span>Compare set</span><h2>Mouse layers</h2></div><b>{layers.length}/5</b></div>
         <div className="shape-layer-list">{layers.map((layer, index) => <LayerRow
@@ -436,8 +450,14 @@ export default function ShapeLabV2({
       </aside>
 
       <div className="shape-stage v5-panel">
-        <div className="shape-stage-head"><div><span>Live overlay</span><h2>{view === "top" ? "Top-shell comparison" : "Side-profile comparison"}</h2></div><div><span>{normalize ? "Normalized length" : "Real scale"}</span><span>{`${align[0].toUpperCase()}${align.slice(1)} aligned`}</span></div></div>
-        <ShapeCanvas layers={layers} view={view} align={align} normalize={normalize} showDimensions={showDimensions} showFills={showFills} showLabels={showLabels}/>
+        <div className="shape-stage-head">
+          <div><span>Live overlay</span><h2>{view === "top" ? "Top-shell comparison" : "Side-profile comparison"}</h2></div>
+          <div className="shape-stage-actions">
+            <div className="shape-stage-meta"><span>{normalize ? "Normalized length" : "Real scale"}</span><span>{`${align[0].toUpperCase()}${align.slice(1)} aligned`}</span></div>
+            <button className="shape-canvas-focus" type="button" onClick={() => setCanvasFocused(current => !current)} aria-pressed={canvasFocused}>{canvasFocused ? "Show layers" : "Focus canvas"}</button>
+          </div>
+        </div>
+        <ShapeCanvas layers={layers} view={view} align={align} normalize={normalize} showDimensions={showDimensions} showFills={showFills} showLabels={showLabels} selectedId={selectedLayerId}/>
         <div className="shape-spec-strip">{layers.filter(layer => layer.visible).map(layer => {
           const mouse = layerMouse(layer); if (!mouse) return null;
           return <article key={mouse.id} style={{ "--shape-color": layer.color } as React.CSSProperties}>
