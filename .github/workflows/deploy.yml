@@ -34,10 +34,11 @@ jobs:
         run: npm install --ignore-scripts --no-audit --no-fund
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
-      - name: Validate catalog, evidence and Worker bundle
+      - name: Validate catalog, evidence, utilities and Worker bundle
         run: |
           npm run data:validate
           npm run community:validate
+          npm run sensitivity:validate
           npm run product:validate
           npm run data:report
           npm run data:seed
@@ -80,6 +81,8 @@ jobs:
           {
             echo "### Atlas live deployment"
             echo "- $DEPLOY_URL"
+            echo "- Keyboard Lab: ${DEPLOY_URL}/#keyboard-lab"
+            echo "- Sensitivity Lab: ${DEPLOY_URL}/#sensitivity"
             echo "- Product Lab: ${DEPLOY_URL}/#product-lab"
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Verify deployed health endpoint
