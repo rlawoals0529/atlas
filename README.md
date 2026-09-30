@@ -1,23 +1,20 @@
 # Atlas
 
-Evidence-aware gaming-peripheral research, fit, comparison and validation workspace. Atlas started mouse-first and now treats mice, mousepads, skates, gaming keyboards, switches and sensitivity calibration as parts of the same input ecosystem rather than isolated spec sheets.
+Atlas started as a mouse recommender and kept growing because the questions around a mouse rarely stop at the mouse. Pads change glide, skates change the pad, switches change how a keyboard feels, and sensitivity changes how the whole setup behaves.
 
-Atlas is intentionally two things at once without splitting into unrelated portfolio demos:
-
-1. a consumer-facing enthusiast product for finding, comparing and calibrating gaming peripherals;
-2. a Product Lab that uses the same catalog, fit model and evidence system for product analytics, category intelligence, product operations and real hardware/system validation.
+The public side is an enthusiast catalog and set of comparison tools. Product Lab uses the same data underneath for category analysis, validation plans, evidence tracking and product-operations work. They share one catalog instead of pretending to be separate portfolio demos.
 
 ## Current build — v0.9
 
-The current canonical catalog contains **66 products**: **39 gaming mice**, **16 mousepads**, **6 skate families**, **3 gaming keyboards** and **2 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. It is curated rather than exhaustive: provenance, fit usefulness and maintainability matter more than inflating the product count.
+The current canonical catalog contains **102 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **18 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. I would rather leave a product out than fill its record with guesses, so catalog growth is tied to sources and evidence rather than a target count.
 
-The established pointing-gear consumer shell remains product UI **v0.8**. Atlas **v0.9** adds new routed enthusiast utilities and a broader data layer without silently changing the existing mouse/pad/skate recommendation model.
+The pointing-gear recommendation model is still product UI **v0.8**; Atlas **v0.9** widened the catalog and added the specialist tools around it. That version split is deliberate: adding keyboards or a new research view does not silently change an existing mouse recommendation.
 
 The consumer product includes:
 
 - explainable mouse, pad and skate recommendations based on hand size, grip subtype, game style, sensitivity and surface preference;
 - relative recommendation mode for moving smaller/larger, narrower/wider, lower/higher, lighter/heavier or changing palm support from a mouse you already own;
-- Shape Lab with top/side overlays, real scale or normalized length, center/front/rear/sensor alignment and up to five layers;
+- Shape Lab with top/side overlays, real scale or normalized length, center/front/rear/sensor alignment, per-layer styling, dimensions, product images, up to five mice and shareable comparison URLs;
 - Balanced, Claw, Fingertip and Palm shape-similarity modes using multi-axis geometry;
 - direct target-geometry search;
 - product detail inspector with type-specific specs, family/revision context, fit/feel models and source provenance;
@@ -26,7 +23,8 @@ The consumer product includes:
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
 - **Keyboard Lab** at `#keyboard-lab` for source-backed gaming-keyboard and switch research;
 - **Sensitivity Lab** at `#sensitivity` for DPI/eDPI and base-hipfire cm/360 conversion with source-specific yaw confidence;
-- responsive precision-lab UI with the information discipline of Sidereal/FantasyStats while remaining visually distinct;
+- a light, product-first interface shared across the catalog and specialist tools;
+- official manufacturer product imagery where Atlas has a pinned asset or a resolvable manufacturer source, with graceful fallback when a remote host changes;
 - installable web-app metadata and a documented research/correction workflow.
 
 ## Keyboard Lab
@@ -125,7 +123,7 @@ See `docs/product/VALIDATION_PROTOCOL.md`.
 - product changelog;
 - lightweight incident/postmortem template.
 
-These docs are intentionally kept proportional to the project rather than simulating a large company's process.
+The point of those docs is to record decisions Atlas actually makes, not to imitate the paperwork of a larger company.
 
 ## Canonical data architecture
 
@@ -165,7 +163,9 @@ For the Gigantus V2 Pro, Razer defines Max Control, Control, Balance, Speed and 
 
 Atlas includes traceable qualitative community-evidence pilots for selected mice and the WALLHACK SP-004. Individual observations preserve source, date, conditions, disagreement and evidence strength; the pilots are not treated as representative market sentiment, friction measurement or reliability-rate data. Public X/Twitter observations are only retained when directly attributable and product-specific; incomplete X indexing is documented as a research limitation.
 
-The v0.9 keyboard shard begins with **Wooting 80HE+**, **Razer Huntsman V3 Pro Tenkeyless 8KHz**, **Keychron Q1 HE 8K**, **Gateron Magnetic Jade Emerald** and **CHERRY MX2A Red**. Manufacturer specifications and independent/reviewer observations remain separate evidence classes.
+The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **18 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
+
+Product media follows the same rule. Pinned images live in a presentation-only registry, while unresolved records can fall back to an official manufacturer page through the Worker. CI checks that every current input-hardware record has one of those paths, and production deploys smoke-test the Worker fallbacks instead of assuming a page URL will keep working.
 
 ## Runtime stack
 
@@ -257,4 +257,6 @@ Core rules:
 
 ## Shape data
 
-Current outline rendering uses **Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. No outline asset is copied from EloShapes, RTINGS or another site's scans. `MouseProduct.outline` supports explicit sourced point sets (`traced-reference`, `measured-svg`, or `scan`) so legitimate reference traces and measured geometry can replace parametric geometry later without changing the Shape Lab interface. Shape Lab evaluates provenance per view: a top-only explicit outline never causes a fallback side profile to be labeled measured.
+Shape Lab uses the best outline Atlas can support for each view: an explicit measured/vector or scan outline when one is present, a sourced traced reference when appropriate, and the catalog's parametric geometry as the fallback. The UI says which one you are looking at. A measured top outline does not make a generated side profile “measured.”
+
+No outline coordinates are copied from EloShapes, RTINGS or another site's proprietary shape database. `MouseProduct.outline` keeps sourced point sets and their source IDs separate from the parametric fallback so better geometry can replace an estimate without changing the comparison workflow.
