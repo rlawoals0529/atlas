@@ -26,8 +26,10 @@ jobs:
         run: npm audit --omit=dev --audit-level=high
       - name: Validate canonical catalog shards
         run: npm run data:validate
-      - name: Validate community evidence pilot
+      - name: Validate community evidence pilots
         run: npm run community:validate
+      - name: Validate sensitivity conversion data
+        run: npm run sensitivity:validate
       - name: Validate Product Lab integrity rules
         run: npm run product:validate
       - name: Generate catalog quality report
