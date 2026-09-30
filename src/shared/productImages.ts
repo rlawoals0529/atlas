@@ -187,7 +187,7 @@ export const productImages: Record<string, ProductImage> = {
     sourceUrl: "https://www.gateron.com/blog/detail/gateron-magnetic-switches-series-for-the-ultimate-gaming-experience",
     alt: "Gateron Magnetic Jade Gaming Hall-effect switch",
     credit: "Gateron official product image",
-  }
+  },
   "keyboard-razer-huntsman-v3-pro-tkl-8khz": {
     url: "https://assets3.razerzone.com/iajuRCuAMNuncojOMjSjzRZzBNY=/1920x1280/https%3A%2F%2Fmedias-p1.phoenix.razer.com%2Fsys-master-phoenix-images-container%2Fhb9%2Fh24%2F9980311076894%2Fhuntsman-v3-pro-tkl-8khz-b-500x500.png",
     sourceUrl: "https://www.razer.com/gaming-keyboards/razer-huntsman-v3-pro-8khz/RZ03-05520200-R3U1",
