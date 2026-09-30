@@ -1,7 +1,7 @@
-import type { Product, SourceKind } from "./types";
+import type { CatalogProduct, SourceKind } from "./types";
 import { evidenceHealth } from "./productMeta";
 
-export function catalogStats(products: Product[]) {
+export function catalogStats(products: CatalogProduct[]) {
   const sourceKinds: Record<SourceKind, number> = { manufacturer: 0, independent: 0, community: 0, editorial: 0 };
   const confidence = { high: 0, medium: 0, low: 0 };
   const checkedDates: string[] = [];
