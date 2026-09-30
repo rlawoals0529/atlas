@@ -243,7 +243,10 @@ export interface KeyboardSwitchProduct extends BaseProduct {
 }
 
 export type PointingProduct = MouseProduct | MousepadProduct | SkateProduct;
-export type Product = PointingProduct | KeyboardProduct | KeyboardSwitchProduct;
+// Preserve the established consumer/recommendation meaning of Product.
+export type Product = PointingProduct;
+// Use CatalogProduct only where Atlas intentionally spans all hardware categories.
+export type CatalogProduct = PointingProduct | KeyboardProduct | KeyboardSwitchProduct;
 
 export interface RelativePreference {
   currentMouseId?: string;
