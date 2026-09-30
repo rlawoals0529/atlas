@@ -257,4 +257,4 @@ Core rules:
 
 ## Shape data
 
-Current outline rendering uses **Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. No outline asset is copied from EloShapes, RTINGS or another site's scans. `MouseProduct.outline` supports sourced measured point sets (`measured-svg` / `scan`) so measured geometry can replace parametric geometry later without changing the Shape Lab interface.
+Current outline rendering uses **Atlas parametric approximations** derived from the catalog's own dimensions and geometry fields. No outline asset is copied from EloShapes, RTINGS or another site's scans. `MouseProduct.outline` supports explicit sourced point sets (`traced-reference`, `measured-svg`, or `scan`) so legitimate reference traces and measured geometry can replace parametric geometry later without changing the Shape Lab interface. Shape Lab evaluates provenance per view: a top-only explicit outline never causes a fallback side profile to be labeled measured.
