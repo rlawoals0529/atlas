@@ -20,10 +20,10 @@
         },
         {
           "id": "atlas-editorial-fit",
-          "label": "Atlas fit model",
+          "label": "Input Atlas fit model (provisional)",
           "url": "./research/FIELD_MODEL.md",
           "kind": "editorial",
-          "checkedAt": "2026-09-30"
+          "checkedAt": "2026-09-28"
         }
       ],
       "specs": {
@@ -114,10 +114,10 @@
         },
         {
           "id": "atlas-editorial-fit",
-          "label": "Atlas fit model",
+          "label": "Input Atlas fit model (provisional)",
           "url": "./research/FIELD_MODEL.md",
           "kind": "editorial",
-          "checkedAt": "2026-09-30"
+          "checkedAt": "2026-09-28"
         }
       ],
       "specs": {
