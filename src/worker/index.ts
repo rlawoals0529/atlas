@@ -100,7 +100,7 @@ function queryNumber(c: AtlasContext, key: string, fallback: number, min: number
 
 const mediaCache = new Map<string, { imageUrl: string; sourceUrl: string; expiresAt: number }>();
 const MEDIA_TTL_MS = 24 * 60 * 60 * 1000;
-const PRIVATE_HOST = /^(?:localhost|127\\.|0\\.|10\\.|192\\.168\\.|169\\.254\\.|172\\.(?:1[6-9]|2\\d|3[01])\\.|\\[?::1\\]?$)/i;
+const PRIVATE_HOST = /^(?:localhost|127\.|0\.|10\.|192\.168\.|169\.254\.|172\.(?:1[6-9]|2\d|3[01])\.|\[?::1\]?$)/i;
 
 function safeHttpsUrl(value: string, base?: string): string | null {
   try {
@@ -117,7 +117,63 @@ function decodeHtml(value: string): string {
 }
 
 function metaContent(html: string, key: string): string | null {
-  const escaped = key.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\app.route("/api/analytics", analyticsApp);");
+  const tags = html.match(/<meta\b[^>]*>/gi) ?? [];
+  for (const tag of tags) {
+    const name = tag.match(/(?:property|name)\s*=\s*["']([^"']+)["']/i)?.[1];
+    if (name?.toLowerCase() !== key.toLowerCase()) continue;
+    const content = tag.match(/content\s*=\s*["']([^"']+)["']/i)?.[1];
+    if (content) return decodeHtml(content);
+  }
+  return null;
+}
+
+function imageCandidateFromHtml(html: string): string | null {
+  for (const key of ["og:image:secure_url", "og:image", "twitter:image"]) {
+    const value = metaContent(html, key);
+    if (value) return value;
+  }
+  const imageSrc = html.match(/<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i)
+    ?? html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']image_src["']/i);
+  if (imageSrc?.[1]) return decodeHtml(imageSrc[1]);
+  const jsonImage = html.match(/"image"\s*:\s*"([^"]+)"/i) ?? html.match(/"image"\s*:\s*\[\s*"([^"]+)"/i);
+  return jsonImage?.[1] ? decodeHtml(jsonImage[1].replaceAll("\\/", "/")) : null;
+}
+
+function sourceScore(url: string): number {
+  const value = url.toLowerCase();
+  let score = 0;
+  if (/\/products?\/|gaming-mice|gaming-keyboards|keyboard|switch/.test(value)) score += 8;
+  if (/\/shop\/p\//.test(value)) score += 4;
+  if (/support|manual|faq|help\.|youtube\.com|youtu\.be/.test(value)) score -= 6;
+  if (/blog|news|feature\.php/.test(value)) score -= 2;
+  return score;
+}
+
+function officialSource(product: CatalogProduct): string | null {
+  const sources = product.sources
+    .filter(source => source.kind === "manufacturer")
+    .map(source => source.url)
+    .filter(url => safeHttpsUrl(url))
+    .sort((a, b) => sourceScore(b) - sourceScore(a));
+  return sources[0] ?? null;
+}
+
+async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl: string; sourceUrl: string } | null> {
+  const cached = mediaCache.get(product.id);
+  if (cached && cached.expiresAt > Date.now()) return cached;
+  const sourceUrl = officialSource(product);
+  if (!sourceUrl) return null;
+  const response = await fetch(sourceUrl, { redirect: "follow", headers: { "Accept": "text/html,application/xhtml+xml", "User-Agent": "Atlas product-media resolver" } });
+  if (!response.ok || !(response.headers.get("content-type") ?? "").includes("text/html")) return null;
+  const html = (await response.text()).slice(0, 2_000_000);
+  const candidate = imageCandidateFromHtml(html);
+  const imageUrl = candidate ? safeHttpsUrl(candidate, sourceUrl) : null;
+  if (!imageUrl) return null;
+  const resolved = { imageUrl, sourceUrl, expiresAt: Date.now() + MEDIA_TTL_MS };
+  mediaCache.set(product.id, resolved);
+  return resolved;
+}
+app.route("/api/analytics", analyticsApp);");
   const patterns = [
     new RegExp('<meta[^>]+(?:property|name)=["\\\\\']' + escaped + '["\\\\\'][^>]+content=["\\\\\']([^"\\\\\']+)["\\\\\'][^>]*>', "i"),
     new RegExp('<meta[^>]+content=["\\\\\']([^"\\\\\']+)["\\\\\'][^>]+(?:property|name)=["\\\\\']' + escaped + '["\\\\\'][^>]*>', "i"),
