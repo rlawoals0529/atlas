@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import App from "./AppV05";
 import ProductLab from "./ProductLab";
 
-const routeFromHash = () => window.location.hash === "#lab" ? "lab" : "app";
+const routeFromHash = () => window.location.hash.startsWith("#lab") ? "lab" : "app";
 
 function RootRouter() {
   const [route, setRoute] = useState<"app" | "lab">(routeFromHash);
