@@ -23,6 +23,7 @@ import {
 } from "../shared/validation";
 import ProductIntelligenceExtras from "./ProductIntelligenceExtras";
 import AnalyticsDeepDive from "./AnalyticsDeepDive";
+import ProductionAnalyticsStatus from "./ProductionAnalyticsStatus";
 
 const SESSION_KEY = "atlas.validation.sessions.v1";
 const DEFECT_KEY = "atlas.validation.defects.v1";
@@ -76,6 +77,8 @@ function AnalyticsPanel() {
       <div><span className={`pl-data-badge ${mode}`}>{mode === "demo" ? "DEMO / SYNTHETIC" : "REAL / THIS BROWSER"}</span><h2>Behavioral product analytics</h2><p>{mode === "demo" ? "Synthetic events exist only to exercise the dashboard. They are never presented as production usage." : "These are first-party events actually recorded in this browser. Atlas does not yet claim an all-users production aggregate."}</p></div>
       <div className="pl-toggle" role="group" aria-label="Analytics data mode"><button className={mode === "local-real" ? "active" : ""} onClick={() => setMode("local-real")}>Real local data</button><button className={mode === "demo" ? "active" : ""} onClick={() => setMode("demo")}>Demo data</button></div>
     </section>
+
+    <ProductionAnalyticsStatus/>
 
     <section className="pl-metrics">
       <article><span>SESSIONS</span><b>{summary.sessions}</b><small>{mode === "demo" ? "synthetic" : "this browser"}</small></article>
