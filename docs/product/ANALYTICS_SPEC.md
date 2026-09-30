@@ -59,6 +59,25 @@ Deterministic fixture events used to exercise dashboards and interview/demo flow
 
 Synthetic events must never be merged into real aggregates.
 
+### PRODUCTION / REAL — optional collector
+Atlas now includes an optional same-origin production collector under `/api/analytics`. It is disabled unless Cloudflare D1 is explicitly bound as `ANALYTICS_DB` and migration `0002_analytics.sql` is applied.
+
+The client checks `/api/analytics/availability` before attempting production delivery. If storage is absent, Atlas falls back to browser-local analytics without breaking the consumer product or implying site-wide measurement exists.
+
+The collector enforces:
+
+- a fixed event-name allowlist;
+- event-specific server-side property validation;
+- bounded body, batch, property and segment sizes;
+- timestamp and identifier validation;
+- per-IP request throttling without persisting the IP;
+- same-origin transport;
+- `INSERT OR IGNORE` event-id deduplication;
+- aggregate summary endpoints separate from raw storage;
+- no route that inserts demo fixture events.
+
+The current public Product Lab intentionally keeps the production view disabled until a real D1 binding exists and real production data is available.
+
 ## Funnel definitions
 
 Primary recommendation funnel:
@@ -84,17 +103,17 @@ Event names and property shapes are defined centrally. Feature code should call 
 
 The initial integration uses a centralized DOM bridge for the existing large consumer component so instrumentation can be added without destabilizing it. New or substantially refactored components should call the typed tracker directly. The bridge should be retired as core surfaces are modularized.
 
-## Future production collector
+## Production operations
 
-An aggregated production collector should be first-party and same-origin, with:
+When `ANALYTICS_DB` is enabled:
 
-- bounded request size and batch size;
-- server-side schema validation;
-- rate limiting;
-- retention policy;
-- no raw IP persistence;
-- no demo events accepted into production tables;
-- aggregate endpoints separated from raw-event access;
-- explicit data-source label in the dashboard.
+1. create a dedicated Atlas analytics D1 database;
+2. apply `migrations/0002_analytics.sql`;
+3. bind it as `ANALYTICS_DB` rather than repurposing unrelated storage;
+4. verify `/api/analytics/availability` reports `available: true`;
+5. verify production events appear only after real user actions;
+6. set and document a retention/deletion policy before accumulating long-term data;
+7. monitor request volume and edge abuse controls;
+8. continue to label Atlas analytics as first-party product behavior, not market-share evidence.
 
-Until that collector is deployed, Atlas must not claim site-wide traffic or conversion metrics.
+Until those steps are complete, Atlas must not claim site-wide traffic or conversion metrics.
