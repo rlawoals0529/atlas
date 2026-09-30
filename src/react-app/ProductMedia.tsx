@@ -20,7 +20,7 @@ export function ProductMedia({ productId, fallback, className = "" }: { productI
   const media = imageForProduct(productId);
   const product = productById.get(productId);
   const official = useMemo(() => bestManufacturerSource(productId), [productId]);
-  const src = media?.url ?? (official ? `/api/media/${encodeURIComponent(productId)}` : undefined);
+  const src = media || official ? `/api/media/${encodeURIComponent(productId)}` : undefined;
   const alt = media?.alt ?? (product ? `${product.brand} ${product.model} product image` : "Product image");
   const [failed, setFailed] = useState(false);
   useEffect(() => setFailed(false), [productId, src]);
