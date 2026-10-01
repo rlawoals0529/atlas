@@ -2,6 +2,8 @@
 
 Atlas treats product research as evidence, not filler. Small, reviewable corrections are better than large imports that are hard to trace.
 
+Use the GitHub issue templates for bugs, feature requests and data corrections. Data corrections should include the Atlas product ID when known, the field being changed, a traceable source, and any revision/methodology context needed to interpret the value.
+
 ## Product data
 
 Add new research to a dated `data/catalog.<period>.json` shard instead of rewriting the original seed catalog. Every product must have globally unique `id` and `slug` values, at least one source, and evidence entries whose `sourceIds` resolve to sources on that product.

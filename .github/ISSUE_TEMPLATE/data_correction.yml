@@ -1,0 +1,71 @@
+name: Data correction
+description: Correct a product specification, source, compatibility note, image, or attribution.
+title: "[Data] "
+labels: ["data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Atlas treats corrections as evidence changes. Please include a traceable source and explain what field should change.
+  - type: input
+    id: product
+    attributes:
+      label: Product
+      placeholder: "Gateron Magnetic Jade / Pulsar X2..."
+    validations:
+      required: true
+  - type: input
+    id: product_id
+    attributes:
+      label: Atlas product ID
+      description: If known.
+      placeholder: "switch-gateron-magnetic-jade"
+  - type: textarea
+    id: field
+    attributes:
+      label: Field(s) to correct
+      placeholder: "actuationForce, totalTravelMm, compatibility, image, source label..."
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Atlas value
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed value
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source URL
+      description: Prefer manufacturer documentation or a controlled independent measurement when appropriate.
+    validations:
+      required: true
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: Source type
+      options:
+        - Manufacturer
+        - Independent measurement / review
+        - Community observation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / methodology
+      description: Include revision, firmware, test method, units, tolerance, or compatibility conditions when they change interpretation.
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I am not asking Atlas to convert an opinion or rating into a factual measurement.
+          required: true
