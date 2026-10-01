@@ -255,7 +255,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
       <div className="consumer-compare-controls">
         <div className="consumer-compare-filter-group">
           <label><input type="checkbox" checked={differencesOnly} onChange={event => setDifferencesOnly(event.target.checked)}/><span>Show differences only</span></label>
-          <span className="consumer-compare-diff-count">{differenceCount} differing {differenceCount === 1 ? "field" : "fields"}</span>
+          <span className="consumer-compare-diff-count" role="status" aria-live="polite" aria-atomic="true">{differenceCount} differing {differenceCount === 1 ? "field" : "fields"}</span>
         </div>
         <a href={specialistHref}>{specialistLabel} →</a>
       </div>
@@ -263,7 +263,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
       <div className="consumer-compare-products" style={{ "--compare-count": products.length } as React.CSSProperties}>
         <div className="consumer-compare-axis"><span>PRODUCT</span></div>
         {products.map((product, index) => <article key={product.id}>
-          <button onClick={() => onRemove(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button>
+          <button type="button" onClick={() => onRemove(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button>
           <div className="consumer-compare-media"><ProductMedia productId={product.id}/></div>
           <div className="consumer-compare-product-meta"><span>{String(index + 1).padStart(2, "0")} · {product.brand}</span><small>{money(product.msrpUsd)} · {coverage(product)}/100 evidence</small></div>
           <h3>{product.model}</h3>
