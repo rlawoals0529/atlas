@@ -12,14 +12,27 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Detect GitHub Dependency Graph
+        id: graph
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          status="$(curl -sS -o /tmp/atlas-dependency-sbom.json -w '%{http_code}'             -H "Accept: application/vnd.github+json"             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/$GITHUB_REPOSITORY/dependency-graph/sbom")"
+          if [[ "$status" == "200" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Dependency Graph probe returned HTTP $status."
+          fi
       - name: Review dependency changes
-        id: review
-        continue-on-error: true
+        if: steps.graph.outputs.enabled == 'true'
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
         with:
           fail-on-severity: high
       - name: Explain unavailable dependency review
-        if: steps.review.outcome == 'failure'
+        if: steps.graph.outputs.enabled != 'true'
         shell: bash
         run: |
           {
