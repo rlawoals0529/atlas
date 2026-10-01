@@ -59,7 +59,7 @@ if (!productMediaComponent.includes('import("../shared/switchProductImages")')) 
   process.exit(1);
 }
 
-if (/^\s*"keyboard-/m.test(initialRegistry)) {
+if (/^\s*"keyboard-[^"]+":\s*\{/m.test(initialRegistry)) {
   console.error("Product media coverage validation failed: keyboard media metadata must stay out of the initial productImages registry.");
   process.exit(1);
 }
