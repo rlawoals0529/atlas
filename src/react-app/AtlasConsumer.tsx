@@ -243,7 +243,7 @@ const sharedSwitchSort = () => {
 };
 
 type AtlasConsumerProps = {
-  focusCategory?: Extract<ProductType, "mousepad" | "switch">;
+  focusCategory?: Extract<ProductType, "mousepad" | "keyboard" | "switch">;
   afterCatalog?: ReactNode;
   additionalProducts?: CatalogProduct[];
 };
@@ -452,7 +452,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     const url = new URL(window.location.href);
     url.search = "";
     url.searchParams.set("compare", serializeSharedCompareIds(compareProducts.map(product => product.id)));
-    url.hash = compareProducts[0].type === "switch" ? "#switches" : compareProducts[0].type === "mousepad" ? "#mousepads" : "";
+    url.hash = compareProducts[0].type === "switch" ? "#switches" : compareProducts[0].type === "keyboard" ? "#keyboards" : compareProducts[0].type === "mousepad" ? "#mousepads" : "";
     try {
       await navigator.clipboard.writeText(url.toString());
       setCompareShareStatus("Comparison link copied");
@@ -514,16 +514,20 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const focusedMeta = focusCategory ? categoryMeta[focusCategory] : null;
   const focusedDescription = focusCategory === "mousepad"
     ? "Browse mousepads as a first-class catalog: cloth, hybrid, glass, resin and hard surfaces with material, size and feel fields kept separate from sourced evidence."
-    : focusCategory === "switch"
-      ? "Browse Atlas switch records, then search the broader attributed ThereminGoat review directory below. External review metadata stays separate from Atlas product specs."
-      : "";
-  const catalogTitle = focusCategory === "mousepad" ? "Mousepad catalog" : focusCategory === "switch" ? "Atlas switch records" : "Browse the input stack";
+    : focusCategory === "keyboard"
+      ? "Browse complete gaming keyboards as board-level products. Switch technology is one specification here; standalone switch records remain in the dedicated Switches catalog."
+      : focusCategory === "switch"
+        ? "Browse Atlas switch records, then search the broader attributed ThereminGoat review directory below. External review metadata stays separate from Atlas product specs."
+        : "";
+  const catalogTitle = focusCategory === "mousepad" ? "Mousepad catalog" : focusCategory === "keyboard" ? "Keyboard catalog" : focusCategory === "switch" ? "Atlas switch records" : "Browse the input stack";
   const catalogDescription = focusCategory === "mousepad"
     ? "Filter by the surface class Atlas actually records, then compare normalized glide, stopping, dimensions and source coverage without collapsing them into one score."
-    : focusCategory === "switch"
-      ? "These are Atlas canonical product records with sourced specifications. The much larger attributed review directory stays below as a separate evidence source."
-      : "Start broad, reveal only the filters that matter, and add up to four products from one category to the richer comparison tray. Official product imagery appears where Atlas has a stable sourced asset; otherwise the interface falls back to the category glyph.";
-  const searchPlaceholder = focusCategory === "mousepad" ? "Search pad, material, surface, base…" : focusCategory === "switch" ? "Search switch, technology, feel, force…" : "Search product, material, shape, switch, feature…";
+    : focusCategory === "keyboard"
+      ? "Filter complete boards by switch technology, form factor, polling and Rapid Trigger support. Published board specifications stay separate from standalone switch research."
+      : focusCategory === "switch"
+        ? "These are Atlas canonical product records with sourced specifications. The much larger attributed review directory stays below as a separate evidence source."
+        : "Start broad, reveal only the filters that matter, and add up to four products from one category to the richer comparison tray. Official product imagery appears where Atlas has a stable sourced asset; otherwise the interface falls back to the category glyph.";
+  const searchPlaceholder = focusCategory === "mousepad" ? "Search pad, material, surface, base…" : focusCategory === "keyboard" ? "Search board, format, switch technology, polling…" : focusCategory === "switch" ? "Search switch, technology, feel, force…" : "Search product, material, shape, switch, feature…";
 
   return <div className={`consumer-shell ${focusCategory ? "consumer-category-page" : ""}`} data-focus-category={focusCategory ?? undefined}>
     <header className="consumer-topbar">
@@ -536,11 +540,11 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
       {focusCategory && focusedMeta && <section className="consumer-category-hero" data-category={focusCategory}>
         <div>
           <span>{focusedMeta.singular} database</span>
-          <h1>{focusCategory === "mousepad" ? "Mousepads" : "Switches"}</h1>
+          <h1>{focusCategory === "mousepad" ? "Mousepads" : focusCategory === "keyboard" ? "Keyboards" : "Switches"}</h1>
           <p>{focusedDescription}</p>
           <div className="consumer-category-hero-actions">
             <a href="#">Browse all gear</a>
-            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder →</a> : <a href="#switch-review-index">Jump to review directory →</a>}
+            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder →</a> : focusCategory === "keyboard" ? <a href="#keyboard-lab">Open Keyboard Lab →</a> : <a href="#switch-review-index">Jump to review directory →</a>}
           </div>
         </div>
         <aside><b>{counts[focusCategory]}</b><span>canonical Atlas records</span><small>{focusedMeta.description}</small></aside>
@@ -557,7 +561,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
         </div>
         <div className="consumer-tool-row" aria-label="Atlas tools">
           <a className="tool-mouse" href="#pointing"><span>01</span><div><b>Setup finder + Shape Lab</b><small>Mouse fit, pad/skate pairing and outline comparison</small></div><i>→</i></a>
-          <a className="tool-keyboard" href="#keyboard-lab"><span>02</span><div><b>Keyboard Lab</b><small>Rapid Trigger, HE/TMR platforms and switch research</small></div><i>→</i></a>
+          <a className="tool-keyboard" href="#keyboard-lab"><span>02</span><div><b>Keyboard Lab</b><small>Complete-board actuation, polling and platform analysis</small></div><i>→</i></a>
           <a className="tool-sensitivity" href="#sensitivity"><span>03</span><div><b>Sensitivity Lab</b><small>cm/360, DPI, yaw and cross-game conversion</small></div><i>→</i></a>
         </div>
       </section>
@@ -568,6 +572,10 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
         {focusCategory === "mousepad" && <div className="consumer-focus-quick" data-category="mousepad" aria-label="Filter mousepads by surface class">
           <button type="button" className={surface === "all" ? "active" : ""} onClick={() => setSurface("all")} aria-pressed={surface === "all"}><span>All surfaces</span><b>{mousepads.length}</b></button>
           {mousepadSurfaces.map(item => <button type="button" key={item} className={surface === item ? "active" : ""} onClick={() => setSurface(item)} aria-pressed={surface === item}><span>{titleCase(item)}</span><b>{mousepadSurfaceCounts.get(item) ?? 0}</b></button>)}
+        </div>}
+        {focusCategory === "keyboard" && <div className="consumer-focus-quick" data-category="keyboard" aria-label="Filter keyboards by switch technology">
+          <button type="button" className={keyboardTech === "all" ? "active" : ""} onClick={() => setKeyboardTech("all")} aria-pressed={keyboardTech === "all"}><span>All boards</span><b>{keyboards.length}</b></button>
+          {[...new Set(keyboards.map(product => product.specs.switchTechnology))].sort().map(item => <button type="button" key={item} className={keyboardTech === item ? "active" : ""} onClick={() => setKeyboardTech(item)} aria-pressed={keyboardTech === item}><span>{titleCase(item)}</span><b>{keyboards.filter(product => product.specs.switchTechnology === item).length}</b></button>)}
         </div>}
         {focusCategory === "switch" && <>
           <div className="consumer-focus-quick" data-category="switch" aria-label="Filter Atlas switches by sensing technology">

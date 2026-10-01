@@ -30,7 +30,7 @@ const KeyboardLab = lazy(loadKeyboardLab);
 const SensitivityLab = lazy(loadSensitivityLab);
 const SwitchesPage = lazy(loadSwitchesPage);
 
-const routeLabel = (hash: string) => hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : hash === "#mousepads" ? "Mousepads" : hash === "#switches" ? "Switches" : hash === "#pointing" ? "Setup" : "Browse";
+const routeLabel = (hash: string) => hash === "#keyboards" ? "Keyboards" : hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : hash === "#mousepads" ? "Mousepads" : hash === "#switches" ? "Switches" : hash === "#pointing" ? "Setup" : "Browse";
 
 const preloadRoute = (href: string) => {
   if (href === "#pointing") void loadPointing();
@@ -119,13 +119,14 @@ function RootRouter() {
 
   const productLab = hash === "#product-lab";
   const validationRunner = hash === "#validation-run";
+  const keyboardsPage = hash === "#keyboards";
   const keyboardLab = hash === "#keyboard-lab";
   const sensitivityLab = hash === "#sensitivity";
   const pointingApp = hash === "#pointing";
   const mousepadsPage = hash === "#mousepads";
   const switchesPage = hash === "#switches";
 
-  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : mousepadsPage ? <AtlasConsumer key="mousepads" focusCategory="mousepad" /> : switchesPage ? <SwitchesPage /> : productLab ? <>
+  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : keyboardsPage ? <AtlasConsumer key="keyboards" focusCategory="keyboard" /> : mousepadsPage ? <AtlasConsumer key="mousepads" focusCategory="mousepad" /> : switchesPage ? <SwitchesPage /> : productLab ? <>
     <ProductLab />
     <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
   </> : pointingApp ? <>

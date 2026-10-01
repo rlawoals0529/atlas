@@ -77,7 +77,7 @@ export default function KeyboardLab() {
   return <div className="utility-shell keyboard-shell">
     <header className="utility-topbar">
       <a href="#" className="utility-brand"><b>ATLAS</b><span>KEYBOARD LAB</span></a>
-      <nav><a href="#">Setup</a><a href="#sensitivity">Sensitivity</a><a href="#product-lab">Product Lab</a></nav>
+      <nav><a href="#keyboards">Keyboard catalog</a><a href="#switches">Switches</a><a href="#product-lab">Product Lab</a></nav>
       <span className="utility-status">{keyboards.length} BOARDS</span>
     </header>
 
@@ -88,7 +88,7 @@ export default function KeyboardLab() {
       </section>
 
       <section className="kb-research-boundary">
-        <b>Looking for switches?</b><p>Switch-level product records and the attributed ThereminGoat review directory now live in the dedicated Switches section, so Keyboard Lab stays focused on complete boards.</p><a href="#switches">Open Switches →</a>
+        <b>Board catalog and switch research are separate.</b><p>Use Keyboards for complete-board browsing and comparison. Standalone switch records and the attributed ThereminGoat review directory stay in Switches, while this lab focuses on board-level actuation, polling and platform details.</p><a href="#keyboards">Open Keyboards →</a><a href="#switches">Open Switches →</a>
       </section>
 
       <section className="kb-toolbar kb-toolbar-boards-only">

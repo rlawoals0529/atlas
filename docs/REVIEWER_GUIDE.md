@@ -5,8 +5,8 @@ This guide is for someone evaluating Atlas without wanting to read the repositor
 ## Five-minute product tour
 
 1. Open the live site: https://atlas.rlawoals0529.workers.dev/
-2. Open **Switches** and filter by technology / feel.
-3. Compare two switches and inspect published force/travel plus source evidence.
+2. Open **Keyboards** and confirm the catalog contains complete boards only; use **Keyboard Lab** for deeper board analysis.
+3. Open **Switches** and filter by technology / feel, then compare two switches and inspect published force/travel plus source evidence.
 4. Open **Shape / pointing setup** and inspect mouse geometry/comparison.
 5. Open **Validation Lab** and confirm generated cases begin `NOT RUN`.
 6. Open **Product Lab** to see how the same canonical catalog supports product analysis and QA planning.

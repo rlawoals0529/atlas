@@ -51,7 +51,8 @@ assert(publicManifest.includes('"src": "/atlas-mark.svg"'), "PWA manifest must k
 
 assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain routable");
 assert(main.includes('hash === "#sensitivity"'), "Sensitivity Lab must remain routable");
-assert(globalNav.includes('href: "#keyboard-lab"'), "global navigation must expose Keyboard Lab");
+assert(globalNav.includes('href: "#keyboards"'), "global navigation must expose the complete-board Keyboards catalog");
+assert(keyboardLab.includes('href="#keyboards"'), "Keyboard Lab must link back to the complete-board catalog");
 assert(globalNav.includes('href: "#sensitivity"'), "global navigation must expose Sensitivity Lab");
 assert(globalNav.includes('href: "#mousepads"'), "global navigation must expose Mousepads");
 assert(globalNav.includes('href: "#switches"'), "global navigation must expose Switches");
@@ -59,6 +60,11 @@ assert(globalNav.includes('scrollIntoView'), "overflowing global navigation must
 assert(globalNav.includes('href: "#pointing"'), "global navigation must expose Setup / Shape Lab");
 assert(globalNav.includes('href: "#product-lab"'), "global navigation must expose Product Lab");
 assert(main.includes('hash === "#switches"'), "dedicated Switches route must remain routable");
+assert(main.includes('hash === "#keyboards"'), "dedicated Keyboards route must remain routable");
+assert(main.includes('focusCategory="keyboard"'), "Keyboards route must use the board-only catalog focus");
+assert(consumer.includes('focusCategory?: Extract<ProductType, "mousepad" | "keyboard" | "switch">'), "focused catalog types must include complete keyboards without collapsing switches into boards");
+assert(consumer.includes('focusCategory === "keyboard" ? <a href="#keyboard-lab">Open Keyboard Lab'), "keyboard catalog must link to the board specialist lab");
+assert(consumer.includes('compareProducts[0].type === "keyboard" ? "#keyboards"'), "shared keyboard comparisons must reopen in the dedicated keyboard catalog");
 assert(consumer.includes("function forceToCN"), "switch actuation sorting must normalize gf/cN for ordering");
 assert(consumer.includes("forceToCN(a.specs.actuationForce)"), "switch actuation sorting must use published actuation force, not a different force point");
 assert(consumer.includes('url.hash = "#switches"'), "shared switch views must preserve the dedicated Switches route");
