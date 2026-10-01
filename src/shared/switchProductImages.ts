@@ -309,25 +309,25 @@ export const switchProductImages: Record<string, ProductImage> = {
 
 
   "switch-wuque-ws-red": {
-    url: "https://ucarecdn.com/ff93d9fd-2b94-470f-8921-8df3ae824a58/-/format/auto/-/preview/3000x3000/-/quality/lighter/4.jpg",
+    url: "https://shop.wuquestudio.com/cdn/shop/products/6_e6f672ad-9bff-4d25-9012-8222e86ff1fa_600x600.jpg?v=1669262527",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
     alt: "Wuque Studio WS Red linear mechanical keyboard switch",
     credit: "Wuque Studio official product image",
   },
   "switch-wuque-ws-yellow": {
-    url: "https://ucarecdn.com/7cb9941a-29e5-40af-a3ac-b19c360abf1c/-/format/auto/-/preview/800x800/-/quality/lighter/4.jpg",
+    url: "https://shop.wuquestudio.com/cdn/shop/products/6_24020060-65a1-4aea-91ba-88e400e9eb38_600x600.jpg?v=1669262527",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
     alt: "Wuque Studio WS Yellow linear mechanical keyboard switch",
     credit: "Wuque Studio official product image",
   },
   "switch-wuque-ws-brown": {
-    url: "https://ucarecdn.com/3f108f67-0071-4e10-a7d8-9756990e841c/-/format/auto/-/preview/3000x3000/-/quality/lighter/5.jpg",
+    url: "https://shop.wuquestudio.com/cdn/shop/products/7_d3cd9f45-3f9c-4ef5-8315-1a5e8ca996c9_600x600.jpg?v=1669262527",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
     alt: "Wuque Studio WS Brown tactile mechanical keyboard switch",
     credit: "Wuque Studio official product image",
   },
   "switch-wuque-ws-quartz": {
-    url: "https://ucarecdn.com/60defef1-bec1-4736-b171-ec9544e2084a/-/format/auto/-/preview/3000x3000/-/quality/lighter/3.jpg",
+    url: "https://shop.wuquestudio.com/cdn/shop/products/5_39fbae6c-89fb-430c-91d3-c89842ee3121_600x600.jpg?v=1669262527",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
     alt: "Wuque Studio WS Quartz linear mechanical keyboard switch",
     credit: "Wuque Studio official product image",
