@@ -1,0 +1,31 @@
+name: Prune merged PR branch
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  delete-branch:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref != github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete merged same-repo branch
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          encoded="$(jq -rn --arg v "$HEAD_REF" '$v|@uri')"
+          if gh api "/repos/$GITHUB_REPOSITORY/git/ref/heads/$encoded" >/dev/null 2>&1; then
+            gh api -X DELETE "/repos/$GITHUB_REPOSITORY/git/refs/heads/$encoded"
+            echo "Deleted merged branch: $HEAD_REF"
+          else
+            echo "Branch already absent: $HEAD_REF"
+          fi
