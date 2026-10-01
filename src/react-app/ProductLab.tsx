@@ -27,8 +27,6 @@ import {
 import ProductIntelligenceExtras from "./ProductIntelligenceExtras";
 import AnalyticsDeepDive from "./AnalyticsDeepDive";
 import ProductionAnalyticsStatus from "./ProductionAnalyticsStatus";
-import "./product-lab.css";
-import "./product-lab-entry.css";
 import "./validation-lab-v09.css";
 
 const SESSION_KEY = "atlas.validation.sessions.v1";
