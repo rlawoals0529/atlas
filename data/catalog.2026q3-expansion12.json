@@ -1,0 +1,184 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-wuque-ws-red",
+      "slug": "wuque-ws-red",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Red",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with a manufacturer-published 67 g bottom-out force, 3.8 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed",
+        "nylon-housing"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-switch-series-official",
+          "label": "Wuque Studio WS Switch Series product page",
+          "url": "https://shop.wuquestudio.com/products/ws-switch-series",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "bottomOutForce": {
+          "value": 67,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.8,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-switch-series-official"
+          ],
+          "confidence": "high",
+          "note": "Wuque Studio publishes WS Red as a linear five-pin switch with Nylon top/bottom housings, POM stem, 22 mm double-stage spring, 3.80±0.3 mm total travel, 67 g bottom-out force and factory lubrication. Atlas stores the published g-force convention as gf in the typed force field."
+        }
+      }
+    },
+    {
+      "id": "switch-wuque-ws-yellow",
+      "slug": "wuque-ws-yellow",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Yellow",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with a manufacturer-published 53 g bottom-out force, 3.8 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed",
+        "nylon-housing"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-switch-series-official",
+          "label": "Wuque Studio WS Switch Series product page",
+          "url": "https://shop.wuquestudio.com/products/ws-switch-series",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "bottomOutForce": {
+          "value": 53,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.8,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-switch-series-official"
+          ],
+          "confidence": "high",
+          "note": "Wuque Studio publishes WS Yellow as a linear five-pin switch with Nylon top/bottom housings, POM stem, 22 mm double-stage spring, 3.80±0.3 mm total travel, 53 g bottom-out force and factory lubrication. Atlas stores the published g-force convention as gf in the typed force field."
+        }
+      }
+    },
+    {
+      "id": "switch-wuque-ws-brown",
+      "slug": "wuque-ws-brown",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Brown",
+      "status": "current",
+      "summary": "Tactile five-pin mechanical switch with a manufacturer-published 55 g bottom-out force, 3.8 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "5-pin",
+        "factory-lubed",
+        "nylon-housing"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-switch-series-official",
+          "label": "Wuque Studio WS Switch Series product page",
+          "url": "https://shop.wuquestudio.com/products/ws-switch-series",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "bottomOutForce": {
+          "value": 55,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.8,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-switch-series-official"
+          ],
+          "confidence": "high",
+          "note": "Wuque Studio publishes WS Brown as a tactile five-pin switch with Nylon top/bottom housings, POM stem, 22 mm double-stage spring, 3.80±0.3 mm total travel, 55 g bottom-out force and factory lubrication. Atlas stores the published g-force convention as gf in the typed force field."
+        }
+      }
+    },
+    {
+      "id": "switch-wuque-ws-quartz",
+      "slug": "wuque-ws-quartz",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Quartz",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with a manufacturer-published 60 g bottom-out force, 3.8 mm total travel, PC housings and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed",
+        "pc-housing"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-switch-series-official",
+          "label": "Wuque Studio WS Switch Series product page",
+          "url": "https://shop.wuquestudio.com/products/ws-switch-series",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "bottomOutForce": {
+          "value": 60,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.8,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-switch-series-official"
+          ],
+          "confidence": "high",
+          "note": "Wuque Studio publishes WS Quartz as a linear five-pin switch with PC top/bottom housings, Nylon stem, 22 mm double-stage spring, 3.80±0.3 mm total travel, 60 g bottom-out force and factory lubrication. Atlas stores the published g-force convention as gf in the typed force field."
+        }
+      }
+    }
+  ]
+}
