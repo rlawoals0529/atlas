@@ -1,7 +1,8 @@
-import { Suspense, lazy, useMemo, useState, type ReactNode } from "react";
+import { Suspense, lazy, useId, useMemo, useState, type ReactNode } from "react";
 import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
+import { useModalDialog } from "./useModalDialog";
 
 const loadConsumerCompare = () => import("./ConsumerCompare");
 const ConsumerCompare = lazy(loadConsumerCompare);
@@ -154,12 +155,15 @@ function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; o
 function ProductDrawer({ product, onClose, onCompare, compared }: { product: CatalogProduct; onClose: () => void; onCompare: (product: CatalogProduct) => void; compared: boolean }) {
   const coverage = evidenceCoverage(product);
   const sourcesById = new Map(product.sources.map(source => [source.id, source]));
-  return <div className="consumer-drawer-shell" role="dialog" aria-modal="true" aria-label={`${product.brand} ${product.model} details`}>
-    <button className="consumer-drawer-backdrop" aria-label="Close product details" onClick={onClose}/>
-    <aside className="consumer-drawer">
-      <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2>{product.model}</h2></div><button onClick={onClose} aria-label="Close">×</button></header>
+  const titleId = useId();
+  const descriptionId = useId();
+  const dialogRef = useModalDialog<HTMLElement>(onClose);
+  return <div className="consumer-drawer-shell">
+    <button type="button" className="consumer-drawer-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
+    <aside ref={dialogRef} className="consumer-drawer" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
+      <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></header>
       <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
-      <p className="consumer-drawer-summary">{product.summary}</p>
+      <p className="consumer-drawer-summary" id={descriptionId}>{product.summary}</p>
       <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button className="consumer-drawer-compare" onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>
       <section><div className="consumer-section-title"><span>EVIDENCE</span><h3>What supports this record</h3></div><div className="consumer-evidence-list">{Object.entries(product.evidence ?? {}).map(([field, note]) => <article key={field}><div><b>{titleCase(field)}</b><span className={note.confidence}>{note.confidence}</span></div>{note.note && <p>{note.note}</p>}<footer>{note.sourceIds.map(sourceId => { const source = sourcesById.get(sourceId); return source ? <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span>{source.label}<i>↗</i></a> : null; })}</footer></article>)}</div></section>
