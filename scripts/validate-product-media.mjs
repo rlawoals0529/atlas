@@ -24,6 +24,10 @@ for (const name of shardNames) {
 const failures = [];
 for (const product of targets) {
   if (explicitImageIds.has(product.id)) continue;
+  if (product.type === "keyboard" && product.brand === "Keychron") {
+    failures.push(`${product.id}: current Keychron keyboards require explicit product media because their storefront blocks Worker-side source fallback`);
+    continue;
+  }
   if (product.type === "switch") {
     failures.push(`${product.id}: current switch records require an explicit verified product image`);
     continue;
