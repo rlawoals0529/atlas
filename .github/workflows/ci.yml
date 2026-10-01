@@ -53,6 +53,7 @@ jobs:
         run: |
           node --check scripts/verify-deployed-health.mjs
           node --check scripts/verify-deployed-media.mjs
+          node --check scripts/verify-deployed-public-surface.mjs
           node --check scripts/check-source-health.mjs
       - name: Generate catalog quality report
         run: npm run data:report
