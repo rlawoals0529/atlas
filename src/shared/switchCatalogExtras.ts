@@ -7,6 +7,7 @@ import expansion13 from "../../data/catalog.2026q3-expansion13.json";
 import expansion14 from "../../data/catalog.2026q3-expansion14.json";
 import expansion15 from "../../data/catalog.2026q3-expansion15.json";
 import expansion16 from "../../data/catalog.2026q3-expansion16.json";
+import expansion17 from "../../data/catalog.2026q3-expansion17.json";
 import type { KeyboardSwitchProduct } from "./types";
 
 export const extraSwitches = [
@@ -19,4 +20,5 @@ export const extraSwitches = [
   ...(expansion14.switches as unknown as KeyboardSwitchProduct[]),
   ...(expansion15.switches as unknown as KeyboardSwitchProduct[]),
   ...(expansion16.switches as unknown as KeyboardSwitchProduct[]),
+  ...(expansion17.switches as unknown as KeyboardSwitchProduct[]),
 ];
