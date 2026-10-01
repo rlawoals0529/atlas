@@ -21,6 +21,10 @@ for (const name of shardNames) {
 const failures = [];
 for (const product of targets) {
   if (explicitImageIds.has(product.id)) continue;
+  if (product.type === "switch") {
+    failures.push(`${product.id}: current switch records require an explicit verified product image`);
+    continue;
+  }
   const manufacturerSources = (product.sources ?? []).filter(source => source.kind === "manufacturer" && /^https:\/\//i.test(source.url ?? ""));
   if (!manufacturerSources.length) failures.push(`${product.id}: no explicit image and no HTTPS manufacturer source for media fallback`);
 }
@@ -32,4 +36,6 @@ if (failures.length) {
 }
 
 const explicit = targets.filter(product => explicitImageIds.has(product.id)).length;
-console.log(`Product media coverage OK: ${targets.length} current/announced mice, keyboards and switches; ${explicit} explicit images; ${targets.length - explicit} official-source fallbacks.`);
+const currentSwitches = targets.filter(product => product.type === "switch");
+const explicitSwitches = currentSwitches.filter(product => explicitImageIds.has(product.id)).length;
+console.log(`Product media coverage OK: ${targets.length} current/announced mice, keyboards and switches; ${explicit} explicit images; ${targets.length - explicit} official-source fallbacks; switches ${explicitSwitches}/${currentSwitches.length} explicit.`);
