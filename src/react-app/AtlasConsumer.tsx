@@ -127,12 +127,12 @@ function CoveragePill({ product }: { product: CatalogProduct }) {
 
 function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; onOpen: (product: CatalogProduct) => void; compared: boolean }) {
   return <button className={`consumer-product ${compared ? "compare-selected" : ""}`} data-product-type={product.type} onClick={() => onOpen(product)}>
-    <div className="consumer-product-visual"><ProductVisual product={product}/><CoveragePill product={product}/></div>
+    <div className="consumer-product-visual"><ProductVisual product={product}/></div>
     <div className="consumer-product-head"><span>{product.brand}</span><small>{categoryMeta[product.type].singular}</small></div>
     <h3>{product.model}</h3>
     <p>{product.summary}</p>
     <div className="consumer-metrics">{productMetrics(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div>
-    <footer><span>{money(product.msrpUsd)}</span><em>View record →</em></footer>
+    <footer><span className="consumer-card-price">{money(product.msrpUsd)}</span><CoveragePill product={product}/><em>Details →</em></footer>
   </button>;
 }
 
