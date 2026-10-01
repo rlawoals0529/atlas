@@ -65,7 +65,7 @@
 .consumer-category-tabs button.active { border-color:var(--consumer-ink); background:var(--consumer-ink); color:white; }
 .consumer-category-tabs button.active span { background:#353a36; color:#bcebdc; }
 
-.consumer-toolbar { margin-top:10px; padding:14px; display:grid; grid-template-columns:minmax(240px,1.5fr) minmax(145px,.55fr) minmax(135px,.48fr) auto auto auto; gap:10px; align-items:end; background:#fff; border:1px solid var(--consumer-line); border-radius:14px; }
+.consumer-toolbar { margin-top:10px; padding:14px; display:grid; grid-template-columns:minmax(220px,1.45fr) minmax(140px,.55fr) minmax(130px,.48fr) auto auto auto auto; gap:10px; align-items:end; background:#fff; border:1px solid var(--consumer-line); border-radius:14px; }
 .consumer-search { height:43px; display:flex; align-items:center; gap:9px; border:1px solid #cfd4cf; border-radius:9px; padding:0 12px; background:#fafbf9; }
 .consumer-search span { font-size:20px; color:#8a908b; transform:rotate(-15deg); }
 .consumer-search input { width:100%; border:0; outline:none; background:transparent; color:var(--consumer-ink); font-size:13px; }
@@ -81,6 +81,10 @@
 .consumer-saved-filter span { min-width:20px; padding:2px 5px; border-radius:999px; background:#eef1ed; color:#666e68; font-size:9px; }
 .consumer-saved-filter.active { border-color:#9fb8ad; background:#eef5f1; color:#174d3e; }
 .consumer-saved-filter.active span { background:#dcebe4; color:#174d3e; }
+.consumer-saved-share { height:43px; border:1px solid #cfd4cf; background:#fff; border-radius:9px; padding:0 10px; color:#343a35; font-size:10px; font-weight:750; white-space:nowrap; }
+.consumer-saved-share:hover:not(:disabled){ border-color:#9fb8ad; background:#f5f8f6; }
+.consumer-saved-share:disabled{ opacity:.45; cursor:not-allowed; }
+.consumer-saved-share-status{ align-self:center; max-width:90px; color:#69706b; font-size:8.5px; line-height:1.25; }
 .consumer-filter-toggle { height:43px; border:1px solid #cfd4cf; background:#fff; border-radius:9px; padding:0 12px; display:flex; align-items:center; gap:12px; color:#343a35; font-size:12px; font-weight:750; }
 .consumer-filter-toggle span { color:var(--consumer-accent); font-size:15px; }
 .consumer-filter-toggle.active { background:#f0f5f2; border-color:#9fb8ad; }

@@ -68,6 +68,9 @@ assert(consumer.includes('SAVED_PRODUCTS_KEY = "atlas.saved-products.v1"'), "sav
 assert(consumer.includes("window.localStorage.setItem(SAVED_PRODUCTS_KEY"), "saved gear must persist locally rather than requiring an account");
 assert(consumer.includes('aria-pressed={savedOnly}'), "saved-only filtering must expose pressed state");
 assert(consumer.includes('aria-pressed={isSaved(product.id)}'), "product save controls must expose pressed state");
+assert(consumer.includes('url.searchParams.set("shortlist"'), "saved gear must expose an explicit shareable shortlist URL");
+assert(consumer.includes("validSharedShortlistIds.length ? validSharedShortlistIds : savedIds"), "shared shortlists must remain separate from local saved state");
+assert(consumer.includes("savedIds.slice(0, 24)"), "shared shortlist URLs must have a bounded product count");
 assert(switchReviewIndex.includes("ThereminGoat"), "Switches directory must retain expert review provenance");
 assert(switchReviewIndex.includes("without mixing those reviews into Atlas product specs"), "Switches directory must keep external reviews separate from Atlas canonical records");
 assert(switchCatalogStatus.includes("field presence, not product quality or market coverage"), "switch catalog coverage must reject quality/market inference");
