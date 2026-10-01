@@ -283,7 +283,30 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
   const clearCategoryFilters = () => {
     setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setPadFirmness("all"); setStitchedOnly(false); setSkateMaterial("all"); setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all");
   };
+  const clearAllFilters = () => {
+    setQuery("");
+    setBrand("all");
+    setCurrentOnly(true);
+    clearCategoryFilters();
+  };
   const selectCategory = (next: "all" | ProductType) => { setCategory(next); setBrand("all"); clearCategoryFilters(); };
+
+  const activeFilters = [
+    query.trim() ? { key: "query", label: `Search: ${query.trim()}`, clear: () => setQuery("") } : null,
+    brand !== "all" ? { key: "brand", label: `Brand: ${brand}`, clear: () => setBrand("all") } : null,
+    shape !== "all" ? { key: "shape", label: `Shape: ${titleCase(shape)}`, clear: () => setShape("all") } : null,
+    minPolling > 0 ? { key: "polling", label: `Polling: ${pollingLabel(minPolling)}+`, clear: () => setMinPolling(0) } : null,
+    maxWeight < 140 ? { key: "weight", label: `Weight: ≤${maxWeight} g`, clear: () => setMaxWeight(140) } : null,
+    surface !== "all" ? { key: "surface", label: `Surface: ${titleCase(surface)}`, clear: () => setSurface("all") } : null,
+    padFirmness !== "all" ? { key: "firmness", label: `Firmness: ${titleCase(padFirmness)}`, clear: () => setPadFirmness("all") } : null,
+    stitchedOnly ? { key: "stitched", label: "Stitched edges", clear: () => setStitchedOnly(false) } : null,
+    skateMaterial !== "all" ? { key: "skate-material", label: `Skates: ${titleCase(skateMaterial)}`, clear: () => setSkateMaterial("all") } : null,
+    keyboardTech !== "all" ? { key: "keyboard-tech", label: `Keyboard: ${titleCase(keyboardTech)}`, clear: () => setKeyboardTech("all") } : null,
+    formFactor !== "all" ? { key: "form-factor", label: `Format: ${formFactor.toUpperCase()}`, clear: () => setFormFactor("all") } : null,
+    rapidTriggerOnly ? { key: "rapid-trigger", label: "Rapid Trigger", clear: () => setRapidTriggerOnly(false) } : null,
+    switchTech !== "all" ? { key: "switch-tech", label: `Switch: ${titleCase(switchTech)}`, clear: () => setSwitchTech("all") } : null,
+    switchFeel !== "all" ? { key: "switch-feel", label: `Feel: ${titleCase(switchFeel)}`, clear: () => setSwitchFeel("all") } : null,
+  ].filter((item): item is { key: string; label: string; clear: () => void } => item !== null);
 
   const focusedMeta = focusCategory ? categoryMeta[focusCategory] : null;
   const focusedDescription = focusCategory === "mousepad"
@@ -337,7 +360,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
       </section>
 
       <section className="consumer-catalog" id="consumer-catalog">
-        <div className="consumer-section-head"><div><span>{focusCategory ? `${focusedMeta?.singular.toUpperCase()} DATABASE` : "DATABASE"}</span><h2>{catalogTitle}</h2><p>{catalogDescription}</p></div><strong>{filtered.length}<small> matching</small></strong></div>
+        <div className="consumer-section-head"><div><span>{focusCategory ? `${focusedMeta?.singular.toUpperCase()} DATABASE` : "DATABASE"}</span><h2>{catalogTitle}</h2><p>{catalogDescription}</p></div><strong aria-live="polite" aria-atomic="true">{filtered.length}<small> matching</small></strong></div>
         <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} data-category={type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? allCatalog.length : counts[type]}</span></button>)}</div>
         {focusCategory === "mousepad" && <div className="consumer-focus-quick" data-category="mousepad" aria-label="Filter mousepads by surface class">
           <button type="button" className={surface === "all" ? "active" : ""} onClick={() => setSurface("all")} aria-pressed={surface === "all"}><span>All surfaces</span><b>{mousepads.length}</b></button>
@@ -348,12 +371,18 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
           {switchTechnologies.map(item => <button type="button" key={item} className={switchTech === item ? "active" : ""} onClick={() => setSwitchTech(item)} aria-pressed={switchTech === item}><span>{titleCase(item)}</span><b>{switchTechnologyCounts.get(item) ?? 0}</b></button>)}
         </div>}
         <div className="consumer-toolbar">
-          <div className="consumer-search"><span>⌕</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
+          <div className="consumer-search"><span aria-hidden="true">⌕</span><input aria-label="Search catalog" value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
           <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
           <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "−" : "+"}</span></button>
         </div>
+
+        {activeFilters.length > 0 && <div className="consumer-active-filters" role="region" aria-label="Active catalog filters">
+          <span>Active filters</span>
+          <div>{activeFilters.map(filter => <button type="button" key={filter.key} onClick={filter.clear} aria-label={`Remove ${filter.label} filter`}><b>{filter.label}</b><i aria-hidden="true">×</i></button>)}</div>
+          <button type="button" className="consumer-active-filters-clear" onClick={clearAllFilters}>Clear all</button>
+        </div>}
 
         {showFilters && <div className="consumer-progressive-filters" id={filtersId}>
           {(category === "mouse" || category === "all") && <><label>Mouse shape<select value={shape} onChange={event => setShape(event.target.value)}><option value="all">Any shape</option><option value="symmetrical">Symmetrical</option><option value="ergonomic">Ergonomic</option></select></label><label>Minimum polling<select value={minPolling} onChange={event => setMinPolling(+event.target.value)}><option value="0">Any</option><option value="1000">1K+</option><option value="4000">4K+</option><option value="8000">8K</option></select></label><label>Maximum weight<select value={maxWeight} onChange={event => setMaxWeight(+event.target.value)}><option value="45">45 g</option><option value="55">55 g</option><option value="65">65 g</option><option value="80">80 g</option><option value="140">Any</option></select></label></>}
@@ -364,7 +393,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
           <button onClick={clearCategoryFilters}>Clear category filters</button>
         </div>}
 
-        {filtered.length > 0 ? <div className="consumer-grid">{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button onClick={() => { setQuery(""); setBrand("all"); clearCategoryFilters(); }}>Reset filters</button></div>}
+        {filtered.length > 0 ? <div className="consumer-grid">{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
       </section>
 
       {afterCatalog}
