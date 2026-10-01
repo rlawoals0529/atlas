@@ -3,6 +3,7 @@ import { mice } from "../shared/catalog";
 import { analyzeMouseCatalog, directCompetitorsFor } from "../shared/productInsights";
 import CommunityEvidencePilot from "./CommunityEvidencePilot";
 import ProductPositionMap from "./ProductPositionMap";
+import "./product-intelligence-extras.css";
 
 const money = (value: number | null) => value == null ? "—" : `$${Math.round(value)}`;
 
