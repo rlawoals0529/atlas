@@ -8,6 +8,7 @@ const files = {
   hook: fs.readFileSync(new URL("../src/react-app/useModalDialog.ts", import.meta.url), "utf8"),
   shape: fs.readFileSync(new URL("../src/react-app/ShapeLabV2.tsx", import.meta.url), "utf8"),
   readability: fs.readFileSync(new URL("../src/react-app/atlas-readability.css", import.meta.url), "utf8"),
+  compareCss: fs.readFileSync(new URL("../src/react-app/consumer-compare-dialog.css", import.meta.url), "utf8"),
 };
 
 const errors = [];
@@ -80,6 +81,16 @@ for (const [label, source, requirement] of [
 
 if (!/\.shape-swatches>button,[\s\S]*?width:26px;\s*height:26px;/.test(files.readability)) {
   errors.push("Shape Lab color swatches must retain at least a 26px explicit target");
+}
+
+if (!/\.consumer-compare-products article>button\{[^}]*width:30px;height:30px;/.test(files.compareCss)) {
+  errors.push("comparison product remove controls must retain a 30px explicit target");
+}
+if (!/@media\(max-width:620px\)\{[\s\S]*?\.consumer-compare-products\{\s*position:relative;\s*top:auto!important;/.test(files.compareCss)) {
+  errors.push("mobile comparison product header must stop sticking below stacked controls");
+}
+if (!files.compare.includes('className="consumer-compare-diff-count" role="status" aria-live="polite"')) {
+  errors.push("comparison difference count must announce changes");
 }
 
 if (errors.length) {
