@@ -1,5 +1,5 @@
 import { Suspense, lazy, useId, useMemo, useState, type ReactNode } from "react";
-import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
+import { allCatalog, keyboards, mice, mousepads, skates } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
