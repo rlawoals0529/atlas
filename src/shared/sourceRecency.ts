@@ -2,6 +2,10 @@ import type { CatalogProduct } from "./types";
 
 export type SourceRecencyWindow = "all" | "30d" | "90d" | "older-90d";
 
+export function parseSourceRecencyWindow(value: string | null | undefined): SourceRecencyWindow {
+  return value === "30d" || value === "90d" || value === "older-90d" ? value : "all";
+}
+
 export function latestSourceCheck(product: CatalogProduct): string | null {
   const dates = product.sources
     .map(source => source.checkedAt)
