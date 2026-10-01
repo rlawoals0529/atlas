@@ -64,6 +64,10 @@ assert(consumer.includes("forceToCN(a.specs.actuationForce)"), "switch actuation
 assert(consumer.includes('url.hash = "#switches"'), "shared switch views must preserve the dedicated Switches route");
 assert(consumer.includes('url.searchParams.set("tech", switchTech)'), "shared switch views must encode technology filters");
 assert(consumer.includes('navigator.clipboard.writeText'), "shared switch views must expose a copyable URL");
+assert(consumer.includes('SAVED_PRODUCTS_KEY = "atlas.saved-products.v1"'), "saved gear must use a versioned browser-local key");
+assert(consumer.includes("window.localStorage.setItem(SAVED_PRODUCTS_KEY"), "saved gear must persist locally rather than requiring an account");
+assert(consumer.includes('aria-pressed={savedOnly}'), "saved-only filtering must expose pressed state");
+assert(consumer.includes('aria-pressed={isSaved(product.id)}'), "product save controls must expose pressed state");
 assert(switchReviewIndex.includes("ThereminGoat"), "Switches directory must retain expert review provenance");
 assert(switchReviewIndex.includes("without mixing those reviews into Atlas product specs"), "Switches directory must keep external reviews separate from Atlas canonical records");
 assert(switchCatalogStatus.includes("field presence, not product quality or market coverage"), "switch catalog coverage must reject quality/market inference");

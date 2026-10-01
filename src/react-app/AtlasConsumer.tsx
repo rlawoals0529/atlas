@@ -1,4 +1,4 @@
-import { Suspense, lazy, useId, useMemo, useState, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useId, useMemo, useState, type ReactNode } from "react";
 import { allCatalog, keyboards, mice, mousepads, skates } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
@@ -149,7 +149,7 @@ function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; o
   </button>;
 }
 
-function ProductDrawer({ product, onClose, onCompare, compared }: { product: CatalogProduct; onClose: () => void; onCompare: (product: CatalogProduct) => void; compared: boolean }) {
+function ProductDrawer({ product, onClose, onCompare, compared, onSave, saved }: { product: CatalogProduct; onClose: () => void; onCompare: (product: CatalogProduct) => void; compared: boolean; onSave: (product: CatalogProduct) => void; saved: boolean }) {
   const coverage = evidenceCoverage(product);
   const sourcesById = new Map(product.sources.map(source => [source.id, source]));
   const titleId = useId();
@@ -161,7 +161,7 @@ function ProductDrawer({ product, onClose, onCompare, compared }: { product: Cat
       <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></header>
       <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
       <p className="consumer-drawer-summary" id={descriptionId}>{product.summary}</p>
-      <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button type="button" className="consumer-drawer-compare" aria-pressed={compared} onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
+      <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button type="button" className="consumer-drawer-save" aria-pressed={saved} onClick={() => onSave(product)}>{saved ? "Saved" : "Save"}</button><button type="button" className="consumer-drawer-compare" aria-pressed={compared} onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>
       <section><div className="consumer-section-title"><span>EVIDENCE</span><h3>What supports this record</h3></div><div className="consumer-evidence-list">{Object.entries(product.evidence ?? {}).map(([field, note]) => <article key={field}><div><b>{titleCase(field)}</b><span className={note.confidence}>{note.confidence}</span></div>{note.note && <p>{note.note}</p>}<footer>{note.sourceIds.map(sourceId => { const source = sourcesById.get(sourceId); return source ? <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span>{source.label}<i>↗</i></a> : null; })}</footer></article>)}</div></section>
       <section><div className="consumer-section-title"><span>SOURCES</span><h3>Provenance ledger</h3></div><div className="consumer-source-list">{product.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span><div><b>{source.label}</b><small>checked {source.checkedAt}</small></div><i>↗</i></a>)}</div></section>
@@ -184,6 +184,18 @@ function CompareLoadingFallback({ onClose }: { onClose: () => void }) {
     </div>
   </div>;
 }
+
+const SAVED_PRODUCTS_KEY = "atlas.saved-products.v1";
+
+const readSavedProductIds = () => {
+  if (typeof window === "undefined") return [] as string[];
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(SAVED_PRODUCTS_KEY) ?? "[]");
+    return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === "string") : [];
+  } catch {
+    return [];
+  }
+};
 
 const readSharedSwitchParam = (key: string) => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(key);
 const sharedSwitchSort = () => {
@@ -224,8 +236,27 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [switchFeel, setSwitchFeel] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("feel") ?? "all" : "all");
   const [compactSwitchView, setCompactSwitchView] = useState(() => focusCategory === "switch" && readSharedSwitchParam("density") === "compact");
   const [shareStatus, setShareStatus] = useState("");
+  const [savedIds, setSavedIds] = useState<string[]>(readSavedProductIds);
+  const [savedOnly, setSavedOnly] = useState(false);
 
   const catalogProducts = useMemo(() => additionalProducts.length ? [...allCatalog, ...additionalProducts] : allCatalog, [additionalProducts]);
+  useEffect(() => {
+    setSavedIds(current => {
+      const valid = current.filter(id => catalogProducts.some(product => product.id === id));
+      return valid.length === current.length ? current : valid;
+    });
+  }, [catalogProducts]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(SAVED_PRODUCTS_KEY, JSON.stringify(savedIds));
+    } catch {
+      // Browsing still works if storage is unavailable.
+    }
+  }, [savedIds]);
+
+  const isSaved = (id: string) => savedIds.includes(id);
+  const toggleSaved = (product: CatalogProduct) => setSavedIds(current => current.includes(product.id) ? current.filter(id => id !== product.id) : [...current, product.id]);
   const switchProducts = useMemo(() => catalogProducts.filter((product): product is Extract<CatalogProduct, { type: "switch" }> => product.type === "switch"), [catalogProducts]);
   const counts: Record<ProductType, number> = {
     mouse: mice.length,
@@ -262,6 +293,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (category !== "all" && product.type !== category) return false;
     if (currentOnly && product.status !== "current") return false;
     if (brand !== "all" && product.brand !== brand) return false;
+    if (savedOnly && !savedIds.includes(product.id)) return false;
     if (query) {
       const text = [product.brand, product.model, product.summary, product.type, ...(product.tags ?? []), JSON.stringify(product.specs)].join(" ").toLowerCase();
       if (!text.includes(query.toLowerCase())) return false;
@@ -300,7 +332,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     }
     if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     return evidenceCoverage(b).score - evidenceCoverage(a).score || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
-  }), [catalogProducts, category, currentOnly, brand, query, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
+  }), [catalogProducts, category, currentOnly, brand, query, savedOnly, savedIds, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
 
   const copySwitchView = async () => {
     const url = new URL(window.location.href);
@@ -329,6 +361,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     setQuery("");
     setBrand("all");
     setCurrentOnly(true);
+    setSavedOnly(false);
     clearCategoryFilters();
   };
   const selectCategory = (next: "all" | ProductType) => { setCategory(next); setBrand("all"); clearCategoryFilters(); };
@@ -336,6 +369,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const activeFilters = [
     query.trim() ? { key: "query", label: `Search: ${query.trim()}`, clear: () => setQuery("") } : null,
     brand !== "all" ? { key: "brand", label: `Brand: ${brand}`, clear: () => setBrand("all") } : null,
+    savedOnly ? { key: "saved", label: "Saved gear", clear: () => setSavedOnly(false) } : null,
     shape !== "all" ? { key: "shape", label: `Shape: ${titleCase(shape)}`, clear: () => setShape("all") } : null,
     minPolling > 0 ? { key: "polling", label: `Polling: ${pollingLabel(minPolling)}+`, clear: () => setMinPolling(0) } : null,
     maxWeight < 140 ? { key: "weight", label: `Weight: ≤${maxWeight} g`, clear: () => setMaxWeight(140) } : null,
@@ -425,6 +459,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
           <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
+          <button type="button" className={`consumer-saved-filter ${savedOnly ? "active" : ""}`} aria-pressed={savedOnly} onClick={() => setSavedOnly(value => !value)}>Saved <span>{savedIds.length}</span></button>
           <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "−" : "+"}</span></button>
         </div>
 
@@ -443,7 +478,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <button onClick={clearCategoryFilters}>Clear category filters</button>
         </div>}
 
-        {filtered.length > 0 ? <div className={`consumer-grid ${focusCategory === "switch" && compactSwitchView ? "consumer-grid-switch-compact" : ""}`}>{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
+        {filtered.length > 0 ? <div className={`consumer-grid ${focusCategory === "switch" && compactSwitchView ? "consumer-grid-switch-compact" : ""}`}>{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><button type="button" className={`consumer-card-save ${isSaved(product.id) ? "selected" : ""}`} aria-pressed={isSaved(product.id)} onClick={() => toggleSaved(product)}>{isSaved(product.id) ? "Saved" : "Save"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
       </section>
 
       {afterCatalog}
@@ -452,7 +487,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
 
     {compareProducts.length > 0 && <div className="consumer-compare-tray" id={compareTrayId} role="region" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button type="button" onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model} from comparison`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button type="button" className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button type="button" className="consumer-compare-open" aria-haspopup="dialog" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
 
-    {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)} onCompare={toggleCompare} compared={compared(selected.id)}/>} 
+    {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)} onCompare={toggleCompare} compared={compared(selected.id)} onSave={toggleSaved} saved={isSaved(selected.id)}/>} 
     {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<CompareLoadingFallback onClose={() => setCompareOpen(false)}/>} ><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 
   </div>;
 }
