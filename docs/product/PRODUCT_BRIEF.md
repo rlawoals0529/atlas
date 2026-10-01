@@ -61,26 +61,23 @@ Until an aggregated production collector is enabled, the Product Lab must label 
 ## Now / Next / Later
 
 ### Now
-- Product Lab navigation and design-system integration;
-- typed behavioral event schema and local first-party instrumentation;
-- real-vs-demo analytics dashboard;
-- evidence-aware Product Intelligence distributions;
-- capability-derived mouse validation cases;
-- manual validation session records and defect schema;
-- product/operations documentation grounded in actual Atlas decisions.
+- keep the public catalog, provenance links and product media healthy as the dataset grows;
+- preserve release, bundle-budget, accessibility, Worker API and security regression gates;
+- improve shareable consumer workflows around saved gear, product details and comparisons;
+- keep Product Lab analytics explicit about browser-local, synthetic and production-unavailable states;
+- maintain validation plans as NOT RUN until a real device session records execution evidence.
 
 ### Next
-- optional Cloudflare-backed analytics collector and all-users aggregate dashboard;
-- direct event instrumentation inside core feature components to replace any temporary DOM bridge;
-- validation evidence attachments and richer report export;
-- real test sessions for owned mice;
-- product-family/competitor positioning views;
-- sourced launch/lifecycle fields where reliable;
-- community-insight ingestion with traceable source/date/conditions.
+- connect production analytics only after a dedicated D1 binding, retention/deletion policy and privacy verification exist;
+- execute the first real hardware validation sessions on owned devices with recorded firmware/receiver/OS/USB context;
+- add validation evidence attachments only after storage/privacy rules are defined;
+- replace remaining transitional analytics bridge paths with direct typed instrumentation as feature boundaries stabilize;
+- expand sourced lifecycle/family relationships where manufacturer/archive evidence is reliable;
+- run additional small, traceable community-evidence pilots rather than mass sentiment ingestion.
 
 ### Later
-- measured 2D/3D geometry ingestion and cross-sections;
-- longitudinal price/lifecycle data;
-- automated host-visible enumeration/input smoke tools where practical;
-- broader mousepad/skate validation and category intelligence;
-- stronger opportunity analysis only if demand/sales/customer evidence becomes available.
+- measured/licensed 2D or 3D geometry ingestion and cross-sections;
+- longitudinal price/lifecycle data after a dated collection policy exists;
+- selective host-visible enumeration/input/configuration smoke helpers where practical;
+- broader mousepad/skate physical validation after the mouse workflow is proven;
+- stronger opportunity analysis only if demand, sales or customer evidence becomes available.
