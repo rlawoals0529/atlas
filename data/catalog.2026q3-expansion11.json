@@ -1,0 +1,189 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-ttc-frozen-silent-v2",
+      "slug": "ttc-frozen-silent-v2",
+      "type": "switch",
+      "brand": "TTC",
+      "model": "Frozen Silent V2",
+      "status": "current",
+      "summary": "Silent linear mechanical switch with 39 gf nominal operating force, 2.0 mm pre-travel, 3.5 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "silent",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "ttc-frozen-silent-v2-official",
+          "label": "TTC Frozen Silent Switch V2 product page",
+          "url": "https://ttcswitches.com/products/ttc-forzen-silent-keyswitch-v2-dust-proof-pre-lubed-silver-coated-terminal-mechanical-keyboard-switches-gaming-switches",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 39,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 50
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ttc-frozen-silent-v2-official"
+          ],
+          "confidence": "high",
+          "note": "TTC publishes 39±10 gf operating force, 2.0±0.4 mm pre-travel, 3.5±0.4 mm total travel, linear silent operation, factory lubrication and a 50M-keystroke lifetime."
+        }
+      }
+    },
+    {
+      "id": "switch-ttc-silent-bluish-white",
+      "slug": "ttc-silent-bluish-white",
+      "type": "switch",
+      "brand": "TTC",
+      "model": "Silent Bluish White",
+      "status": "current",
+      "summary": "Silent tactile mechanical switch with 42 gf nominal operating force, 2.0 mm pre-travel, 3.5 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "silent",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "ttc-silent-bluish-white-official",
+          "label": "TTC Silent Bluish White product page",
+          "url": "https://ttcswitches.com/products/ttc-silent-bluish-white-keyboard-switches-factory-pre-lubed-double-silent-firm-mechanical-gaming-keyboard",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 42,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 80
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ttc-silent-bluish-white-official"
+          ],
+          "confidence": "high",
+          "note": "TTC publishes 42±10 gf operating force, 58±5 gf tactile force, 0.5±0.3 mm tactile travel, 2.0±0.4 mm pre-travel, 3.5±0.4 mm total travel, factory lubrication and an 80M-keystroke lifetime."
+        }
+      }
+    },
+    {
+      "id": "switch-ttc-speed-silver-v2",
+      "slug": "ttc-speed-silver-v2",
+      "type": "switch",
+      "brand": "TTC",
+      "model": "Speed Silver V2",
+      "status": "current",
+      "summary": "Short-pre-travel linear mechanical switch with 45 gf nominal operating force, about 1.08 mm pre-travel, 3.4 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "speed",
+        "factory-lubed",
+        "3-pin"
+      ],
+      "sources": [
+        {
+          "id": "ttc-speed-silver-v2-official",
+          "label": "TTC Speed Silver V2 product page",
+          "url": "https://ttcswitches.com/products/ttc-speed-silver-v2-gaming-linear-45g-force-diy-3pins-mechanical-keyboard-switch-fast-rgb-gaming-dual-spring-keyboard-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.08,
+        "totalTravelMm": 3.4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ttc-speed-silver-v2-official"
+          ],
+          "confidence": "high",
+          "note": "TTC publishes 45±4 gf operating force, 1.08 +0.4/-0.08 mm pre-travel, 3.4±0.4 mm total travel, factory lubrication, a dual spring and a 100M-keystroke lifetime."
+        }
+      }
+    },
+    {
+      "id": "switch-ttc-golden-pink-v3",
+      "slug": "ttc-golden-pink-v3",
+      "type": "switch",
+      "brand": "TTC",
+      "model": "Golden Pink V3",
+      "status": "current",
+      "summary": "Light linear five-pin mechanical switch with 37 gf nominal operating force, 2.0 mm pre-travel, 4.0 mm total travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "ttc-golden-pink-v3-official",
+          "label": "TTC Golden Pink V3 product page",
+          "url": "https://ttcswitches.com/products/ttc-5-pins-37gf-hifi-keyswitch-anti-oxidation-durability-v3-version-gold-pink-mechanical-keyswitch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 37,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ttc-golden-pink-v3-official"
+          ],
+          "confidence": "high",
+          "note": "TTC publishes 37 gf operating force, 2.0 mm pre-travel, 4.0 mm total travel, five-pin mounting, factory lubrication and a 100M-keystroke lifetime."
+        }
+      }
+    }
+  ]
+}
