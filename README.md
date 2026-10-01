@@ -5,6 +5,19 @@
 
 **Live:** https://atlas.rlawoals0529.workers.dev/ · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
 
+## Quick tour
+
+For a fast review of the project:
+
+- **Switches:** https://atlas.rlawoals0529.workers.dev/#switches — sourced switch catalog, explicit product media, filtering, comparison, compatibility caveats and attributed external reviews.
+- **Keyboard Lab:** https://atlas.rlawoals0529.workers.dev/#keyboard-lab — complete-board research for form factor, switch technology, polling, actuation and configuration.
+- **Shape Lab / pointing setup:** https://atlas.rlawoals0529.workers.dev/#pointing — mouse geometry comparison and setup guidance.
+- **Sensitivity Lab:** https://atlas.rlawoals0529.workers.dev/#sensitivity — sourced base-hipfire sensitivity conversion.
+- **Validation Lab:** https://atlas.rlawoals0529.workers.dev/#validation-run — guided hardware test execution with NOT RUN / PASS / FAIL / BLOCKED evidence handling.
+- **Product Lab:** https://atlas.rlawoals0529.workers.dev/#product-lab — catalog analysis, evidence coverage, validation planning and product-operations work.
+
+Reviewer docs: [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [contributing](CONTRIBUTING.md)
+
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
 Today Atlas is an enthusiast catalog with comparison and setup tools. Product Lab sits on the same data and handles the less glamorous work behind it: category analysis, validation plans, evidence tracking and product-operations notes. It is one project with one catalog, not a collection of disconnected demos.
@@ -181,6 +194,10 @@ Product media follows the same rule. Current switch records require an explicit 
 Atlas does not claim ownership of manufacturer imagery, external review material or linked source documents. Product images stay attributed to their manufacturer/source, and the ThereminGoat directory remains an attributed external-review index rather than an Atlas-owned ratings dataset.
 
 The repository's catalog records are Atlas research artifacts built from cited sources. Publishing the repository does not relicense third-party images, reviews, trademarks or source material.
+
+## Source availability
+
+Atlas is public so the implementation, research model and project history can be reviewed. The repository does not currently grant an open-source license. Third-party trademarks, product media, review material and linked source content remain subject to their respective owners' rights.
 
 ## Runtime stack
 

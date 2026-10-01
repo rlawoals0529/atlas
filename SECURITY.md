@@ -2,6 +2,12 @@
 
 Atlas is a read-mostly gaming-peripheral research application deployed on Cloudflare Workers. Repository visibility does not change the application security model. The current production runtime has no user accounts, private per-user records, required database binding, file uploads, webhooks, or paid AI endpoint. Controls that depend on those features (password storage, RLS, per-user authorization, CSRF for authenticated mutations, private buckets, webhook signatures) are not applicable until those features are introduced.
 
+## Reporting a security issue
+
+Do not post credentials, private tokens, private user data, or an exploit containing sensitive material in a public issue.
+
+If GitHub shows a private vulnerability-reporting option for this repository, use that channel. Otherwise, contact the repository owner through the GitHub profile before publishing sensitive details. Ordinary non-sensitive bugs can use the public bug-report template.
+
 ## Current requirements
 
 - Keep API keys and Cloudflare credentials out of source and browser bundles. Deployment credentials belong in encrypted GitHub Actions secrets or Cloudflare-managed secrets.
