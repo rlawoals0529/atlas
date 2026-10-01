@@ -24,7 +24,7 @@ Today Atlas is an enthusiast catalog with comparison and setup tools. Product La
 
 ## Current build — v0.9.0
 
-The canonical catalog currently has **134 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **50 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
+The canonical catalog currently has **138 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **54 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
 
 The pointing-gear recommendation model is still product UI **v0.8**; Atlas **v0.9** widened the catalog and added the specialist tools around it. That version split is deliberate: adding keyboards or a new research view does not silently change an existing mouse recommendation.
 
@@ -185,7 +185,7 @@ For the Gigantus V2 Pro, Razer defines Max Control, Control, Balance, Speed and 
 
 Atlas includes traceable qualitative community-evidence pilots for selected mice and the WALLHACK SP-004. Individual observations preserve source, date, conditions, disagreement and evidence strength; the pilots are not treated as representative market sentiment, friction measurement or reliability-rate data. Public X/Twitter observations are only retained when directly attributable and product-specific; incomplete X indexing is documented as a research limitation.
 
-The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **50 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
+The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **54 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
 
 Product media follows the same rule. Current switch records require an explicit pinned product image; other unresolved input-hardware records can fall back to an official manufacturer page through the Worker. CI checks those paths, and production deploys smoke-test media resolution instead of assuming a page URL will keep working.
 
