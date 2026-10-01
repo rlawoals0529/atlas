@@ -134,8 +134,10 @@ A normal PR is expected to pass:
 
 Main then deploys through Cloudflare Workers and verifies:
 
-- deployed release/health metadata;
-- current product-media resolution.
+- deployed release metadata;
+- live canonical catalog counts against the repository checkout;
+- API security headers and JSON content type;
+- current product-media resolution, including lightweight binary signature checks.
 
 A weekly source-health workflow separately probes cited URLs and treats only confirmed 404/410 responses as hard-broken links. Authentication blocks, rate limits and transient failures are reported separately.
 
