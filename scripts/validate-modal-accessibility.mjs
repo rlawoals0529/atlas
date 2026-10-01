@@ -37,6 +37,9 @@ for (const requirement of [
   'previousFocus',
   'document.body.style.overflow = "hidden"',
   'modalStack.at(-1)',
+  'document.addEventListener("focusin"',
+  'savedBodyPaddingRight',
+  'event.isComposing',
 ]) {
   if (!files.hook.includes(requirement)) errors.push(`useModalDialog: missing required behavior ${requirement}`);
 }
@@ -45,10 +48,20 @@ if (!files.consumer.includes("function CompareLoadingFallback") || !files.consum
   errors.push("comparison loading fallback must use modal focus management");
 }
 
+for (const [label, requirement] of [
+  ["product cards advertise dialog behavior", 'aria-haspopup="dialog"'],
+  ["progressive filters expose expanded state", "aria-expanded={showFilters}"],
+  ["progressive filters expose their controlled region", "aria-controls={filtersId}"],
+  ["compare selection exposes pressed state", "aria-pressed={compared(product.id)}"],
+  ["comparison tray is a labeled region", 'role="region" aria-label="Comparison tray"'],
+]) {
+  if (!files.consumer.includes(requirement)) errors.push(`consumer catalog: missing ${label}`);
+}
+
 if (errors.length) {
   console.error("Modal accessibility validation FAILED:");
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log("Modal accessibility PASS: all inspector/comparison dialogs use shared focus trapping, Escape handling, focus restoration and non-focusable backdrops.");
+console.log("Modal accessibility PASS: dialogs trap keyboard/programmatic focus, restore the opener, preserve scroll layout, expose dialog/filter state, and keep backdrops out of the accessibility tree.");
