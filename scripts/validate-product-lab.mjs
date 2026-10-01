@@ -62,6 +62,8 @@ assert(main.includes('hash === "#switches"'), "dedicated Switches route must rem
 assert(consumer.includes("function forceToCN"), "switch actuation sorting must normalize gf/cN for ordering");
 assert(consumer.includes("forceToCN(a.specs.actuationForce)"), "switch actuation sorting must use published actuation force, not a different force point");
 assert(consumer.includes('url.hash = "#switches"'), "shared switch views must preserve the dedicated Switches route");
+assert(consumer.includes("Latest source check"), "consumer product drawer must expose source-check recency");
+assert(app.includes("Latest source check"), "legacy/product database inspector must expose source-check recency");
 assert(consumer.includes('url.searchParams.set("tech", switchTech)'), "shared switch views must encode technology filters");
 assert(consumer.includes('navigator.clipboard.writeText'), "shared switch views must expose a copyable URL");
 assert(consumer.includes('SAVED_PRODUCTS_KEY = "atlas.saved-products.v1"'), "saved gear must use a versioned browser-local key");

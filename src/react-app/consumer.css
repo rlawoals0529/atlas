@@ -263,3 +263,24 @@
 @media (max-width:780px){
   .consumer-saved-filter,.consumer-filter-toggle{justify-content:center}
 }
+
+
+.consumer-drawer-source-checks{
+  display:grid;
+  gap:4px;
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid #d4d9d4;
+}
+.consumer-drawer-source-checks span{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  color:#6d756f;
+  font-size:9px;
+}
+.consumer-drawer-source-checks strong{
+  color:#313833;
+  font:650 9px var(--atlas-mono);
+  font-variant-numeric:tabular-nums;
+}

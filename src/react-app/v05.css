@@ -48,3 +48,30 @@
 @media(prefers-reduced-motion:reduce){.v5-shell *, .v5-shell *:before,.v5-shell *:after{animation-duration:1ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:1ms!important}}
 
 }
+
+
+.v5-source-window{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin:-2px 0 10px;
+}
+.v5-source-window span{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border:1px solid rgba(192,207,228,.07);
+  border-radius:8px;
+  background:rgba(255,255,255,.01);
+  color:#5f6b78;
+  font:500 7px DM Mono,monospace;
+}
+.v5-source-window b{
+  color:#9ca8b5;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:780px){
+  .v5-source-window{grid-template-columns:1fr}
+}

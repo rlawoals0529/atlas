@@ -22,6 +22,14 @@ const money = (value?: number) => value == null ? "Price not listed" : `$${value
 const pollingLabel = (hz: number) => hz >= 1000 ? `${hz / 1000}K Hz` : `${hz} Hz`;
 const titleCase = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, char => char.toUpperCase());
 
+function sourceCheckWindow(product: CatalogProduct) {
+  const dates = product.sources.map(source => source.checkedAt).filter(Boolean).sort();
+  return {
+    oldest: dates[0] ?? "Not recorded",
+    latest: dates.at(-1) ?? "Not recorded",
+  };
+}
+
 function evidenceCoverage(product: CatalogProduct) {
   const notes = Object.values(product.evidence ?? {});
   const high = notes.filter(note => note.confidence === "high").length;
@@ -151,6 +159,7 @@ function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; o
 
 function ProductDrawer({ product, onClose, onCompare, compared, onSave, saved }: { product: CatalogProduct; onClose: () => void; onCompare: (product: CatalogProduct) => void; compared: boolean; onSave: (product: CatalogProduct) => void; saved: boolean }) {
   const coverage = evidenceCoverage(product);
+  const sourceChecks = sourceCheckWindow(product);
   const sourcesById = new Map(product.sources.map(source => [source.id, source]));
   const titleId = useId();
   const descriptionId = useId();
@@ -159,7 +168,7 @@ function ProductDrawer({ product, onClose, onCompare, compared, onSave, saved }:
     <button type="button" className="consumer-drawer-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
     <aside ref={dialogRef} className="consumer-drawer" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
       <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></header>
-      <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span></div></div>
+      <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span><div className="consumer-drawer-source-checks"><span>Latest source check <strong>{sourceChecks.latest}</strong></span><span>Oldest source check <strong>{sourceChecks.oldest}</strong></span></div></div></div>
       <p className="consumer-drawer-summary" id={descriptionId}>{product.summary}</p>
       <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button type="button" className="consumer-drawer-save" aria-pressed={saved} onClick={() => onSave(product)}>{saved ? "Saved" : "Save"}</button><button type="button" className="consumer-drawer-compare" aria-pressed={compared} onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>

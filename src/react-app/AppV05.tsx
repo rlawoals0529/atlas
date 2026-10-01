@@ -89,6 +89,14 @@ function ProductArt({ product }: { product: Product }) {
   return <div className="v5-skate-art"><i/><i/><i/><i/></div>;
 }
 
+function sourceCheckWindow(product: Product) {
+  const dates = product.sources.map(source => source.checkedAt).filter(Boolean).sort();
+  return {
+    oldest: dates[0] ?? "Not recorded",
+    latest: dates.at(-1) ?? "Not recorded",
+  };
+}
+
 function EvidenceBadge({ kind }: { kind: keyof typeof sourceKindMeta }) {
   const meta = sourceKindMeta[kind];
   return <span className={`v5-source-badge ${kind}`} title={meta.description}>{meta.short}</span>;
@@ -129,6 +137,7 @@ function SpecRow({ label, value }: { label: string; value: React.ReactNode }) {
 
 function ProductInspector({ product, onClose, onOpen }: { product: Product; onClose: () => void; onOpen: (product: Product) => void }) {
   const health = evidenceHealth(product);
+  const sourceChecks = sourceCheckWindow(product);
   const family = familyFor(product.id);
   const siblings = family?.memberIds.map(id => catalog.find(item => item.id === id)).filter((item): item is Product => Boolean(item && item.id !== product.id)) ?? [];
   const evidence = evidenceRows(product);
@@ -156,7 +165,7 @@ function ProductInspector({ product, onClose, onOpen }: { product: Product; onCl
 
       {product.type === "skate" && <section className="v5-detail-section"><div className="v5-detail-title"><span>GLIDE MODEL</span><h3>Fresh, broken-in and wear</h3></div><FeelGrid rows={[["Fresh speed", product.feel.freshSpeed ?? product.feel.speed], ["Broken-in speed", product.feel.brokenInSpeed ?? product.feel.speed], ["Control", product.feel.control], ["Durability", product.feel.durability], ["Wear resistance", 100 - (product.feel.wearRate ?? 50)], ["Dust tolerance", 100 - (product.feel.dustSensitivity ?? 50)]]}/></section>}
 
-      <section className="v5-detail-section evidence"><div className="v5-detail-title"><span>EVIDENCE</span><h3>Why you can trust each field</h3></div><div className="v5-evidence-summary"><b>{health.sourceCount}</b><span>sources</span><b>{health.evidenceCount}</b><span>evidence groups</span></div>{evidence.map(row => <div className="v5-evidence-row" key={row.field}><div><b>{row.field}</b><span className={`v5-confidence ${row.confidence}`}>{row.confidence}</span></div>{row.note && <p>{row.note}</p>}<div className="v5-source-list">{row.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><EvidenceBadge kind={source.kind}/><span>{source.label}</span><small>{source.checkedAt}</small></a>)}</div></div>)}</section>
+      <section className="v5-detail-section evidence"><div className="v5-detail-title"><span>EVIDENCE</span><h3>Why you can trust each field</h3></div><div className="v5-evidence-summary"><b>{health.sourceCount}</b><span>sources</span><b>{health.evidenceCount}</b><span>evidence groups</span></div><div className="v5-source-window"><span>Latest source check <b>{sourceChecks.latest}</b></span><span>Oldest source check <b>{sourceChecks.oldest}</b></span></div>{evidence.map(row => <div className="v5-evidence-row" key={row.field}><div><b>{row.field}</b><span className={`v5-confidence ${row.confidence}`}>{row.confidence}</span></div>{row.note && <p>{row.note}</p>}<div className="v5-source-list">{row.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><EvidenceBadge kind={source.kind}/><span>{source.label}</span><small>{source.checkedAt}</small></a>)}</div></div>)}</section>
 
       <section className="v5-detail-section"><div className="v5-detail-title"><span>ALL SOURCES</span><h3>Provenance ledger</h3></div><div className="v5-source-ledger">{product.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><EvidenceBadge kind={source.kind}/><div><b>{source.label}</b><small>{sourceKindMeta[source.kind].label} · checked {source.checkedAt}</small></div><span>↗</span></a>)}</div></section>
     </aside>
