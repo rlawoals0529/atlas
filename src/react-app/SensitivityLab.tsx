@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import "./utility-labs.css";
+import "./sensitivity-fixes.css";
 import { cm360, convertSensitivity, effectiveDpi, gameById, inches360, sensitivityDataset, sensitivityForCm360, sensitivityGames } from "../shared/sensitivity";
 
 const positiveNumber = (value: string) => {
