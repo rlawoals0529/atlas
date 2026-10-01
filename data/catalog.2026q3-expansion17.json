@@ -1,0 +1,106 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-kailh-magnetic-cpg1515m01d01",
+      "slug": "kailh-magnetic-cpg1515m01d01",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "Magnetic CPG1515M01D01",
+      "status": "current",
+      "summary": "Linear full-POM magnetic keyboard switch with 30 gf initial force, 3.8 mm total travel, published magnetic-flux positions and a 100M-cycle life.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "full-pom"
+      ],
+      "sources": [
+        {
+          "id": "kailh-magnetic-cpg1515m01d01-official",
+          "label": "Kailh Magnetic Keyboard Switch product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/magnetic-keyboard-switch.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.8,
+        "ratedKeystrokesM": 100,
+        "magneticFluxGs": {
+          "initial": 100,
+          "bottomOut": 2000
+        },
+        "compatibility": [
+          "Requires a keyboard/PCB with magnetic sensing and firmware calibrated for Kailh CPG1515M01D01; physical MX-style fit alone does not establish electrical/sensing compatibility."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-magnetic-cpg1515m01d01-official"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes CPG1515M01D01 as a linear full-POM magnetic switch with 30±10 gf initial force, 3.8 +0/-0.4 mm total travel, 100M-cycle life, initial-position flux 100±15 Gs and total-travel-position flux 2000±150 Gs. The page does not claim universal board compatibility, so Atlas keeps compatibility conditional on the target sensor/firmware implementation."
+        }
+      }
+    },
+    {
+      "id": "switch-kailh-midnight-mx-silent-tactile",
+      "slug": "kailh-midnight-mx-silent-tactile",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "Midnight MX Silent Tactile",
+      "status": "current",
+      "summary": "Silent tactile mechanical switch with 45 gf operating force, 60 gf bottom force, 2.0 mm pre-travel, 4.0 mm total travel and a 70M-cycle published life.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "silent",
+        "dust-proof"
+      ],
+      "sources": [
+        {
+          "id": "kailh-midnight-mx-silent-tactile-official",
+          "label": "Kailh Midnight MX Silent Tactile product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/midnight-mx-silent-switch-tactile.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 60,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "ratedKeystrokesM": 70
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-midnight-mx-silent-tactile-official"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes 45±10 gf operation force, 60 gf bottom force, 2.0±0.4 mm conduct travel, 4.0±0.4 mm total travel and 70M cycles. Kailh also describes silicone silencing elements in the upper cover/base and a dust-proof design."
+        }
+      }
+    }
+  ]
+}
