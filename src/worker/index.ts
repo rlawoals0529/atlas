@@ -4,6 +4,8 @@ import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../sha
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { evidenceHealth, familyFor, productSearchText } from "../shared/productMeta";
 import { imageForProduct, mediaSourceForProduct } from "../shared/productImages";
+import { switchProductImages } from "../shared/switchProductImages";
+import { extraSwitches } from "../shared/switchCatalogExtras";
 import { RELEASE } from "../shared/release";
 import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
@@ -11,6 +13,8 @@ import type { CatalogProduct, MouseProduct, UserProfile } from "../shared/types"
 import { analyticsApp, type AnalyticsBindings } from "./analytics";
 
 const app = new Hono<{ Bindings: AnalyticsBindings }>();
+const workerSwitches = [...switches, ...extraSwitches];
+const workerCatalog = [...allCatalog, ...extraSwitches];
 type AtlasContext = Context<{ Bindings: AnalyticsBindings }>;
 
 const securityHeaders: Record<string, string> = {
@@ -181,7 +185,7 @@ function officialSource(product: CatalogProduct): string | null {
 async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl: string; sourceUrl: string } | null> {
   const cached = mediaCache.get(product.id);
   if (cached && cached.expiresAt > Date.now()) return cached;
-  const explicit = imageForProduct(product.id);
+  const explicit = imageForProduct(product.id) ?? switchProductImages[product.id];
   if (explicit) return { imageUrl: explicit.url, sourceUrl: explicit.sourceUrl };
   const sourceUrl = officialSource(product);
   if (!sourceUrl) return null;
@@ -202,7 +206,7 @@ app.route("/api/analytics", analyticsApp);
 app.get("/api/media/:id", async (c) => {
   const id = c.req.param("id");
   if (!/^[a-z0-9-]{1,120}$/i.test(id)) return c.json({ error: "Invalid product identifier" }, 400);
-  const product = allCatalog.find(item => item.id === id);
+  const product = workerCatalog.find(item => item.id === id);
   if (!product) return c.json({ error: "Not found" }, 404);
   const limited = enforceRateLimit(c, "product-media", 180, 60_000);
   if (limited) return limited;
@@ -220,20 +224,20 @@ app.get("/api/health", (c) => c.json({
   productUi: RELEASE.productUi,
   dataLayer: RELEASE.dataLayer,
   researchCutoff: RELEASE.researchCutoff,
-  products: allCatalog.length,
+  products: workerCatalog.length,
   mice: mice.length,
   pads: mousepads.length,
   skates: skates.length,
   keyboards: keyboards.length,
-  switches: switches.length,
+  switches: workerSwitches.length,
   analyticsStorage: Boolean(c.env.ANALYTICS_DB),
-  averageEvidenceHealth: Math.round(allCatalog.reduce((sum, product) => sum + evidenceHealth(product).score, 0) / Math.max(1, allCatalog.length)),
+  averageEvidenceHealth: Math.round(workerCatalog.reduce((sum, product) => sum + evidenceHealth(product).score, 0) / Math.max(1, workerCatalog.length)),
 }));
 
 app.get("/api/stats", (c) => c.json({
   release: RELEASE,
-  catalog: catalogStats(allCatalog),
-  types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length, keyboards: keyboards.length, switches: switches.length },
+  catalog: catalogStats(workerCatalog),
+  types: { mice: mice.length, mousepads: mousepads.length, skates: skates.length, keyboards: keyboards.length, switches: workerSwitches.length },
   capabilities: { productionAnalytics: Boolean(c.env.ANALYTICS_DB) },
 }));
 
@@ -243,7 +247,7 @@ app.get("/api/catalog", (c) => {
   const rawQuery = c.req.query("q") ?? "";
   if (rawQuery.length > 120) return c.json({ error: "Search query is too long" }, 400);
   const q = rawQuery.trim().toLowerCase();
-  const base: CatalogProduct[] = type === "mouse" ? mice : type === "mousepad" ? mousepads : type === "skate" ? skates : type === "keyboard" ? keyboards : type === "switch" ? switches : allCatalog;
+  const base: CatalogProduct[] = type === "mouse" ? mice : type === "mousepad" ? mousepads : type === "skate" ? skates : type === "keyboard" ? keyboards : type === "switch" ? workerSwitches : workerCatalog;
   const data = q ? base.filter((product) => productSearchText(product).includes(q)) : base;
   return c.json({ data, count: data.length });
 });
@@ -251,7 +255,7 @@ app.get("/api/catalog", (c) => {
 app.get("/api/products/:slug", (c) => {
   const slug = c.req.param("slug");
   if (slug.length > 120 || !/^[a-z0-9-]+$/i.test(slug)) return c.json({ error: "Invalid product identifier" }, 400);
-  const product = allCatalog.find((item) => item.slug === slug);
+  const product = workerCatalog.find((item) => item.slug === slug);
   if (!product) return c.json({ error: "Not found" }, 404);
   const family = familyFor(product.id);
   return c.json({
@@ -259,7 +263,7 @@ app.get("/api/products/:slug", (c) => {
     evidenceHealth: evidenceHealth(product),
     family: family ? {
       ...family,
-      members: family.memberIds.map(id => allCatalog.find(item => item.id === id)).filter(Boolean),
+      members: family.memberIds.map(id => workerCatalog.find(item => item.id === id)).filter(Boolean),
     } : null,
   });
 });
