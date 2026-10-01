@@ -5,6 +5,8 @@ const robots = fs.readFileSync("public/robots.txt", "utf8");
 const sitemap = fs.readFileSync("public/sitemap.xml", "utf8");
 const manifest = JSON.parse(fs.readFileSync("public/manifest.webmanifest", "utf8"));
 const security = fs.readFileSync("public/.well-known/security.txt", "utf8");
+const worker = fs.readFileSync("src/worker/index.ts", "utf8");
+const wrangler = fs.readFileSync("wrangler.jsonc", "utf8");
 
 const origin = "https://atlas.rlawoals0529.workers.dev/";
 const failures = [];
@@ -33,6 +35,10 @@ if (manifest.start_url !== "/" || manifest.scope !== "/") failures.push("manifes
 if (!Array.isArray(manifest.icons) || !manifest.icons.some(icon => icon.src === "/atlas-mark.svg")) failures.push("manifest must retain the Atlas icon");
 if (!security.includes("Contact: https://github.com/rlawoals0529/atlas/security/policy")) failures.push("security.txt must point to the public security policy");
 if (!security.includes(`Canonical: ${origin}.well-known/security.txt`)) failures.push("security.txt canonical URL is incorrect");
+for (const route of ["/robots.txt", "/sitemap.xml", "/.well-known/security.txt"]) {
+  if (!worker.includes(`app.get("${route}"`)) failures.push(`Worker must serve ${route} ahead of SPA fallback`);
+  if (!wrangler.includes(`"${route}"`)) failures.push(`wrangler run_worker_first must include ${route}`);
+}
 
 if (failures.length) {
   console.error("Public metadata validation failed:");
