@@ -1,0 +1,106 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-kailh-box-jade",
+      "slug": "kailh-box-jade",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "BOX Jade",
+      "status": "current",
+      "summary": "Click-bar mechanical switch with 50 gf operating force, 1.8 mm pre-travel, 3.6 mm total travel and an 80M-cycle published mechanical life.",
+      "tags": [
+        "mechanical",
+        "clicky",
+        "box",
+        "click-bar",
+        "ip56"
+      ],
+      "sources": [
+        {
+          "id": "kailh-box-jade-official",
+          "label": "Kailh BOX Jade specification page",
+          "url": "https://www.kailhswitch.com/info/jade-switch-26503859.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "kailh-box-jade-product",
+          "label": "Kailh BOX Jade product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/smt-key-switches/box-jade-switches.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "clicky",
+        "actuationForce": {
+          "value": 50,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.8,
+        "totalTravelMm": 3.6,
+        "ratedKeystrokesM": 80
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-box-jade-official",
+            "kailh-box-jade-product"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes BOX Jade as a thick-click-bar switch with 50±15 gf operating force, 75±15 gf tactile force, 1.8±0.3 mm conduction/pre-travel, 3.6±0.3 mm total travel and an 80M-cycle minimum mechanical life. Atlas does not store the 75 gf tactile force as bottom-out."
+        }
+      }
+    },
+    {
+      "id": "switch-kailh-box-silent-pink",
+      "slug": "kailh-box-silent-pink",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "BOX Silent Pink",
+      "status": "current",
+      "summary": "Silent linear BOX mechanical switch with 35 gf operating force, 1.8 mm pre-travel, 3.6 mm total travel and an 80M-cycle published mechanical life.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "silent",
+        "box",
+        "ip54"
+      ],
+      "sources": [
+        {
+          "id": "kailh-box-silent-pink-official",
+          "label": "Kailh BOX Silent Pink product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/smt-key-switches/silent-smt-key-switch.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 35,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.8,
+        "totalTravelMm": 3.6,
+        "ratedKeystrokesM": 80
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-box-silent-pink-official"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes BOX Silent Pink as linear with 35±10 gf actuation force, 1.8±0.4 mm actuation travel, 3.6±0.4 mm total travel, 80M cycles and IP54 dust/water protection."
+        }
+      }
+    }
+  ]
+}

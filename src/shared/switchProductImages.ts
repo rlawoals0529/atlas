@@ -405,4 +405,18 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "KTT official product image",
   },
 
+
+  "switch-kailh-box-jade": {
+    url: "https://www.kailhswitch.com/uploads/201815927/small/box-jade-switches35509435469.jpg",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/smt-key-switches/box-jade-switches.html",
+    alt: "Kailh BOX Jade clicky mechanical keyboard switch",
+    credit: "Kailh official product image",
+  },
+  "switch-kailh-box-silent-pink": {
+    url: "https://www.kailhswitch.com/uploads/202215927/silent-smt-key-switch55068009675.jpg",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/smt-key-switches/silent-smt-key-switch.html",
+    alt: "Kailh BOX Silent Pink linear mechanical keyboard switch",
+    credit: "Kailh official product image",
+  },
+
 };
