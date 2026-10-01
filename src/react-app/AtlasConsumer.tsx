@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useId, useMemo, useState, type ReactNode } from "react";
 import { allCatalog, keyboards, mice, mousepads, skates } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
+import { parseSharedCompareIds, serializeSharedCompareIds } from "../shared/shareState";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
 
@@ -229,8 +230,7 @@ const readSharedShortlistIds = () => {
 
 const readSharedCompareIds = () => {
   if (typeof window === "undefined") return [] as string[];
-  const value = new URLSearchParams(window.location.search).get("compare");
-  return value ? value.split(",").map(item => item.trim()).filter(item => /^[a-z0-9-]{1,120}$/i.test(item)).slice(0, 4) : [];
+  return parseSharedCompareIds(new URLSearchParams(window.location.search).get("compare"));
 };
 
 
@@ -445,7 +445,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     }
     const url = new URL(window.location.href);
     url.search = "";
-    url.searchParams.set("compare", compareProducts.slice(0, 4).map(product => product.id).join(","));
+    url.searchParams.set("compare", serializeSharedCompareIds(compareProducts.map(product => product.id)));
     url.hash = compareProducts[0].type === "switch" ? "#switches" : compareProducts[0].type === "mousepad" ? "#mousepads" : "";
     try {
       await navigator.clipboard.writeText(url.toString());
