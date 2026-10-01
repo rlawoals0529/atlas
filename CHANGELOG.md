@@ -4,6 +4,14 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 
 ## Unreleased
 
+## v0.9.1 — 2026-10-01
+
+### Product and UX
+- Added browser-local saved gear with shareable shortlist URLs.
+- Added direct shareable product-detail URLs and explicit copy-link actions.
+- Polished global navigation contrast and mobile overflow behavior.
+- Product inspectors now expose latest/oldest source-check dates so provenance recency is visible at point of use.
+
 ### Data
 - Added Wuque Studio WS Silent Linear, WS Silent Tactile, WS Morandi and WS Pearl from first-party product pages with explicit official media; absent actuation values remain unset rather than inferred from bottom-out force.
 - Expanded the canonical switch catalog with manufacturer-backed Wuque Studio WS Red, WS Yellow, WS Brown and WS Quartz records.
@@ -12,7 +20,17 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 - Added KTT Creamy Ice Cream, Taro Ice Cream and MoonRosa with official KTT media and specialist travel/force references; Guava remains excluded while KTT's own published force text disagrees across pages.
 - Added Kailh BOX Jade and BOX Silent Pink from first-party Kailh specifications and media. BOX Navy remains excluded while Kailh's own pages disagree on its operating force.
 - Added Kailh Magnetic CPG1515M01D01 and Midnight MX Silent Tactile with first-party technical specifications and media; magnetic compatibility remains explicitly board/sensor/firmware dependent.
+- Repaired stale catalog source links and restored fit-model provenance/live Finalmouse sourcing.
 - Current canonical catalog: 157 products, including 73 keyboard switches.
+
+### Quality, security and release engineering
+- CI/deploy now install strictly from `package-lock.json` with `npm ci`.
+- Added one-command `npm run verify`, Node 22 runtime contract, CodeQL, Worker API contract tests and consolidated public-repo security checks.
+- Added weekly source-link health auditing and changed-switch media verification before merge.
+- Production media validation now checks returned binary signatures rather than treating any HTTP response as a valid image.
+- Added CycloneDX SBOM generation and a repeatable documented release process.
+- Added architecture, reviewer and data-dictionary documentation plus public health/deploy/source badges.
+- Automatically prunes merged PR branches.
 
 ## v0.9.0 — 2026-10-01
 

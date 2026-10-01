@@ -6,7 +6,7 @@
 [![Deploy Atlas](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml)
 [![Source link health](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml)
 
-**Live:** https://atlas.rlawoals0529.workers.dev/ · **Release:** [v0.9.0](https://github.com/rlawoals0529/atlas/releases/tag/v0.9.0) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
+**Live:** https://atlas.rlawoals0529.workers.dev/ · **Release:** [v0.9.1](https://github.com/rlawoals0529/atlas/releases/tag/v0.9.1) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
 
 ## Quick tour
 
@@ -25,7 +25,7 @@ Atlas started as a mouse recommender, then grew into the rest of the setup. A pa
 
 Today Atlas is an enthusiast catalog with comparison and setup tools. Product Lab sits on the same data and handles the less glamorous work behind it: category analysis, validation plans, evidence tracking and product-operations notes. It is one project with one catalog, not a collection of disconnected demos.
 
-## Current build — v0.9.0
+## Current build — v0.9.1
 
 The canonical catalog currently has **157 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **73 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
 
