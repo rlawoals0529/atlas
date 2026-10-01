@@ -83,7 +83,7 @@ export default function SwitchReviewIndex() {
     setSort("name");
   };
 
-  return <section className="switch-review-index" aria-labelledby="switch-review-index-title">
+  return <section className="switch-review-index" id="switch-review-index" aria-labelledby="switch-review-index-title">
     <div className="switch-review-index-head">
       <div>
         <span>External review directory</span>
