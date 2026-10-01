@@ -4,8 +4,11 @@ import path from "node:path";
 const root = process.cwd();
 const dataDir = path.join(root, "data");
 const shardNames = fs.readdirSync(dataDir).filter(name => /^catalog.*\.json$/.test(name));
-const imageRegistry = fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8");
-const explicitImageIds = new Set([...imageRegistry.matchAll(/^\s*"([^"]+)":\s*\{/gm)].map(match => match[1]));
+const imageRegistries = [
+  fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8"),
+  fs.readFileSync(path.join(root, "src/shared/switchProductImages.ts"), "utf8"),
+].join("\n");
+const explicitImageIds = new Set([...imageRegistries.matchAll(/^\s*"([^"]+)":\s*\{/gm)].map(match => match[1]));
 
 const targets = [];
 for (const name of shardNames) {
@@ -39,3 +42,14 @@ const explicit = targets.filter(product => explicitImageIds.has(product.id)).len
 const currentSwitches = targets.filter(product => product.type === "switch");
 const explicitSwitches = currentSwitches.filter(product => explicitImageIds.has(product.id)).length;
 console.log(`Product media coverage OK: ${targets.length} current/announced mice, keyboards and switches; ${explicit} explicit images; ${targets.length - explicit} official-source fallbacks; switches ${explicitSwitches}/${currentSwitches.length} explicit.`);
+
+const initialRegistry = fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8");
+const productMediaComponent = fs.readFileSync(path.join(root, "src/react-app/ProductMedia.tsx"), "utf8");
+if (/^\s*"switch-/m.test(initialRegistry)) {
+  console.error("Product media coverage validation failed: switch media metadata must stay out of the initial productImages registry.");
+  process.exit(1);
+}
+if (!productMediaComponent.includes('import("../shared/switchProductImages")')) {
+  console.error("Product media coverage validation failed: ProductMedia must lazy-load switch media metadata.");
+  process.exit(1);
+}
