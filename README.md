@@ -1,5 +1,8 @@
 # Atlas
 
+[![Atlas CI](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml)
+[![Security baseline](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml)
+
 **Live:** https://atlas.rlawoals0529.workers.dev/
 
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
@@ -8,7 +11,7 @@ Today Atlas is an enthusiast catalog with comparison and setup tools. Product La
 
 ## Current build — v0.9
 
-The canonical catalog currently has **127 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **43 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
+The canonical catalog currently has **134 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **50 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
 
 The pointing-gear recommendation model is still product UI **v0.8**; Atlas **v0.9** widened the catalog and added the specialist tools around it. That version split is deliberate: adding keyboards or a new research view does not silently change an existing mouse recommendation.
 
@@ -25,11 +28,11 @@ The consumer product includes:
 - a dedicated **Mousepads** catalog at `#mousepads` with surface, firmness and stitched-edge filters plus glide/stopping sorting;
 - mousepad comparison with a glide × stopping map, footprint/build view and normalized feel profiles before the full spec table;
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
-- an **Atlas Switches** catalog at `#switches`, followed by a separately attributed directory of 466 ThereminGoat scorecards/review records rather than copied Atlas rankings;
+- an **Atlas Switches** catalog at `#switches` with manufacturer-sourced records, explicit switch media, switch-specific filters/comparison and a separately attributed directory of 466 ThereminGoat scorecards/review records rather than copied Atlas rankings;
 - **Keyboard Lab** at `#keyboard-lab` for complete-board research, actuation/platform comparison and sourced keyboard specifications;
 - **Sensitivity Lab** at `#sensitivity` for DPI/eDPI and base-hipfire cm/360 conversion with source-specific yaw confidence;
 - a light, product-first interface shared across the catalog and specialist tools;
-- official manufacturer product imagery where Atlas has a pinned asset or a resolvable manufacturer source, with graceful fallback when a remote host changes;
+- explicit manufacturer product imagery for every current switch record, plus pinned/fallback manufacturer media for the rest of the input-hardware catalog;
 - installable web-app metadata and a documented research/correction workflow.
 
 ## Keyboard Lab
@@ -169,9 +172,15 @@ For the Gigantus V2 Pro, Razer defines Max Control, Control, Balance, Speed and 
 
 Atlas includes traceable qualitative community-evidence pilots for selected mice and the WALLHACK SP-004. Individual observations preserve source, date, conditions, disagreement and evidence strength; the pilots are not treated as representative market sentiment, friction measurement or reliability-rate data. Public X/Twitter observations are only retained when directly attributable and product-specific; incomplete X indexing is documented as a research limitation.
 
-The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **43 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
+The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **50 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
 
 Product media follows the same rule. Current switch records require an explicit pinned product image; other unresolved input-hardware records can fall back to an official manufacturer page through the Worker. CI checks those paths, and production deploys smoke-test media resolution instead of assuming a page URL will keep working.
+
+## Third-party data and media
+
+Atlas does not claim ownership of manufacturer imagery, external review material or linked source documents. Product images stay attributed to their manufacturer/source, and the ThereminGoat directory remains an attributed external-review index rather than an Atlas-owned ratings dataset.
+
+The repository's catalog records are Atlas research artifacts built from cited sources. Publishing the repository does not relicense third-party images, reviews, trademarks or source material.
 
 ## Runtime stack
 
