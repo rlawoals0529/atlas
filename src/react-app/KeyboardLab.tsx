@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { keyboards, switches } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, sourceKindMeta } from "../shared/productMeta";
 import type { KeyboardProduct, KeyboardSwitchProduct } from "../shared/types";
 import { ProductMedia } from "./ProductMedia";
+import { useModalDialog } from "./useModalDialog";
 
 type KeyboardLabProduct = KeyboardProduct | KeyboardSwitchProduct;
 
@@ -61,12 +62,15 @@ function Specs({ product }: { product: KeyboardLabProduct }) {
 function Inspector({ product, onClose }: { product: KeyboardLabProduct; onClose: () => void }) {
   const health = evidenceHealth(product);
   const rows = evidenceRows(product);
-  return <div className="kb-inspector-shell" role="dialog" aria-modal="true" aria-label={`${product.brand} ${product.model} details`}>
-    <button className="kb-backdrop" aria-label="Close" onClick={onClose}/>
-    <aside className="kb-inspector">
-      <header><div><span>{product.type.toUpperCase()} / {product.brand}</span><h2>{product.model}</h2></div><button onClick={onClose} aria-label="Close">×</button></header>
+  const titleId = useId();
+  const descriptionId = useId();
+  const dialogRef = useModalDialog<HTMLElement>(onClose);
+  return <div className="kb-inspector-shell">
+    <button type="button" className="kb-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
+    <aside ref={dialogRef} className="kb-inspector" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
+      <header><div><span>{product.type.toUpperCase()} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></header>
       <div className="kb-detail-art"><ProductVisual product={product}/><div><b>{health.score}</b><span>DATA HEALTH</span><small>{health.label}</small></div></div>
-      <p className="kb-summary">{product.summary}</p>
+      <p className="kb-summary" id={descriptionId}>{product.summary}</p>
       <div className="kb-chip-row"><Chips product={product}/><span>{money(product.msrpUsd)} MSRP</span><span>{product.status}</span></div>
       <section><div className="utility-section-head"><span>SPECIFICATION</span><h3>Source-backed hardware facts</h3></div><Specs product={product}/></section>
       {product.type === "switch" && product.specs.compatibility?.length ? <section><div className="utility-section-head"><span>COMPATIBILITY</span><h3>Board caveats</h3></div>{product.specs.compatibility.map(item => <p className="kb-callout" key={item}>{item}</p>)}</section> : null}
