@@ -21,14 +21,14 @@ const loadProductLab = () => import("./ProductLab");
 const loadValidationRunner = () => import("./ValidationRunner");
 const loadKeyboardLab = () => import("./KeyboardLab");
 const loadSensitivityLab = () => import("./SensitivityLab");
-const loadSwitchReviewIndex = () => import("./SwitchReviewIndex");
+const loadSwitchesPage = () => import("./SwitchesPage");
 
 const PointingApp = lazy(loadPointing);
 const ProductLab = lazy(loadProductLab);
 const ValidationRunner = lazy(loadValidationRunner);
 const KeyboardLab = lazy(loadKeyboardLab);
 const SensitivityLab = lazy(loadSensitivityLab);
-const SwitchReviewIndex = lazy(loadSwitchReviewIndex);
+const SwitchesPage = lazy(loadSwitchesPage);
 
 const routeLabel = (hash: string) => hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : hash === "#mousepads" ? "Mousepads" : hash === "#switches" ? "Switches" : hash === "#pointing" ? "Setup" : "Browse";
 
@@ -38,7 +38,7 @@ const preloadRoute = (href: string) => {
   else if (href === "#sensitivity") void loadSensitivityLab();
   else if (href === "#product-lab") void loadProductLab();
   else if (href === "#validation-run") void loadValidationRunner();
-  else if (href === "#switches") void loadSwitchReviewIndex();
+  else if (href === "#switches") void loadSwitchesPage();
 };
 
 function ToolFallback({ hash }: { hash: string }) {
@@ -94,7 +94,7 @@ function RootRouter() {
       void loadPointing();
       void loadKeyboardLab();
       void loadSensitivityLab();
-      void loadSwitchReviewIndex();
+      void loadSwitchesPage();
       void loadProductLab();
     };
     const idleWindow = window as Window & {
@@ -125,7 +125,7 @@ function RootRouter() {
   const mousepadsPage = hash === "#mousepads";
   const switchesPage = hash === "#switches";
 
-  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : mousepadsPage ? <AtlasConsumer key="mousepads" focusCategory="mousepad" /> : switchesPage ? <AtlasConsumer key="switches" focusCategory="switch" afterCatalog={<Suspense fallback={<div className="switch-index-inline-loading" role="status">Loading attributed switch review index…</div>}><SwitchReviewIndex /></Suspense>} /> : productLab ? <>
+  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : mousepadsPage ? <AtlasConsumer key="mousepads" focusCategory="mousepad" /> : switchesPage ? <SwitchesPage /> : productLab ? <>
     <ProductLab />
     <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
   </> : pointingApp ? <>
