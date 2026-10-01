@@ -1,8 +1,28 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { allCatalog } from "../shared/catalog";
-import { imageForProduct } from "../shared/productImages";
+import { imageForProduct, type ProductImage } from "../shared/productImages";
 
 const productById = new Map(allCatalog.map(product => [product.id, product]));
+let switchImagesPromise: Promise<Record<string, ProductImage>> | null = null;
+const loadSwitchImages = () => switchImagesPromise ??= import("../shared/switchProductImages").then(module => module.switchProductImages);
+
+function useProductImage(productId: string) {
+  const base = imageForProduct(productId);
+  const [media, setMedia] = useState<ProductImage | undefined>(base);
+
+  useEffect(() => {
+    let active = true;
+    setMedia(base);
+    if (!base && productId.startsWith("switch-")) {
+      void loadSwitchImages().then(images => {
+        if (active) setMedia(images[productId]);
+      });
+    }
+    return () => { active = false; };
+  }, [base, productId]);
+
+  return media;
+}
 const sourceScore = (url: string) => {
   const value = url.toLowerCase();
   return (/\/products?\/|gaming-mice|gaming-keyboards|keyboard|switch/.test(value) ? 8 : 0)
@@ -17,7 +37,7 @@ const bestManufacturerSource = (productId: string) => {
 };
 
 export function ProductMedia({ productId, fallback, className = "" }: { productId: string; fallback?: ReactNode; className?: string }) {
-  const media = imageForProduct(productId);
+  const media = useProductImage(productId);
   const product = productById.get(productId);
   const official = useMemo(() => bestManufacturerSource(productId), [productId]);
   const src = media || official ? `/api/media/${encodeURIComponent(productId)}` : undefined;
@@ -29,7 +49,7 @@ export function ProductMedia({ productId, fallback, className = "" }: { productI
 }
 
 export function ProductImageCredit({ productId }: { productId: string }) {
-  const media = imageForProduct(productId);
+  const media = useProductImage(productId);
   const product = productById.get(productId);
   const official = bestManufacturerSource(productId);
   const href = media?.sourceUrl ?? official?.url;
