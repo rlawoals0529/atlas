@@ -174,10 +174,20 @@ body{
   background:var(--jade-3)!important;
   border-color:var(--jade-7)!important;
 }
+.atlas-global-nav nav a.active[href="#mousepads"]{
+  color:var(--blue-12)!important;
+  background:var(--blue-3)!important;
+  border-color:var(--blue-7)!important;
+}
 .atlas-global-nav nav a.active[href="#keyboard-lab"]{
   color:var(--amber-12)!important;
   background:var(--amber-2)!important;
   border-color:var(--amber-7)!important;
+}
+.atlas-global-nav nav a.active[href="#switches"]{
+  color:var(--orange-12)!important;
+  background:var(--orange-3)!important;
+  border-color:var(--orange-7)!important;
 }
 .atlas-global-nav nav a.active[href="#sensitivity"]{
   color:var(--blue-12)!important;
