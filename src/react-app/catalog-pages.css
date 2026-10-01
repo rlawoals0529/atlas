@@ -77,7 +77,7 @@
 
 /* First-class catalog pages. */
 .consumer-category-page[data-focus-category="mousepad"]{--category-tone:var(--blue-11)}
-.consumer-category-page[data-focus-category="keyboard"]{--category-tone:var(--plum-11)}
+.consumer-category-page[data-focus-category="keyboard"]{--category-tone:var(--amber-11)}
 .consumer-category-page[data-focus-category="switch"]{--category-tone:var(--orange-11)}
 
 .consumer-category-page .consumer-hero,
@@ -106,9 +106,9 @@
   --category-border:var(--blue-7);
 }
 .consumer-category-hero[data-category="keyboard"]{
-  --category-tone:var(--plum-11);
-  --category-soft:var(--plum-3);
-  --category-border:var(--plum-7);
+  --category-tone:var(--amber-11);
+  --category-soft:var(--amber-2);
+  --category-border:var(--amber-7);
 }
 .consumer-category-hero[data-category="switch"]{
   --category-tone:var(--orange-11);
@@ -279,8 +279,8 @@
 }
 .consumer-focus-quick::-webkit-scrollbar{display:none}
 .consumer-focus-quick[data-category="keyboard"]{
-  --focus-tone:var(--plum-11);
-  --focus-soft:var(--plum-3);
+  --focus-tone:var(--amber-11);
+  --focus-soft:var(--amber-2);
 }
 .consumer-focus-quick[data-category="switch"]{
   --focus-tone:var(--orange-11);
@@ -334,9 +334,9 @@
   color:var(--blue-12)!important;
 }
 .consumer-category-page[data-focus-category="keyboard"] .consumer-filter-toggle.active{
-  border-color:var(--plum-7)!important;
-  background:var(--plum-3)!important;
-  color:var(--plum-12)!important;
+  border-color:var(--amber-7)!important;
+  background:var(--amber-2)!important;
+  color:var(--amber-12)!important;
 }
 .consumer-category-page[data-focus-category="switch"] .consumer-filter-toggle.active{
   border-color:var(--orange-7)!important;
