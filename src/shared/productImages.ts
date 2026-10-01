@@ -220,7 +220,7 @@ export const productImages: Record<string, ProductImage> = {
 export const productMediaSourceOverrides: Record<string, string> = {
   "mouse-vaxee-xe-s-wireless-4k": "https://www.vaxee.co/EN/product.php?act=view&id=227",
   "mouse-vaxee-xe-v2": "https://www.vaxee.co/en/product.php?act=view&id=271",
-  "mouse-xm2w-4k-v2": "https://www.endgamegear.com/en-at/gaming-mice/xm2w-4k-v2",
+  "mouse-xm2w-4k-v2": "https://endgamegear.com/products/xm2w-4k-v2-wireless-gaming-mouse",
   "mouse-scimitar-se": "https://www.corsair.com/us/en/p/gaming-mouse/ch-9314014-ww/scimitar-elite-wireless-se-mmo-gaming-mouse-gun-metal-ch-9314014-ww",
   "mouse-corsair-sabre-v2-pro-mg": "https://www.corsair.com/us/en/p/gaming-mouse/ch-931g100-ww/sabre-v2-pro-wireless-magnesium-alloy-gaming-mouse-black-ch-931g100-ww",
   "mouse-ulx-competition-medium": "https://finalmouse.com/products/ulx-competition-overview",
