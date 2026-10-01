@@ -161,6 +161,16 @@ function ProductDrawer({ product, onClose, onCompare, compared, onSave, saved }:
   const coverage = evidenceCoverage(product);
   const sourceChecks = sourceCheckWindow(product);
   const sourcesById = new Map(product.sources.map(source => [source.id, source]));
+  const [linkStatus, setLinkStatus] = useState("");
+  const copyProductLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setLinkStatus("Link copied");
+    } catch {
+      setLinkStatus("Could not copy link");
+    }
+    window.setTimeout(() => setLinkStatus(""), 1800);
+  };
   const titleId = useId();
   const descriptionId = useId();
   const dialogRef = useModalDialog<HTMLElement>(onClose);
@@ -170,7 +180,7 @@ function ProductDrawer({ product, onClose, onCompare, compared, onSave, saved }:
       <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></header>
       <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span><div className="consumer-drawer-source-checks"><span>Latest source check <strong>{sourceChecks.latest}</strong></span><span>Oldest source check <strong>{sourceChecks.oldest}</strong></span></div></div></div>
       <p className="consumer-drawer-summary" id={descriptionId}>{product.summary}</p>
-      <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button type="button" className="consumer-drawer-save" aria-pressed={saved} onClick={() => onSave(product)}>{saved ? "Saved" : "Save"}</button><button type="button" className="consumer-drawer-compare" aria-pressed={compared} onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button></div>
+      <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button type="button" className="consumer-drawer-save" aria-pressed={saved} onClick={() => onSave(product)}>{saved ? "Saved" : "Save"}</button><button type="button" className="consumer-drawer-compare" aria-pressed={compared} onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button><button type="button" className="consumer-drawer-link" onClick={copyProductLink}>Copy link</button><span className="consumer-drawer-link-status" role="status" aria-live="polite">{linkStatus}</span></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>
       <section><div className="consumer-section-title"><span>EVIDENCE</span><h3>What supports this record</h3></div><div className="consumer-evidence-list">{Object.entries(product.evidence ?? {}).map(([field, note]) => <article key={field}><div><b>{titleCase(field)}</b><span className={note.confidence}>{note.confidence}</span></div>{note.note && <p>{note.note}</p>}<footer>{note.sourceIds.map(sourceId => { const source = sourcesById.get(sourceId); return source ? <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span>{source.label}<i>↗</i></a> : null; })}</footer></article>)}</div></section>
       <section><div className="consumer-section-title"><span>SOURCES</span><h3>Provenance ledger</h3></div><div className="consumer-source-list">{product.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span><div><b>{source.label}</b><small>checked {source.checkedAt}</small></div><i>↗</i></a>)}</div></section>
