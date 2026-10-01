@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { catalogGroups, loadCatalog } from "./load-catalog.mjs";
 
 const data = loadCatalog();
@@ -23,6 +24,11 @@ for (const p of products) {
 
   for (const s of p.sources ?? []) {
     if (!s.id || !s.label || !s.url || !s.kind || !s.checkedAt) errors.push(`${p.id}: incomplete source definition`);
+    if (s.checkedAt) {
+      const today = new Date().toISOString().slice(0, 10);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(s.checkedAt) || Number.isNaN(Date.parse(`${s.checkedAt}T00:00:00Z`))) errors.push(`${p.id}: invalid source checkedAt date for ${s.id}`);
+      else if (s.checkedAt > today) errors.push(`${p.id}: source checkedAt is in the future for ${s.id}`);
+    }
     const signature = JSON.stringify(s);
     const previous = sourceDefs.get(s.id);
     if (previous && previous !== signature) errors.push(`source id conflict: ${s.id}`);
@@ -79,6 +85,12 @@ for (const p of products) {
     }
   }
 }
+
+const readme = fs.readFileSync("README.md", "utf8");
+const readmeCatalogSummary = `The canonical catalog currently has **${products.length} products**: **${data.mice.length} gaming mice**, **${data.mousepads.length} mousepads**, **${data.skates.length} skate families**, **${data.keyboards.length} gaming keyboards** and **${data.switches.length} keyboard switches**`;
+if (!readme.includes(readmeCatalogSummary)) errors.push("README canonical catalog counts are stale");
+const readmeKeyboardSummary = `now contains **${data.keyboards.length} keyboards** and **${data.switches.length} switches**`;
+if (!readme.includes(readmeKeyboardSummary)) errors.push("README keyboard/switch counts are stale");
 
 if (errors.length) {
   console.error(errors.join("\n"));
