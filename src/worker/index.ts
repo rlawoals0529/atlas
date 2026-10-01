@@ -191,7 +191,29 @@ async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl
 }
 app.route("/api/analytics", analyticsApp);
 
+const PUBLIC_ORIGIN = "https://atlas.rlawoals0529.workers.dev/";
+const publicTextHeaders = {
+  "Cache-Control": "public, max-age=3600",
+  "X-Content-Type-Options": "nosniff",
+};
 
+app.get("/robots.txt", (c) => c.text(
+  `User-agent: *\nAllow: /\n\nSitemap: ${PUBLIC_ORIGIN}sitemap.xml\n`,
+  200,
+  { ...publicTextHeaders, "Content-Type": "text/plain; charset=UTF-8" },
+));
+
+app.get("/sitemap.xml", (c) => c.body(
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>${PUBLIC_ORIGIN}</loc>\n    <changefreq>weekly</changefreq>\n  </url>\n</urlset>\n`,
+  200,
+  { ...publicTextHeaders, "Content-Type": "application/xml; charset=UTF-8" },
+));
+
+app.get("/.well-known/security.txt", (c) => c.text(
+  `Contact: https://github.com/rlawoals0529/atlas/security/policy\nPolicy: https://github.com/rlawoals0529/atlas/security/policy\nCanonical: ${PUBLIC_ORIGIN}.well-known/security.txt\nExpires: 2027-10-01T00:00:00Z\nPreferred-Languages: en\n`,
+  200,
+  { ...publicTextHeaders, "Content-Type": "text/plain; charset=UTF-8" },
+));
 
 app.get("/api/media/:id", async (c) => {
   const id = c.req.param("id");
