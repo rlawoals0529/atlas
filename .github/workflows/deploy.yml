@@ -43,6 +43,7 @@ jobs:
           npm run sensitivity:validate
           npm run product:validate
           npm run media:validate
+          npm run headers:validate
           npm run data:report
           npm run data:seed
           test -s generated/data-report.json
