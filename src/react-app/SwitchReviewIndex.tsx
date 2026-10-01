@@ -56,7 +56,7 @@ export default function SwitchReviewIndex() {
         <span role="cell">{entry.manufacturer}</span>
         <span role="cell" className="switch-review-type">{entry.type}</span>
         <time role="cell" dateTime={entry.reviewedAt}>{prettyDate(entry.reviewedAt)}</time>
-        <span role="cell">{entry.reviewUrl ? <a href={entry.reviewUrl} target="_blank" rel="noreferrer">Scorecard ↗</a> : <a href={THEREMINGOAT_SWITCH_SOURCE} target="_blank" rel="noreferrer">Sheet ↗</a>}</span>
+        <span role="cell"><a href={entry.reviewUrl} target="_blank" rel="noreferrer" title={entry.scorecardName ? `Source scorecard title: ${entry.scorecardName}` : undefined}>Scorecard ↗</a></span>
       </div>)}
     </div>
     {filtered.length === 0 && <div className="switch-review-empty">No switch reviews match those filters.</div>}

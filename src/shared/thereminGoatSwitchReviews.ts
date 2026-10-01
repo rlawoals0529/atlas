@@ -3,14 +3,17 @@ export type ExternalSwitchReview = {
   manufacturer: string;
   type: string;
   reviewedAt: string;
-  reviewUrl: string | null;
+  reviewUrl: string;
+  /** Present only when the repository scorecard filename/title differs from the composite-sheet name. */
+  scorecardName?: string;
 };
 
 /**
  * Metadata-only directory derived from ThereminGoat's public Composite Overall
  * Total Score Sheet (snapshot read 2026-09-30). Atlas intentionally does not
  * reproduce the reviewer's score/rank columns here. Re-scored duplicate names
- * are collapsed to the newest dated entry.
+ * are collapsed to the newest dated entry. Non-exact scorecard-title matches are
+ * explicit via scorecardName and validated against a reviewed alias allowlist.
  */
 export const THEREMINGOAT_SWITCH_SOURCE = "https://github.com/ThereminGoat/switch-scores/blob/master/1-Composite%20Overall%20Total%20Score%20Sheet.csv";
 export const THEREMINGOAT_SWITCH_REVIEW_COUNT = 467;
@@ -20,7 +23,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "6/6/2021",
     "manufacturer": "Tecsee",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Aura%20Frost%20Panda.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Aura%20Frost%20Panda.pdf",
+    "scorecardName": "Aura Frost Panda"
   },
   {
     "name": "43 Studio Jing",
@@ -188,7 +192,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "11/20/2022",
     "manufacturer": "KTT",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Akko%20V3%20Cream%20Yelow.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Akko%20V3%20Cream%20Yelow.pdf",
+    "scorecardName": "Akko V3 Cream Yelow"
   },
   {
     "name": "Aliaz (80g)",
@@ -251,7 +256,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "4/7/2024",
     "manufacturer": "Unknown",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/B.%20Stone%20Dark%20Eyes.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/B.%20Stone%20Dark%20Eyes.pdf",
+    "scorecardName": "B. Stone Dark Eyes"
   },
   {
     "name": "Ball Bearing Blue",
@@ -363,7 +369,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "8/1/2021",
     "manufacturer": "Durock/JWK",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kiwi.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kiwi.pdf",
+    "scorecardName": "Kiwi"
   },
   {
     "name": "C3 Macho",
@@ -398,14 +405,16 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "3/14/2021",
     "manufacturer": "Cherry",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX%20Brown.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX%20Brown.pdf",
+    "scorecardName": "Cherry MX Brown"
   },
   {
     "name": "Cherry MX Ergo Clear (3 Pin)",
     "reviewedAt": "5/7/2023",
     "manufacturer": "Cherry",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX%20Ergo%20Clear.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX%20Ergo%20Clear.pdf",
+    "scorecardName": "Cherry MX Ergo Clear"
   },
   {
     "name": "Cherry MX Falcon",
@@ -468,14 +477,16 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "8/27/2023",
     "manufacturer": "Cherry",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX2A%20RGB%20Black.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX2A%20RGB%20Black.pdf",
+    "scorecardName": "Cherry MX2A RGB Black"
   },
   {
     "name": "Cherry MX2A RGB Blue (3 Pin)",
     "reviewedAt": "9/3/2023",
     "manufacturer": "Cherry",
     "type": "Clicky",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX2A%20RGB%20Blue.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Cherry%20MX2A%20RGB%20Blue.pdf",
+    "scorecardName": "Cherry MX2A RGB Blue"
   },
   {
     "name": "Cherry Viola",
@@ -552,7 +563,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "10/31/2021",
     "manufacturer": "Kailh",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20Cream%20Tactile.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20Cream%20Tactile.pdf",
+    "scorecardName": "Novelkeys Cream Tactile"
   },
   {
     "name": "DareU Mahjong",
@@ -671,14 +683,16 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "8/1/2021",
     "manufacturer": "Durock/JWK",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Everglide%20Amber%20Orange%20V2%20Pro.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Everglide%20Amber%20Orange%20V2%20Pro.pdf",
+    "scorecardName": "Everglide Amber Orange V2 Pro"
   },
   {
     "name": "Everglide Coral Red V2 Pro!",
     "reviewedAt": "8/1/2021",
     "manufacturer": "Durock/JWK",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Everglide%20Coral%20Red%20V2%20Pro.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Everglide%20Coral%20Red%20V2%20Pro.pdf",
+    "scorecardName": "Everglide Coral Red V2 Pro"
   },
   {
     "name": "Everglide Jade Green V2",
@@ -755,7 +769,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "1/28/2024",
     "manufacturer": "Outemu",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Gamaky%20Venus.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Gamaky%20Venus.pdf",
+    "scorecardName": "Gamaky Venus"
   },
   {
     "name": "Gateron Azure Dragon",
@@ -902,7 +917,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "11/21/2020",
     "manufacturer": "Gateron",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Gateron%20Kangaroo%20Ink.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Gateron%20Kangaroo%20Ink.pdf",
+    "scorecardName": "Gateron Kangaroo Ink"
   },
   {
     "name": "Gateron Keyfirst Cream",
@@ -1161,7 +1177,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "12/7/2025",
     "manufacturer": "Greetech",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Greetech%20OG%20Brown%20(5%20Pin).pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Greetech%20OG%20Brown%20(5%20Pin).pdf",
+    "scorecardName": "Greetech OG Brown (5 Pin)"
   },
   {
     "name": "Greetech Razer Green",
@@ -1252,7 +1269,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "8/1/2021",
     "manufacturer": "Durock/JWK",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Hexin%20Bamboo%20Green%2060g.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Hexin%20Bamboo%20Green%2060g.pdf",
+    "scorecardName": "Hexin Bamboo Green 60g"
   },
   {
     "name": "HMX Anti",
@@ -1714,7 +1732,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "9/3/2023",
     "manufacturer": "Kailh",
     "type": "Silent Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Deep%20Sea%20Silent%20Pro%20Tactile%20Whale.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Deep%20Sea%20Silent%20Pro%20Tactile%20Whale.pdf",
+    "scorecardName": "Kailh Deep Sea Silent Pro Tactile Whale"
   },
   {
     "name": "Kailh Extreme Slippery",
@@ -1749,21 +1768,24 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "1/16/2022",
     "manufacturer": "Kailh",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Pro%20Burgundy.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Pro%20Burgundy.pdf",
+    "scorecardName": "Kailh Pro Burgundy"
   },
   {
     "name": "Kailh Pro Light Green (Plate Mount)",
     "reviewedAt": "1/16/2022",
     "manufacturer": "Kailh",
     "type": "Clicky",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Pro%20Light%20Green.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Pro%20Light%20Green.pdf",
+    "scorecardName": "Kailh Pro Light Green"
   },
   {
     "name": "Kailh Pro Purple (Plate Mount)",
     "reviewedAt": "1/16/2022",
     "manufacturer": "Kailh",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Pro%20Purple.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Kailh%20Pro%20Purple.pdf",
+    "scorecardName": "Kailh Pro Purple"
   },
   {
     "name": "Kailh x Melgeek Hornet HE",
@@ -1882,7 +1904,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "8/24/2025",
     "manufacturer": "Keygeek",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Keygeek%20Y2%20(20mm_45g).pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Keygeek%20Y2%20(20mm_45g).pdf",
+    "scorecardName": "Keygeek Y2 (20mm_45g)"
   },
   {
     "name": "KFA Lubed Pink Robin",
@@ -1917,7 +1940,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "8/15/2021",
     "manufacturer": "Tecsee",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/KK%20Lightwave%20V1.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/KK%20Lightwave%20V1.pdf",
+    "scorecardName": "KK Lightwave V1"
   },
   {
     "name": "KNC Keys Chocolate Crinkle Cookies",
@@ -2323,28 +2347,32 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "6/20/2021",
     "manufacturer": "Kailh",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Chocolate.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Chocolate.pdf",
+    "scorecardName": "Novelkeys x Kailh Chocolate"
   },
   {
     "name": "NK x Kailh Speed Heavy Burnt Orange",
     "reviewedAt": "3/26/2023",
     "manufacturer": "Kailh",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Speed%20Heavy%20Burnt%20Orange.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Speed%20Heavy%20Burnt%20Orange.pdf",
+    "scorecardName": "Novelkeys x Kailh Speed Heavy Burnt Orange"
   },
   {
     "name": "NK x Kailh Speed Heavy Dark Yellow",
     "reviewedAt": "3/26/2023",
     "manufacturer": "Kailh",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Speed%20Heavy%20Dark%20Yellow.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Speed%20Heavy%20Dark%20Yellow.pdf",
+    "scorecardName": "Novelkeys x Kailh Speed Heavy Dark Yellow"
   },
   {
     "name": "NK x Kailh Speed Heavy Pale Blue",
     "reviewedAt": "3/26/2023",
     "manufacturer": "Kailh",
     "type": "Clicky",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Speed%20Heavy%20Pale%20Blue.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20x%20Kailh%20Speed%20Heavy%20Pale%20Blue.pdf",
+    "scorecardName": "Novelkeys x Kailh Speed Heavy Pale Blue"
   },
   {
     "name": "Noppoo Brown",
@@ -2358,14 +2386,16 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "1/17/2021",
     "manufacturer": "Kailh",
     "type": "Tactile",
-    "reviewUrl": null
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelias.pdf",
+    "scorecardName": "Novelias"
   },
   {
     "name": "Novelkeys Box Cream",
     "reviewedAt": "5/9/2021",
     "manufacturer": "Kailh",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20Box%20Creams.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Novelkeys%20Box%20Creams.pdf",
+    "scorecardName": "Novelkeys Box Creams"
   },
   {
     "name": "Novelkeys Classic Blue",
@@ -2631,7 +2661,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "10/24/2021",
     "manufacturer": "Unknown",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/RRE%20Black.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/RRE%20Black.pdf",
+    "scorecardName": "RRE Black"
   },
   {
     "name": "Rubrehose Brown",
@@ -2694,7 +2725,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "3/26/2023",
     "manufacturer": "SP Star",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/SP%20Star%20Magic%20Girl.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/SP%20Star%20Magic%20Girl.pdf",
+    "scorecardName": "SP Star Magic Girl"
   },
   {
     "name": "SP Star Marble Soda Melon",
@@ -2981,7 +3013,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "9/5/2021",
     "manufacturer": "TTC",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/TTC%20Wild%2042g.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/TTC%20Wild%2042g.pdf",
+    "scorecardName": "TTC Wild 42g"
   },
   {
     "name": "TTC x Helix Lab Skylar",
@@ -3044,7 +3077,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "7/23/2023",
     "manufacturer": "Durock/JWK",
     "type": "Linear",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Vertex%20V1.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/Vertex%20V1.pdf",
+    "scorecardName": "Vertex V1"
   },
   {
     "name": "WEKT Lucy R5",
@@ -3142,7 +3176,8 @@ export const thereminGoatSwitchReviews: ExternalSwitchReview[] = [
     "reviewedAt": "11/14/2021",
     "manufacturer": "Gateron",
     "type": "Tactile",
-    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/WinkeylessKR%20Zeal%20Clear.pdf"
+    "reviewUrl": "https://github.com/ThereminGoat/switch-scores/blob/master/WinkeylessKR%20Zeal%20Clear.pdf",
+    "scorecardName": "WinkeylessKR Zeal Clear"
   },
   {
     "name": "WS Arowana Red",

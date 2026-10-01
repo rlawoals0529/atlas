@@ -34,6 +34,8 @@ jobs:
         run: npm run product:validate
       - name: Validate product media coverage
         run: npm run media:validate
+      - name: Validate external switch review index
+        run: npm run switch-index:validate
       - name: Validate deployment verifier syntax
         run: |
           node --check scripts/verify-deployed-health.mjs
