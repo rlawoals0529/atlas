@@ -261,4 +261,24 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "Akko official product image",
   },
 
+
+  "switch-kailh-box-v2-red": {
+    url: "https://www.kailhswitch.com/uploads/202215927/box-switch-v2-linear40442559994.png",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/box-switch-v2-linear.html",
+    alt: "Kailh BOX V2 Red linear mechanical keyboard switch",
+    credit: "Kailh official product image",
+  },
+  "switch-kailh-box-v2-brown": {
+    url: "https://www.kailhswitch.com/uploads/202215927/small/box-switch-v2-tactile21174331225.png",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/box-switch-v2-tactile.html",
+    alt: "Kailh BOX V2 Brown tactile mechanical keyboard switch",
+    credit: "Kailh official product image",
+  },
+  "switch-kailh-box-v2-white": {
+    url: "https://www.kailhswitch.com/uploads/202215927/box-switch-v2-white24396058363.png",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/box-switch-v2-white.html",
+    alt: "Kailh BOX V2 White clicky mechanical keyboard switch",
+    credit: "Kailh official product image",
+  },
+
 };
