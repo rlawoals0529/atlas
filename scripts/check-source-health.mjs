@@ -18,19 +18,42 @@ const rows = [...sourceMap.values()];
 const concurrency = 8;
 const timeoutMs = 9000;
 
+async function fetchSource(url, userAgent) {
+  const response = await fetch(url, {
+    method: "GET",
+    redirect: "follow",
+    headers: {
+      "user-agent": userAgent,
+      "accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+    },
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  try { await response.body?.cancel(); } catch {}
+  return response;
+}
+
 async function probe(row) {
   const started = Date.now();
+
+  if (/^(\.\.?\/|research\/|docs\/)/.test(row.url)) {
+    const fs = await import("node:fs");
+    const localPath = row.url.replace(/^\.\//, "");
+    return {
+      ...row,
+      state: fs.existsSync(localPath) ? "local" : "broken",
+      status: null,
+      finalUrl: row.url,
+      durationMs: Date.now() - started,
+    };
+  }
+
   try {
-    const response = await fetch(row.url, {
-      method: "GET",
-      redirect: "follow",
-      headers: {
-        "user-agent": "AtlasSourceHealth/0.9 (+https://github.com/rlawoals0529/atlas)",
-        "accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
-      },
-      signal: AbortSignal.timeout(timeoutMs),
-    });
-    try { await response.body?.cancel(); } catch {}
+    let response = await fetchSource(row.url, "AtlasSourceHealth/0.9 (+https://github.com/rlawoals0529/atlas)");
+    let retried = false;
+    if ([404, 410].includes(response.status)) {
+      response = await fetchSource(row.url, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/154 Safari/537.36");
+      retried = true;
+    }
 
     let state = "ok";
     if ([401, 403, 405, 429].includes(response.status)) state = "blocked";
@@ -43,6 +66,7 @@ async function probe(row) {
       state,
       status: response.status,
       finalUrl: response.url,
+      retried,
       durationMs: Date.now() - started,
     };
   } catch (error) {
@@ -70,10 +94,10 @@ const counts = results.reduce((acc, row) => {
 }, {});
 
 const hardBroken = results.filter(row => row.state === "broken");
-const noteworthy = results.filter(row => row.state !== "ok");
+const noteworthy = results.filter(row => !["ok", "local"].includes(row.state));
 
 console.log(`Checked ${results.length} unique source URLs across ${products.length} catalog products.`);
-for (const key of ["ok", "blocked", "broken", "server-error", "warning", "unavailable"]) {
+for (const key of ["ok", "local", "blocked", "broken", "server-error", "warning", "unavailable"]) {
   console.log(`${key}: ${counts[key] ?? 0}`);
 }
 
@@ -91,7 +115,7 @@ if (process.env.GITHUB_STEP_SUMMARY) {
     "",
     "| State | Count |",
     "| --- | ---: |",
-    ...["ok", "blocked", "broken", "server-error", "warning", "unavailable"].map(key => `| ${key} | ${counts[key] ?? 0} |`),
+    ...["ok", "local", "blocked", "broken", "server-error", "warning", "unavailable"].map(key => `| ${key} | ${counts[key] ?? 0} |`),
     "",
     "Only HTTP 404/410 responses are treated as confirmed broken sources. Authentication blocks, rate limits, server errors and network failures are reported separately.",
   ];
