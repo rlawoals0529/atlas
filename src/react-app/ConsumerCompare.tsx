@@ -29,6 +29,34 @@ const scale = (value: number, min: number, max: number) => clamp(((value - min) 
 const seriesColors = ["var(--blue-11)", "var(--orange-11)", "var(--plum-11)", "var(--jade-11)"];
 
 type MousepadProduct = Extract<CatalogProduct, { type: "mousepad" }>;
+type SwitchProduct = Extract<CatalogProduct, { type: "switch" }>;
+
+function SwitchVisualSummary({ products }: { products: SwitchProduct[] }) {
+  return <section className="switch-compare-visual" aria-labelledby="switch-visual-heading">
+    <header>
+      <div><span>PUBLISHED SPECS</span><h3 id="switch-visual-heading">Force points and travel at a glance</h3></div>
+      <p>Force units stay exactly as the source publishes them. Atlas does not silently convert cN and gf or turn these fields into a preference score.</p>
+    </header>
+    <div className="switch-compare-cards" style={{ "--compare-count": products.length } as React.CSSProperties}>
+      {products.map((product, index) => <article key={product.id}>
+        <header><span>{String(index + 1).padStart(2, "0")} · {product.brand}</span><b>{product.model}</b></header>
+        <div className="switch-compare-force-grid">
+          <div><span>Initial</span><b>{product.specs.initialForce ? `${product.specs.initialForce.value} ${product.specs.initialForce.unit}` : "—"}</b></div>
+          <div><span>Actuation</span><b>{product.specs.actuationForce ? `${product.specs.actuationForce.value} ${product.specs.actuationForce.unit}` : "—"}</b></div>
+          <div><span>Bottom-out</span><b>{product.specs.bottomOutForce ? `${product.specs.bottomOutForce.value} ${product.specs.bottomOutForce.unit}` : "—"}</b></div>
+        </div>
+        <div className="switch-compare-travel">
+          <div><span>Pre-travel</span><b>{product.specs.preTravelMm != null ? `${product.specs.preTravelMm} mm` : "not published"}</b></div>
+          <div><span>Total travel</span><b>{product.specs.totalTravelMm} mm</b></div>
+        </div>
+        <footer>
+          <span>{titleCase(product.specs.technology)} · {titleCase(product.specs.feel)}</span>
+          {product.specs.compatibility?.length ? <em>{product.specs.compatibility.length} compatibility note{product.specs.compatibility.length === 1 ? "" : "s"}</em> : <em>No board-specific note stored</em>}
+        </footer>
+      </article>)}
+    </div>
+  </section>;
+}
 
 function MousepadVisualSummary({ products }: { products: MousepadProduct[] }) {
   const maxWidth = Math.max(...products.map(product => product.specs.widthMm), 1);
@@ -238,9 +266,10 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
   };
   const differenceCount = allRows.filter(rowDiffers).length;
   const sections = [...new Set(rows.map(row => row.section))];
-  const specialistHref = type === "mouse" || type === "mousepad" ? "#pointing" : type === "keyboard" || type === "switch" ? "#keyboard-lab" : "#product-lab";
-  const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "mousepad" ? "Pair in Setup Finder" : type === "keyboard" || type === "switch" ? "Open Keyboard Lab" : "Open research tools";
+  const specialistHref = type === "mouse" || type === "mousepad" ? "#pointing" : type === "keyboard" ? "#keyboard-lab" : type === "switch" ? "#switches" : "#product-lab";
+  const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "mousepad" ? "Pair in Setup Finder" : type === "keyboard" ? "Open Keyboard Lab" : type === "switch" ? "Open Switches" : "Open research tools";
   const mousepadProducts = type === "mousepad" ? products.filter((product): product is MousepadProduct => product.type === "mousepad") : [];
+  const switchProducts = type === "switch" ? products.filter((product): product is SwitchProduct => product.type === "switch") : [];
 
   if (!type || products.length < 2) return null;
 
