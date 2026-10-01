@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { catalog, mice, mousepads, skates } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, familyFor, productSearchText, sourceKindMeta } from "../shared/productMeta";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { shapeSimilarity, type SimilarityMode } from "../shared/shape";
 import ShapeLabV2, { ShapeCanvas, type ShapeLayer } from "./ShapeLabV2";
 import { ProductMedia } from "./ProductMedia";
+import { useModalDialog } from "./useModalDialog";
 import type { GameStyle, Grip, MouseProduct, MousepadProduct, Product, SkateProduct, UserProfile } from "../shared/types";
 
 const VERSION = "0.8";
@@ -129,12 +130,15 @@ function ProductInspector({ product, onClose, onOpen }: { product: Product; onCl
   const family = familyFor(product.id);
   const siblings = family?.memberIds.map(id => catalog.find(item => item.id === id)).filter((item): item is Product => Boolean(item && item.id !== product.id)) ?? [];
   const evidence = evidenceRows(product);
-  return <div className="v5-inspector-shell" role="dialog" aria-modal="true" aria-label={`${product.brand} ${product.model} details`}>
-    <button className="v5-inspector-backdrop" aria-label="Close product details" onClick={onClose}/>
-    <aside className="v5-inspector">
-      <div className="v5-inspector-head"><div><span className="v5-eyebrow">{product.brand} / {product.type}</span><h2>{product.model}</h2></div><button className="v5-icon-button" onClick={onClose} aria-label="Close">×</button></div>
+  const titleId = useId();
+  const descriptionId = useId();
+  const dialogRef = useModalDialog<HTMLElement>(onClose);
+  return <div className="v5-inspector-shell">
+    <button type="button" className="v5-inspector-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
+    <aside ref={dialogRef} className="v5-inspector" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
+      <div className="v5-inspector-head"><div><span className="v5-eyebrow">{product.brand} / {product.type}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" className="v5-icon-button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></div>
       <div className="v5-detail-hero"><ProductMedia productId={product.id} fallback={<ProductArt product={product}/>} className={`v5-detail-real-image ${product.type}`}/><div className="v5-detail-score"><b>{health.score}</b><span>DATA HEALTH</span><small>{health.label}</small></div></div>
-      <div className="v5-detail-summary"><p>{product.summary}</p><div className="v5-chips"><span>{product.status}</span><span>{money(product.msrpUsd)} MSRP</span>{(product.tags ?? []).slice(0, 4).map(tag => <span key={tag}>{tag}</span>)}</div></div>
+      <div className="v5-detail-summary"><p id={descriptionId}>{product.summary}</p><div className="v5-chips"><span>{product.status}</span><span>{money(product.msrpUsd)} MSRP</span>{(product.tags ?? []).slice(0, 4).map(tag => <span key={tag}>{tag}</span>)}</div></div>
 
       {family && <section className="v5-detail-section"><div className="v5-detail-title"><span>LINEAGE</span><h3>{family.label}</h3></div><p className="v5-family-note">{family.relationship}</p>{siblings.length > 0 && <div className="v5-family-list">{siblings.map(item => <button key={item.id} onClick={() => onOpen(item)}><span>{item.brand}</span><b>{item.model}</b><small>open record →</small></button>)}</div>}</section>}
 
