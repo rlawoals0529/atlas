@@ -1,60 +1,60 @@
 # Atlas prioritized backlog
 
-This is a working backlog for the product, not a resume checklist. Priorities use the Atlas **User value × Evidence × Risk × Effort** framework from `OPERATIONS.md`.
+This is a working product backlog, not a resume checklist. Priority follows the Atlas **User value × Evidence × Risk × Effort** framing in `OPERATIONS.md`.
 
-## Delivered on the current Product Lab integration branch
+## Recently delivered
 
-These are implemented capabilities, not production outcomes:
+These are implemented capabilities, not claimed market or hardware outcomes:
 
-- typed analytics schema v2 with recommendation-step/abandonment and overlay events;
-- browser-local real data vs deterministic demo separation;
-- local opt-out + GPC/DNT collection controls;
-- activation/completion/abandonment/compare/depth/outbound KPI calculations;
-- optional validated production collector that remains disabled without real storage;
-- Product Intelligence distributions, matrices, brand positioning, direct-competitor heuristic and catalog constellation;
-- requirement-sourced validation plans that initialize `NOT RUN`;
-- real manual-session/defect UI from the v0.8 Product Lab work;
-- richer environment/reliability/automation-suitability model and structured report builder;
-- community evidence schema/protocol before ingestion;
-- decision records, release gate and research-correction workflow.
+- public v0.9.1 release with package/release/health metadata contract;
+- 157-product canonical catalog, including 73 sourced keyboard switches;
+- browser-local saved gear, shareable shortlists and shareable product-detail links;
+- dedicated Switches/Mousepads destinations and category-specific comparison;
+- source-check recency in product inspectors;
+- weekly source-link health and changed-switch media verification;
+- production media binary-signature checks;
+- Worker API contract tests, CodeQL, shared security baseline and CycloneDX SBOM;
+- Node 22 + `npm ci` reproducible CI/deploy path;
+- release notes/changelog/reviewer/architecture/data-dictionary documentation;
+- automatic merged-branch pruning.
 
 ## Now
 
-| Priority | Work | Why now | Evidence / trigger | Exit criteria |
-| --- | --- | --- | --- | --- |
-| P0 | Keep Product Lab integration build/deploy green | New evidence systems must not destabilize the consumer product | CI, Wrangler dry-run and security baseline | all required checks pass on the integration PR |
-| P1 | Finish integration/review against concurrent Atlas branches | PRs #10/#11/#12 contain overlapping history and should not create duplicate architecture | current open PR state | strongest implementation retained; redundant prototype paths not merged |
-| P1 | Verify Product Lab responsive/accessibility behavior | New charts/forms increase density | current new constellation/privacy controls | keyboard focus, reduced motion and narrow widths remain usable |
-| P1 | Keep analytics/validation integrity regression aligned with schema v2 | These are portfolio-sensitive claims where regressions could mislabel evidence | analytics/validation source changes | CI asserts privacy/demo/NOT RUN/provenance invariants |
+| Priority | Work | Why now | Exit criteria |
+| --- | --- | --- | --- |
+| P0 | Keep catalog/media/source health green | public research value depends on traceable current evidence | CI + source/media checks pass; broken sources are fixed or downgraded |
+| P0 | Keep release/deploy contract green | public tags must correspond to what production reports | package, RELEASE.label, README, changelog, notes and /api/health agree |
+| P1 | Maintain bundle headroom | current JS is close enough to its budget that dependency/UI growth needs discipline | initial JS/CSS remain below enforced raw/gzip budgets |
+| P1 | Preserve accessibility on dense/shareable flows | drawers, compare and mobile catalog controls continue to grow | focus, modal, keyboard and narrow-width checks remain usable |
+| P1 | Keep public security dependencies pinned | shared workflows are part of Atlas's supply chain | immutable Action/reusable-workflow refs and green security/CodeQL checks |
 
 ## Next
 
-| Priority | Work | Why | Evidence still needed / dependency |
+| Priority | Work | Why | Evidence / dependency |
 | --- | --- | --- | --- |
-| P1 | Connect `ANALYTICS_DB` and production aggregate view | Enables actual all-user funnels/feature usage | dedicated Cloudflare D1, migration, retention/deletion policy, production traffic |
-| P1 | Execute validation sessions on owned mice | Produces real System Test / Validation evidence | physical devices, firmware/receiver versions, Windows test environment |
-| P1 | Validation evidence attachments/metadata | PASS/FAIL should be auditable | decide storage/privacy policy; R2/local-export path |
-| P2 | Replace DOM analytics bridge with direct feature instrumentation | Cleaner long-term architecture | refactor large `AppV05` into stable feature modules |
-| P2 | Small community-insight pilot | Adds qualitative evidence without premature scale | define one question, source set and sampling approach |
-| P2 | Product-family positioning | Useful category analysis | consistently sourced family/revision relationships |
-| P2 | Launch/lifecycle dates | Enables release cadence analysis | reliable dated manufacturer/archive sources |
-| P2 | Measured outline ingestion | Improves geometry validity beyond parametric silhouettes | licensed/own measured SVG/scan data |
+| P1 | Configure production analytics intentionally | enables actual cross-user funnels/feature use | D1, migration, retention/deletion policy, privacy verification, real traffic |
+| P1 | Execute real hardware validation sessions | turns test plans into actual QA evidence | owned devices + firmware/receiver/OS/USB environment |
+| P1 | Add validation evidence attachments | makes observed PASS/FAIL auditable | storage and privacy policy |
+| P2 | Replace remaining analytics bridge instrumentation | reduces architectural coupling | stable feature-module boundaries |
+| P2 | Expand sourced lifecycle/family relationships | improves product context | reliable dated manufacturer/archive evidence |
+| P2 | Continue small community evidence pilots | adds qualitative context without fake consensus | declared question/source/sample plan |
+| P2 | Add measured/licensed outline data selectively | improves shape validity beyond parametric fallback | own/licensed measured SVG/scan data |
 
 ## Later
 
 | Priority | Work | Why not now |
 | --- | --- | --- |
-| P2 | Cross-section / 3D comparison | Needs trustworthy geometry rather than decorative pseudo-3D |
-| P2 | Mousepad/skate validation sessions | Reuse mouse validation architecture after device workflow is proven |
-| P3 | Host-visible test helper | Useful selective automation, but real manual execution evidence should establish priorities first |
-| P3 | Longitudinal price analysis | Needs a time-series data source and collection policy |
-| P3 | Market opportunity sizing | Sparse catalog cells are not demand; requires sales/customer/willingness-to-pay evidence |
+| P2 | Cross-section / 3D comparison | needs trustworthy geometry, not decorative pseudo-3D |
+| P2 | Mousepad/skate physical validation | reuse the device workflow after mouse execution is proven |
+| P3 | Host-visible test helper | useful only after real manual execution establishes automation priorities |
+| P3 | Longitudinal price analysis | needs a time-series source and collection policy |
+| P3 | Market opportunity sizing | catalog density is not demand; requires customer/sales/willingness-to-pay evidence |
 
 ## Explicitly not prioritized
 
 - universal product rankings;
 - scraping proprietary EloShapes/RTINGS shape assets;
-- mass Reddit ingestion before the evidence schema and sampling policy are proven;
+- mass Reddit/X ingestion before sampling/provenance rules are proven;
 - automation percentage as a goal;
 - fake hardware PASS/FAIL fixtures;
-- resume bullets before real executions/analytics outputs exist.
+- resume claims before real executions or analytics outputs exist.

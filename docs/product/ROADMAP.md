@@ -1,75 +1,83 @@
 # Atlas Now / Next / Later roadmap
 
-This roadmap is dependency-driven. It is not a promise of dates and it does not treat portfolio coverage as a product requirement.
+This roadmap is dependency-driven. It describes evidence needed for the next product step rather than promising dates.
 
-## Now — make the evidence systems coherent and releasable
+## Now — keep the public product trustworthy
 
 | Workstream | Current state | Exit condition |
 | --- | --- | --- |
-| Product Analytics | typed schema v2, local-real/demo separation, privacy controls, funnel/engagement KPIs, optional production transport | CI green; production remains explicitly unavailable unless real storage is configured |
-| Product Intelligence | distributions, brand positioning, competitor heuristic, correlation/matrix analysis, catalog constellation | all measures label their Atlas-sample denominator/derived status; accessible/responsive visualization |
-| Validation | capability-derived `NOT RUN` cases, requirement provenance, manual session UI, defects, structured report builder | generated cases cannot become results without explicit execution status; integrity regression passes |
-| Community evidence | typed schema + aggregation limitations + collection protocol | no mass ingestion until a small reviewable source/sample plan exists |
-| Product Operations | working brief/backlog/ops/validation/changelog plus decision records and release gate | docs describe real Atlas choices and current dependencies rather than generic process |
+| Consumer catalog | 157 canonical products with saved/shareable gear, comparison and specialist routes | catalog/media/source checks stay green; no unsourced expansion |
+| Product Analytics | typed schema, browser-local real/demo separation and optional Worker collector | production claims remain disabled until real storage is intentionally configured |
+| Product Intelligence | sourced catalog distributions, competitor/positioning heuristics and evidence coverage | every derived metric stays labeled as Atlas-sample/heuristic rather than market demand |
+| Validation | capability-derived NOT RUN plans, manual session/defect schema and exports | no PASS/FAIL appears without explicit real execution evidence |
+| Public engineering | Node 22, npm lockfile, Worker contract tests, CodeQL, SBOM, release contract and verified deploys | every release maps package/repo/health metadata to the exact deployed commit |
+| Research operations | source health, source-check dates, media validation and correction templates | stale/broken evidence is corrected or explicitly downgraded rather than silently retained |
 
-## Next — produce real evidence
+## Next — produce evidence Atlas does not have yet
 
 ### Production behavior analytics
 
-Dependency: dedicated analytics D1 + migration + retention/deletion policy.
+Dependency: a dedicated analytics D1 database, migration, retention/deletion policy and privacy review.
 
 Then:
-
 - verify privacy signals against production transport;
-- validate schema/version handling;
+- validate schema/version handling and failure behavior;
 - begin site-wide funnel/feature measurements;
-- set minimum sample/quality thresholds before segment interpretation;
-- use observed drop-off to prioritize consumer-flow changes.
+- establish minimum sample/quality thresholds before segment interpretation;
+- prioritize consumer changes from observed behavior rather than synthetic fixtures.
 
 ### Physical validation sessions
 
-Dependency: an owned real mouse + recorded environment/firmware.
+Dependency: owned hardware plus a recorded firmware/receiver/OS/USB test environment.
 
 Then:
-
-- execute the P0 enumeration/input/reconnect set first;
-- record actual results and evidence;
+- execute P0 enumeration/input/reconnect cases first;
+- record actual PASS/FAIL/BLOCKED results and evidence;
 - create defects only for observed failures;
-- rerun linked regression cases after any real fix/firmware change;
-- publish/export a report scoped to the executed environment.
+- rerun linked regression cases after any real fix or firmware change;
+- publish/export reports scoped to the exact tested environment.
 
-### Small community evidence pilot
+### Direct instrumentation cleanup
 
-Dependency: a declared sampling question and source policy.
+Dependency: stable feature boundaries in the consumer UI.
 
 Then:
+- move remaining bridge-observed interactions to typed feature-level events;
+- keep analytics opt-out/GPC/DNT behavior unchanged;
+- verify event naming/property limits with existing integrity checks.
 
-- select one product + one attribute question;
-- capture a small traceable sample across more than one source type when possible;
-- preserve disagreement and conditions;
-- review whether the schema answers the question before increasing volume.
+### Sourced lifecycle and family context
 
-### Instrumentation modularization
+Dependency: reliable dated manufacturer/archive evidence.
 
-Dependency: stable boundaries extracted from `AppV05`.
+Then:
+- expand release/lifecycle fields selectively;
+- improve family/revision views where relationships are explicit;
+- avoid treating product age or family size as demand.
 
-Then replace bridge-observed interactions with direct typed event calls in the relevant feature modules.
+### Community evidence pilots
+
+Dependency: a declared question and source/sampling plan.
+
+Then:
+- collect a small traceable sample across more than one source type where possible;
+- retain disagreement and conditions;
+- evaluate whether the schema answers the question before increasing volume.
 
 ## Later — expand only when evidence quality supports it
 
-- measured/licensed/own shape outlines rather than scraped proprietary assets;
-- mousepad/skate validation sessions using proven execution/report patterns;
-- selective host-visible automation helper for enumeration/input/config persistence;
-- longitudinal pricing/lifecycle analysis after reliable dated data collection exists;
-- richer family/revision positioning after family relationships are consistently sourced;
-- report rendering beyond JSON after real validation sessions create content worth presenting.
+- measured/licensed/own shape outlines and cross-sections rather than scraped proprietary assets;
+- mousepad/skate physical validation using proven execution/report patterns;
+- selective host-visible automation helpers for enumeration/input/config persistence;
+- longitudinal pricing analysis after a repeatable dated data source exists;
+- demand/opportunity analysis only with actual customer, sales or willingness-to-pay evidence.
 
 ## Explicit non-goals
 
 - fake production KPI fixtures presented as users;
 - generated PASS/FAIL hardware results;
 - market-opportunity scoring from sparse catalog cells;
-- universal “best mouse” rankings;
-- scraping EloShapes/RTINGS proprietary shape assets;
-- maximum automation percentage;
-- resume bullets before the underlying evidence exists.
+- universal “best” product rankings;
+- scraping proprietary EloShapes/RTINGS geometry assets;
+- automation percentage as a goal;
+- resume claims that exceed the underlying evidence.
