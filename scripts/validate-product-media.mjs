@@ -42,3 +42,14 @@ const explicit = targets.filter(product => explicitImageIds.has(product.id)).len
 const currentSwitches = targets.filter(product => product.type === "switch");
 const explicitSwitches = currentSwitches.filter(product => explicitImageIds.has(product.id)).length;
 console.log(`Product media coverage OK: ${targets.length} current/announced mice, keyboards and switches; ${explicit} explicit images; ${targets.length - explicit} official-source fallbacks; switches ${explicitSwitches}/${currentSwitches.length} explicit.`);
+
+const initialRegistry = fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8");
+const productMediaComponent = fs.readFileSync(path.join(root, "src/react-app/ProductMedia.tsx"), "utf8");
+if (/^\s*"switch-/m.test(initialRegistry)) {
+  console.error("Product media coverage validation failed: switch media metadata must stay out of the initial productImages registry.");
+  process.exit(1);
+}
+if (!productMediaComponent.includes('import("../shared/switchProductImages")')) {
+  console.error("Product media coverage validation failed: ProductMedia must lazy-load switch media metadata.");
+  process.exit(1);
+}
