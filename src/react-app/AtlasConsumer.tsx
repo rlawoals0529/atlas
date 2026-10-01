@@ -172,6 +172,22 @@ function ProductDrawer({ product, onClose, onCompare, compared }: { product: Cat
   </div>;
 }
 
+function CompareLoadingFallback({ onClose }: { onClose: () => void }) {
+  const titleId = useId();
+  const descriptionId = useId();
+  const dialogRef = useModalDialog<HTMLDivElement>(onClose);
+
+  return <div className="consumer-compare-shell consumer-compare-loading">
+    <button type="button" className="consumer-compare-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
+      <button type="button" className="consumer-compare-loading-close" data-dialog-initial-focus onClick={onClose} aria-label="Close comparison">×</button>
+      <i aria-hidden="true"/>
+      <b id={titleId}>Opening comparison</b>
+      <span id={descriptionId} role="status" aria-live="polite">Preparing the richer side-by-side view…</span>
+    </div>
+  </div>;
+}
+
 type AtlasConsumerProps = {
   focusCategory?: Extract<ProductType, "mousepad" | "switch">;
   afterCatalog?: ReactNode;
@@ -356,6 +372,6 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
     {compareProducts.length > 0 && <div className="consumer-compare-tray" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button className="consumer-compare-open" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
 
     {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)} onCompare={toggleCompare} compared={compared(selected.id)}/>} 
-    {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<div className="consumer-compare-shell consumer-compare-loading" role="status" aria-live="polite"><button className="consumer-compare-backdrop" onClick={() => setCompareOpen(false)} aria-label="Close comparison"/><div><i/><b>Opening comparison</b><span>Preparing the richer side-by-side view…</span></div></div>}><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 
+    {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<CompareLoadingFallback onClose={() => setCompareOpen(false)}/>} ><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 
   </div>;
 }

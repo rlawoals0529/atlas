@@ -36,6 +36,8 @@ jobs:
         run: npm run media:validate
       - name: Validate external switch review index
         run: npm run switch-index:validate
+      - name: Validate modal accessibility invariants
+        run: npm run a11y:validate
       - name: Validate deployment verifier syntax
         run: |
           node --check scripts/verify-deployed-health.mjs
