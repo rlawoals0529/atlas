@@ -15,7 +15,8 @@
     "community:validate": "node scripts/validate-community-insights.mjs",
     "sensitivity:validate": "node scripts/validate-sensitivity.mjs",
     "product:validate": "node scripts/validate-product-lab.mjs",
-    "media:validate": "node scripts/validate-product-media.mjs"
+    "media:validate": "node scripts/validate-product-media.mjs",
+    "switch-index:validate": "node scripts/validate-switch-review-index.mjs"
   },
   "dependencies": {
     "hono": "4.13.11",
