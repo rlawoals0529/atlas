@@ -281,4 +281,30 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "Kailh official product image",
   },
 
+
+  "switch-ttc-frozen-silent-v2": {
+    url: "https://img-va.myshopline.com/image/store/1756255006180/-1-31.png?h=1768&w=2560",
+    sourceUrl: "https://ttcswitches.com/products/ttc-forzen-silent-keyswitch-v2-dust-proof-pre-lubed-silver-coated-terminal-mechanical-keyboard-switches-gaming-switches",
+    alt: "TTC Frozen Silent V2 linear mechanical keyboard switch",
+    credit: "TTC official product image",
+  },
+  "switch-ttc-silent-bluish-white": {
+    url: "https://img-va.myshopline.com/image/store/1756255006180/--5.png?h=1768&w=2560",
+    sourceUrl: "https://ttcswitches.com/products/ttc-silent-bluish-white-keyboard-switches-factory-pre-lubed-double-silent-firm-mechanical-gaming-keyboard",
+    alt: "TTC Silent Bluish White tactile mechanical keyboard switch",
+    credit: "TTC official product image",
+  },
+  "switch-ttc-speed-silver-v2": {
+    url: "https://img-va.myshopline.com/image/store/1756255006180/--24.png?h=1768&w=2560",
+    sourceUrl: "https://ttcswitches.com/products/ttc-speed-silver-v2-gaming-linear-45g-force-diy-3pins-mechanical-keyboard-switch-fast-rgb-gaming-dual-spring-keyboard-switch",
+    alt: "TTC Speed Silver V2 linear mechanical keyboard switch",
+    credit: "TTC official product image",
+  },
+  "switch-ttc-golden-pink-v3": {
+    url: "https://img-va.myshopline.com/image/store/1756255006180/-V3.png?h=1768&w=2560",
+    sourceUrl: "https://ttcswitches.com/products/ttc-5-pins-37gf-hifi-keyswitch-anti-oxidation-durability-v3-version-gold-pink-mechanical-keyswitch",
+    alt: "TTC Golden Pink V3 linear mechanical keyboard switch",
+    credit: "TTC official product image",
+  },
+
 };
