@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
+import "./consumer-compare-visuals.css";
 
 type CompareRow = {
   section: string;

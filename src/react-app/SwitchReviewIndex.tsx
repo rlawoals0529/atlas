@@ -1,5 +1,6 @@
 import { Fragment, useMemo, useState } from "react";
 import { THEREMINGOAT_SWITCH_REVIEW_COUNT, THEREMINGOAT_SWITCH_SOURCE, thereminGoatSwitchReviews } from "../shared/thereminGoatSwitchReviews";
+import "./switch-review-index.css";
 
 const typeOrder = ["Linear", "Tactile", "Clicky", "Silent Linear", "Silent Tactile"];
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
