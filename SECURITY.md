@@ -1,6 +1,6 @@
 # Atlas security baseline
 
-Atlas is currently a public, read-mostly gaming-peripheral research application on Cloudflare Workers. It has no user accounts, private per-user records, database binding, file uploads, webhooks, or paid AI endpoint in the production runtime. Controls that depend on those features (password storage, RLS, per-user authorization, CSRF for authenticated mutations, private buckets, webhook signatures) are not applicable until those features are introduced.
+Atlas is a read-mostly gaming-peripheral research application deployed on Cloudflare Workers. Repository visibility does not change the application security model. The current production runtime has no user accounts, private per-user records, required database binding, file uploads, webhooks, or paid AI endpoint. Controls that depend on those features (password storage, RLS, per-user authorization, CSRF for authenticated mutations, private buckets, webhook signatures) are not applicable until those features are introduced.
 
 ## Current requirements
 
@@ -17,7 +17,7 @@ Atlas is currently a public, read-mostly gaming-peripheral research application 
 
 ## Deployment controls
 
-Cloudflare edge rate limiting, HTTPS redirect/HSTS policy, account spend/usage alerts, and secret rotation are configured outside this repository. GitHub secret scanning/push protection should be enabled for the repository/account where available.
+Cloudflare edge rate limiting, HTTPS redirect/HSTS policy, account spend/usage alerts, and secret rotation are configured outside this repository. GitHub secret scanning and push protection should be enabled when available, especially before or when the repository is made public.
 
 If any real credential is ever committed or printed into a public log, revoke/rotate it immediately. Removing it from the current file is not sufficient because git history may retain it.
 

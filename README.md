@@ -1,12 +1,14 @@
 # Atlas
 
+**Live:** https://atlas.rlawoals0529.workers.dev/
+
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
 Today Atlas is an enthusiast catalog with comparison and setup tools. Product Lab sits on the same data and handles the less glamorous work behind it: category analysis, validation plans, evidence tracking and product-operations notes. It is one project with one catalog, not a collection of disconnected demos.
 
 ## Current build — v0.9
 
-The canonical catalog currently has **102 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **18 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
+The canonical catalog currently has **127 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **43 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
 
 The pointing-gear recommendation model is still product UI **v0.8**; Atlas **v0.9** widened the catalog and added the specialist tools around it. That version split is deliberate: adding keyboards or a new research view does not silently change an existing mouse recommendation.
 
@@ -24,7 +26,7 @@ The consumer product includes:
 - mousepad comparison with a glide × stopping map, footprint/build view and normalized feel profiles before the full spec table;
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
 - an **Atlas Switches** catalog at `#switches`, followed by a separately attributed directory of 466 ThereminGoat scorecards/review records rather than copied Atlas rankings;
-- **Keyboard Lab** at `#keyboard-lab` for source-backed gaming-keyboard and switch research;
+- **Keyboard Lab** at `#keyboard-lab` for complete-board research, actuation/platform comparison and sourced keyboard specifications;
 - **Sensitivity Lab** at `#sensitivity` for DPI/eDPI and base-hipfire cm/360 conversion with source-specific yaw confidence;
 - a light, product-first interface shared across the catalog and specialist tools;
 - official manufacturer product imagery where Atlas has a pinned asset or a resolvable manufacturer source, with graceful fallback when a remote host changes;
@@ -34,16 +36,17 @@ The consumer product includes:
 
 Open **Keyboard Lab** from the main Atlas navigation or `#keyboard-lab`.
 
-The first keyboard/switch catalog pass focuses on fields that can be sourced cleanly:
+Keyboard Lab is intentionally board-only. It focuses on fields that can be sourced cleanly:
 
 - form factor, layout and switch technology;
 - polling ceiling and adjustable actuation range;
 - Rapid Trigger, SOCD-style input behavior and analog input where documented;
 - connectivity, case/plate/keycap/mount details and configuration software;
-- switch technology, feel, published force points, travel, lubrication, lifespan and magnetic-flux conditions where published;
-- source provenance and explicit Hall-effect compatibility caveats.
+- source provenance and explicit boundaries between advertised support and measured behavior.
 
-Atlas does **not** treat minimum actuation distance as latency, advertised polling support as proof of an effective update rate, or subjective switch-review scores as a universal quality ranking. ThereminGoat scorecards and long-form reviews are used as traceable expert evidence rather than copied wholesale into an Atlas leaderboard.
+Atlas does **not** treat minimum actuation distance as latency or advertised polling support as proof of an effective update rate.
+
+Switch-level research lives in the dedicated **Switches** route at `#switches`, where published force/travel fields, product media, board-compatibility notes and the attributed ThereminGoat review directory stay separate from complete-keyboard records.
 
 See `research/V10_SURFACE_KEYBOARD_RESEARCH.md`.
 
@@ -166,9 +169,9 @@ For the Gigantus V2 Pro, Razer defines Max Control, Control, Balance, Speed and 
 
 Atlas includes traceable qualitative community-evidence pilots for selected mice and the WALLHACK SP-004. Individual observations preserve source, date, conditions, disagreement and evidence strength; the pilots are not treated as representative market sentiment, friction measurement or reliability-rate data. Public X/Twitter observations are only retained when directly attributable and product-specific; incomplete X indexing is documented as a research limitation.
 
-The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **18 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
+The keyboard/switch catalog has grown beyond the original v0.9 pilot and now contains **12 keyboards** and **43 switches**. The same boundary still applies: manufacturer specifications, independent measurements/reviews and Atlas-derived fields remain separate evidence classes. Magnetic-switch compatibility is stored with board-specific caveats rather than collapsed into a universal “HE compatible” label.
 
-Product media follows the same rule. Pinned images live in a presentation-only registry, while unresolved records can fall back to an official manufacturer page through the Worker. CI checks that every current input-hardware record has one of those paths, and production deploys smoke-test the Worker fallbacks instead of assuming a page URL will keep working.
+Product media follows the same rule. Current switch records require an explicit pinned product image; other unresolved input-hardware records can fall back to an official manufacturer page through the Worker. CI checks those paths, and production deploys smoke-test media resolution instead of assuming a page URL will keep working.
 
 ## Runtime stack
 
