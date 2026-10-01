@@ -5,7 +5,7 @@ import AnalyticsBridge from "./AnalyticsBridge";
 import AnalyticsTransport from "./AnalyticsTransport";
 import AtlasGlobalNav from "./AtlasGlobalNav";
 import { analyticsVisitor, trackAtlasEvent } from "../shared/analytics";
-import "./styles.css";
+import "./atlas-base.css";
 import "./v05.css";
 import "./consumer.css";
 import "./consumer-compare.css";
@@ -145,10 +145,16 @@ function RootRouter() {
 
   return <>
     <AnalyticsTransport />
+    <a className="atlas-skip-link" href="#atlas-route-content" onClick={event => {
+      event.preventDefault();
+      document.getElementById("atlas-route-content")?.focus({ preventScroll: false });
+    }}>Skip to main content</a>
     <AtlasGlobalNav hash={hash} onPreload={preloadRoute}/>
     <div className={`atlas-route-progress ${showRouteProgress ? "visible" : ""}`} aria-hidden="true"><i/></div>
     {showRouteStatus && pendingHash && <div className="atlas-route-status" role="status" aria-live="polite"><i/><div><b>Opening {routeLabel(pendingHash)}</b><span>Keeping this page available while the next view finishes loading.</span></div></div>}
-    <Suspense fallback={<ToolFallback hash={hash} />}>{route}</Suspense>
+    <div id="atlas-route-content" className="atlas-route-host" tabIndex={-1}>
+      <Suspense fallback={<ToolFallback hash={hash} />}>{route}</Suspense>
+    </div>
   </>;
 }
 
