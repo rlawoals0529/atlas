@@ -2,6 +2,7 @@ import { useId, useMemo, useState } from "react";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
+import "./consumer-compare-dialog.css";
 import "./consumer-compare-visuals.css";
 
 type CompareRow = {
