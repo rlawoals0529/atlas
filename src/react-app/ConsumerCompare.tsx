@@ -116,6 +116,14 @@ function MousepadVisualSummary({ products }: { products: MousepadProduct[] }) {
   </section>;
 }
 
+function sourceCheckWindow(product: CatalogProduct) {
+  const dates = product.sources.map(source => source.checkedAt).filter(Boolean).sort();
+  return {
+    oldest: dates[0] ?? "Not recorded",
+    latest: dates.at(-1) ?? "Not recorded",
+  };
+}
+
 function coverage(product: CatalogProduct) {
   const notes = Object.values(product.evidence ?? {});
   const high = notes.filter(note => note.confidence === "high").length;
@@ -136,10 +144,13 @@ function forceText(product: Extract<CatalogProduct, { type: "switch" }>) {
 }
 
 function rowsFor(product: CatalogProduct): CompareRow[] {
+  const sourceChecks = sourceCheckWindow(product);
   const common: CompareRow[] = [
     { section: "Overview", label: "Price", value: money(product.msrpUsd) },
     { section: "Evidence", label: "Evidence coverage", value: `${coverage(product)}/100`, bar: coverage(product) },
     { section: "Evidence", label: "Sources", value: String(product.sources.length), bar: scale(product.sources.length, 0, 6) },
+    { section: "Evidence", label: "Latest source check", value: sourceChecks.latest },
+    { section: "Evidence", label: "Oldest source check", value: sourceChecks.oldest },
     { section: "Evidence", label: "High-confidence groups", value: String(Object.values(product.evidence ?? {}).filter(note => note.confidence === "high").length) },
     { section: "Evidence", label: "Independent sources", value: String(product.sources.filter(source => source.kind === "independent").length) },
   ];
