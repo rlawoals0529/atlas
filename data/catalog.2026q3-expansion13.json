@@ -1,0 +1,165 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-ktt-hyacinth",
+      "slug": "ktt-hyacinth",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Hyacinth",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 45 gf nominal operating force, 1.9 mm pre-travel and shortened 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "short-travel"
+      ],
+      "sources": [
+        {
+          "id": "ktt-hyacinth-official",
+          "label": "KTT Hyacinth product page",
+          "url": "https://www.ktt-switch.com/en/product_395200.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "mechanical-keyboards-ktt-hyacinth",
+          "label": "MechanicalKeyboards KTT Hyacinth specification page",
+          "url": "https://mechanicalkeyboards.com/products/ktt-hyacinth-45g-linear-pcb-mount",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.9,
+        "totalTravelMm": 3.5
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-hyacinth-official",
+            "mechanical-keyboards-ktt-hyacinth"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Hyacinth as a linear 45 g five-pin switch. MechanicalKeyboards publishes 1.90 mm pre-travel and 3.50 mm total travel. Specialist listings disagree slightly on bottom-out force (55–56 g), so Atlas leaves bottom-out unspecified rather than choosing one value."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-macaron-orange",
+      "slug": "ktt-macaron-orange",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Orange",
+      "status": "current",
+      "summary": "Tactile five-pin mechanical switch with 38 gf published operating force, 1.9 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-orange-official",
+          "label": "KTT Macaron Orange product page",
+          "url": "https://www.ktt-switch.com/en/product_395203.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 38,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.9,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-orange-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Macaron Orange as tactile, five-pin and headlines a 50 g specification. Keypro separates that into 38±5 gf operating force and 50±5 gf pressure-point force, with 1.9±0.3 mm pre-travel and 4.0±0.5 mm total travel. Atlas stores 38 gf as actuation/operating force and does not mislabel the 50 gf tactile pressure point as bottom-out."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-macaron-pink",
+      "slug": "ktt-macaron-pink",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Pink",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 43 gf operating force, 50 gf bottom-out force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-pink-official",
+          "label": "KTT Macaron Pink product page",
+          "url": "https://www.ktt-switch.com/en/product_395204.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 43,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 50,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-pink-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Macaron Pink as a linear 43 g five-pin switch. Keypro publishes 43±5 gf operating force, 50±5 gf bottom-out force, 2.0±0.3 mm pre-travel and 4.0±0.5 mm total travel."
+        }
+      }
+    }
+  ]
+}

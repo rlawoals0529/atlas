@@ -6,7 +6,8 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 
 ### Data
 - Expanded the canonical switch catalog with manufacturer-backed Wuque Studio WS Red, WS Yellow, WS Brown and WS Quartz records.
-- Current canonical catalog: 138 products, including 54 keyboard switches.
+- Added sourced KTT Hyacinth, Macaron Orange and Macaron Pink records with official manufacturer media. Macaron Orange keeps operating force distinct from its tactile pressure-point force.
+- Current canonical catalog: 141 products, including 57 keyboard switches.
 
 ## v0.9.0 — 2026-10-01
 
