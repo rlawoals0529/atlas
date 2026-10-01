@@ -259,13 +259,14 @@ function LayerEditor({
     <div className="shape-editor-grid">
       <div className="shape-editor-field shape-editor-colors">
         <span>Outline</span>
-        <div className="shape-swatches" aria-label="Preset outline colors">
+        <div className="shape-swatches" role="group" aria-label="Preset outline colors">
           {COLORS.map(color => <button
             type="button"
             key={color}
             className={layer.color.toLowerCase() === color.toLowerCase() ? "active" : ""}
             style={{ "--swatch": color } as React.CSSProperties}
             onClick={() => onChange({ ...layer, color })}
+            aria-pressed={layer.color.toLowerCase() === color.toLowerCase()}
             aria-label={`Use ${color} outline color`}
           />)}
           <label className="shape-color" title="Custom outline color"><input type="color" value={layer.color} onChange={event => onChange({ ...layer, color: event.target.value })}/><span style={{ background: layer.color }}>+</span></label>
@@ -273,7 +274,7 @@ function LayerEditor({
       </div>
       <div className="shape-editor-field shape-editor-lines">
         <span>Line style</span>
-        <div className="shape-line-buttons" aria-label="Line style">
+        <div className="shape-line-buttons" role="group" aria-label="Line style">
           {(["solid", "dash", "dot"] as LineStyle[]).map(style => <button
             type="button"
             key={style}
@@ -403,8 +404,8 @@ export default function ShapeLabV2({
     <section className="v5-page-head"><div><div className="v5-kicker">Geometry workbench</div><h1>Shape Lab</h1><p>Stack up to five mice, line them up the way you want, and compare the shell at real scale or normalized length. The dimensions stay visible so the overlay is still tied to the catalog data.</p></div><div className="v5-head-stat"><b>{mice.length}</b><span>catalog shapes</span></div></section>
 
     <section className="shape-toolbar v5-panel">
-      <div className="shape-segments" aria-label="Shape view">{(["top", "side"] as ShapeView[]).map(item => <button key={item} className={view === item ? "active" : ""} onClick={() => setView(item)}>{item === "top" ? "Top view" : "Side view"}</button>)}</div>
-      <div className="shape-segments" aria-label="Scale mode"><button className={!normalize ? "active" : ""} onClick={() => setNormalize(false)}>Real scale</button><button className={normalize ? "active" : ""} onClick={() => setNormalize(true)}>Normalize length</button></div>
+      <div className="shape-segments" role="group" aria-label="Shape view">{(["top", "side"] as ShapeView[]).map(item => <button type="button" key={item} className={view === item ? "active" : ""} aria-pressed={view === item} onClick={() => setView(item)}>{item === "top" ? "Top view" : "Side view"}</button>)}</div>
+      <div className="shape-segments" role="group" aria-label="Scale mode"><button type="button" className={!normalize ? "active" : ""} aria-pressed={!normalize} onClick={() => setNormalize(false)}>Real scale</button><button type="button" className={normalize ? "active" : ""} aria-pressed={normalize} onClick={() => setNormalize(true)}>Normalize length</button></div>
       <label>Alignment<select value={align} onChange={event => setAlign(event.target.value as AlignMode)}><option value="center">Center</option><option value="sensor">Sensor</option><option value="front">Front</option><option value="rear">Rear</option></select></label>
       <label className="shape-toggle"><input type="checkbox" checked={showDimensions} onChange={event => setShowDimensions(event.target.checked)}/><span>Dimensions</span></label>
       <label className="shape-toggle"><input type="checkbox" checked={showFills} onChange={event => setShowFills(event.target.checked)}/><span>Fills</span></label>
@@ -472,7 +473,7 @@ export default function ShapeLabV2({
 
     <section className="shape-similar v5-panel">
       <div className="shape-similar-head"><div><span>Shape search</span><h2>Find close geometry</h2><p>Add a match without rebuilding the rest of your comparison stack.</p></div><label>Reference<select value={referenceId} onChange={event => setReferenceId(event.target.value)}>{mice.map(mouse => <option key={mouse.id} value={mouse.id}>{mouse.brand} {mouse.model}</option>)}</select></label></div>
-      <div className="shape-mode-row">{(Object.keys(similarityLabels) as SimilarityMode[]).map(mode => <button key={mode} className={mode === similarityMode ? "active" : ""} onClick={() => setSimilarityMode(mode)}>{similarityLabels[mode]}</button>)}</div>
+      <div className="shape-mode-row" role="group" aria-label="Similarity mode">{(Object.keys(similarityLabels) as SimilarityMode[]).map(mode => <button type="button" key={mode} className={mode === similarityMode ? "active" : ""} aria-pressed={mode === similarityMode} onClick={() => setSimilarityMode(mode)}>{similarityLabels[mode]}</button>)}</div>
       <div className="shape-similar-grid">{similar.slice(0, 8).map((result, index) => {
         const alreadyAdded = selectedIds.has(result.mouse.id);
         return <button key={result.mouse.id} disabled={alreadyAdded || layers.length >= 5} onClick={() => addMouse(result.mouse.id)}>
