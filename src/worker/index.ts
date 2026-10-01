@@ -264,9 +264,22 @@ app.get("/api/products/:slug", (c) => {
 app.get("/api/compare", (c) => {
   const rawIds = c.req.query("ids") ?? "";
   if (rawIds.length > 500) return c.json({ error: "Comparison request is too large" }, 400);
-  const ids = rawIds.split(",").map(id => id.trim()).filter(id => /^[a-z0-9-]{1,120}$/i.test(id)).slice(0, 4);
-  const data = ids.map(id => mice.find(mouse => mouse.id === id || mouse.slug === id)).filter(Boolean);
-  return c.json({ data, count: data.length });
+
+  const tokens = rawIds.split(",").map(id => id.trim()).filter(Boolean);
+  if (tokens.length === 0) return c.json({ error: "At least one product identifier is required" }, 400);
+  if (tokens.length > 4) return c.json({ error: "Comparison supports up to 4 products" }, 400);
+  if (tokens.some(id => !/^[a-z0-9-]{1,120}$/i.test(id))) return c.json({ error: "Invalid product identifier" }, 400);
+
+  const ids = [...new Set(tokens)];
+  const data = ids.map(id => workerCatalog.find(product => product.id === id || product.slug === id));
+  const missing = ids.filter((_, index) => !data[index]);
+  if (missing.length) return c.json({ error: "One or more products were not found", missing }, 404);
+
+  const products = data.filter((product): product is CatalogProduct => Boolean(product));
+  const types = new Set(products.map(product => product.type));
+  if (types.size > 1) return c.json({ error: "Comparison products must share a type" }, 422);
+
+  return c.json({ type: products[0]?.type ?? null, data: products, count: products.length });
 });
 
 app.get("/api/similar/:id", (c) => {

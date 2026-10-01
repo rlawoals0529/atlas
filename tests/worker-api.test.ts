@@ -117,3 +117,45 @@ test("stats reports the same total implied by type counts", async () => {
   const reported = body.catalog.products ?? body.catalog.total;
   if (typeof reported === "number") assert.equal(reported, implied);
 });
+
+
+test("generic compare supports canonical switches and preserves one product type", async () => {
+  const catalogResponse = await request("/api/catalog?type=switch");
+  const catalogBody = await catalogResponse.json() as { data: Array<{ id: string; type: string }> };
+  assert.ok(catalogBody.data.length >= 2);
+
+  const [first, second] = catalogBody.data;
+  const response = await request(`/api/compare?ids=${first.id},${second.id}`);
+  assert.equal(response.status, 200);
+  const body = await response.json() as { type: string; count: number; data: Array<{ id: string; type: string }> };
+  assert.equal(body.type, "switch");
+  assert.equal(body.count, 2);
+  assert.deepEqual(body.data.map(product => product.id), [first.id, second.id]);
+  assert.ok(body.data.every(product => product.type === "switch"));
+});
+
+test("generic compare rejects mixed product types instead of returning a partial comparison", async () => {
+  const [mouseResponse, switchResponse] = await Promise.all([
+    request("/api/catalog?type=mouse"),
+    request("/api/catalog?type=switch"),
+  ]);
+  const mouse = ((await mouseResponse.json()) as { data: Array<{ id: string }> }).data[0];
+  const keyboardSwitch = ((await switchResponse.json()) as { data: Array<{ id: string }> }).data[0];
+  const response = await request(`/api/compare?ids=${mouse.id},${keyboardSwitch.id}`);
+  assert.equal(response.status, 422);
+  assert.deepEqual(await response.json(), { error: "Comparison products must share a type" });
+});
+
+test("generic compare validates identifiers, bounds list size and reports missing products", async () => {
+  const invalid = await request("/api/compare?ids=not_valid!");
+  assert.equal(invalid.status, 400);
+  assert.deepEqual(await invalid.json(), { error: "Invalid product identifier" });
+
+  const tooMany = await request("/api/compare?ids=a,b,c,d,e");
+  assert.equal(tooMany.status, 400);
+  assert.deepEqual(await tooMany.json(), { error: "Comparison supports up to 4 products" });
+
+  const missing = await request("/api/compare?ids=not-a-real-product");
+  assert.equal(missing.status, 404);
+  assert.deepEqual(await missing.json(), { error: "One or more products were not found", missing: ["not-a-real-product"] });
+});
