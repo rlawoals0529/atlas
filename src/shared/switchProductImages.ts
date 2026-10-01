@@ -433,4 +433,30 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "Kailh official product image",
   },
 
+
+  "switch-wuque-ws-silent-linear": {
+    url: "https://ucarecdn.com/13f44cdd-2cb7-4a6f-b980-b86be862122d/-/format/auto/-/preview/3000x3000/-/quality/lighter/5.jpg",
+    sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
+    alt: "Wuque Studio WS Silent Linear mechanical keyboard switch",
+    credit: "Wuque Studio official product image",
+  },
+  "switch-wuque-ws-silent-tactile": {
+    url: "https://ucarecdn.com/0ccc6ebf-01a7-4585-afc5-07556b00e4a3/-/format/auto/-/preview/3000x3000/-/quality/lighter/5.jpg",
+    sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
+    alt: "Wuque Studio WS Silent Tactile mechanical keyboard switch",
+    credit: "Wuque Studio official product image",
+  },
+  "switch-wuque-ws-morandi": {
+    url: "https://shop.wuquestudio.com/cdn/shop/products/MorandiSwitch_Scene01_1024x1024.png?v=1677121658",
+    sourceUrl: "https://shop.wuquestudio.com/products/ws-morandi-switch",
+    alt: "Wuque Studio WS Morandi linear mechanical keyboard switch",
+    credit: "Wuque Studio official product image",
+  },
+  "switch-wuque-ws-pearl": {
+    url: "https://shop.wuquestudio.com/cdn/shop/files/DSC04067.jpg?v=1714374536&width=600",
+    sourceUrl: "https://shop.wuquestudio.com/products/ws-pearl-switch-35pcs",
+    alt: "Wuque Studio WS Pearl linear mechanical keyboard switch",
+    credit: "Wuque Studio official product image",
+  },
+
 };
