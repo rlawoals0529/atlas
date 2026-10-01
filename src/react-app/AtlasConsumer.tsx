@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useId, useMemo, useState, type ReactNode } f
 import { allCatalog, keyboards, mice, mousepads, skates } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { parseSharedCompareIds, serializeSharedCompareIds } from "../shared/shareState";
-import { compareSourceCheck, matchesSourceRecency, type SourceRecencyWindow } from "../shared/sourceRecency";
+import { compareSourceCheck, matchesSourceRecency, parseSourceRecencyWindow, type SourceRecencyWindow } from "../shared/sourceRecency";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
 
@@ -276,7 +276,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [switchFeel, setSwitchFeel] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("feel") ?? "all" : "all");
   const [compactSwitchView, setCompactSwitchView] = useState(() => focusCategory === "switch" && readSharedSwitchParam("density") === "compact");
   const [shareStatus, setShareStatus] = useState("");
-  const [sourceRecency, setSourceRecency] = useState<SourceRecencyWindow>(() => focusCategory === "switch" ? (readSharedSwitchParam("checked") as SourceRecencyWindow | null) ?? "all" : "all");
+  const [sourceRecency, setSourceRecency] = useState<SourceRecencyWindow>(() => focusCategory === "switch" ? parseSourceRecencyWindow(readSharedSwitchParam("checked")) : "all");
   const [savedIds, setSavedIds] = useState<string[]>(readSavedProductIds);
   const [sharedShortlistIds] = useState<string[]>(readSharedShortlistIds);
   const [savedOnly, setSavedOnly] = useState(() => readSharedShortlistIds().length > 0);
