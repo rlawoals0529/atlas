@@ -197,6 +197,12 @@ const readSavedProductIds = () => {
   }
 };
 
+const readSharedShortlistIds = () => {
+  if (typeof window === "undefined") return [] as string[];
+  const value = new URLSearchParams(window.location.search).get("shortlist");
+  return value ? value.split(",").map(item => item.trim()).filter(Boolean).slice(0, 24) : [];
+};
+
 const readSharedSwitchParam = (key: string) => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(key);
 const sharedSwitchSort = () => {
   const value = readSharedSwitchParam("sort");
@@ -237,7 +243,9 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [compactSwitchView, setCompactSwitchView] = useState(() => focusCategory === "switch" && readSharedSwitchParam("density") === "compact");
   const [shareStatus, setShareStatus] = useState("");
   const [savedIds, setSavedIds] = useState<string[]>(readSavedProductIds);
-  const [savedOnly, setSavedOnly] = useState(false);
+  const [sharedShortlistIds] = useState<string[]>(readSharedShortlistIds);
+  const [savedOnly, setSavedOnly] = useState(() => readSharedShortlistIds().length > 0);
+  const [savedShareStatus, setSavedShareStatus] = useState("");
 
   const catalogProducts = useMemo(() => additionalProducts.length ? [...allCatalog, ...additionalProducts] : allCatalog, [additionalProducts]);
   useEffect(() => {
@@ -256,6 +264,8 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   }, [savedIds]);
 
   const isSaved = (id: string) => savedIds.includes(id);
+  const validSharedShortlistIds = useMemo(() => sharedShortlistIds.filter(id => catalogProducts.some(product => product.id === id)), [catalogProducts, sharedShortlistIds]);
+  const shortlistFilterIds = validSharedShortlistIds.length ? validSharedShortlistIds : savedIds;
   const toggleSaved = (product: CatalogProduct) => setSavedIds(current => current.includes(product.id) ? current.filter(id => id !== product.id) : [...current, product.id]);
   const switchProducts = useMemo(() => catalogProducts.filter((product): product is Extract<CatalogProduct, { type: "switch" }> => product.type === "switch"), [catalogProducts]);
   const counts: Record<ProductType, number> = {
@@ -293,7 +303,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (category !== "all" && product.type !== category) return false;
     if (currentOnly && product.status !== "current") return false;
     if (brand !== "all" && product.brand !== brand) return false;
-    if (savedOnly && !savedIds.includes(product.id)) return false;
+    if (savedOnly && !shortlistFilterIds.includes(product.id)) return false;
     if (query) {
       const text = [product.brand, product.model, product.summary, product.type, ...(product.tags ?? []), JSON.stringify(product.specs)].join(" ").toLowerCase();
       if (!text.includes(query.toLowerCase())) return false;
@@ -332,7 +342,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     }
     if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     return evidenceCoverage(b).score - evidenceCoverage(a).score || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
-  }), [catalogProducts, category, currentOnly, brand, query, savedOnly, savedIds, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
+  }), [catalogProducts, category, currentOnly, brand, query, savedOnly, shortlistFilterIds, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
 
   const copySwitchView = async () => {
     const url = new URL(window.location.href);
@@ -354,6 +364,24 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     window.setTimeout(() => setShareStatus(""), 1800);
   };
 
+  const copySavedShortlist = async () => {
+    if (!savedIds.length) {
+      setSavedShareStatus("Save gear first");
+      window.setTimeout(() => setSavedShareStatus(""), 1800);
+      return;
+    }
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.searchParams.set("shortlist", savedIds.slice(0, 24).join(","));
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setSavedShareStatus("Shortlist link copied");
+    } catch {
+      setSavedShareStatus("Could not copy link");
+    }
+    window.setTimeout(() => setSavedShareStatus(""), 1800);
+  };
+
   const clearCategoryFilters = () => {
     setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setPadFirmness("all"); setStitchedOnly(false); setSkateMaterial("all"); setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all");
   };
@@ -369,7 +397,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const activeFilters = [
     query.trim() ? { key: "query", label: `Search: ${query.trim()}`, clear: () => setQuery("") } : null,
     brand !== "all" ? { key: "brand", label: `Brand: ${brand}`, clear: () => setBrand("all") } : null,
-    savedOnly ? { key: "saved", label: "Saved gear", clear: () => setSavedOnly(false) } : null,
+    savedOnly ? { key: "saved", label: validSharedShortlistIds.length ? `Shared shortlist: ${validSharedShortlistIds.length}` : "Saved gear", clear: () => setSavedOnly(false) } : null,
     shape !== "all" ? { key: "shape", label: `Shape: ${titleCase(shape)}`, clear: () => setShape("all") } : null,
     minPolling > 0 ? { key: "polling", label: `Polling: ${pollingLabel(minPolling)}+`, clear: () => setMinPolling(0) } : null,
     maxWeight < 140 ? { key: "weight", label: `Weight: ≤${maxWeight} g`, clear: () => setMaxWeight(140) } : null,
@@ -459,7 +487,9 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
           <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
-          <button type="button" className={`consumer-saved-filter ${savedOnly ? "active" : ""}`} aria-pressed={savedOnly} onClick={() => setSavedOnly(value => !value)}>Saved <span>{savedIds.length}</span></button>
+          <button type="button" className={`consumer-saved-filter ${savedOnly ? "active" : ""}`} aria-pressed={savedOnly} onClick={() => setSavedOnly(value => !value)}>{validSharedShortlistIds.length ? "Shared" : "Saved"} <span>{validSharedShortlistIds.length || savedIds.length}</span></button>
+          <button type="button" className="consumer-saved-share" disabled={!savedIds.length} onClick={copySavedShortlist}>Share saved</button>
+          <span className="consumer-saved-share-status" role="status" aria-live="polite">{savedShareStatus}</span>
           <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "−" : "+"}</span></button>
         </div>
 
