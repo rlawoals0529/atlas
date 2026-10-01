@@ -27,6 +27,8 @@ jobs:
         run: npm audit --omit=dev --audit-level=high
       - name: Run Worker API contract tests
         run: npm test
+      - name: Generate and validate CycloneDX SBOM
+        run: npm run sbom:generate
       - name: Validate canonical catalog shards
         run: npm run data:validate
       - name: Validate community evidence pilots
@@ -54,6 +56,7 @@ jobs:
         run: |
           test -s generated/data-report.json
           test -s generated/catalog-seed.sql
+          test -s generated/sbom.cdx.json
       - name: Typecheck, build, and validate Worker bundle
         run: npm run check
       - name: Enforce initial bundle budget
