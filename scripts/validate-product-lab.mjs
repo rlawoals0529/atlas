@@ -53,6 +53,9 @@ assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain rout
 assert(main.includes('hash === "#sensitivity"'), "Sensitivity Lab must remain routable");
 assert(globalNav.includes('href: "#keyboard-lab"'), "global navigation must expose Keyboard Lab");
 assert(globalNav.includes('href: "#sensitivity"'), "global navigation must expose Sensitivity Lab");
+assert(globalNav.includes('href: "#mousepads"'), "global navigation must expose Mousepads");
+assert(globalNav.includes('href: "#switches"'), "global navigation must expose Switches");
+assert(globalNav.includes('scrollIntoView'), "overflowing global navigation must keep the active route visible");
 assert(globalNav.includes('href: "#pointing"'), "global navigation must expose Setup / Shape Lab");
 assert(globalNav.includes('href: "#product-lab"'), "global navigation must expose Product Lab");
 assert(main.includes('hash === "#switches"'), "dedicated Switches route must remain routable");
