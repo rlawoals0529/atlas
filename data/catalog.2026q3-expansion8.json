@@ -1,0 +1,480 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-gateron-smoothie",
+      "slug": "gateron-smoothie-linear",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Smoothie Linear",
+      "status": "current",
+      "summary": "Full-POM linear five-pin mechanical switch with 40 gf nominal operating force, 2.0 mm pre-travel and 3.6 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "full-pom",
+        "factory-lubed",
+        "5-pin"
+      ],
+      "sources": [
+        {
+          "id": "gateron-smoothie-official",
+          "label": "Gateron Smoothie Linear product page",
+          "url": "https://www.gateron.com/products/gateron-smoothie-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.6,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-smoothie-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 40±10 gf operating force, 2.0±0.6 mm pre-travel, 3.6±0.2 mm total travel, full-POM construction, a 22 mm double-stage spring, factory lubrication and five-pin mounting."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-melodic",
+      "slug": "gateron-melodic-clicky",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Melodic Clicky",
+      "status": "current",
+      "summary": "Clicky five-pin mechanical switch with 60 gf nominal operating force, 2.0 mm pre-travel, 4.0 mm maximum travel and factory lubrication.",
+      "tags": [
+        "mechanical",
+        "clicky",
+        "factory-lubed",
+        "5-pin"
+      ],
+      "sources": [
+        {
+          "id": "gateron-melodic-official",
+          "label": "Gateron Melodic Clicky product page",
+          "url": "https://www.gateron.com/products/gateron-melodic-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "clicky",
+        "actuationForce": {
+          "value": 60,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 60
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-melodic-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 60±12 gf operating force, 2.0±0.6 mm pre-travel, 4.0 mm maximum total travel, POM stem, PC top housing, nylon bottom housing, factory lubrication, five-pin mounting and a minimum 60M-keystroke lifespan."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade",
+      "slug": "gateron-magnetic-jade",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade",
+      "status": "current",
+      "summary": "Linear Hall-effect switch with 30 gf nominal initial force, adjustable pre-travel, 3.5 mm total travel and published 120→700 Gs magnetic flux values.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "factory-lubed",
+        "jade"
+      ],
+      "sources": [
+        {
+          "id": "gateron-magnetic-jade-official",
+          "label": "Gateron Magnetic Jade HE product page",
+          "url": "https://www.gateron.com/products/gateron-magic-jade-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100,
+        "magneticFluxGs": {
+          "initial": 120,
+          "bottomOut": 700,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": [
+          "Gateron specifies an N-pole-down magnet orientation; Hall-effect compatibility remains board-specific and should be verified against the target keyboard."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-magnetic-jade-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 30±7 gf initial force, 3.5±0.2 mm travel, freely adjustable pre-travel, 120±15→700±80 Gs flux at 1.2 mm PCB thickness, factory lubrication and a 100M-keystroke rating."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-sapphire",
+      "slug": "gateron-magnetic-jade-sapphire",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Sapphire",
+      "status": "current",
+      "summary": "Linear Hall-effect Jade variant with a U-rail stem guide, 36 gf nominal initial force, 3.5 mm travel and a 150M-cycle rating.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "u-rail",
+        "factory-lubed",
+        "jade"
+      ],
+      "sources": [
+        {
+          "id": "gateron-jade-sapphire-official",
+          "label": "Gateron Magnetic Jade Sapphire HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-sapphire-he-u-rail-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 36,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": {
+          "initial": 120,
+          "bottomOut": 700,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": [
+          "Gateron specifies N-pole-down Hall-effect compatibility; verify keyboard polarity, sensing range and firmware support before purchase."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-jade-sapphire-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron's specification table publishes a nominal 36 gf initial force, 3.5±0.1 mm travel, freely adjustable pre-travel, 120→700 Gs magnetic flux at 1.2 mm PCB thickness, factory lubrication and over 150M keystrokes. Atlas stores nominal values and leaves the page's published tolerance formatting in source context."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-low-profile-magnetic-jade",
+      "slug": "gateron-low-profile-magnetic-jade",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Low Profile Magnetic Jade",
+      "status": "current",
+      "summary": "Low-profile linear Hall-effect switch with 30 gf nominal initial force, adjustable pre-travel, 3.5 mm total travel and factory lubrication.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "low-profile",
+        "magnetic",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "gateron-low-profile-magnetic-jade-official",
+          "label": "Gateron Low Profile Magnetic Jade product page",
+          "url": "https://www.gateron.com/products/gateron-low-profile-magnetic-jade-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100,
+        "compatibility": [
+          "Low-profile Hall-effect compatibility is implementation-specific; verify the target keyboard's physical socket, magnetic polarity and firmware calibration."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-low-profile-magnetic-jade-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 30±10 gf initial force, freely adjustable pre-travel, 3.5±0.2 mm total travel, an 18 mm spring, factory lubrication and a 100M-keystroke lifespan."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-dragon",
+      "slug": "gateron-magnetic-jade-dragon",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Dragon",
+      "status": "current",
+      "summary": "Linear Hall-effect switch with a dual-drive stem/magnet structure, 33 gf nominal initial force, 45 gf bottom-out and 3.2 mm total travel.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "factory-lubed",
+        "jade"
+      ],
+      "sources": [
+        {
+          "id": "gateron-jade-dragon-official",
+          "label": "Gateron Magnetic Jade Dragon HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-dragon-he-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 33,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.2,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": {
+          "initial": 122,
+          "bottomOut": 550,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": [
+          "Hall-effect compatibility remains board-specific; verify magnetic polarity, sensing range and firmware calibration."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-jade-dragon-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 33±5 gf initial force, 45±10 gf bottom-out, 3.2±0.1 mm travel, freely adjustable pre-travel, 122±8→550±30 Gs flux at 1.2 mm PCB thickness, factory lubrication and a 150M+ cycle rating."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-ultra",
+      "slug": "gateron-magnetic-jade-ultra",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Ultra",
+      "status": "current",
+      "summary": "Linear dual-drive Hall-effect Jade switch with 30 gf nominal initial force, 40 gf bottom-out, 3.2 mm travel and adjustable pre-travel.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "factory-lubed",
+        "jade"
+      ],
+      "sources": [
+        {
+          "id": "gateron-jade-ultra-official",
+          "label": "Gateron Magnetic Jade Ultra HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-ultra-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.2,
+        "factoryLubed": true,
+        "magneticFluxGs": {
+          "initial": 122,
+          "bottomOut": 550,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": [
+          "Hall-effect compatibility remains board-specific; verify polarity, magnetic sensing range and keyboard firmware support."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-jade-ultra-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 30±5 gf initial force, 40±10 gf bottom-out force, 3.2±0.1 mm travel, freely adjustable pre-travel, 122±8→550±30 Gs flux at 1.2 mm PCB thickness, a 19 mm spring and factory lubrication."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-sakura",
+      "slug": "gateron-magnetic-jade-sakura",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Sakura",
+      "status": "current",
+      "summary": "Linear Hall-effect Jade variant with 33 gf nominal initial force, 45 gf bottom-out, 3.5 mm total travel and a 150M-cycle rating.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "factory-lubed",
+        "jade"
+      ],
+      "sources": [
+        {
+          "id": "gateron-jade-sakura-official",
+          "label": "Gateron Magnetic Jade Sakura HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-sakura-he-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 33,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": {
+          "initial": 120,
+          "bottomOut": 700,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": [
+          "Hall-effect compatibility remains board-specific; verify polarity, supported flux range and firmware calibration before purchase."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-jade-sakura-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 33±5 gf initial force, 45±10 gf bottom-out, 3.5±0.1 mm total travel, 120±8→700±30 Gs flux at 1.2 mm PCB thickness, freely adjustable pre-travel, factory lubrication and a 150M+ cycle rating."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-magnetic-jade-air",
+      "slug": "gateron-magnetic-jade-air",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Magnetic Jade Air",
+      "status": "current",
+      "summary": "Linear Hall-effect Jade variant with 36 gf nominal initial force, 50 gf bottom-out, 3.5 mm total travel and a 20 mm spring.",
+      "tags": [
+        "hall-effect",
+        "linear",
+        "magnetic",
+        "factory-lubed",
+        "jade"
+      ],
+      "sources": [
+        {
+          "id": "gateron-jade-air-official",
+          "label": "Gateron Magnetic Jade Air HE product page",
+          "url": "https://www.gateron.com/products/gateron-magnetic-jade-air-he-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "hall-effect",
+        "feel": "linear",
+        "initialForce": {
+          "value": 36,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 50,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 150,
+        "magneticFluxGs": {
+          "initial": 120,
+          "bottomOut": 700,
+          "pcbThicknessMm": 1.2
+        },
+        "compatibility": [
+          "Hall-effect compatibility remains board-specific; verify polarity, supported magnetic range and target-board calibration."
+        ]
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-jade-air-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 36±5 gf initial force, 50±10 gf bottom-out, 3.5±0.1 mm total travel, 120±8→700±30 Gs flux at 1.2 mm PCB thickness, freely adjustable pre-travel, a 20 mm spring, factory lubrication and a 150M+ cycle rating."
+        }
+      }
+    }
+  ]
+}
