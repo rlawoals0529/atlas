@@ -10,7 +10,8 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 - Completed the seven-switch KTT Macaron family with Red, Yellow, Green, Blue and Purple; tactile pressure-point values remain distinct from actuation/bottom-out fields.
 - Added KTT Creamy Ice Cream, Taro Ice Cream and MoonRosa with official KTT media and specialist travel/force references; Guava remains excluded while KTT's own published force text disagrees across pages.
 - Added Kailh BOX Jade and BOX Silent Pink from first-party Kailh specifications and media. BOX Navy remains excluded while Kailh's own pages disagree on its operating force.
-- Current canonical catalog: 151 products, including 67 keyboard switches.
+- Added Kailh Magnetic CPG1515M01D01 and Midnight MX Silent Tactile with first-party technical specifications and media; magnetic compatibility remains explicitly board/sensor/firmware dependent.
+- Current canonical catalog: 153 products, including 69 keyboard switches.
 
 ## v0.9.0 — 2026-10-01
 
