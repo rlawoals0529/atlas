@@ -1,7 +1,5 @@
 import { useMemo, useState } from "react";
 import { cm360, convertSensitivity, effectiveDpi, gameById, inches360, sensitivityDataset, sensitivityForCm360, sensitivityGames } from "../shared/sensitivity";
-import "./utility-labs.css";
-import "./sensitivity-fixes.css";
 
 const positiveNumber = (value: string) => {
   const parsed = Number(value);
