@@ -141,10 +141,9 @@
   border-bottom:1px solid var(--sage-5);
 }
 .switch-review-row:last-child{border-bottom:0}
-.switch-review-row.header{
-  position:sticky;
-  top:var(--atlas-nav-h);
-  z-index:5;
+ .switch-review-row.header{
+  position:relative;
+  z-index:1;
   min-height:36px;
   background:var(--sage-3);
   box-shadow:0 1px 0 var(--sage-6);
@@ -459,4 +458,13 @@
   .switch-index-summary{min-width:0}
   .switch-alpha-rail{margin-inline:-2px}
   .switch-type-quick{grid-template-columns:1fr 1fr}
+}
+
+
+/* Keep the alphabet rail visually attached to the directory instead of floating over a large gap. */
+.switch-alpha-rail{
+  margin-bottom:8px;
+}
+.switch-review-table{
+  margin-top:0;
 }
