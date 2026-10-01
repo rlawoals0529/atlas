@@ -1,0 +1,145 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-kailh-box-v2-red",
+      "slug": "kailh-box-v2-red",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "BOX V2 Red",
+      "status": "current",
+      "summary": "Linear five-pin BOX V2 mechanical switch with 40 gf nominal operating force, 1.8 mm actuation travel and 3.6 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "box-v2",
+        "5-pin",
+        "ip54"
+      ],
+      "sources": [
+        {
+          "id": "kailh-box-v2-red-official",
+          "label": "Kailh BOX Switch V2 Linear product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/box-switch-v2-linear.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.8,
+        "totalTravelMm": 3.6,
+        "ratedKeystrokesM": 80
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-box-v2-red-official"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes 40±15 gf operation force, 1.80±0.4 mm actuation travel, 3.6±0.3 mm total travel, IP54 protection and a minimum 80M-cycle mechanical life for the BOX V2 linear/red switch."
+        }
+      }
+    },
+    {
+      "id": "switch-kailh-box-v2-brown",
+      "slug": "kailh-box-v2-brown",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "BOX V2 Brown",
+      "status": "current",
+      "summary": "Tactile five-pin BOX V2 mechanical switch with 45 gf nominal operating force, 2.0 mm conduction travel and 3.6 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "box-v2",
+        "5-pin",
+        "ip54"
+      ],
+      "sources": [
+        {
+          "id": "kailh-box-v2-brown-official",
+          "label": "Kailh BOX Switch V2 Tactile product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/box-switch-v2-tactile.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.6,
+        "ratedKeystrokesM": 50
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-box-v2-brown-official"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes 45±15 gf operation force, 75±10 gf tactile force, 2.0±0.4 mm conduction travel, 3.6±0.3 mm total travel, IP54 protection and a minimum 50M-cycle operating life for BOX V2 Brown."
+        }
+      }
+    },
+    {
+      "id": "switch-kailh-box-v2-white",
+      "slug": "kailh-box-v2-white",
+      "type": "switch",
+      "brand": "Kailh",
+      "model": "BOX V2 White",
+      "status": "current",
+      "summary": "Click-bar BOX V2 mechanical switch with 45 gf nominal operating force, 1.8 mm actuation travel, 3.6 mm total travel and factory-applied lubrication.",
+      "tags": [
+        "mechanical",
+        "clicky",
+        "box-v2",
+        "5-pin",
+        "factory-lubed",
+        "ip54"
+      ],
+      "sources": [
+        {
+          "id": "kailh-box-v2-white-official",
+          "label": "Kailh BOX Switch V2 White product page",
+          "url": "https://www.kailhswitch.com/mechanical-keyboard-switches/box-switch-v2-white.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "clicky",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.8,
+        "totalTravelMm": 3.6,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 80
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "kailh-box-v2-white-official"
+          ],
+          "confidence": "high",
+          "note": "Kailh publishes 45±15 gf operation force, 1.80±0.4 mm actuation travel, 3.6±0.3 mm total travel, IP54 protection and 80M cycles. The product page also states the base, pushrod and stem feet are lubed and identifies the click-bar mechanism."
+        }
+      }
+    }
+  ]
+}
