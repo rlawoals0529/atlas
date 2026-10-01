@@ -223,4 +223,42 @@ export const switchProductImages: Record<string, ProductImage> = {
     alt: "Gateron Magnetic Jade Air Hall-effect switch",
     credit: "Gateron official product image",
   },
+
+  "switch-akko-v3-creamy-blue-pro": {
+    url: "https://en.akkogear.com/wp-content/uploads/2023/04/V3-Cream-Blue-Pro.jpg",
+    sourceUrl: "https://en.akkogear.com/product/akko-v3-cream-blue-pro-switch-45pcs/",
+    alt: "Akko V3 Creamy Blue Pro tactile mechanical keyboard switch",
+    credit: "Akko official product image",
+  },
+  "switch-akko-v3-creamy-yellow-pro": {
+    url: "https://en.akkogear.com/wp-content/uploads/2023/04/V3-Cream-Yellow-Pro.jpg",
+    sourceUrl: "https://en.akkogear.com/product/akko-v3-cream-yellow-pro-switch-45pcs/",
+    alt: "Akko V3 Creamy Yellow Pro linear mechanical keyboard switch",
+    credit: "Akko official product image",
+  },
+  "switch-akko-penguin-silent": {
+    url: "https://en.akkogear.com/wp-content/uploads/2023/09/V3-Pro-Penguin-Silent.jpg",
+    sourceUrl: "https://en.akkogear.com/product/akko-v3-pro-penguin-switch-silent/",
+    alt: "Akko Penguin Silent tactile mechanical keyboard switch",
+    credit: "Akko official product image",
+  },
+  "switch-akko-rosewood": {
+    url: "https://en.akkogear.com/wp-content/uploads/2024/06/Akko-Rosewood-Switch.png",
+    sourceUrl: "https://en.akkogear.com/product/akko-rosewood-switch/",
+    alt: "Akko Rosewood linear mechanical keyboard switch",
+    credit: "Akko official product image",
+  },
+  "switch-akko-botany": {
+    url: "https://en.akkogear.com/wp-content/uploads/2024/07/Akko-Botany-Switches.png",
+    sourceUrl: "https://en.akkogear.com/product/akko-botany-switches/",
+    alt: "Akko Botany linear mechanical keyboard switch",
+    credit: "Akko official product image",
+  },
+  "switch-akko-creamy-yellow-u1": {
+    url: "https://en.akkogear.com/wp-content/uploads/2026/05/Akko-Creamy-Yellow-U1-Switch-GXDX.png",
+    sourceUrl: "https://en.akkogear.com/product/creamy-yellow-u1-switch-lubed/",
+    alt: "Akko Creamy Yellow U1 linear mechanical keyboard switch",
+    credit: "Akko official product image",
+  },
+
 };
