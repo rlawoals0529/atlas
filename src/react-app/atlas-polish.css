@@ -179,7 +179,7 @@ body{
   background:var(--blue-3)!important;
   border-color:var(--blue-7)!important;
 }
-.atlas-global-nav nav a.active[href="#keyboard-lab"]{
+.atlas-global-nav nav a.active[href="#keyboards"]{
   color:var(--amber-12)!important;
   background:var(--amber-2)!important;
   border-color:var(--amber-7)!important;
