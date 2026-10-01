@@ -1,0 +1,280 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-akko-v3-creamy-blue-pro",
+      "slug": "akko-v3-creamy-blue-pro",
+      "type": "switch",
+      "brand": "Akko",
+      "model": "V3 Creamy Blue Pro",
+      "status": "current",
+      "summary": "Tactile five-pin mechanical switch with 45 gf nominal operating force, 55 gf tactile force, 2.2 mm pre-travel and 3.3 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "5-pin",
+        "lubed"
+      ],
+      "sources": [
+        {
+          "id": "akko-creamy-blue-pro-official",
+          "label": "Akko V3 Creamy Blue Pro product page",
+          "url": "https://en.akkogear.com/product/akko-v3-cream-blue-pro-switch-45pcs/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 2.2,
+        "totalTravelMm": 3.3,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "akko-creamy-blue-pro-official"
+          ],
+          "confidence": "high",
+          "note": "Akko publishes 45±10 gf operating force, 55±10 gf tactile force, 0.5 mm tactile position, 2.2±0.5 mm pre-travel, 3.3 mm total travel, five-pin mounting and a lubricated rail."
+        }
+      }
+    },
+    {
+      "id": "switch-akko-v3-creamy-yellow-pro",
+      "slug": "akko-v3-creamy-yellow-pro",
+      "type": "switch",
+      "brand": "Akko",
+      "model": "V3 Creamy Yellow Pro",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 50 gf nominal operating force, 2.0 mm pre-travel and 3.3 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "lubed"
+      ],
+      "sources": [
+        {
+          "id": "akko-creamy-yellow-pro-official",
+          "label": "Akko V3 Creamy Yellow Pro product page",
+          "url": "https://en.akkogear.com/product/akko-v3-cream-yellow-pro-switch-45pcs/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 50,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.3,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "akko-creamy-yellow-pro-official"
+          ],
+          "confidence": "high",
+          "note": "Akko publishes 50±10 gf operating force, 2.0±0.6 mm pre-travel, 3.3 mm total travel, five-pin mounting and a lubricated rail."
+        }
+      }
+    },
+    {
+      "id": "switch-akko-penguin-silent",
+      "slug": "akko-penguin-silent",
+      "type": "switch",
+      "brand": "Akko",
+      "model": "Penguin Silent",
+      "status": "current",
+      "summary": "Silent tactile five-pin mechanical switch with 50 gf operating force, 58 gf tactile force, 2.0 mm pre-travel and 3.3 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "silent",
+        "5-pin"
+      ],
+      "sources": [
+        {
+          "id": "akko-penguin-official",
+          "label": "Akko Penguin Silent product page",
+          "url": "https://en.akkogear.com/product/akko-v3-pro-penguin-switch-silent/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 50,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 60,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.3,
+        "ratedKeystrokesM": 50
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "akko-penguin-official"
+          ],
+          "confidence": "high",
+          "note": "Akko publishes 50 gf operating force, 58±5 gf tactile force, 60 gf maximum bottom-out force, 0.4 mm tactile travel, 2.0±0.5 mm pre-travel, 3.3 mm total travel, five-pin mounting and a 50M-keystroke lifespan."
+        }
+      }
+    },
+    {
+      "id": "switch-akko-rosewood",
+      "slug": "akko-rosewood",
+      "type": "switch",
+      "brand": "Akko",
+      "model": "Rosewood",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 40 gf nominal operating force, 2.0 mm pre-travel, 4.0 mm total travel and a 22 mm spring.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "akko-rosewood-official",
+          "label": "Akko Rosewood product page",
+          "url": "https://en.akkogear.com/product/akko-rosewood-switch/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "akko-rosewood-official"
+          ],
+          "confidence": "high",
+          "note": "Akko publishes 40±5 gf operating force, 2.0±0.5 mm pre-travel, 4.0 mm total travel, a 22 mm spring, five-pin mounting and factory lubrication."
+        }
+      }
+    },
+    {
+      "id": "switch-akko-botany",
+      "slug": "akko-botany",
+      "type": "switch",
+      "brand": "Akko",
+      "model": "Botany",
+      "status": "current",
+      "summary": "Light linear five-pin mechanical switch with 38 gf nominal operating force, 2.0 mm pre-travel and 3.6 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "akko-botany-official",
+          "label": "Akko Botany product page",
+          "url": "https://en.akkogear.com/product/akko-botany-switches/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 38,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.6,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "akko-botany-official"
+          ],
+          "confidence": "high",
+          "note": "Akko publishes 38±5 gf operating force, 2.0±0.6 mm pre-travel, 3.6 mm total travel, five-pin mounting and factory lubrication."
+        }
+      }
+    },
+    {
+      "id": "switch-akko-creamy-yellow-u1",
+      "slug": "akko-creamy-yellow-u1",
+      "type": "switch",
+      "brand": "Akko",
+      "model": "Creamy Yellow U1",
+      "status": "current",
+      "summary": "Factory-lubed linear five-pin mechanical switch with 45 gf nominal operating force, 55 gf end force, 2.0 mm pre-travel and 3.6 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "akko-creamy-yellow-u1-official",
+          "label": "Akko Creamy Yellow U1 product page",
+          "url": "https://en.akkogear.com/product/creamy-yellow-u1-switch-lubed/",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 55,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.6,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "akko-creamy-yellow-u1-official"
+          ],
+          "confidence": "high",
+          "note": "Akko publishes 45±8 gf operating force, 55±8 gf end force, 2.0±0.4 mm pre-travel, 3.6±0.4 mm total travel and factory lubrication."
+        }
+      }
+    }
+  ]
+}
