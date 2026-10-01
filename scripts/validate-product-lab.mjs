@@ -14,6 +14,7 @@ const globalNav = read("src/react-app/AtlasGlobalNav.tsx");
 const lab = read("src/react-app/ProductLab.tsx");
 const keyboardLab = read("src/react-app/KeyboardLab.tsx");
 const switchReviewIndex = read("src/react-app/SwitchReviewIndex.tsx");
+const switchCatalogStatus = read("src/react-app/SwitchCatalogStatus.tsx");
 const sensitivityLab = read("src/react-app/SensitivityLab.tsx");
 const validationRunner = read("src/react-app/ValidationRunner.tsx");
 const validation = read("src/shared/validation.ts");
@@ -48,6 +49,8 @@ assert(globalNav.includes('href: "#product-lab"'), "global navigation must expos
 assert(main.includes('hash === "#switches"'), "dedicated Switches route must remain routable");
 assert(switchReviewIndex.includes("ThereminGoat"), "Switches directory must retain expert review provenance");
 assert(switchReviewIndex.includes("without mixing those reviews into Atlas product specs"), "Switches directory must keep external reviews separate from Atlas canonical records");
+assert(switchCatalogStatus.includes("field presence, not product quality or market coverage"), "switch catalog coverage must reject quality/market inference");
+assert(switchCatalogStatus.includes("Magnetic") || switchCatalogStatus.includes("HALL-EFFECT / TMR COMPATIBILITY"), "switch catalog must retain magnetic compatibility guidance");
 assert(keyboardLab.includes("Actuation is not latency"), "Keyboard Lab must keep actuation and latency semantically separate");
 assert(keyboardLab.includes("HE compatibility is not universal"), "Keyboard Lab must keep magnetic switch compatibility caveats visible");
 assert(sensitivityLab.includes("base horizontal turn distance only"), "Sensitivity Lab must keep the base-hipfire conversion boundary visible");
