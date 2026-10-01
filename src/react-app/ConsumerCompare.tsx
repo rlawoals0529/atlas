@@ -23,6 +23,67 @@ const polling = (hz: number) => hz >= 1000 ? `${hz / 1000}K Hz` : `${hz} Hz`;
 const yesNo = (value?: boolean) => value == null ? "—" : value ? "Yes" : "No";
 const clamp = (value: number) => Math.max(0, Math.min(100, value));
 const scale = (value: number, min: number, max: number) => clamp(((value - min) / Math.max(1, max - min)) * 100);
+const seriesColors = ["var(--blue-10)", "var(--orange-10)", "var(--plum-10)", "var(--jade-10)"];
+
+type MousepadProduct = Extract<CatalogProduct, { type: "mousepad" }>;
+
+function MousepadVisualSummary({ products }: { products: MousepadProduct[] }) {
+  const maxWidth = Math.max(...products.map(product => product.specs.widthMm), 1);
+  const profileMetrics = [
+    ["Initial", (product: MousepadProduct) => product.feel.staticSpeed],
+    ["Glide", (product: MousepadProduct) => product.feel.dynamicSpeed],
+    ["Stopping", (product: MousepadProduct) => product.feel.stoppingPower],
+    ["Texture", (product: MousepadProduct) => product.feel.texture],
+    ["Humidity", (product: MousepadProduct) => product.feel.humidityResistance],
+    ["X/Y", (product: MousepadProduct) => product.feel.xyConsistency],
+  ] as const;
+
+  return <section className="mousepad-compare-visual" aria-labelledby="mousepad-visual-heading">
+    <header>
+      <div><span>VISUAL READ</span><h3 id="mousepad-visual-heading">Feel profile before the spec table</h3></div>
+      <p>Every position below uses Atlas's existing normalized fields. It is a comparison aid, not a quality score.</p>
+    </header>
+
+    <div className="mousepad-compare-map-wrap">
+      <div className="mousepad-compare-map-card">
+        <div className="mousepad-compare-card-head"><b>Glide × stopping map</b><span>normalized /100</span></div>
+        <div className="mousepad-compare-map" aria-label="Mousepad dynamic glide versus stopping power">
+          <span className="map-axis map-axis-y top">more stopping</span>
+          <span className="map-axis map-axis-y bottom">less stopping</span>
+          <span className="map-axis map-axis-x left">slower glide</span>
+          <span className="map-axis map-axis-x right">faster glide</span>
+          <i className="map-midline vertical" aria-hidden="true"/><i className="map-midline horizontal" aria-hidden="true"/>
+          {products.map((product, index) => <span
+            className="mousepad-map-dot"
+            key={product.id}
+            style={{ left: `${clamp(product.feel.dynamicSpeed)}%`, bottom: `${clamp(product.feel.stoppingPower)}%`, "--series-color": seriesColors[index] } as React.CSSProperties}
+            title={`${product.brand} ${product.model}: ${product.feel.dynamicSpeed}/100 glide, ${product.feel.stoppingPower}/100 stopping`}
+          >{String(index + 1).padStart(2, "0")}</span>)}
+        </div>
+        <div className="mousepad-map-legend">{products.map((product, index) => <span key={product.id} style={{ "--series-color": seriesColors[index] } as React.CSSProperties}><i/>{String(index + 1).padStart(2, "0")} {product.model}</span>)}</div>
+      </div>
+
+      <div className="mousepad-footprint-card">
+        <div className="mousepad-compare-card-head"><b>Footprint + build</b><span>published dimensions</span></div>
+        <div className="mousepad-footprints">{products.map((product, index) => <article key={product.id} style={{ "--series-color": seriesColors[index] } as React.CSSProperties}>
+          <div className="mousepad-footprint-stage"><i style={{ width: `${Math.max(48, (product.specs.widthMm / maxWidth) * 100)}%`, aspectRatio: `${product.specs.widthMm} / ${product.specs.heightMm}` }}/></div>
+          <div><b>{String(index + 1).padStart(2, "0")} · {product.specs.widthMm} × {product.specs.heightMm}</b><span>{titleCase(product.specs.surfaceClass)} · {titleCase(product.specs.firmness)} · {product.specs.thicknessMm} mm</span></div>
+        </article>)}</div>
+      </div>
+    </div>
+
+    <div className="mousepad-profile-grid">
+      {products.map((product, index) => <article key={product.id} style={{ "--series-color": seriesColors[index] } as React.CSSProperties}>
+        <header><span>{String(index + 1).padStart(2, "0")} · {product.brand}</span><b>{product.model}</b></header>
+        <div className="mousepad-profile-chips"><span>{titleCase(product.specs.surfaceClass)}</span><span>{product.specs.stitchedEdges ? "Stitched" : "Unstitched"}</span></div>
+        {profileMetrics.map(([label, getter]) => {
+          const value = getter(product);
+          return <div className="mousepad-profile-metric" key={label}><span>{label}</span><div aria-hidden="true"><i style={{ width: `${clamp(value)}%` }}/></div><b>{value}</b></div>;
+        })}
+      </article>)}
+    </div>
+  </section>;
+}
 
 function coverage(product: CatalogProduct) {
   const notes = Object.values(product.evidence ?? {});
@@ -171,8 +232,9 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
   };
   const differenceCount = allRows.filter(rowDiffers).length;
   const sections = [...new Set(rows.map(row => row.section))];
-  const specialistHref = type === "mouse" ? "#pointing" : type === "keyboard" || type === "switch" ? "#keyboard-lab" : "#product-lab";
-  const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "keyboard" || type === "switch" ? "Open Keyboard Lab" : "Open research tools";
+  const specialistHref = type === "mouse" || type === "mousepad" ? "#pointing" : type === "keyboard" || type === "switch" ? "#keyboard-lab" : "#product-lab";
+  const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "mousepad" ? "Pair in Setup Finder" : type === "keyboard" || type === "switch" ? "Open Keyboard Lab" : "Open research tools";
+  const mousepadProducts = type === "mousepad" ? products.filter((product): product is MousepadProduct => product.type === "mousepad") : [];
 
   if (!type || products.length < 2) return null;
 
@@ -180,7 +242,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
     <button className="consumer-compare-backdrop" onClick={onClose} aria-label="Close comparison"/>
     <section className="consumer-compare-panel">
       <header className="consumer-compare-header">
-        <div><span>RICH COMPARISON / {typeLabel[type].toUpperCase()}</span><h2>Compare the parts that actually differ.</h2><p>Atlas keeps raw specifications, modeled feel fields and evidence strength visible side-by-side. Bars show position on a fixed scale, not an overall quality score.</p></div>
+        <div><span>RICH COMPARISON / {typeLabel[type].toUpperCase()}</span><h2>{type === "mousepad" ? "See how the surfaces separate." : "Compare the parts that actually differ."}</h2><p>{type === "mousepad" ? "Start with glide, stopping, footprint and build, then use the full table for the sourced details. Normalized feel fields stay separate from published specifications." : "Atlas keeps raw specifications, modeled feel fields and evidence strength visible side-by-side. Bars show position on a fixed scale, not an overall quality score."}</p></div>
         <button className="consumer-compare-close" onClick={onClose} aria-label="Close">×</button>
       </header>
 
@@ -203,6 +265,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
         </article>)}
       </div>
 
+      {type === "mousepad" && mousepadProducts.length >= 2 && <MousepadVisualSummary products={mousepadProducts}/>}
       <div className="consumer-compare-table" style={{ "--compare-count": products.length } as React.CSSProperties}>
         {sections.map(section => {
           const sectionRows = rows.filter(row => row.section === section);
