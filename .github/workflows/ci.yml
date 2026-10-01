@@ -47,6 +47,8 @@ jobs:
         run: npm run a11y:validate
       - name: Validate static-site security headers
         run: npm run headers:validate
+      - name: Validate public discovery metadata
+        run: npm run public:validate
       - name: Validate deployment verifier syntax
         run: |
           node --check scripts/verify-deployed-health.mjs
