@@ -3,7 +3,6 @@ import { keyboards, switches } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, sourceKindMeta } from "../shared/productMeta";
 import type { KeyboardProduct, KeyboardSwitchProduct } from "../shared/types";
 import { ProductMedia } from "./ProductMedia";
-import "./utility-labs.css";
 
 type KeyboardLabProduct = KeyboardProduct | KeyboardSwitchProduct;
 
