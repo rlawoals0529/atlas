@@ -36,5 +36,8 @@
     "typescript": "5.9.3",
     "vite": "^7.0.0",
     "wrangler": "4.136.1"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

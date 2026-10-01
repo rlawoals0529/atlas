@@ -233,6 +233,8 @@ Optional production analytics endpoints:
 
 ## Local setup
 
+Atlas CI/deploy uses **Node 22**. Use the same major locally (`.nvmrc` is included) so lockfile/build behavior matches CI.
+
 1. `npm ci`
 2. `npm run data:validate`
 3. `npm run community:validate`
