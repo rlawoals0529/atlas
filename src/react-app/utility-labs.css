@@ -10,3 +10,39 @@
 @media(prefers-reduced-motion:reduce){.kb-card{transition:none!important}}
 
 }
+
+.kb-empty{
+  display:grid;
+  justify-items:start;
+  gap:7px;
+  margin-top:14px;
+  padding:20px;
+  border:1px solid var(--sage-6);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 1px 0 rgba(26,33,30,.02);
+}
+.kb-empty b{
+  color:var(--sage-12);
+  font-size:13px;
+}
+.kb-empty span{
+  color:var(--sage-11);
+  font-size:11px;
+  line-height:1.5;
+}
+.kb-empty button{
+  min-height:34px;
+  margin-top:3px;
+  padding:0 10px;
+  border:1px solid var(--amber-7);
+  border-radius:7px;
+  background:var(--amber-2);
+  color:var(--amber-12);
+  font-size:10px;
+  font-weight:650;
+  cursor:pointer;
+}
+.kb-empty button:hover{
+  border-color:var(--amber-8);
+}

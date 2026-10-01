@@ -14,8 +14,8 @@ const force = (point?: { value: number; unit: "gf" | "cN" }) => point ? `${point
 const human = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, char => char.toUpperCase());
 
 function ProductGlyph({ product }: { product: KeyboardLabProduct }) {
-  if (product.type === "switch") return <div className={`kb-switch-glyph ${product.specs.technology}`}><i/><span>{product.specs.feel}</span></div>;
-  return <div className={`kb-board-glyph f-${product.specs.formFactor.replace(/[^a-z0-9]/gi, "")}`}><div className="kb-key-row">{Array.from({length: 14}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row short">{Array.from({length: 13}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row">{Array.from({length: 12}, (_, i) => <i key={i}/>)}</div><span>{product.specs.formFactor}</span></div>;
+  if (product.type === "switch") return <div className={`kb-switch-glyph ${product.specs.technology}`} aria-hidden="true"><i/><span>{product.specs.feel}</span></div>;
+  return <div className={`kb-board-glyph f-${product.specs.formFactor.replace(/[^a-z0-9]/gi, "")}`} aria-hidden="true"><div className="kb-key-row">{Array.from({length: 14}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row short">{Array.from({length: 13}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row">{Array.from({length: 12}, (_, i) => <i key={i}/>)}</div><span>{product.specs.formFactor}</span></div>;
 }
 
 function ProductVisual({ product }: { product: KeyboardLabProduct }) {
@@ -94,6 +94,11 @@ export default function KeyboardLab() {
     return !query.trim() || haystack.includes(query.trim().toLowerCase());
   }), [kind, products, query, technology]);
   const technologies = [...new Set(products.map(product => product.type === "keyboard" ? product.specs.switchTechnology : product.specs.technology))];
+  const resetFilters = () => {
+    setKind("all");
+    setQuery("");
+    setTechnology("all");
+  };
 
   return <div className="utility-shell keyboard-shell">
     <header className="utility-topbar">
@@ -116,10 +121,10 @@ export default function KeyboardLab() {
         <div className="kb-segments" role="group" aria-label="Hardware type">{(["all","keyboard","switch"] as const).map(value => <button type="button" key={value} className={kind === value ? "active" : ""} aria-pressed={kind === value} onClick={() => setKind(value)}>{value === "all" ? "All hardware" : value === "keyboard" ? "Keyboards" : "Switches"}</button>)}</div>
         <input type="search" aria-label="Search keyboards and switches" placeholder="Search brand, model, technology…" value={query} onChange={event => setQuery(event.target.value)}/>
         <select aria-label="Filter keyboards and switches by technology" value={technology} onChange={event => setTechnology(event.target.value)}><option value="all">All technologies</option>{technologies.map(value => <option key={value} value={value}>{human(value)}</option>)}</select>
-        <span>{filtered.length} records</span>
+        <span role="status" aria-live="polite" aria-atomic="true">{filtered.length} records</span>
       </section>
 
-      <section className="kb-grid">{filtered.map(product => {
+      {filtered.length > 0 ? <section className="kb-grid">{filtered.map(product => {
         const health = evidenceHealth(product);
         return <button type="button" className="kb-card" key={product.id} aria-haspopup="dialog" onClick={() => setSelected(product)} aria-label={`Open ${product.brand} ${product.model} record`}>
           <div className="kb-card-art"><ProductVisual product={product}/></div>
@@ -131,7 +136,11 @@ export default function KeyboardLab() {
             <footer><span>{health.sourceCount} source{health.sourceCount === 1 ? "" : "s"}</span><i>View details →</i></footer>
           </div>
         </button>;
-      })}</section>
+      })}</section> : <section className="kb-empty">
+        <b>No keyboards or switches match those filters.</b>
+        <span>Try a broader search or reset the hardware and technology filters.</span>
+        <button type="button" onClick={resetFilters}>Reset filters</button>
+      </section>}
 
       <section className="utility-grid kb-principles">
         <article><span>01</span><h3>Actuation is not latency</h3><p>A 0.1 mm minimum actuation setting is a configurable travel threshold, not a measured end-to-end input latency value.</p></article>
