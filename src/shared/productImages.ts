@@ -382,6 +382,61 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Gateron Magnetic Jade Max Hall-effect switch",
     credit: "Gateron official product image",
   },
+
+  "switch-gateron-smoothie": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/05/products/gateron-smoothie-switch-pom.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-smoothie-switch",
+    alt: "Gateron Smoothie Linear mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-melodic": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/04/products/gateron-melodic-clicky-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-melodic-switch-set",
+    alt: "Gateron Melodic Clicky mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magic-jade-switch-magnetic-hall-sensor-switch-mechanical-keyboard.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magic-jade-switch",
+    alt: "Gateron Magnetic Jade Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-sapphire": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-sapphire-he-U-rail-switch2.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-sapphire-he-u-rail-switch",
+    alt: "Gateron Magnetic Jade Sapphire U-rail Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-low-profile-magnetic-jade": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2411/27/products/78087a9794.png?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-low-profile-magnetic-jade-switch",
+    alt: "Gateron Low Profile Magnetic Jade Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-dragon": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2605/08/products/gateron-jade-dragon-he-switch2.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-dragon-he-switch-set",
+    alt: "Gateron Magnetic Jade Dragon Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-ultra": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2511/05/products/gateron-magnetic-jade-ultra-switch4.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-ultra-switch-set",
+    alt: "Gateron Magnetic Jade Ultra Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-sakura": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-sakura-he-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-sakura-he-switch-set",
+    alt: "Gateron Magnetic Jade Sakura Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-air": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-air-he-switch-1025058c53.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-air-he-switch-set",
+    alt: "Gateron Magnetic Jade Air Hall-effect switch",
+    credit: "Gateron official product image",
+  },
 };
 
 export const productMediaSourceOverrides: Record<string, string> = {
