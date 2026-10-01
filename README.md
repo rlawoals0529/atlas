@@ -195,6 +195,10 @@ Atlas does not claim ownership of manufacturer imagery, external review material
 
 The repository's catalog records are Atlas research artifacts built from cited sources. Publishing the repository does not relicense third-party images, reviews, trademarks or source material.
 
+## Source availability
+
+Atlas is public so the implementation, research model and project history can be reviewed. The repository does not currently grant an open-source license. Third-party trademarks, product media, review material and linked source content remain subject to their respective owners' rights.
+
 ## Runtime stack
 
 - React 19 + TypeScript + Vite
