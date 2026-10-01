@@ -6,7 +6,7 @@
 [![Deploy Atlas](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml)
 [![Source link health](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml)
 
-**Live:** https://atlas.rlawoals0529.workers.dev/ · **Release:** v0.9.1 pending publication · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
+**Live:** https://atlas.rlawoals0529.workers.dev/ · **Release:** [v0.9.1](https://github.com/rlawoals0529/atlas/releases/tag/v0.9.1) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
 
 ## Quick tour
 
