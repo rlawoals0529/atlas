@@ -4,6 +4,7 @@ import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../sha
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";
 import { evidenceHealth, familyFor, productSearchText } from "../shared/productMeta";
 import { imageForProduct, mediaSourceForProduct } from "../shared/productImages";
+import { keyboardProductImages } from "../shared/keyboardProductImages";
 import { switchProductImages } from "../shared/switchProductImages";
 import { extraSwitches } from "../shared/switchCatalogExtras";
 import { RELEASE } from "../shared/release";
@@ -174,7 +175,7 @@ function officialSource(product: CatalogProduct): string | null {
 async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl: string; sourceUrl: string } | null> {
   const cached = mediaCache.get(product.id);
   if (cached && cached.expiresAt > Date.now()) return cached;
-  const explicit = imageForProduct(product.id) ?? switchProductImages[product.id];
+  const explicit = imageForProduct(product.id) ?? keyboardProductImages[product.id] ?? switchProductImages[product.id];
   if (explicit) return { imageUrl: explicit.url, sourceUrl: explicit.sourceUrl };
   const sourceUrl = officialSource(product);
   if (!sourceUrl) return null;

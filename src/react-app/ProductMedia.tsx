@@ -3,7 +3,9 @@ import { allCatalog } from "../shared/catalog";
 import { imageForProduct, type ProductImage } from "../shared/productImages";
 
 const productById = new Map(allCatalog.map(product => [product.id, product]));
+let keyboardImagesPromise: Promise<Record<string, ProductImage>> | null = null;
 let switchImagesPromise: Promise<Record<string, ProductImage>> | null = null;
+const loadKeyboardImages = () => keyboardImagesPromise ??= import("../shared/keyboardProductImages").then(module => module.keyboardProductImages);
 const loadSwitchImages = () => switchImagesPromise ??= import("../shared/switchProductImages").then(module => module.switchProductImages);
 
 function useProductImage(productId: string) {
@@ -13,7 +15,11 @@ function useProductImage(productId: string) {
   useEffect(() => {
     let active = true;
     setMedia(base);
-    if (!base && productId.startsWith("switch-")) {
+    if (!base && productId.startsWith("keyboard-")) {
+      void loadKeyboardImages().then(images => {
+        if (active) setMedia(images[productId]);
+      });
+    } else if (!base && productId.startsWith("switch-")) {
       void loadSwitchImages().then(images => {
         if (active) setMedia(images[productId]);
       });

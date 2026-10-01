@@ -6,6 +6,7 @@ const dataDir = path.join(root, "data");
 const shardNames = fs.readdirSync(dataDir).filter(name => /^catalog.*\.json$/.test(name));
 const imageRegistries = [
   fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8"),
+  fs.readFileSync(path.join(root, "src/shared/keyboardProductImages.ts"), "utf8"),
   fs.readFileSync(path.join(root, "src/shared/switchProductImages.ts"), "utf8"),
 ].join("\n");
 const explicitImageIds = new Set([...imageRegistries.matchAll(/^\s*"([^"]+)":\s*\{/gm)].map(match => match[1]));
@@ -55,5 +56,14 @@ if (/^\s*"switch-/m.test(initialRegistry)) {
 }
 if (!productMediaComponent.includes('import("../shared/switchProductImages")')) {
   console.error("Product media coverage validation failed: ProductMedia must lazy-load switch media metadata.");
+  process.exit(1);
+}
+
+if (/^\s*"keyboard-[^"]+":\s*\{/m.test(initialRegistry)) {
+  console.error("Product media coverage validation failed: keyboard media metadata must stay out of the initial productImages registry.");
+  process.exit(1);
+}
+if (!productMediaComponent.includes('import("../shared/keyboardProductImages")')) {
+  console.error("Product media coverage validation failed: ProductMedia must lazy-load keyboard media metadata.");
   process.exit(1);
 }

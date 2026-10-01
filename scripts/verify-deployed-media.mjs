@@ -12,6 +12,7 @@ const dataDir = path.join(root, "data");
 const shardNames = fs.readdirSync(dataDir).filter(name => /^catalog.*\.json$/.test(name));
 const imageRegistries = [
   fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8"),
+  fs.readFileSync(path.join(root, "src/shared/keyboardProductImages.ts"), "utf8"),
   fs.readFileSync(path.join(root, "src/shared/switchProductImages.ts"), "utf8"),
 ].join("\n");
 const explicitImageIds = new Set([...imageRegistries.matchAll(/^\s*"([^"]+)":\s*\{/gm)].map(match => match[1]));
