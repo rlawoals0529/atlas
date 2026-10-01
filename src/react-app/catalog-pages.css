@@ -499,3 +499,92 @@
     grid-column:1/-1;
   }
 }
+
+
+/* Switch catalog scan controls. */
+.consumer-switch-feel-quick{
+  display:flex;
+  gap:6px;
+  align-items:center;
+  margin:7px 0 9px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.consumer-switch-feel-quick::-webkit-scrollbar{display:none}
+.consumer-switch-feel-quick>button,
+.consumer-switch-view-toggle button{
+  min-height:32px;
+  flex:0 0 auto;
+  padding:0 10px;
+  border:1px solid var(--sage-6);
+  border-radius:999px;
+  background:#fff;
+  color:var(--sage-11);
+  font-size:9.5px;
+  font-weight:650;
+}
+.consumer-switch-feel-quick>button.active{
+  border-color:var(--orange-7);
+  background:var(--orange-3);
+  color:var(--orange-12);
+}
+.consumer-switch-view-toggle{
+  margin-left:auto;
+  display:inline-flex;
+  flex:0 0 auto;
+  padding:2px;
+  border:1px solid var(--sage-6);
+  border-radius:999px;
+  background:var(--sage-2);
+}
+.consumer-switch-view-toggle button{
+  min-height:28px;
+  border:0;
+  background:transparent;
+}
+.consumer-switch-view-toggle button.active{
+  background:#fff;
+  color:var(--sage-12);
+  box-shadow:0 1px 3px rgba(20,28,23,.08);
+}
+.consumer-grid-switch-compact{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:9px;
+}
+.consumer-grid-switch-compact .consumer-product{
+  min-height:305px;
+}
+.consumer-grid-switch-compact .consumer-product-visual{
+  height:96px;
+}
+.consumer-grid-switch-compact .consumer-product-head{
+  padding:11px 12px 0;
+}
+.consumer-grid-switch-compact .consumer-product h3{
+  margin:4px 12px 0;
+  font-size:16px;
+}
+.consumer-grid-switch-compact .consumer-product>p{
+  margin:7px 12px 9px;
+  -webkit-line-clamp:2;
+}
+.consumer-grid-switch-compact .consumer-metrics{
+  margin-inline:12px;
+}
+.consumer-grid-switch-compact .consumer-product>footer{
+  padding:9px 12px 11px;
+}
+@media(max-width:1180px){
+  .consumer-grid-switch-compact{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:900px){
+  .consumer-grid-switch-compact{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .consumer-switch-feel-quick{align-items:stretch}
+  .consumer-switch-view-toggle{margin-left:4px}
+  .consumer-grid-switch-compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:460px){
+  .consumer-grid-switch-compact{grid-template-columns:1fr}
+}
