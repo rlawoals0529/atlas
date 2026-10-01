@@ -27,6 +27,12 @@ Cloudflare edge rate limiting, HTTPS redirect/HSTS policy, account spend/usage a
 
 If any real credential is ever committed or printed into a public log, revoke/rotate it immediately. Removing it from the current file is not sufficient because git history may retain it.
 
+## Automated security checks
+
+Public pull requests run Atlas's reusable security baseline plus GitHub's dependency-diff review. JavaScript/TypeScript changes are also scanned by CodeQL on pull requests, main pushes and a weekly schedule.
+
+Dependency review blocks newly introduced dependencies with known **high** or **critical** severity advisories. CodeQL uses GitHub's extended security query suite; it supplements the repository's explicit catalog/runtime checks rather than replacing them.
+
 ## Security regression checks
 
 Before deployment, run:
