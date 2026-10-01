@@ -29,6 +29,8 @@ jobs:
         run: npm test
       - name: Generate and validate CycloneDX SBOM
         run: npm run sbom:generate
+      - name: Validate release metadata contract
+        run: npm run release:validate
       - name: Validate canonical catalog shards
         run: npm run data:validate
       - name: Validate community evidence pilots
