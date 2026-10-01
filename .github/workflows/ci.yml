@@ -45,6 +45,8 @@ jobs:
         run: npm run switch-index:validate
       - name: Validate modal accessibility invariants
         run: npm run a11y:validate
+      - name: Validate static-site security headers
+        run: npm run headers:validate
       - name: Validate deployment verifier syntax
         run: |
           node --check scripts/verify-deployed-health.mjs

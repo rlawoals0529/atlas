@@ -39,6 +39,17 @@ const expectedHeaders = {
   "cache-control": "no-store",
 };
 
+const expectedStaticHeaders = {
+  "content-security-policy": "default-src 'self'; script-src 'self' 'sha256-CCjubsCFntNIihdq7/Hpnm3nognvadnOAO5ZG8Fz++o='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=()",
+  "referrer-policy": "no-referrer",
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
+};
+
 const attempts = 12;
 const delayMs = 2_000;
 let lastError = "No response received";
@@ -79,9 +90,26 @@ for (let attempt = 1; attempt <= attempts; attempt += 1) {
         }
 
         if (health.ok === true && mismatches.length === 0 && headerMismatches.length === 0) {
-          console.log(JSON.stringify(health));
-          console.log(`Verified deployed Atlas release ${expected.build}, catalog counts and API security headers on attempt ${attempt}.`);
-          process.exit(0);
+          const pageResponse = await fetch(`${baseUrl}/?verify=${Date.now()}-${attempt}`, {
+            headers: {
+              "cache-control": "no-cache",
+              pragma: "no-cache",
+            },
+          });
+          const pageType = pageResponse.headers.get("content-type") ?? "";
+          const staticHeaderMismatches = Object.entries(expectedStaticHeaders)
+            .filter(([name, value]) => pageResponse.headers.get(name) !== value)
+            .map(([name, value]) => `static header ${name}: expected ${JSON.stringify(value)}, received ${JSON.stringify(pageResponse.headers.get(name))}`);
+          if (!pageResponse.ok) staticHeaderMismatches.push(`static root returned HTTP ${pageResponse.status}`);
+          if (!pageType.toLowerCase().startsWith("text/html")) staticHeaderMismatches.push(`static root content-type: expected text/html, received ${JSON.stringify(pageType)}`);
+
+          if (staticHeaderMismatches.length === 0) {
+            console.log(JSON.stringify(health));
+            console.log(`Verified deployed Atlas release ${expected.build}, catalog counts, API headers and static-site security headers on attempt ${attempt}.`);
+            process.exit(0);
+          }
+
+          headerMismatches.push(...staticHeaderMismatches);
         }
 
         lastError = [
