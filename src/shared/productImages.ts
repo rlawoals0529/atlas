@@ -223,7 +223,7 @@ export const productMediaSourceOverrides: Record<string, string> = {
   "mouse-xm2w-4k-v2": "https://endgamegear.com/products/xm2w-4k-v2-wireless-gaming-mouse",
   "mouse-scimitar-se": "https://www.corsair.com/us/en/p/gaming-mouse/ch-9314014-ww/scimitar-elite-wireless-se-mmo-gaming-mouse-gun-metal-ch-9314014-ww",
   "mouse-corsair-sabre-v2-pro-mg": "https://www.corsair.com/us/en/p/gaming-mouse/ch-931g100-ww/sabre-v2-pro-wireless-magnesium-alloy-gaming-mouse-black-ch-931g100-ww",
-  "mouse-ulx-competition-medium": "https://finalmouse.com/products/ulx-competition-overview",
+  "mouse-ulx-competition-medium": "https://finalmouse.com/pages/mice",
   "mouse-akitsu-small": "https://arbiterstudio.com/products/akitsu-carbon-fiber-8k-wireless-gaming-mouse",
   "mouse-mchose-l7-pro": "https://www.mchose.store/products/mchose-l7-series-ultra-lightweight-wireless-gaming-mouse",
   "mouse-g502-x-plus": "https://www.logitechg.com/en-us/shop/p/g502-x-plus-wireless-lightforce",
