@@ -6,3 +6,4 @@ dist/
 generated/catalog-seed.sql
 generated/data-report.json
 *.log
+generated/sbom.cdx.json
