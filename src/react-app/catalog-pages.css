@@ -725,3 +725,78 @@
 @media(prefers-reduced-motion:reduce){
   .atlas-route-progress i{animation:none}
 }
+
+
+/* Focused category catalogs: quick factual filters before the full toolbar. */
+.consumer-focus-quick{
+  --focus-tone:var(--blue-11);
+  --focus-soft:var(--blue-3);
+  display:flex;
+  gap:6px;
+  margin:14px 0 9px;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:none;
+}
+.consumer-focus-quick::-webkit-scrollbar{display:none}
+.consumer-focus-quick[data-category="switch"]{
+  --focus-tone:var(--orange-11);
+  --focus-soft:var(--orange-3);
+}
+.consumer-focus-quick button{
+  flex:1 0 120px;
+  min-width:0;
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border:1px solid var(--sage-6);
+  border-radius:8px;
+  background:#fff;
+  color:var(--sage-11);
+}
+.consumer-focus-quick button:hover{
+  border-color:var(--sage-8);
+  color:var(--sage-12);
+}
+.consumer-focus-quick button.active{
+  border-color:color-mix(in srgb,var(--focus-tone) 45%,var(--sage-6));
+  background:var(--focus-soft);
+  color:var(--focus-tone);
+}
+.consumer-focus-quick button span{
+  min-width:0;
+  overflow:hidden;
+  font-size:10px;
+  font-weight:650;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.consumer-focus-quick button b{
+  flex:0 0 auto;
+  color:inherit;
+  font:600 9px var(--atlas-mono);
+}
+.consumer-category-page .consumer-toolbar{
+  margin-top:0!important;
+}
+.consumer-category-page .consumer-section-head p{
+  max-width:760px;
+}
+.consumer-category-page[data-focus-category="mousepad"] .consumer-filter-toggle.active{
+  border-color:var(--blue-7)!important;
+  background:var(--blue-3)!important;
+  color:var(--blue-12)!important;
+}
+.consumer-category-page[data-focus-category="switch"] .consumer-filter-toggle.active{
+  border-color:var(--orange-7)!important;
+  background:var(--orange-3)!important;
+  color:var(--orange-12)!important;
+}
+@media(max-width:820px){
+  .consumer-focus-quick button{
+    flex:0 0 126px;
+  }
+}
