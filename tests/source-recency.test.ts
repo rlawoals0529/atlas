@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { CatalogProduct } from "../src/shared/types";
-import { compareSourceCheck, latestSourceCheck, matchesSourceRecency, sourceCheckAgeDays } from "../src/shared/sourceRecency";
+import { compareSourceCheck, latestSourceCheck, matchesSourceRecency, parseSourceRecencyWindow, sourceCheckAgeDays } from "../src/shared/sourceRecency";
 
 const product = (dates: string[]): CatalogProduct => ({
   id: "switch-test",
@@ -48,4 +48,12 @@ test("source recency sorting keeps records without dates last", () => {
   assert.ok(compareSourceCheck(newest, older, "newest") < 0);
   assert.ok(compareSourceCheck(older, newest, "oldest") < 0);
   assert.ok(compareSourceCheck(missing, newest, "newest") > 0);
+});
+
+
+test("shared source-recency values reject unknown URL state", () => {
+  assert.equal(parseSourceRecencyWindow("30d"), "30d");
+  assert.equal(parseSourceRecencyWindow("older-90d"), "older-90d");
+  assert.equal(parseSourceRecencyWindow("stale"), "all");
+  assert.equal(parseSourceRecencyWindow(null), "all");
 });
