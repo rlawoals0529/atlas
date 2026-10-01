@@ -1,0 +1,508 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-cherry-mx2a-brown",
+      "slug": "cherry-mx2a-brown",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX2A Brown",
+      "status": "current",
+      "summary": "Tactile mechanical MX switch with a 45 cN actuation force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "mx2a",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "cherry-mx2a-brown-official",
+          "label": "CHERRY MX2A Brown product page",
+          "url": "https://www.cherry.de/en-us/product/mx2a-brown",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "initialForce": {
+          "value": 30,
+          "unit": "cN"
+        },
+        "actuationForce": {
+          "value": 45,
+          "unit": "cN"
+        },
+        "bottomOutForce": {
+          "value": 80,
+          "unit": "cN"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "cherry-mx2a-brown-official"
+          ],
+          "confidence": "high",
+          "note": "CHERRY publishes 30 cN initial, 45 cN actuation and 80 cN final force, 2.0 mm pre-travel, 4.0 mm total travel, factory lubrication and more than 100 million keystrokes. Atlas stores the conservative 100M floor."
+        }
+      }
+    },
+    {
+      "id": "switch-cherry-mx2a-blue",
+      "slug": "cherry-mx2a-blue",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX2A Blue",
+      "status": "current",
+      "summary": "Clicky tactile mechanical MX switch with audible feedback, 50 cN actuation, 2.2 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "clicky",
+        "tactile",
+        "mx2a"
+      ],
+      "sources": [
+        {
+          "id": "cherry-mx2a-blue-official",
+          "label": "CHERRY MX2A Blue product page",
+          "url": "https://www.cherry.de/en-us/product/mx2a-blue",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "clicky",
+        "initialForce": {
+          "value": 25,
+          "unit": "cN"
+        },
+        "actuationForce": {
+          "value": 50,
+          "unit": "cN"
+        },
+        "preTravelMm": 2.2,
+        "totalTravelMm": 4,
+        "ratedKeystrokesM": 50
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "cherry-mx2a-blue-official"
+          ],
+          "confidence": "high",
+          "note": "CHERRY publishes tactile-and-clicky operation, 25 cN initial force, 50 cN actuation force, 2.2 mm pre-travel, 4.0 mm total travel and more than 50 million keystrokes."
+        }
+      }
+    },
+    {
+      "id": "switch-cherry-mx2a-black",
+      "slug": "cherry-mx2a-black",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX2A Black",
+      "status": "current",
+      "summary": "Firm linear mechanical MX switch with 60 cN actuation, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "mx2a",
+        "factory-lubed",
+        "heavy"
+      ],
+      "sources": [
+        {
+          "id": "cherry-mx2a-black-official",
+          "label": "CHERRY MX2A Black product page",
+          "url": "https://www.cherry.de/en-us/product/mx2a-black",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "cN"
+        },
+        "actuationForce": {
+          "value": 60,
+          "unit": "cN"
+        },
+        "bottomOutForce": {
+          "value": 110,
+          "unit": "cN"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "cherry-mx2a-black-official"
+          ],
+          "confidence": "high",
+          "note": "CHERRY publishes 30 cN initial, 60 cN actuation and 110 cN final force, 2.0 mm pre-travel, 4.0 mm total travel, factory lubrication and more than 100 million keystrokes."
+        }
+      }
+    },
+    {
+      "id": "switch-cherry-mx2a-silent-red",
+      "slug": "cherry-mx2a-silent-red",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX2A Silent Red",
+      "status": "current",
+      "summary": "Damped linear mechanical MX switch with 45 cN actuation, 1.9 mm pre-travel and 3.7 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "silent",
+        "mx2a",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "cherry-mx2a-silent-red-official",
+          "label": "CHERRY MX2A Silent Red product page",
+          "url": "https://www.cherry.de/en-us/product/mx2a-silent-red",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "cN"
+        },
+        "actuationForce": {
+          "value": 45,
+          "unit": "cN"
+        },
+        "bottomOutForce": {
+          "value": 100,
+          "unit": "cN"
+        },
+        "preTravelMm": 1.9,
+        "totalTravelMm": 3.7,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 50
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "cherry-mx2a-silent-red-official"
+          ],
+          "confidence": "high",
+          "note": "CHERRY publishes 30 cN initial, 45 cN actuation and 100 cN final force, 1.9 mm pre-travel, 3.7 mm total travel, factory lubrication, integrated noise damping and more than 50 million keystrokes."
+        }
+      }
+    },
+    {
+      "id": "switch-cherry-mx2a-speed-silver",
+      "slug": "cherry-mx2a-speed-silver",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX2A Speed Silver",
+      "status": "current",
+      "summary": "Short-pre-travel linear mechanical MX switch with 45 cN actuation, 1.2 mm pre-travel and 3.4 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "speed",
+        "mx2a",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "cherry-mx2a-speed-silver-official",
+          "label": "CHERRY MX2A Speed Silver product page",
+          "url": "https://www.cherry.de/en-us/product/mx2a-speed-silver",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "cN"
+        },
+        "actuationForce": {
+          "value": 45,
+          "unit": "cN"
+        },
+        "bottomOutForce": {
+          "value": 100,
+          "unit": "cN"
+        },
+        "preTravelMm": 1.2,
+        "totalTravelMm": 3.4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 100
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "cherry-mx2a-speed-silver-official"
+          ],
+          "confidence": "high",
+          "note": "CHERRY publishes 30 cN initial, 45 cN actuation and 100 cN final force, 1.2 mm pre-travel, 3.4 mm total travel, factory lubrication and more than 100 million keystrokes."
+        }
+      }
+    },
+    {
+      "id": "switch-cherry-mx-clear",
+      "slug": "cherry-mx-clear",
+      "type": "switch",
+      "brand": "CHERRY",
+      "model": "MX Clear",
+      "status": "current",
+      "summary": "Firm tactile mechanical MX switch with a 55 cN published actuation force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "mx",
+        "heavy"
+      ],
+      "sources": [
+        {
+          "id": "cherry-mx-clear-official",
+          "label": "CHERRY MX Clear product page",
+          "url": "https://www.cherry.de/en-us/product/mx-clear",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "initialForce": {
+          "value": 40,
+          "unit": "cN"
+        },
+        "actuationForce": {
+          "value": 55,
+          "unit": "cN"
+        },
+        "bottomOutForce": {
+          "value": 110,
+          "unit": "cN"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "ratedKeystrokesM": 50
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "cherry-mx-clear-official"
+          ],
+          "confidence": "high",
+          "note": "CHERRY publishes 40 cN initial, 55 cN actuation and 110 cN final force, 2.0 mm pre-travel, 4.0 mm total travel and more than 50 million keystrokes."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-oil-king",
+      "slug": "gateron-oil-king-linear",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Oil King Linear",
+      "status": "current",
+      "summary": "Factory-lubed five-pin linear mechanical switch with 55 gf operating force, about 80 gf bottom-out, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "factory-lubed",
+        "5-pin",
+        "oil-king"
+      ],
+      "sources": [
+        {
+          "id": "gateron-oil-king-official",
+          "label": "Gateron Oil King Linear product page",
+          "url": "https://www.gateron.com/products/gateron-oil-king-pre-lubed-switches-linear",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 55,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 80,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 60
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-oil-king-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 55±5 gf operating force, approximately 80 gf bottom-out, 2.0 mm pre-travel, 4.0 mm total travel, factory lubrication, five-pin construction and up to 60 million cycles."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-baby-kangaroo-2",
+      "slug": "gateron-baby-kangaroo-2-0",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Baby Kangaroo 2.0",
+      "status": "current",
+      "summary": "Ahead-heavy tactile five-pin mechanical switch with 59 gf nominal operating force, 2.0 mm pre-travel and 3.4 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "heavy-tactile",
+        "factory-lubed",
+        "5-pin"
+      ],
+      "sources": [
+        {
+          "id": "gateron-baby-kangaroo-2-official",
+          "label": "Gateron Baby Kangaroo 2.0 product page",
+          "url": "https://www.gateron.com/products/gateron-baby-kangaroo-20-tactile-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 59,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.4,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-baby-kangaroo-2-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes ahead-heavy tactile behavior, 59±8 gf operating force, 2.0±0.5 mm pre-travel, 3.4 mm total travel, factory lubrication and five-pin construction."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-quinn",
+      "slug": "gateron-quinn-tactile",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "Quinn Tactile",
+      "status": "current",
+      "summary": "Ahead-heavy tactile five-pin mechanical switch with 59 gf nominal operating force, 2.0 mm pre-travel and a shortened 3.4 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "heavy-tactile",
+        "factory-lubed",
+        "5-pin"
+      ],
+      "sources": [
+        {
+          "id": "gateron-quinn-official",
+          "label": "Gateron Quinn Tactile product page",
+          "url": "https://www.gateron.com/products/gateron-quinn-tactile-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 59,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.4,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-quinn-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 59±15 gf operating force, 2.0±0.5 mm pre-travel, 3.4 mm total travel, factory lubrication, a 22 mm dual-stage spring and five-pin construction."
+        }
+      }
+    },
+    {
+      "id": "switch-gateron-milky-yellow-pro",
+      "slug": "gateron-ks-3x1-milky-yellow-pro",
+      "type": "switch",
+      "brand": "Gateron",
+      "model": "KS-3X1 Milky Yellow Pro",
+      "status": "current",
+      "summary": "Factory-lubed linear five-pin mechanical switch with 50 gf nominal operating force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "factory-lubed",
+        "5-pin",
+        "milky-yellow"
+      ],
+      "sources": [
+        {
+          "id": "gateron-milky-yellow-pro-official",
+          "label": "Gateron KS-3X1 Milky Yellow Red Pro product page",
+          "url": "https://www.gateron.com/products/gateron-ks-3-milky-pro-switch-set",
+          "kind": "manufacturer",
+          "checkedAt": "2026-09-30"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 50,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "gateron-milky-yellow-pro-official"
+          ],
+          "confidence": "high",
+          "note": "Gateron publishes 50±15 gf operating force for the Yellow variant, 2.0±0.6 mm pre-travel, 4.0 mm total travel, factory lubrication, milky nylon housing and five-pin construction."
+        }
+      }
+    }
+  ]
+}
