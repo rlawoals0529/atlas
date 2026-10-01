@@ -1,0 +1,174 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-ktt-creamy-ice-cream",
+      "slug": "ktt-creamy-ice-cream",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Creamy Ice Cream",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 43 gf operating force, 48 gf bottom-out force, 1.9 mm pre-travel and shortened 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "ice-cream"
+      ],
+      "sources": [
+        {
+          "id": "ktt-creamy-ice-cream-official",
+          "label": "KTT Creamy Ice Cream product page",
+          "url": "https://www.ktt-switch.com/en/product_395215.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "switchoddities-ktt-creamy-ice-cream",
+          "label": "SwitchOddities KTT Creamy Ice Cream specification page",
+          "url": "https://switchoddities.com/products/ktt-creamy-ice-cream",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 43,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 48,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.9,
+        "totalTravelMm": 3.5
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-creamy-ice-cream-official",
+            "switchoddities-ktt-creamy-ice-cream"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Creamy Ice Cream as a linear 43 g five-pin switch. SwitchOddities publishes 43 g actuation, 48 g bottom-out, 1.9 mm pre-travel and 3.5 mm total travel."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-taro-ice-cream",
+      "slug": "ktt-taro-ice-cream",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Taro Ice Cream",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 40 gf operating force, 48 gf bottom-out force, 1.9 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "ice-cream"
+      ],
+      "sources": [
+        {
+          "id": "ktt-taro-ice-cream-official",
+          "label": "KTT Taro Ice Cream product page",
+          "url": "https://www.ktt-switch.com/en/product_395217.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "switchoddities-ktt-taro-ice-cream",
+          "label": "SwitchOddities KTT Taro Ice Cream specification page",
+          "url": "https://switchoddities.com/products/ktt-taro-ice-cream",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 48,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.9,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-taro-ice-cream-official",
+            "switchoddities-ktt-taro-ice-cream"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Taro Ice Cream as a linear 40 g five-pin switch. SwitchOddities publishes 40 g actuation, 48 g bottom-out, 1.9 mm pre-travel and 4.0 mm total travel."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-moonrosa",
+      "slug": "ktt-moonrosa",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "MoonRosa",
+      "status": "current",
+      "summary": "Light linear five-pin mechanical switch with 37 gf operating force, 45 gf bottom-out force, 1.8 mm pre-travel and 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "pom"
+      ],
+      "sources": [
+        {
+          "id": "ktt-moonrosa-official",
+          "label": "KTT MoonRosa product page",
+          "url": "https://www.ktt-switch.com/en/product_395202.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "mechanical-keyboards-ktt-moonrosa",
+          "label": "MechanicalKeyboards KTT MoonRosa specification page",
+          "url": "https://mechanicalkeyboards.com/products/ktt-moonrosa-37g-linear-pcb-mount",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 37,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.8,
+        "totalTravelMm": 3.5,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-moonrosa-official",
+            "mechanical-keyboards-ktt-moonrosa"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies MoonRosa as a linear 37 g five-pin switch. MechanicalKeyboards publishes 37 g actuation, 45 g bottom-out, 1.80 mm pre-travel, 3.50 mm total travel, all-POM construction and factory lubrication."
+        }
+      }
+    }
+  ]
+}

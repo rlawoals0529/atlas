@@ -8,7 +8,8 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 - Expanded the canonical switch catalog with manufacturer-backed Wuque Studio WS Red, WS Yellow, WS Brown and WS Quartz records.
 - Added sourced KTT Hyacinth, Macaron Orange and Macaron Pink records with official manufacturer media. Macaron Orange keeps operating force distinct from its tactile pressure-point force.
 - Completed the seven-switch KTT Macaron family with Red, Yellow, Green, Blue and Purple; tactile pressure-point values remain distinct from actuation/bottom-out fields.
-- Current canonical catalog: 146 products, including 62 keyboard switches.
+- Added KTT Creamy Ice Cream, Taro Ice Cream and MoonRosa with official KTT media and specialist travel/force references; Guava remains excluded while KTT's own published force text disagrees across pages.
+- Current canonical catalog: 149 products, including 65 keyboard switches.
 
 ## v0.9.0 — 2026-10-01
 

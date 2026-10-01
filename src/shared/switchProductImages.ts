@@ -385,4 +385,24 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "KTT official product image",
   },
 
+
+  "switch-ktt-creamy-ice-cream": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1724325709409/naiyouxuegao_r__1500-1500_c__cac6a3_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/en/product_395215.html",
+    alt: "KTT Creamy Ice Cream linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-taro-ice-cream": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1727247954001/yunixuegao3_r__1500-1500_c__bfb9b3_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/en/product_395217.html",
+    alt: "KTT Taro Ice Cream linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-moonrosa": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1727248204168/yuejifen3_r__1500-1500_c__b9a5a6_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/en/product_395202.html",
+    alt: "KTT MoonRosa linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+
 };
