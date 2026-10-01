@@ -32,7 +32,7 @@ If any real credential is ever committed or printed into a public log, revoke/ro
 Before deployment, run:
 
 ```bash
-npm install --no-audit --no-fund
+npm ci --no-audit --no-fund
 npm run data:validate
 npm run data:report
 npm run data:seed
