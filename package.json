@@ -19,8 +19,9 @@
     "switch-index:validate": "node scripts/validate-switch-review-index.mjs",
     "a11y:validate": "node scripts/validate-modal-accessibility.mjs",
     "bundle:validate": "node scripts/validate-bundle-budget.mjs",
-    "verify": "npm run data:validate && npm run community:validate && npm run sensitivity:validate && npm run product:validate && npm run media:validate && npm run switch-index:validate && npm run a11y:validate && npm run check && npm run bundle:validate",
-    "source:check": "node scripts/check-source-health.mjs"
+    "verify": "npm run test && npm run data:validate && npm run community:validate && npm run sensitivity:validate && npm run product:validate && npm run media:validate && npm run switch-index:validate && npm run a11y:validate && npm run check && npm run bundle:validate",
+    "source:check": "node scripts/check-source-health.mjs",
+    "test": "tsx --test tests/**/*.test.ts"
   },
   "dependencies": {
     "hono": "4.13.11",
@@ -35,7 +36,8 @@
     "@vitejs/plugin-react": "5.1.1",
     "typescript": "5.9.3",
     "vite": "^7.0.0",
-    "wrangler": "4.136.1"
+    "wrangler": "4.136.1",
+    "tsx": "4.23.15"
   },
   "engines": {
     "node": "22.x"
