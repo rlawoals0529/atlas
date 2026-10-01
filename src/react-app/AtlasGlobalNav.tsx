@@ -9,7 +9,7 @@ const routes = [
   { href: "#", label: "Browse", hint: "Database", match: (hash: string) => hash === "" || hash === "#" },
   { href: "#pointing", label: "Setup", hint: "Mouse + shape", match: (hash: string) => hash === "#pointing" },
   { href: "#mousepads", label: "Mousepads", hint: "Surfaces", match: (hash: string) => hash === "#mousepads" },
-  { href: "#keyboard-lab", label: "Keyboards", hint: "Boards", match: (hash: string) => hash === "#keyboard-lab" },
+  { href: "#keyboards", label: "Keyboards", hint: "Boards", match: (hash: string) => hash === "#keyboards" || hash === "#keyboard-lab" },
   { href: "#switches", label: "Switches", hint: "Switch index", match: (hash: string) => hash === "#switches" },
   { href: "#sensitivity", label: "Sensitivity", hint: "cm/360", match: (hash: string) => hash === "#sensitivity" },
   { href: "#product-lab", label: "Research", hint: "Evidence", match: (hash: string) => hash === "#product-lab" || hash === "#validation-run" },
