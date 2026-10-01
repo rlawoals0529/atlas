@@ -29,10 +29,10 @@ export async function fetchWithSafeRedirects(
   if (!current) return null;
 
   for (let redirectCount = 0; redirectCount <= MAX_MEDIA_REDIRECTS; redirectCount += 1) {
-    const response = await fetcher(current, { ...init, redirect: "manual" });
+    const response: Response = await fetcher(current, { ...init, redirect: "manual" });
     if (![301, 302, 303, 307, 308].includes(response.status)) return response;
     if (redirectCount === MAX_MEDIA_REDIRECTS) return null;
-    const location = response.headers.get("location");
+    const location: string | null = response.headers.get("location");
     current = location ? safeHttpsUrl(location, current) : null;
     if (!current) return null;
   }
