@@ -92,12 +92,16 @@ function RootRouter() {
       void loadSwitchReviewIndex();
       void loadProductLab();
     };
-    if ("requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(preloadCommonRoutes, { timeout: 1800 });
-      return () => window.cancelIdleCallback(id);
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    if (typeof idleWindow.requestIdleCallback === "function") {
+      const id = idleWindow.requestIdleCallback(preloadCommonRoutes, { timeout: 1800 });
+      return () => idleWindow.cancelIdleCallback?.(id);
     }
-    const id = window.setTimeout(preloadCommonRoutes, 1200);
-    return () => window.clearTimeout(id);
+    const id = globalThis.setTimeout(preloadCommonRoutes, 1200);
+    return () => globalThis.clearTimeout(id);
   }, []);
 
   useEffect(() => {
