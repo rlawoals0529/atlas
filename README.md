@@ -2,6 +2,7 @@
 
 [![Atlas CI](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml)
 [![Security baseline](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml)
+[![CodeQL](https://github.com/rlawoals0529/atlas/actions/workflows/codeql.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/codeql.yml)
 [![Deploy Atlas](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml)
 [![Source link health](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml)
 
@@ -18,7 +19,7 @@ For a fast review of the project:
 - **Validation Lab:** https://atlas.rlawoals0529.workers.dev/#validation-run — guided hardware test execution with NOT RUN / PASS / FAIL / BLOCKED evidence handling.
 - **Product Lab:** https://atlas.rlawoals0529.workers.dev/#product-lab — catalog analysis, evidence coverage, validation planning and product-operations work.
 
-Reviewer docs: [5-minute reviewer guide](docs/REVIEWER_GUIDE.md) · [architecture](docs/ARCHITECTURE.md) · [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [data dictionary](docs/DATA_DICTIONARY.md) · [contributing](CONTRIBUTING.md)
+Reviewer docs: [5-minute reviewer guide](docs/REVIEWER_GUIDE.md) · [architecture](docs/ARCHITECTURE.md) · [release process](docs/RELEASING.md) · [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [data dictionary](docs/DATA_DICTIONARY.md) · [contributing](CONTRIBUTING.md)
 
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
@@ -269,7 +270,7 @@ npm run data:seed
 npm run check
 ```
 
-CI installs exactly from `package-lock.json` with `npm ci`, validates the catalog shards, qualitative evidence pilots, sensitivity rules, switch-review mappings and modal keyboard-accessibility invariants. It also generates the derived artifacts, audits production dependencies, and runs TypeScript, Vite and a Wrangler deployment dry-run. The security workflow checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
+CI installs exactly from `package-lock.json` with `npm ci`, validates the catalog shards, qualitative evidence pilots, sensitivity rules, switch-review mappings and modal keyboard-accessibility invariants. It also generates the derived artifacts, audits production dependencies, and runs TypeScript, Vite and a Wrangler deployment dry-run. The security workflow checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks. CodeQL scans JavaScript/TypeScript, and CI generates a CycloneDX SBOM from the lockfile so the dependency graph is inspectable without changing the runtime bundle.
 
 ## Cloudflare deploy
 
