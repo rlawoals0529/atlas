@@ -1,4 +1,4 @@
-import { StrictMode, Suspense, lazy, startTransition, useEffect, useState } from "react";
+import { StrictMode, Suspense, lazy, useEffect, useState, useTransition } from "react";
 import { createRoot } from "react-dom/client";
 import AtlasConsumer from "./AtlasConsumer";
 import AnalyticsBridge from "./AnalyticsBridge";
@@ -50,7 +50,7 @@ const preloadRoute = (href: string) => {
 };
 
 function ToolFallback({ hash }: { hash: string }) {
-  const label = hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : "Setup";
+  const label = hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : hash === "#mousepads" ? "Mousepads" : hash === "#switches" ? "Switches" : "Setup";
   return <main className="atlas-route-loading" role="status" aria-live="polite" aria-label={`Loading ${label}`}>
     <div className="atlas-route-loading-head"><span>Atlas</span><b>{label}</b></div>
     <div className="atlas-route-loading-grid">
@@ -62,11 +62,42 @@ function ToolFallback({ hash }: { hash: string }) {
 
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
+  const [isRoutePending, startRouteTransition] = useTransition();
+  const [showRouteProgress, setShowRouteProgress] = useState(false);
 
   useEffect(() => {
-    const onHash = () => startTransition(() => setHash(window.location.hash));
+    const onHash = () => {
+      const nextHash = window.location.hash;
+      preloadRoute(nextHash);
+      startRouteTransition(() => setHash(nextHash));
+    };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  useEffect(() => {
+    if (!isRoutePending) {
+      setShowRouteProgress(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setShowRouteProgress(true), 180);
+    return () => window.clearTimeout(timer);
+  }, [isRoutePending]);
+
+  useEffect(() => {
+    const preloadCommonRoutes = () => {
+      void loadPointing();
+      void loadKeyboardLab();
+      void loadSensitivityLab();
+      void loadSwitchReviewIndex();
+      void loadProductLab();
+    };
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(preloadCommonRoutes, { timeout: 1800 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(preloadCommonRoutes, 1200);
+    return () => window.clearTimeout(id);
   }, []);
 
   useEffect(() => {
@@ -99,6 +130,7 @@ function RootRouter() {
   return <>
     <AnalyticsTransport />
     <AtlasGlobalNav hash={hash} onPreload={preloadRoute}/>
+    <div className={`atlas-route-progress ${showRouteProgress ? "visible" : ""}`} aria-hidden="true"><i/></div>
     <Suspense fallback={<ToolFallback hash={hash} />}>{route}</Suspense>
   </>;
 }
