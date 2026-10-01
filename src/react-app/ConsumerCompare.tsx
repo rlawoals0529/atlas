@@ -163,13 +163,20 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
       return new Set(values).size > 1;
     });
   }, [rowSets, differencesOnly]);
+  const allRows = rowSets[0] ?? [];
+  const rowDiffers = (row: CompareRow) => {
+    const originalIndex = allRows.findIndex(candidate => candidate.section === row.section && candidate.label === row.label);
+    const values = rowSets.map(set => set[originalIndex]?.value ?? "—");
+    return new Set(values).size > 1;
+  };
+  const differenceCount = allRows.filter(rowDiffers).length;
   const sections = [...new Set(rows.map(row => row.section))];
   const specialistHref = type === "mouse" ? "#pointing" : type === "keyboard" || type === "switch" ? "#keyboard-lab" : "#product-lab";
   const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "keyboard" || type === "switch" ? "Open Keyboard Lab" : "Open research tools";
 
   if (!type || products.length < 2) return null;
 
-  return <div className="consumer-compare-shell" role="dialog" aria-modal="true" aria-label={`Compare ${typeLabel[type]} products`}>
+  return <div className="consumer-compare-shell" data-product-type={type} role="dialog" aria-modal="true" aria-label={`Compare ${typeLabel[type]} products`}>
     <button className="consumer-compare-backdrop" onClick={onClose} aria-label="Close comparison"/>
     <section className="consumer-compare-panel">
       <header className="consumer-compare-header">
@@ -178,25 +185,33 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
       </header>
 
       <div className="consumer-compare-controls">
-        <label><input type="checkbox" checked={differencesOnly} onChange={event => setDifferencesOnly(event.target.checked)}/><span>Show differences only</span></label>
+        <div className="consumer-compare-filter-group">
+          <label><input type="checkbox" checked={differencesOnly} onChange={event => setDifferencesOnly(event.target.checked)}/><span>Show differences only</span></label>
+          <span className="consumer-compare-diff-count">{differenceCount} differing {differenceCount === 1 ? "field" : "fields"}</span>
+        </div>
         <a href={specialistHref}>{specialistLabel} →</a>
       </div>
 
       <div className="consumer-compare-products" style={{ "--compare-count": products.length } as React.CSSProperties}>
         <div className="consumer-compare-axis"><span>PRODUCT</span></div>
-        {products.map(product => <article key={product.id}>
+        {products.map((product, index) => <article key={product.id}>
           <button onClick={() => onRemove(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button>
           <div className="consumer-compare-media"><ProductMedia productId={product.id}/></div>
-          <span>{product.brand}</span><h3>{product.model}</h3><small>{money(product.msrpUsd)} · {coverage(product)}/100 evidence</small>
+          <div className="consumer-compare-product-meta"><span>{String(index + 1).padStart(2, "0")} · {product.brand}</span><small>{money(product.msrpUsd)} · {coverage(product)}/100 evidence</small></div>
+          <h3>{product.model}</h3>
           <ProductImageCredit productId={product.id}/>
         </article>)}
       </div>
 
       <div className="consumer-compare-table" style={{ "--compare-count": products.length } as React.CSSProperties}>
-        {sections.map(section => <div className="consumer-compare-section" key={section}>
-          <div className="consumer-compare-section-title">{section}</div>
-          {rows.map(row => row.section === section ? <div className="consumer-compare-row" key={`${section}-${row.label}`}>
-            <div className="consumer-compare-axis"><span>{row.label}</span></div>
+        {sections.map(section => {
+          const sectionRows = rows.filter(row => row.section === section);
+          return <div className="consumer-compare-section" key={section}>
+          <div className="consumer-compare-section-title"><span>{section}</span><small>{sectionRows.length}</small></div>
+          {sectionRows.map(row => {
+            const different = rowDiffers(row);
+            return <div className={`consumer-compare-row ${different ? "is-different" : ""}`} key={`${section}-${row.label}`}>
+            <div className="consumer-compare-axis"><span>{row.label}</span>{different && <i aria-label="Values differ">Δ</i>}</div>
             {rowSets.map((set, productIndex) => {
               const originalIndex = rowSets[0].findIndex(candidate => candidate.section === row.section && candidate.label === row.label);
               const cell = set[originalIndex] ?? row;
@@ -205,8 +220,10 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
                 {cell.bar != null && <div className="consumer-compare-bar" aria-hidden="true"><i style={{ width: `${clamp(cell.bar)}%` }}/></div>}
               </div>;
             })}
-          </div> : null)}
-        </div>)}
+          </div>;
+          })}
+        </div>;
+        })}
       </div>
 
       <footer className="consumer-compare-note"><b>No automatic winner.</b><span>The meaning of a difference depends on your hand, game, surface, board compatibility and preferences. Atlas exposes the delta instead of turning it into a universal verdict.</span></footer>
