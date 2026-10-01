@@ -485,3 +485,40 @@
 @media(prefers-reduced-motion:reduce){
   .atlas-route-status>i{animation:none}
 }
+
+
+/* Keyboard entry point for every hash-routed Atlas surface. */
+.atlas-skip-link{
+  position:fixed;
+  z-index:2000;
+  top:8px;
+  left:10px;
+  transform:translateY(calc(-100% - 18px));
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 12px;
+  border:1px solid var(--jade-7);
+  border-radius:8px;
+  background:#fff;
+  color:var(--jade-12);
+  box-shadow:var(--atlas-shadow-md);
+  font:650 11px var(--atlas-sans);
+  text-decoration:none;
+  transition:transform var(--atlas-motion);
+}
+.atlas-skip-link:focus,
+.atlas-skip-link:focus-visible{
+  transform:translateY(0);
+  outline:2px solid var(--atlas-focus);
+  outline-offset:2px;
+}
+.atlas-route-host{
+  min-width:0;
+}
+.atlas-route-host:focus{
+  outline:none;
+}
+@media(prefers-reduced-motion:reduce){
+  .atlas-skip-link{transition:none}
+}
