@@ -12,6 +12,7 @@ const FOCUSABLE = [
 const modalStack: HTMLElement[] = [];
 let scrollLockCount = 0;
 let savedBodyOverflow = "";
+let savedBodyPaddingRight = "";
 
 function focusableElements(dialog: HTMLElement) {
   return [...dialog.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(element => {
@@ -41,6 +42,12 @@ export function useModalDialog<T extends HTMLElement>(onClose: () => void): RefO
 
     if (scrollLockCount === 0) {
       savedBodyOverflow = document.body.style.overflow;
+      savedBodyPaddingRight = document.body.style.paddingRight;
+      const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+      if (scrollbarWidth > 0) {
+        const currentPadding = Number.parseFloat(window.getComputedStyle(document.body).paddingRight) || 0;
+        document.body.style.paddingRight = `${currentPadding + scrollbarWidth}px`;
+      }
       document.body.style.overflow = "hidden";
     }
     scrollLockCount += 1;
@@ -54,7 +61,7 @@ export function useModalDialog<T extends HTMLElement>(onClose: () => void): RefO
     const keydown = (event: KeyboardEvent) => {
       if (modalStack.at(-1) !== dialog) return;
 
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && !event.isComposing) {
         event.preventDefault();
         event.stopPropagation();
         closeRef.current();
@@ -82,17 +89,28 @@ export function useModalDialog<T extends HTMLElement>(onClose: () => void): RefO
       }
     };
 
+    const focusin = (event: FocusEvent) => {
+      if (modalStack.at(-1) !== dialog) return;
+      const target = event.target;
+      if (target instanceof Node && !dialog.contains(target)) focusInitial();
+    };
+
     document.addEventListener("keydown", keydown, true);
+    document.addEventListener("focusin", focusin, true);
 
     return () => {
       window.cancelAnimationFrame(frame);
       document.removeEventListener("keydown", keydown, true);
+      document.removeEventListener("focusin", focusin, true);
 
       const index = modalStack.lastIndexOf(dialog);
       if (index >= 0) modalStack.splice(index, 1);
 
       scrollLockCount = Math.max(0, scrollLockCount - 1);
-      if (scrollLockCount === 0) document.body.style.overflow = savedBodyOverflow;
+      if (scrollLockCount === 0) {
+        document.body.style.overflow = savedBodyOverflow;
+        document.body.style.paddingRight = savedBodyPaddingRight;
+      }
 
       window.requestAnimationFrame(() => {
         if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
