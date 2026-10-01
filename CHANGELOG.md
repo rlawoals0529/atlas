@@ -4,6 +4,9 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 
 ## Unreleased
 
+### Product and UX
+- Added source-check recency filtering and newest/oldest source-check sorting across the catalog; recency remains a maintenance signal rather than a product-quality score.
+
 ### Fixed
 - Pinned first-party Keychron media for Q1 HE 8K, K2 HE (Nebula V1 / TMR), and Q3 HE 8K after production media verification exposed unreliable Worker-side storefront fallback.
 
