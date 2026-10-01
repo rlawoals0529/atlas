@@ -66,6 +66,9 @@ assert(consumer.includes("Latest source check"), "consumer product drawer must e
 assert(app.includes("Latest source check"), "legacy/product database inspector must expose source-check recency");
 assert(consumer.includes('url.searchParams.set("tech", switchTech)'), "shared switch views must encode technology filters");
 assert(consumer.includes('navigator.clipboard.writeText'), "shared switch views must expose a copyable URL");
+assert(consumer.includes('searchParams.set("product", productId)'), "product drawers must expose a shareable canonical product query parameter");
+assert(consumer.includes("readSharedProductId()"), "catalog must reopen a product drawer from a shared product link");
+assert(consumer.includes('searchParams.delete("product")'), "closing a shared product drawer must clear only its product query parameter");
 assert(consumer.includes('SAVED_PRODUCTS_KEY = "atlas.saved-products.v1"'), "saved gear must use a versioned browser-local key");
 assert(consumer.includes("window.localStorage.setItem(SAVED_PRODUCTS_KEY"), "saved gear must persist locally rather than requiring an account");
 assert(consumer.includes('aria-pressed={savedOnly}'), "saved-only filtering must expose pressed state");
