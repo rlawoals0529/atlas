@@ -333,4 +333,24 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "Wuque Studio official product image",
   },
 
+
+  "switch-ktt-hyacinth": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718327905791/1-1_r__1500-1500_c__e1e0e2_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/en/product_395200.html",
+    alt: "KTT Hyacinth linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-macaron-orange": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718328091194/1_r__1500-1500_c__eac8b5_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/en/product_395203.html",
+    alt: "KTT Macaron Orange tactile mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-macaron-pink": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718328282120/1_r__1500-1500_c__e1bcc6_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/en/product_395204.html",
+    alt: "KTT Macaron Pink linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+
 };
