@@ -3,7 +3,7 @@
 [![Atlas CI](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml)
 [![Security baseline](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml)
 
-**Live:** https://atlas.rlawoals0529.workers.dev/
+**Live:** https://atlas.rlawoals0529.workers.dev/ · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
 
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
