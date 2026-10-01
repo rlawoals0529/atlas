@@ -1,5 +1,34 @@
 # Atlas product changelog
 
+## v0.9.1 — Public research reliability and sharing (released 2026-10-01)
+
+### Consumer workflows
+- adds browser-local saved gear with shareable shortlist URLs;
+- adds canonical product-detail permalinks with explicit copy-link feedback;
+- improves global navigation contrast/mobile overflow while preserving the existing enthusiast-product visual language;
+- exposes source-check recency directly in product inspectors.
+
+### Catalog and evidence
+- expands the canonical catalog to 157 products, including 73 keyboard switches;
+- adds manufacturer-backed Wuque Studio, KTT and Kailh switch records while preserving conflicting/missing values rather than guessing;
+- keeps operating force, tactile pressure-point force and magnetic compatibility distinct;
+- repairs stale source links and strengthens source-health/media verification.
+
+### Engineering and release quality
+- standardizes Node 22 and exact lockfile installs;
+- adds Worker API contract tests, CodeQL, CycloneDX SBOM generation and changed-switch media checks;
+- verifies production media as actual image payloads rather than HTTP-success alone;
+- adds a package/release/README/changelog/health metadata contract;
+- formalizes reviewer, architecture, data-dictionary and release documentation;
+- automatically prunes merged branches.
+
+### Integrity boundaries
+- production analytics remain unavailable unless a real storage binding/policy is configured;
+- no hardware PASS/FAIL is claimed without a real execution session;
+- catalog counts and competitor heuristics are not market-share/demand measurements;
+- external review scores remain external evidence rather than Atlas universal rankings.
+
+
 ## v0.9 — Input ecosystem expansion (released 2026-09-30)
 
 ### Consumer utilities
