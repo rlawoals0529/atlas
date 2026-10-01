@@ -233,7 +233,7 @@ Optional production analytics endpoints:
 
 ## Local setup
 
-1. `npm install`
+1. `npm ci`
 2. `npm run data:validate`
 3. `npm run community:validate`
 4. `npm run sensitivity:validate`
@@ -256,7 +256,7 @@ npm run data:seed
 npm run check
 ```
 
-CI validates the catalog shards, qualitative evidence pilots, sensitivity rules, switch-review mappings and modal keyboard-accessibility invariants. It also generates the derived artifacts, audits production dependencies, and runs TypeScript, Vite and a Wrangler deployment dry-run. The security workflow checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
+CI installs exactly from `package-lock.json` with `npm ci`, validates the catalog shards, qualitative evidence pilots, sensitivity rules, switch-review mappings and modal keyboard-accessibility invariants. It also generates the derived artifacts, audits production dependencies, and runs TypeScript, Vite and a Wrangler deployment dry-run. The security workflow checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
 
 ## Cloudflare deploy
 
