@@ -13,6 +13,7 @@ const main = read("src/react-app/main.tsx");
 const globalNav = read("src/react-app/AtlasGlobalNav.tsx");
 const lab = read("src/react-app/ProductLab.tsx");
 const keyboardLab = read("src/react-app/KeyboardLab.tsx");
+const consumer = read("src/react-app/AtlasConsumer.tsx");
 const switchReviewIndex = read("src/react-app/SwitchReviewIndex.tsx");
 const switchCatalogStatus = read("src/react-app/SwitchCatalogStatus.tsx");
 const sensitivityLab = read("src/react-app/SensitivityLab.tsx");
