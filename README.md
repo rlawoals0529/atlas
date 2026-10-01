@@ -16,7 +16,7 @@ For a fast review of the project:
 - **Validation Lab:** https://atlas.rlawoals0529.workers.dev/#validation-run — guided hardware test execution with NOT RUN / PASS / FAIL / BLOCKED evidence handling.
 - **Product Lab:** https://atlas.rlawoals0529.workers.dev/#product-lab — catalog analysis, evidence coverage, validation planning and product-operations work.
 
-Reviewer docs: [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [contributing](CONTRIBUTING.md)
+Reviewer docs: [5-minute reviewer guide](docs/REVIEWER_GUIDE.md) · [architecture](docs/ARCHITECTURE.md) · [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [contributing](CONTRIBUTING.md)
 
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
@@ -232,6 +232,8 @@ Optional production analytics endpoints:
 `/api/stats` reports release metadata, catalog/source/evidence coverage and whether production analytics storage is configured.
 
 ## Local setup
+
+Atlas CI/deploy uses **Node 22**. Use the same major locally (`.nvmrc` is included) so lockfile/build behavior matches CI.
 
 1. `npm ci`
 2. `npm run data:validate`
