@@ -4,6 +4,9 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 
 ## Unreleased
 
+### Fixed
+- Pinned first-party Keychron media for Q1 HE 8K, K2 HE (Nebula V1 / TMR), and Q3 HE 8K after production media verification exposed unreliable Worker-side storefront fallback.
+
 ## v0.9.1 — 2026-10-01
 
 ### Product and UX
