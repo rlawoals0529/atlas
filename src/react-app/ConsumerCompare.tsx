@@ -29,7 +29,44 @@ const scale = (value: number, min: number, max: number) => clamp(((value - min) 
 const seriesColors = ["var(--blue-11)", "var(--orange-11)", "var(--plum-11)", "var(--jade-11)"];
 
 type MousepadProduct = Extract<CatalogProduct, { type: "mousepad" }>;
+type KeyboardProduct = Extract<CatalogProduct, { type: "keyboard" }>;
 type SwitchProduct = Extract<CatalogProduct, { type: "switch" }>;
+
+function KeyboardVisualSummary({ products }: { products: KeyboardProduct[] }) {
+  return <section className="keyboard-compare-visual" aria-labelledby="keyboard-visual-heading">
+    <header>
+      <div><span>BOARD CAPABILITIES</span><h3 id="keyboard-visual-heading">Published input and platform features</h3></div>
+      <p>Polling ceilings and configurable actuation are published capabilities, not measured end-to-end latency. Atlas keeps them separate from physical validation.</p>
+    </header>
+    <div className="keyboard-compare-grid" style={{ "--compare-count": products.length } as React.CSSProperties}>
+      {products.map((product, index) => {
+        const actuation = product.specs.minActuationMm != null
+          ? `${product.specs.minActuationMm}–${product.specs.maxActuationMm ?? "?"} mm`
+          : product.specs.actuationStepMm != null
+            ? `${product.specs.actuationStepMm} mm tuning step`
+            : "not fully published";
+        return <article key={product.id} style={{ "--series-color": seriesColors[index] } as React.CSSProperties}>
+          <header><span>{String(index + 1).padStart(2, "0")} · {product.brand}</span><b>{product.model}</b></header>
+          <div className="keyboard-compare-primary">
+            <div><span>Format</span><b>{product.specs.formFactor.toUpperCase()}</b></div>
+            <div><span>Polling ceiling</span><b>{polling(product.specs.maxPollingHz)}</b></div>
+            <div><span>Actuation</span><b>{actuation}</b></div>
+          </div>
+          <div className="keyboard-compare-flags">
+            <span data-supported={product.specs.rapidTrigger ? "true" : "false"}>Rapid Trigger <b>{yesNo(product.specs.rapidTrigger)}</b></span>
+            <span data-supported={product.specs.socd ? "true" : "false"}>SOCD <b>{yesNo(product.specs.socd)}</b></span>
+            <span data-supported={product.specs.analogInput ? "true" : "false"}>Analog <b>{yesNo(product.specs.analogInput)}</b></span>
+            <span data-supported={product.specs.hotSwappable ? "true" : "false"}>Hot-swap <b>{yesNo(product.specs.hotSwappable)}</b></span>
+          </div>
+          <footer>
+            <span>{titleCase(product.specs.switchTechnology)} · {product.specs.connectivity.join(" / ")}</span>
+            <em>{product.specs.webConfigurator ? "Web configurator" : product.specs.software ?? "Configuration not listed"}</em>
+          </footer>
+        </article>;
+      })}
+    </div>
+  </section>;
+}
 
 function SwitchVisualSummary({ products }: { products: SwitchProduct[] }) {
   return <section className="switch-compare-visual" aria-labelledby="switch-visual-heading">
@@ -280,6 +317,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
   const specialistHref = type === "mouse" || type === "mousepad" ? "#pointing" : type === "keyboard" ? "#keyboard-lab" : type === "switch" ? "#switches" : "#product-lab";
   const specialistLabel = type === "mouse" ? "Open Shape Lab" : type === "mousepad" ? "Pair in Setup Finder" : type === "keyboard" ? "Open Keyboard Lab" : type === "switch" ? "Open Switches" : "Open research tools";
   const mousepadProducts = type === "mousepad" ? products.filter((product): product is MousepadProduct => product.type === "mousepad") : [];
+  const keyboardProducts = type === "keyboard" ? products.filter((product): product is KeyboardProduct => product.type === "keyboard") : [];
   const switchProducts = type === "switch" ? products.filter((product): product is SwitchProduct => product.type === "switch") : [];
 
   if (!type || products.length < 2) return null;

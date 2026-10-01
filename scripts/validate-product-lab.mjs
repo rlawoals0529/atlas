@@ -65,6 +65,8 @@ assert(main.includes('focusCategory="keyboard"'), "Keyboards route must use the 
 assert(consumer.includes('focusCategory?: Extract<ProductType, "mousepad" | "keyboard" | "switch">'), "focused catalog types must include complete keyboards without collapsing switches into boards");
 assert(consumer.includes('focusCategory === "keyboard" ? <a href="#keyboard-lab">Open Keyboard Lab'), "keyboard catalog must link to the board specialist lab");
 assert(consumer.includes('compareProducts[0].type === "keyboard" ? "#keyboards"'), "shared keyboard comparisons must reopen in the dedicated keyboard catalog");
+assert(read("src/react-app/ConsumerCompare.tsx").includes("KeyboardVisualSummary"), "keyboard comparisons must retain the board capability summary");
+assert(read("src/react-app/ConsumerCompare.tsx").includes("published capabilities, not measured end-to-end latency"), "keyboard comparison must keep polling/actuation distinct from measured latency");
 assert(consumer.includes("function forceToCN"), "switch actuation sorting must normalize gf/cN for ordering");
 assert(consumer.includes("forceToCN(a.specs.actuationForce)"), "switch actuation sorting must use published actuation force, not a different force point");
 assert(consumer.includes('url.hash = "#switches"'), "shared switch views must preserve the dedicated Switches route");

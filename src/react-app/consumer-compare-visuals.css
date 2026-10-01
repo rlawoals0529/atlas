@@ -259,3 +259,141 @@
   .mousepad-compare-map{height:180px}
   .mousepad-profile-grid{grid-template-columns:1fr}
 }
+
+
+/* Keyboard comparison: published board capabilities, not latency or a winner score. */
+.keyboard-compare-visual{
+  padding:18px 24px 20px;
+  border-bottom:1px solid var(--sage-6);
+  background:var(--amber-2);
+}
+.keyboard-compare-visual>header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:12px;
+}
+.keyboard-compare-visual>header span{
+  color:var(--amber-11);
+  font:650 8.5px var(--atlas-mono);
+  letter-spacing:.055em;
+}
+.keyboard-compare-visual>header h3{
+  margin:3px 0 0;
+  color:var(--sage-12);
+  font-size:18px;
+  letter-spacing:-.025em;
+}
+.keyboard-compare-visual>header p{
+  max-width:520px;
+  margin:0;
+  color:var(--sage-11);
+  font-size:9.5px;
+  line-height:1.45;
+  text-align:right;
+}
+.keyboard-compare-grid{
+  display:grid;
+  grid-template-columns:repeat(var(--compare-count,2),minmax(0,1fr));
+  gap:8px;
+}
+.keyboard-compare-grid>article{
+  --series-color:var(--amber-11);
+  min-width:0;
+  padding:11px;
+  border:1px solid var(--amber-7);
+  border-radius:10px;
+  background:#fff;
+}
+.keyboard-compare-grid>article>header{
+  min-height:38px;
+  display:grid;
+  gap:2px;
+}
+.keyboard-compare-grid>article>header span{
+  color:var(--series-color);
+  font:650 8px var(--atlas-mono);
+}
+.keyboard-compare-grid>article>header b{
+  overflow:hidden;
+  color:var(--sage-12);
+  font-size:11px;
+  line-height:1.25;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.keyboard-compare-primary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  margin-top:8px;
+}
+.keyboard-compare-primary>div{
+  min-width:0;
+  padding:7px;
+  border:1px solid var(--sage-5);
+  border-radius:7px;
+  background:var(--sage-2);
+}
+.keyboard-compare-primary span{
+  display:block;
+  color:var(--sage-10);
+  font-size:7px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.keyboard-compare-primary b{
+  display:block;
+  margin-top:3px;
+  overflow:hidden;
+  color:var(--sage-12);
+  font:650 8.5px var(--atlas-mono);
+  font-variant-numeric:tabular-nums;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.keyboard-compare-flags{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+  margin-top:7px;
+}
+.keyboard-compare-flags>span{
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+  padding:5px 6px;
+  border:1px solid var(--sage-5);
+  border-radius:6px;
+  color:var(--sage-10);
+  font-size:7.5px;
+}
+.keyboard-compare-flags>span[data-supported="true"]{
+  border-color:var(--jade-6);
+  background:var(--jade-2);
+  color:var(--jade-11);
+}
+.keyboard-compare-flags b{font-weight:700}
+.keyboard-compare-grid>article>footer{
+  display:grid;
+  gap:3px;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid var(--sage-5);
+  color:var(--sage-10);
+  font-size:7.5px;
+}
+.keyboard-compare-grid>article>footer em{
+  color:var(--amber-11);
+  font-style:normal;
+}
+@media(max-width:980px){
+  .keyboard-compare-visual{padding:16px}
+  .keyboard-compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .keyboard-compare-visual>header{align-items:flex-start;flex-direction:column;gap:6px}
+  .keyboard-compare-visual>header p{text-align:left}
+  .keyboard-compare-grid{grid-template-columns:1fr}
+}
