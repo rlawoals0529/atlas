@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 type AtlasGlobalNavProps = {
   hash: string;
   onPreload?: (href: string) => void;
@@ -14,12 +16,21 @@ const routes = [
 ];
 
 export default function AtlasGlobalNav({ hash, onPreload }: AtlasGlobalNavProps) {
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const navElement = navRef.current;
+    if (!navElement || navElement.scrollWidth <= navElement.clientWidth) return;
+    const activeLink = navElement.querySelector<HTMLElement>('[aria-current="page"]');
+    activeLink?.scrollIntoView({ block: "nearest", inline: "center", behavior: "auto" });
+  }, [hash]);
+
   return <header className="atlas-global-nav">
     <a className="atlas-global-brand" href="#" aria-label="Atlas database home">
       <span className="atlas-global-mark" aria-hidden="true"><i/><i/><i/></span>
       <span><b>ATLAS</b><small>input gear intelligence</small></span>
     </a>
-    <nav aria-label="Primary Atlas navigation">
+    <nav ref={navRef} aria-label="Primary Atlas navigation">
       {routes.map(route => {
         const active = route.match(hash);
         return <a key={route.href} href={route.href} className={active ? "active" : ""} aria-current={active ? "page" : undefined} onMouseEnter={() => onPreload?.(route.href)} onFocus={() => onPreload?.(route.href)} onPointerDown={() => onPreload?.(route.href)}>
