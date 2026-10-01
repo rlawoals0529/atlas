@@ -245,7 +245,8 @@
   color:#1d3b31;
 }
 .consumer-drawer-save,
-.consumer-drawer-compare{
+.consumer-drawer-compare,
+.consumer-drawer-link{
   min-height:30px;
   padding:0 9px;
   border:1px solid #cfd5d0;
@@ -283,4 +284,11 @@
   color:#313833;
   font:650 9px var(--atlas-mono);
   font-variant-numeric:tabular-nums;
+}
+
+.consumer-drawer-link-status{
+  align-self:center;
+  min-width:64px;
+  color:#6d756f;
+  font-size:8.5px;
 }
