@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ANALYTICS_PRIVACY_EVENT, analyticsCollectionState, setAnalyticsOptOut } from "../shared/analytics";
+import "./production-analytics.css";
 
 type ProductionSummary = {
   available: true;
