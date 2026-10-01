@@ -40,6 +40,8 @@ const KeyboardLab = lazy(loadKeyboardLab);
 const SensitivityLab = lazy(loadSensitivityLab);
 const SwitchReviewIndex = lazy(loadSwitchReviewIndex);
 
+const routeLabel = (hash: string) => hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : hash === "#mousepads" ? "Mousepads" : hash === "#switches" ? "Switches" : hash === "#pointing" ? "Setup" : "Browse";
+
 const preloadRoute = (href: string) => {
   if (href === "#pointing") void loadPointing();
   else if (href === "#keyboard-lab") void loadKeyboardLab();
@@ -50,7 +52,7 @@ const preloadRoute = (href: string) => {
 };
 
 function ToolFallback({ hash }: { hash: string }) {
-  const label = hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : hash === "#mousepads" ? "Mousepads" : hash === "#switches" ? "Switches" : "Setup";
+  const label = routeLabel(hash);
   return <main className="atlas-route-loading" role="status" aria-live="polite" aria-label={`Loading ${label}`}>
     <div className="atlas-route-loading-head"><span>Atlas</span><b>{label}</b></div>
     <div className="atlas-route-loading-grid">
@@ -63,11 +65,14 @@ function ToolFallback({ hash }: { hash: string }) {
 function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
   const [isRoutePending, startRouteTransition] = useTransition();
+  const [pendingHash, setPendingHash] = useState<string | null>(null);
   const [showRouteProgress, setShowRouteProgress] = useState(false);
+  const [showRouteStatus, setShowRouteStatus] = useState(false);
 
   useEffect(() => {
     const onHash = () => {
       const nextHash = window.location.hash;
+      setPendingHash(nextHash);
       preloadRoute(nextHash);
       startRouteTransition(() => setHash(nextHash));
     };
@@ -78,13 +83,23 @@ function RootRouter() {
   useEffect(() => {
     if (!isRoutePending) {
       setShowRouteProgress(false);
+      setShowRouteStatus(false);
+      setPendingHash(null);
       return;
     }
-    const timer = window.setTimeout(() => setShowRouteProgress(true), 180);
-    return () => window.clearTimeout(timer);
+    const progressTimer = window.setTimeout(() => setShowRouteProgress(true), 180);
+    const statusTimer = window.setTimeout(() => setShowRouteStatus(true), 850);
+    return () => {
+      window.clearTimeout(progressTimer);
+      window.clearTimeout(statusTimer);
+    };
   }, [isRoutePending]);
 
   useEffect(() => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const slowConnection = connection?.saveData || connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g" || connection?.effectiveType === "3g";
+    if (slowConnection) return;
+
     const preloadCommonRoutes = () => {
       void loadPointing();
       void loadKeyboardLab();
@@ -97,10 +112,10 @@ function RootRouter() {
       cancelIdleCallback?: (handle: number) => void;
     };
     if (typeof idleWindow.requestIdleCallback === "function") {
-      const id = idleWindow.requestIdleCallback(preloadCommonRoutes, { timeout: 1800 });
+      const id = idleWindow.requestIdleCallback(preloadCommonRoutes, { timeout: 2200 });
       return () => idleWindow.cancelIdleCallback?.(id);
     }
-    const id = globalThis.setTimeout(preloadCommonRoutes, 1200);
+    const id = globalThis.setTimeout(preloadCommonRoutes, 1400);
     return () => globalThis.clearTimeout(id);
   }, []);
 
@@ -135,6 +150,7 @@ function RootRouter() {
     <AnalyticsTransport />
     <AtlasGlobalNav hash={hash} onPreload={preloadRoute}/>
     <div className={`atlas-route-progress ${showRouteProgress ? "visible" : ""}`} aria-hidden="true"><i/></div>
+    {showRouteStatus && pendingHash && <div className="atlas-route-status" role="status" aria-live="polite"><i/><div><b>Opening {routeLabel(pendingHash)}</b><span>Keeping this page available while the next view finishes loading.</span></div></div>}
     <Suspense fallback={<ToolFallback hash={hash} />}>{route}</Suspense>
   </>;
 }
