@@ -2,6 +2,12 @@
 
 Atlas release notes focus on user-visible product changes, research/data rules, validation behavior and meaningful engineering changes.
 
+## Unreleased
+
+### Data
+- Expanded the canonical switch catalog with manufacturer-backed Wuque Studio WS Red, WS Yellow, WS Brown and WS Quartz records.
+- Current canonical catalog: 138 products, including 54 keyboard switches.
+
 ## v0.9.0 — 2026-10-01
 
 First public portfolio release.
