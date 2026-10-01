@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { mice } from "../shared/catalog";
 import { summarizeAnalytics, type AtlasAnalyticsEvent } from "../shared/analytics";
 import { attributeOutboundEngagement, compareShapeLabSessionDepth, segmentBehavior, topFilterUsage } from "../shared/analyticsInsights";
+import "./analytics-deep-dive.css";
 
 const display = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, char => char.toUpperCase());
 
