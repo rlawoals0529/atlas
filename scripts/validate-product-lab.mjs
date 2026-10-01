@@ -47,6 +47,8 @@ assert(globalNav.includes('href: "#sensitivity"'), "global navigation must expos
 assert(globalNav.includes('href: "#pointing"'), "global navigation must expose Setup / Shape Lab");
 assert(globalNav.includes('href: "#product-lab"'), "global navigation must expose Product Lab");
 assert(main.includes('hash === "#switches"'), "dedicated Switches route must remain routable");
+assert(consumer.includes("function forceToCN"), "switch actuation sorting must normalize gf/cN for ordering");
+assert(consumer.includes("forceToCN(a.specs.actuationForce)"), "switch actuation sorting must use published actuation force, not a different force point");
 assert(switchReviewIndex.includes("ThereminGoat"), "Switches directory must retain expert review provenance");
 assert(switchReviewIndex.includes("without mixing those reviews into Atlas product specs"), "Switches directory must keep external reviews separate from Atlas canonical records");
 assert(switchCatalogStatus.includes("field presence, not product quality or market coverage"), "switch catalog coverage must reject quality/market inference");
