@@ -191,7 +191,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [query, setQuery] = useState("");
   const [brand, setBrand] = useState("all");
   const [currentOnly, setCurrentOnly] = useState(true);
-  const [sort, setSort] = useState<"name" | "coverage" | "price" | "glide" | "stopping">("coverage");
+  const [sort, setSort] = useState<"name" | "coverage" | "price" | "glide" | "stopping" | "actuation" | "travel">("coverage");
   const [selected, setSelected] = useState<CatalogProduct | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -211,6 +211,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [rapidTriggerOnly, setRapidTriggerOnly] = useState(false);
   const [switchTech, setSwitchTech] = useState("all");
   const [switchFeel, setSwitchFeel] = useState("all");
+  const [compactSwitchView, setCompactSwitchView] = useState(false);
 
   const catalogProducts = useMemo(() => additionalProducts.length ? [...allCatalog, ...additionalProducts] : allCatalog, [additionalProducts]);
   const switchProducts = useMemo(() => catalogProducts.filter((product): product is Extract<CatalogProduct, { type: "switch" }> => product.type === "switch"), [catalogProducts]);
@@ -280,6 +281,12 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (sort === "price") return (a.msrpUsd ?? Number.POSITIVE_INFINITY) - (b.msrpUsd ?? Number.POSITIVE_INFINITY);
     if (sort === "glide" && a.type === "mousepad" && b.type === "mousepad") return b.feel.dynamicSpeed - a.feel.dynamicSpeed || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "stopping" && a.type === "mousepad" && b.type === "mousepad") return b.feel.stoppingPower - a.feel.stoppingPower || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
+    if (sort === "actuation" && a.type === "switch" && b.type === "switch") {
+      const af = a.specs.actuationForce?.value ?? a.specs.initialForce?.value ?? Number.POSITIVE_INFINITY;
+      const bf = b.specs.actuationForce?.value ?? b.specs.initialForce?.value ?? Number.POSITIVE_INFINITY;
+      return af - bf || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
+    }
+    if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     return evidenceCoverage(b).score - evidenceCoverage(a).score || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
   }), [catalogProducts, category, currentOnly, brand, query, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
 
@@ -340,7 +347,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <p>{focusedDescription}</p>
           <div className="consumer-category-hero-actions">
             <a href="#">Browse all gear</a>
-            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder →</a> : <a href="#keyboard-lab">Open Keyboard Lab →</a>}
+            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder →</a> : <a href="#switch-review-index">Jump to review directory →</a>}
           </div>
         </div>
         <aside><b>{counts[focusCategory]}</b><span>canonical Atlas records</span><small>{focusedMeta.description}</small></aside>
@@ -369,14 +376,20 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <button type="button" className={surface === "all" ? "active" : ""} onClick={() => setSurface("all")} aria-pressed={surface === "all"}><span>All surfaces</span><b>{mousepads.length}</b></button>
           {mousepadSurfaces.map(item => <button type="button" key={item} className={surface === item ? "active" : ""} onClick={() => setSurface(item)} aria-pressed={surface === item}><span>{titleCase(item)}</span><b>{mousepadSurfaceCounts.get(item) ?? 0}</b></button>)}
         </div>}
-        {focusCategory === "switch" && <div className="consumer-focus-quick" data-category="switch" aria-label="Filter Atlas switches by sensing technology">
-          <button type="button" className={switchTech === "all" ? "active" : ""} onClick={() => setSwitchTech("all")} aria-pressed={switchTech === "all"}><span>All technologies</span><b>{switchProducts.length}</b></button>
-          {switchTechnologies.map(item => <button type="button" key={item} className={switchTech === item ? "active" : ""} onClick={() => setSwitchTech(item)} aria-pressed={switchTech === item}><span>{titleCase(item)}</span><b>{switchTechnologyCounts.get(item) ?? 0}</b></button>)}
-        </div>}
+        {focusCategory === "switch" && <>
+          <div className="consumer-focus-quick" data-category="switch" aria-label="Filter Atlas switches by sensing technology">
+            <button type="button" className={switchTech === "all" ? "active" : ""} onClick={() => setSwitchTech("all")} aria-pressed={switchTech === "all"}><span>All technologies</span><b>{switchProducts.length}</b></button>
+            {switchTechnologies.map(item => <button type="button" key={item} className={switchTech === item ? "active" : ""} onClick={() => setSwitchTech(item)} aria-pressed={switchTech === item}><span>{titleCase(item)}</span><b>{switchTechnologyCounts.get(item) ?? 0}</b></button>)}
+          </div>
+          <div className="consumer-switch-feel-quick" role="group" aria-label="Filter Atlas switches by feel">
+            {(["all","linear","tactile","clicky"] as const).map(item => <button type="button" key={item} className={switchFeel === item ? "active" : ""} onClick={() => setSwitchFeel(item)} aria-pressed={switchFeel === item}>{item === "all" ? "Any feel" : titleCase(item)}</button>)}
+            <span className="consumer-switch-view-toggle"><button type="button" aria-pressed={!compactSwitchView} className={!compactSwitchView ? "active" : ""} onClick={() => setCompactSwitchView(false)}>Comfortable</button><button type="button" aria-pressed={compactSwitchView} className={compactSwitchView ? "active" : ""} onClick={() => setCompactSwitchView(true)}>Compact</button></span>
+          </div>
+        </>}
         <div className="consumer-toolbar">
           <div className="consumer-search"><span aria-hidden="true">⌕</span><input aria-label="Search catalog" value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
-          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}</select></label>
+          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Actuation force · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
           <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "−" : "+"}</span></button>
         </div>
@@ -396,7 +409,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <button onClick={clearCategoryFilters}>Clear category filters</button>
         </div>}
 
-        {filtered.length > 0 ? <div className="consumer-grid">{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
+        {filtered.length > 0 ? <div className={`consumer-grid ${focusCategory === "switch" && compactSwitchView ? "consumer-grid-switch-compact" : ""}`}>{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
       </section>
 
       {afterCatalog}
