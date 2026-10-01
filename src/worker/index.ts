@@ -207,7 +207,8 @@ app.get("/api/media/:id", async (c) => {
   if (!imageResponse?.ok || !contentType.startsWith("image/")) return c.json({ error: "Official product image unavailable" }, 502);
   const imageBytes = await readBytesLimited(imageResponse);
   if (!imageBytes) return c.json({ error: "Official product image is too large" }, 502);
-  return new Response(imageBytes, { status: 200, headers: { "Content-Type": contentType, "Content-Length": String(imageBytes.byteLength), "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800", "X-Atlas-Media-Source": new URL(resolved.sourceUrl).hostname } });
+  const responseBody = imageBytes.buffer.slice(imageBytes.byteOffset, imageBytes.byteOffset + imageBytes.byteLength) as ArrayBuffer;
+  return new Response(responseBody, { status: 200, headers: { "Content-Type": contentType, "Content-Length": String(imageBytes.byteLength), "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800", "X-Atlas-Media-Source": new URL(resolved.sourceUrl).hostname } });
 });
 
 app.get("/api/health", (c) => c.json({
