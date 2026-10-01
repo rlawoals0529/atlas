@@ -3,7 +3,6 @@ import { mice } from "../shared/catalog";
 import { alignmentOffset, findSimilarShapes, outlineFor, type AlignMode, type ShapeView, type SimilarityMode } from "../shared/shape";
 import type { MouseProduct } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
-import "./shape-lab-v2.css";
 
 const COLORS = ["#0f766e", "#315f8c", "#6d5fa3", "#a35f13", "#9f3d62"];
 const similarityLabels: Record<SimilarityMode, string> = { balanced: "Balanced", claw: "Claw", fingertip: "Fingertip", palm: "Palm" };
