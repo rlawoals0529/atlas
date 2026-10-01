@@ -11,6 +11,7 @@ import { findSimilarShapes, type SimilarityMode } from "../shared/shape";
 import { catalogStats } from "../shared/stats";
 import type { CatalogProduct, MouseProduct, UserProfile } from "../shared/types";
 import { analyticsApp, type AnalyticsBindings } from "./analytics";
+import { fetchWithSafeRedirects, readBytesLimited, readTextLimited, safeHttpsUrl } from "./mediaSecurity";
 
 const app = new Hono<{ Bindings: AnalyticsBindings }>();
 const workerSwitches = [...switches, ...extraSwitches];
@@ -105,18 +106,6 @@ function queryNumber(c: AtlasContext, key: string, fallback: number, min: number
 
 const mediaCache = new Map<string, { imageUrl: string; sourceUrl: string; expiresAt: number }>();
 const MEDIA_TTL_MS = 24 * 60 * 60 * 1000;
-const PRIVATE_HOST = /^(?:localhost|127\.|0\.|10\.|192\.168\.|169\.254\.|172\.(?:1[6-9]|2\d|3[01])\.|\[?::1\]?$)/i;
-
-function safeHttpsUrl(value: string, base?: string): string | null {
-  try {
-    const url = new URL(value, base);
-    if (url.protocol !== "https:" || PRIVATE_HOST.test(url.hostname) || !url.hostname.includes(".")) return null;
-    return url.toString();
-  } catch {
-    return null;
-  }
-}
-
 function decodeHtml(value: string): string {
   return value.replaceAll("&amp;", "&").replaceAll("&quot;", "\"").replaceAll("&#39;", "'").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 }
@@ -189,9 +178,10 @@ async function resolveOfficialImage(product: CatalogProduct): Promise<{ imageUrl
   if (explicit) return { imageUrl: explicit.url, sourceUrl: explicit.sourceUrl };
   const sourceUrl = officialSource(product);
   if (!sourceUrl) return null;
-  const response = await fetch(sourceUrl, { redirect: "follow", headers: { "Accept": "text/html,application/xhtml+xml", "User-Agent": "Mozilla/5.0 (compatible; AtlasProductMedia/1.0)" } });
-  if (!response.ok || !(response.headers.get("content-type") ?? "").includes("text/html")) return null;
-  const html = (await response.text()).slice(0, 2_000_000);
+  const response = await fetchWithSafeRedirects(sourceUrl, { headers: { "Accept": "text/html,application/xhtml+xml", "User-Agent": "Mozilla/5.0 (compatible; AtlasProductMedia/1.0)" } });
+  if (!response?.ok || !(response.headers.get("content-type") ?? "").includes("text/html")) return null;
+  const html = await readTextLimited(response);
+  if (html === null) return null;
   const candidate = imageCandidateFromHtml(html, product);
   const imageUrl = candidate ? safeHttpsUrl(candidate, sourceUrl) : null;
   if (!imageUrl) return null;
@@ -212,10 +202,12 @@ app.get("/api/media/:id", async (c) => {
   if (limited) return limited;
   const resolved = await resolveOfficialImage(product);
   if (!resolved) return c.json({ error: "Official product image unavailable" }, 404);
-  const imageResponse = await fetch(resolved.imageUrl, { redirect: "follow", headers: { "Accept": "image/avif,image/webp,image/png,image/jpeg,image/*", "User-Agent": "Mozilla/5.0 (compatible; AtlasProductMedia/1.0)", "Referer": resolved.sourceUrl } });
-  const contentType = imageResponse.headers.get("content-type") ?? "";
-  if (!imageResponse.ok || !contentType.startsWith("image/") || !imageResponse.body) return c.json({ error: "Official product image unavailable" }, 502);
-  return new Response(imageResponse.body, { status: 200, headers: { "Content-Type": contentType, "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800", "X-Atlas-Media-Source": new URL(resolved.sourceUrl).hostname } });
+  const imageResponse = await fetchWithSafeRedirects(resolved.imageUrl, { headers: { "Accept": "image/avif,image/webp,image/png,image/jpeg,image/*", "User-Agent": "Mozilla/5.0 (compatible; AtlasProductMedia/1.0)", "Referer": resolved.sourceUrl } });
+  const contentType = imageResponse?.headers.get("content-type") ?? "";
+  if (!imageResponse?.ok || !contentType.startsWith("image/")) return c.json({ error: "Official product image unavailable" }, 502);
+  const imageBytes = await readBytesLimited(imageResponse);
+  if (!imageBytes) return c.json({ error: "Official product image is too large" }, 502);
+  return new Response(imageBytes, { status: 200, headers: { "Content-Type": contentType, "Content-Length": String(imageBytes.byteLength), "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800", "X-Atlas-Media-Source": new URL(resolved.sourceUrl).hostname } });
 });
 
 app.get("/api/health", (c) => c.json({
