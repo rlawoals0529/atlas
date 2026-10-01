@@ -12,6 +12,7 @@ test("health exposes the live contract and security headers", async () => {
   assert.equal(response.headers.get("x-frame-options"), "DENY");
   assert.equal(response.headers.get("x-content-type-options"), "nosniff");
   assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
+  assert.equal(response.headers.get("access-control-allow-origin"), null);
 
   const body = await response.json() as Record<string, unknown>;
   assert.equal(body.ok, true);
@@ -75,4 +76,44 @@ test("recommendation endpoint distinguishes invalid JSON from invalid profiles",
   });
   assert.equal(invalidProfile.status, 422);
   assert.deepEqual(await invalidProfile.json(), { error: "Invalid recommendation profile" });
+});
+
+
+test("product and media identifiers are bounded before lookup/fetch", async () => {
+  const invalidProduct = await request("/api/products/not_valid!");
+  assert.equal(invalidProduct.status, 400);
+  assert.deepEqual(await invalidProduct.json(), { error: "Invalid product identifier" });
+
+  const invalidMedia = await request("/api/media/not_valid!");
+  assert.equal(invalidMedia.status, 400);
+  assert.deepEqual(await invalidMedia.json(), { error: "Invalid product identifier" });
+});
+
+test("shape search rejects out-of-range physical parameters", async () => {
+  const response = await request("/api/shape?length=1000");
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: "Invalid geometry parameters" });
+});
+
+test("recommendation endpoint rejects oversized bodies before parsing", async () => {
+  const response = await request("/api/recommend", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ padding: "x".repeat(17 * 1024) }),
+  });
+  assert.equal(response.status, 413);
+  assert.deepEqual(await response.json(), { error: "Request body is too large" });
+});
+
+test("stats reports the same total implied by type counts", async () => {
+  const response = await request("/api/stats");
+  assert.equal(response.status, 200);
+  const body = await response.json() as {
+    types: { mice: number; mousepads: number; skates: number; keyboards: number; switches: number };
+    catalog: { products?: number; total?: number };
+  };
+  const implied = Object.values(body.types).reduce((sum, value) => sum + value, 0);
+  assert.ok(implied > 0);
+  const reported = body.catalog.products ?? body.catalog.total;
+  if (typeof reported === "number") assert.equal(reported, implied);
 });
