@@ -321,6 +321,67 @@ export const productImages: Record<string, ProductImage> = {
     alt: "Gateron KS-3X1 Milky Yellow Pro mechanical keyboard switch",
     credit: "Gateron official product image",
   },
+
+  "switch-gateron-magnetic-jade-emerald": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-emerald-he-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-emerald-switch-set",
+    alt: "Gateron Magnetic Jade Emerald heavy tactile Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-cherry-mx2a-red": {
+    url: "https://www.cherry.de/fileadmin/_processed_/7/a/csm_6f9d95492f1c7d13592741ed63d263d1_bef242fb90.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-red",
+    alt: "CHERRY MX2A Red mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-wooting-lekker-tikken-medium": {
+    url: "https://checkout-apac.wooting.io/cdn/shop/files/lekker-tikken_SW1-TIK-MID-20P_1.jpg?v=1772142865&width=3840",
+    sourceUrl: "https://wooting.io/product/wooting-lekker-tikken-medium-switch",
+    alt: "Wooting Lekker Tikken Medium Hall-effect switch",
+    credit: "Wooting official product image",
+  },
+  "switch-wooting-lekker-v2-l45": {
+    url: "https://checkout-row-apac.wooting.io/cdn/shop/files/L45-V2.png?v=1771508596&width=1445",
+    sourceUrl: "https://wooting.io/product/lekker-switch-l45-v2",
+    alt: "Wooting Lekker V2 L45 Hall-effect switch",
+    credit: "Wooting official product image",
+  },
+  "switch-wooting-lekker-v2-l60": {
+    url: "https://checkout-row-apac.wooting.io/cdn/shop/files/L60-V2.png?v=1771514540&width=1445",
+    sourceUrl: "https://wooting.io/product/lekker-switch-l60-v2",
+    alt: "Wooting Lekker V2 L60 Hall-effect switch",
+    credit: "Wooting official product image",
+  },
+  "switch-gateron-magnetic-jade-delta-light": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2511/08/products/GATERONMagneticJadeDeltaSwitch1.png?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-delta-switch",
+    alt: "Gateron Magnetic Jade Delta Light Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-delta-dark": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2511/08/products/GATERONMagneticJadeDeltaSwitch7.png?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-delta-switch",
+    alt: "Gateron Magnetic Jade Delta Dark Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-genty-silent": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-genty-silent-he-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-genty-silent-switch",
+    alt: "Gateron Magnetic Genty Silent Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-ruby": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-ruby-switch1.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-ruby-switch",
+    alt: "Gateron Magnetic Jade Ruby Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-max": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-mangeitc-jade-max-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-max-switch-set",
+    alt: "Gateron Magnetic Jade Max Hall-effect switch",
+    credit: "Gateron official product image",
+  },
 };
 
 export const productMediaSourceOverrides: Record<string, string> = {
