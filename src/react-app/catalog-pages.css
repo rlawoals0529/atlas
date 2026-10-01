@@ -76,6 +76,9 @@
 }
 
 /* First-class catalog pages. */
+.consumer-category-page[data-focus-category="mousepad"]{--category-tone:var(--blue-11)}
+.consumer-category-page[data-focus-category="switch"]{--category-tone:var(--orange-11)}
+
 .consumer-category-page .consumer-hero,
 .consumer-category-page .consumer-tools,
 .consumer-category-page .consumer-principles,
