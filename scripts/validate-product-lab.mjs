@@ -70,6 +70,10 @@ assert(consumer.includes('searchParams.set("product", productId)'), "product dra
 assert(consumer.includes("readSharedProductId()"), "catalog must reopen a product drawer from a shared product link");
 assert(consumer.includes('searchParams.delete("product")'), "closing a shared product drawer must clear only its product query parameter");
 assert(consumer.includes('navigator.clipboard.writeText(window.location.href)'), "product drawer must expose an explicit copy-link action");
+assert(consumer.includes('get("compare")'), "catalog comparison must read shared compare IDs from the URL");
+assert(consumer.includes('url.searchParams.set("compare"'), "catalog comparison must create a shareable compare URL");
+assert(consumer.includes('sameType.length < 2'), "shared comparisons must require at least two same-category products");
+assert(consumer.includes('slice(0, 4)'), "shared comparisons must remain bounded to four products");
 assert(consumer.includes('aria-live="polite">{linkStatus}'), "product permalink copy feedback must be announced accessibly");
 assert(consumer.includes('SAVED_PRODUCTS_KEY = "atlas.saved-products.v1"'), "saved gear must use a versioned browser-local key");
 assert(consumer.includes("window.localStorage.setItem(SAVED_PRODUCTS_KEY"), "saved gear must persist locally rather than requiring an account");
