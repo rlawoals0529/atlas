@@ -12,4 +12,4 @@ permissions:
 
 jobs:
   baseline:
-    uses: rlawoals0529/agent-skills/.github/workflows/security-baseline-reusable.yml@a998ffd4629f3bfba95aabda2be9512fed2ccfd5
+    uses: rlawoals0529/agent-skills/.github/workflows/security-baseline-reusable.yml@9ad71f1ee57b9c0c6771ce16bd6c60c3ef2d8898
