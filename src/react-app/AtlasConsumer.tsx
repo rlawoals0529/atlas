@@ -206,6 +206,11 @@ const readSavedProductIds = () => {
   }
 };
 
+const readSharedProductId = () => {
+  if (typeof window === "undefined") return "";
+  return (new URLSearchParams(window.location.search).get("product") ?? "").trim().slice(0, 128);
+};
+
 const readSharedShortlistIds = () => {
   if (typeof window === "undefined") return [] as string[];
   const value = new URLSearchParams(window.location.search).get("shortlist");
@@ -263,6 +268,14 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
       return valid.length === current.length ? current : valid;
     });
   }, [catalogProducts]);
+
+  useEffect(() => {
+    const productId = readSharedProductId();
+    if (!productId) return;
+    const product = catalogProducts.find(item => item.id === productId);
+    if (product) setSelected(product);
+  }, [catalogProducts]);
+
 
   useEffect(() => {
     try {
@@ -352,6 +365,23 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     return evidenceCoverage(b).score - evidenceCoverage(a).score || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
   }), [catalogProducts, category, currentOnly, brand, query, savedOnly, shortlistFilterIds, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
+
+  const replaceProductParam = (productId?: string) => {
+    const url = new URL(window.location.href);
+    if (productId) url.searchParams.set("product", productId);
+    else url.searchParams.delete("product");
+    window.history.replaceState(window.history.state, "", url);
+  };
+
+  const openProduct = (product: CatalogProduct) => {
+    setSelected(product);
+    replaceProductParam(product.id);
+  };
+
+  const closeProduct = () => {
+    setSelected(null);
+    replaceProductParam();
+  };
 
   const copySwitchView = async () => {
     const url = new URL(window.location.href);
@@ -517,7 +547,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <button onClick={clearCategoryFilters}>Clear category filters</button>
         </div>}
 
-        {filtered.length > 0 ? <div className={`consumer-grid ${focusCategory === "switch" && compactSwitchView ? "consumer-grid-switch-compact" : ""}`}>{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><button type="button" className={`consumer-card-save ${isSaved(product.id) ? "selected" : ""}`} aria-pressed={isSaved(product.id)} onClick={() => toggleSaved(product)}>{isSaved(product.id) ? "Saved" : "Save"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
+        {filtered.length > 0 ? <div className={`consumer-grid ${focusCategory === "switch" && compactSwitchView ? "consumer-grid-switch-compact" : ""}`}>{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button type="button" className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} aria-pressed={compared(product.id)} aria-controls={compareTrayId} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><button type="button" className={`consumer-card-save ${isSaved(product.id) ? "selected" : ""}`} aria-pressed={isSaved(product.id)} onClick={() => toggleSaved(product)}>{isSaved(product.id) ? "Saved" : "Save"}</button><ProductCard product={product} onOpen={openProduct} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button type="button" onClick={clearAllFilters}>Reset filters</button></div>}
       </section>
 
       {afterCatalog}
@@ -526,7 +556,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
 
     {compareProducts.length > 0 && <div className="consumer-compare-tray" id={compareTrayId} role="region" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button type="button" onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model} from comparison`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button type="button" className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button type="button" className="consumer-compare-open" aria-haspopup="dialog" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
 
-    {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)} onCompare={toggleCompare} compared={compared(selected.id)} onSave={toggleSaved} saved={isSaved(selected.id)}/>} 
+    {selected && <ProductDrawer product={selected} onClose={closeProduct} onCompare={toggleCompare} compared={compared(selected.id)} onSave={toggleSaved} saved={isSaved(selected.id)}/>} 
     {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<CompareLoadingFallback onClose={() => setCompareOpen(false)}/>} ><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 
   </div>;
 }
