@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useId, useMemo, useState, type ReactNode } f
 import { allCatalog, keyboards, mice, mousepads, skates } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { parseSharedCompareIds, serializeSharedCompareIds } from "../shared/shareState";
+import { compareSourceCheck, matchesSourceRecency, type SourceRecencyWindow } from "../shared/sourceRecency";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
 
@@ -238,7 +239,7 @@ const readSharedCompareIds = () => {
 const readSharedSwitchParam = (key: string) => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(key);
 const sharedSwitchSort = () => {
   const value = readSharedSwitchParam("sort");
-  return value && ["name", "coverage", "price", "actuation", "travel"].includes(value) ? value as "name" | "coverage" | "price" | "actuation" | "travel" : "coverage";
+  return value && ["name", "coverage", "price", "actuation", "travel", "source-newest", "source-oldest"].includes(value) ? value as "name" | "coverage" | "price" | "actuation" | "travel" | "source-newest" | "source-oldest" : "coverage";
 };
 
 type AtlasConsumerProps = {
@@ -252,7 +253,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [query, setQuery] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("q") ?? "" : "");
   const [brand, setBrand] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("brand") ?? "all" : "all");
   const [currentOnly, setCurrentOnly] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("current") !== "all" : true);
-  const [sort, setSort] = useState<"name" | "coverage" | "price" | "glide" | "stopping" | "actuation" | "travel">(() => focusCategory === "switch" ? sharedSwitchSort() : "coverage");
+  const [sort, setSort] = useState<"name" | "coverage" | "price" | "glide" | "stopping" | "actuation" | "travel" | "source-newest" | "source-oldest">(() => focusCategory === "switch" ? sharedSwitchSort() : "coverage");
   const [selected, setSelected] = useState<CatalogProduct | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -275,6 +276,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [switchFeel, setSwitchFeel] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("feel") ?? "all" : "all");
   const [compactSwitchView, setCompactSwitchView] = useState(() => focusCategory === "switch" && readSharedSwitchParam("density") === "compact");
   const [shareStatus, setShareStatus] = useState("");
+  const [sourceRecency, setSourceRecency] = useState<SourceRecencyWindow>(() => focusCategory === "switch" ? (readSharedSwitchParam("checked") as SourceRecencyWindow | null) ?? "all" : "all");
   const [savedIds, setSavedIds] = useState<string[]>(readSavedProductIds);
   const [sharedShortlistIds] = useState<string[]>(readSharedShortlistIds);
   const [savedOnly, setSavedOnly] = useState(() => readSharedShortlistIds().length > 0);
@@ -360,6 +362,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (currentOnly && product.status !== "current") return false;
     if (brand !== "all" && product.brand !== brand) return false;
     if (savedOnly && !shortlistFilterIds.includes(product.id)) return false;
+    if (!matchesSourceRecency(product, sourceRecency)) return false;
     if (query) {
       const text = [product.brand, product.model, product.summary, product.type, ...(product.tags ?? []), JSON.stringify(product.specs)].join(" ").toLowerCase();
       if (!text.includes(query.toLowerCase())) return false;
@@ -389,6 +392,8 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   }).sort((a, b) => {
     if (sort === "name") return `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "price") return (a.msrpUsd ?? Number.POSITIVE_INFINITY) - (b.msrpUsd ?? Number.POSITIVE_INFINITY);
+    if (sort === "source-newest") return compareSourceCheck(a, b, "newest") || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
+    if (sort === "source-oldest") return compareSourceCheck(a, b, "oldest") || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "glide" && a.type === "mousepad" && b.type === "mousepad") return b.feel.dynamicSpeed - a.feel.dynamicSpeed || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "stopping" && a.type === "mousepad" && b.type === "mousepad") return b.feel.stoppingPower - a.feel.stoppingPower || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "actuation" && a.type === "switch" && b.type === "switch") {
@@ -425,6 +430,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (!currentOnly) url.searchParams.set("current", "all");
     if (switchTech !== "all") url.searchParams.set("tech", switchTech);
     if (switchFeel !== "all") url.searchParams.set("feel", switchFeel);
+    if (sourceRecency !== "all") url.searchParams.set("checked", sourceRecency);
     if (sort !== "coverage") url.searchParams.set("sort", sort);
     if (compactSwitchView) url.searchParams.set("density", "compact");
     url.hash = "#switches";
@@ -475,7 +481,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   };
 
   const clearCategoryFilters = () => {
-    setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setPadFirmness("all"); setStitchedOnly(false); setSkateMaterial("all"); setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all");
+    setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setPadFirmness("all"); setStitchedOnly(false); setSkateMaterial("all"); setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all"); setSourceRecency("all");
   };
   const clearAllFilters = () => {
     setQuery("");
@@ -502,6 +508,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     rapidTriggerOnly ? { key: "rapid-trigger", label: "Rapid Trigger", clear: () => setRapidTriggerOnly(false) } : null,
     switchTech !== "all" ? { key: "switch-tech", label: `Switch: ${titleCase(switchTech)}`, clear: () => setSwitchTech("all") } : null,
     switchFeel !== "all" ? { key: "switch-feel", label: `Feel: ${titleCase(switchFeel)}`, clear: () => setSwitchFeel("all") } : null,
+    sourceRecency !== "all" ? { key: "source-recency", label: sourceRecency === "30d" ? "Source check: ≤30 days" : sourceRecency === "90d" ? "Source check: ≤90 days" : "Source check: >90 days", clear: () => setSourceRecency("all") } : null,
   ].filter((item): item is { key: string; label: string; clear: () => void } => item !== null);
 
   const focusedMeta = focusCategory ? categoryMeta[focusCategory] : null;
@@ -577,7 +584,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
         <div className="consumer-toolbar">
           <div className="consumer-search"><span aria-hidden="true">⌕</span><input aria-label="Search catalog" value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
-          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
+          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option><option value="source-newest">Source check · newest</option><option value="source-oldest">Source check · oldest</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
           <button type="button" className={`consumer-saved-filter ${savedOnly ? "active" : ""}`} aria-pressed={savedOnly} onClick={() => setSavedOnly(value => !value)}>{validSharedShortlistIds.length ? "Shared" : "Saved"} <span>{validSharedShortlistIds.length || savedIds.length}</span></button>
           <button type="button" className="consumer-saved-share" disabled={!savedIds.length} onClick={copySavedShortlist}>Share saved</button>
@@ -597,6 +604,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           {(category === "skate" || category === "all") && <label>Skate material<select value={skateMaterial} onChange={event => setSkateMaterial(event.target.value)}><option value="all">Any material</option><option value="pure-ptfe">Pure PTFE</option><option value="hardened-ptfe">Hardened PTFE</option><option value="uhmwpe">UHMWPE</option><option value="glass">Glass</option><option value="pom">POM</option></select></label>}
           {(category === "keyboard" || category === "all") && <><label>Keyboard technology<select value={keyboardTech} onChange={event => setKeyboardTech(event.target.value)}><option value="all">Any technology</option><option value="hall-effect">Hall effect</option><option value="optical-analog">Optical analog</option><option value="tmr">TMR</option><option value="mechanical">Mechanical</option></select></label><label>Form factor<select value={formFactor} onChange={event => setFormFactor(event.target.value)}><option value="all">Any format</option><option value="60%">60%</option><option value="65%">65%</option><option value="75%">75%</option><option value="80%">80%</option><option value="tkl">TKL</option><option value="full-size">Full size</option></select></label><label className="consumer-filter-check">Rapid Trigger only<input type="checkbox" checked={rapidTriggerOnly} onChange={event => setRapidTriggerOnly(event.target.checked)}/></label></>}
           {(category === "switch" || category === "all") && <><label>Switch technology<select value={switchTech} onChange={event => setSwitchTech(event.target.value)}><option value="all">Any technology</option><option value="hall-effect">Hall effect</option><option value="tmr">TMR</option><option value="mechanical">Mechanical</option><option value="optical-analog">Optical analog</option></select></label><label>Switch feel<select value={switchFeel} onChange={event => setSwitchFeel(event.target.value)}><option value="all">Any feel</option><option value="linear">Linear</option><option value="tactile">Tactile</option><option value="clicky">Clicky</option></select></label></>}
+          <label title="Uses the latest stored source checkedAt date. This is a maintenance signal, not a quality score.">Latest source check<select value={sourceRecency} onChange={event => setSourceRecency(event.target.value as SourceRecencyWindow)}><option value="all">Any date</option><option value="30d">Within 30 days</option><option value="90d">Within 90 days</option><option value="older-90d">More than 90 days ago</option></select></label>
           <button onClick={clearCategoryFilters}>Clear category filters</button>
         </div>}
 
