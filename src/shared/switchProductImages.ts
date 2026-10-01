@@ -353,4 +353,36 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "KTT official product image",
   },
 
+
+  "switch-ktt-macaron-red": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1724297731932/1_r__1500-1500_c__efa3a0_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/product_212947.html",
+    alt: "KTT Macaron Red linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-macaron-yellow": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718329148705/1_r__1500-1500_c__ebe2be_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/product_212948.html",
+    alt: "KTT Macaron Yellow linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-macaron-green": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718329210091/1_r__807-807_c__c7ddb8_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/product_212950.html",
+    alt: "KTT Macaron Green linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-macaron-blue": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718329165778/1_r__1500-1500_c__aacdd0_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/product_212949.html",
+    alt: "KTT Macaron Blue tactile mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+  "switch-ktt-macaron-purple": {
+    url: "https://cdn.xuansiwei.com/d0820dck8684/1718329257893/1_r__1500-1500_c__d2c5e0_.png?x-oss-process=style%2Fpng_small",
+    sourceUrl: "https://www.ktt-switch.com/product_212951.html",
+    alt: "KTT Macaron Purple linear mechanical keyboard switch",
+    credit: "KTT official product image",
+  },
+
 };

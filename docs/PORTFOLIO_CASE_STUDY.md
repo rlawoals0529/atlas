@@ -4,7 +4,7 @@
 
 Atlas is an enthusiast hardware research and comparison product for gaming mice, mousepads, skates, keyboards and switches. It combines a sourced product catalog with comparison tools, setup guidance, validation workflows and product-operations artifacts.
 
-The current public build contains 141 canonical products, including 57 keyboard switches, with a separate attributed directory of 466 ThereminGoat switch review records.
+The current public build contains 146 canonical products, including 62 keyboard switches, with a separate attributed directory of 466 ThereminGoat switch review records.
 
 Live product: https://atlas.rlawoals0529.workers.dev/
 

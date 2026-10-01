@@ -1,0 +1,279 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-ktt-macaron-red",
+      "slug": "ktt-macaron-red",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Red",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 37 gf operating force, 45 gf bottom-out force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-red-official",
+          "label": "KTT Macaron Red product page",
+          "url": "https://www.ktt-switch.com/product_212947.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 37,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 45,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-red-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Macaron Red as a linear 37 g five-pin switch. Keypro publishes 37±5 gf operating force, 45±5 gf bottom-out force, 2.0±0.3 mm pre-travel and 4.0±0.5 mm total travel."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-macaron-yellow",
+      "slug": "ktt-macaron-yellow",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Yellow",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 48 gf operating force, 56 gf bottom-out force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-yellow-official",
+          "label": "KTT Macaron Yellow product page",
+          "url": "https://www.ktt-switch.com/product_212948.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 48,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 56,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-yellow-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT lists Macaron Yellow in the Macaron family as a five-pin mechanical switch. Keypro publishes 48±5 gf operating force, 56±5 gf bottom-out force, 2.0±0.3 mm pre-travel and 4.0±0.5 mm total travel."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-macaron-green",
+      "slug": "ktt-macaron-green",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Green",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 55 gf operating force, 63 gf bottom-out force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-green-official",
+          "label": "KTT Macaron Green product page",
+          "url": "https://www.ktt-switch.com/product_212950.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 55,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 63,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-green-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Macaron Green as a linear 55 g five-pin switch. Keypro publishes 55±5 gf operating force, 63±5 gf bottom-out force, 2.0±0.3 mm pre-travel and 4.0±0.5 mm total travel."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-macaron-blue",
+      "slug": "ktt-macaron-blue",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Blue",
+      "status": "current",
+      "summary": "Tactile five-pin mechanical switch with 40 gf operating force, 1.9 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-blue-official",
+          "label": "KTT Macaron Blue product page",
+          "url": "https://www.ktt-switch.com/product_212949.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "actuationForce": {
+          "value": 40,
+          "unit": "gf"
+        },
+        "preTravelMm": 1.9,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-blue-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Macaron Blue as tactile, five-pin and headlines a 50 g specification. Keypro separates that into 40±5 gf operating force and 50±5 gf pressure-point force, with 1.9±0.3 mm pre-travel and 4.0±0.5 mm total travel. Atlas does not store the 50 gf tactile pressure point as bottom-out."
+        }
+      }
+    },
+    {
+      "id": "switch-ktt-macaron-purple",
+      "slug": "ktt-macaron-purple",
+      "type": "switch",
+      "brand": "KTT",
+      "model": "Macaron Purple",
+      "status": "current",
+      "summary": "Linear five-pin mechanical switch with 58 gf operating force, 65 gf bottom-out force, 2.0 mm pre-travel and 4.0 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "5-pin",
+        "macaron"
+      ],
+      "sources": [
+        {
+          "id": "ktt-macaron-purple-official",
+          "label": "KTT Macaron Purple product page",
+          "url": "https://www.ktt-switch.com/product_212951.html",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        },
+        {
+          "id": "keypro-ktt-macaron-series",
+          "label": "Keypro KTT Macaron Series specification page",
+          "url": "https://keyprokb.com/en/products/ktt-macaron-series-linear-switch",
+          "kind": "independent",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "actuationForce": {
+          "value": 58,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 65,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 4
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "ktt-macaron-purple-official",
+            "keypro-ktt-macaron-series"
+          ],
+          "confidence": "medium",
+          "note": "KTT identifies Macaron Purple as a linear 58 g five-pin switch. Keypro publishes 58±5 gf operating force, 65±5 gf bottom-out force, 2.0±0.3 mm pre-travel and 4.0±0.5 mm total travel."
+        }
+      }
+    }
+  ]
+}
