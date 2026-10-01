@@ -421,7 +421,7 @@ export const switchProductImages: Record<string, ProductImage> = {
 
 
   "switch-kailh-magnetic-cpg1515m01d01": {
-    url: "https://www.kailhswitch.com/uploads/15927/page/magnetic-keyboard-switch578a9.jpg",
+    url: "https://www.kailhswitch.com/uploads/15927/products/20240726164051a6629.jpg?size=1000x0",
     sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/magnetic-keyboard-switch.html",
     alt: "Kailh CPG1515M01D01 magnetic keyboard switch",
     credit: "Kailh official product image",
