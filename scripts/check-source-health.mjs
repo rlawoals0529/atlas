@@ -7,9 +7,10 @@ const sourceMap = new Map();
 for (const product of products) {
   for (const source of product.sources ?? []) {
     if (!source?.url) continue;
-    const row = sourceMap.get(source.url) ?? { url: source.url, labels: new Set(), products: new Set(), kind: source.kind };
+    const row = sourceMap.get(source.url) ?? { url: source.url, labels: new Set(), products: new Set(), checkedDates: new Set(), kind: source.kind };
     row.labels.add(source.label);
     row.products.add(product.id);
+    if (source.checkedAt) row.checkedDates.add(source.checkedAt);
     sourceMap.set(source.url, row);
   }
 }
@@ -96,10 +97,32 @@ const counts = results.reduce((acc, row) => {
 const hardBroken = results.filter(row => row.state === "broken");
 const noteworthy = results.filter(row => !["ok", "local"].includes(row.state));
 
+const today = new Date();
+const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+const recencyCounts = { "0-30d": 0, "31-90d": 0, ">90d": 0, missing: 0 };
+for (const row of results) {
+  const dates = [...row.checkedDates].filter(value => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort();
+  const latest = dates.at(-1);
+  if (!latest) {
+    recencyCounts.missing += 1;
+    continue;
+  }
+  const checked = Date.parse(`${latest}T00:00:00Z`);
+  if (!Number.isFinite(checked)) {
+    recencyCounts.missing += 1;
+    continue;
+  }
+  const ageDays = Math.max(0, Math.floor((todayUtc - checked) / 86_400_000));
+  if (ageDays <= 30) recencyCounts["0-30d"] += 1;
+  else if (ageDays <= 90) recencyCounts["31-90d"] += 1;
+  else recencyCounts[">90d"] += 1;
+}
+
 console.log(`Checked ${results.length} unique source URLs across ${products.length} catalog products.`);
 for (const key of ["ok", "local", "blocked", "broken", "server-error", "warning", "unavailable"]) {
   console.log(`${key}: ${counts[key] ?? 0}`);
 }
+console.log(`Source check age: ≤30d ${recencyCounts["0-30d"]} / 31–90d ${recencyCounts["31-90d"]} / >90d ${recencyCounts[">90d"]} / missing ${recencyCounts.missing}`);
 
 for (const row of noteworthy) {
   const productsText = [...row.products].slice(0, 6).join(", ");
@@ -118,6 +141,17 @@ if (process.env.GITHUB_STEP_SUMMARY) {
     ...["ok", "local", "blocked", "broken", "server-error", "warning", "unavailable"].map(key => `| ${key} | ${counts[key] ?? 0} |`),
     "",
     "Only HTTP 404/410 responses are treated as confirmed broken sources. Authentication blocks, rate limits, server errors and network failures are reported separately.",
+    "",
+    "### Source-check recency",
+    "",
+    "| Latest stored check | Unique source URLs |",
+    "| --- | ---: |",
+    `| ≤30 days | ${recencyCounts["0-30d"]} |`,
+    `| 31–90 days | ${recencyCounts["31-90d"]} |`,
+    `| >90 days | ${recencyCounts[">90d"]} |`,
+    `| Missing | ${recencyCounts.missing} |`,
+    "",
+    "Recency is a maintenance signal only. Older does not mean lower-quality evidence, and this workflow does not fail because a source check is old.",
   ];
   if (noteworthy.length) {
     lines.push("", "### Needs review", "");
