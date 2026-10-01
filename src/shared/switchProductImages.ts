@@ -419,4 +419,18 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "Kailh official product image",
   },
 
+
+  "switch-kailh-magnetic-cpg1515m01d01": {
+    url: "https://www.kailhswitch.com/uploads/15927/page/magnetic-keyboard-switch578a9.jpg",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/magnetic-keyboard-switch.html",
+    alt: "Kailh CPG1515M01D01 magnetic keyboard switch",
+    credit: "Kailh official product image",
+  },
+  "switch-kailh-midnight-mx-silent-tactile": {
+    url: "https://www.kailhswitch.com/uploads/202115927/midnight-mx-silent-switch-tactile02328747671.jpg",
+    sourceUrl: "https://www.kailhswitch.com/mechanical-keyboard-switches/midnight-mx-silent-switch-tactile.html",
+    alt: "Kailh Midnight MX Silent Tactile mechanical keyboard switch",
+    credit: "Kailh official product image",
+  },
+
 };
