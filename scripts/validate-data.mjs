@@ -71,6 +71,12 @@ for (const p of products) {
     }
     if (p.specs?.preTravelMm != null && (p.specs.preTravelMm < 0 || p.specs.preTravelMm > p.specs.totalTravelMm)) errors.push(`${p.id}: invalid switch pre-travel`);
     if (p.specs?.ratedKeystrokesM != null && p.specs.ratedKeystrokesM <= 0) errors.push(`${p.id}: invalid switch lifetime`);
+
+    if (p.status === "current") {
+      if (!(p.sources ?? []).some(source => source.kind === "manufacturer")) errors.push(`${p.id}: current switch requires a manufacturer source`);
+      if (!p.specs?.initialForce && !p.specs?.actuationForce && !p.specs?.bottomOutForce) errors.push(`${p.id}: current switch requires at least one published force point`);
+      if (["hall-effect", "tmr"].includes(p.specs?.technology) && !(p.specs?.compatibility?.length)) errors.push(`${p.id}: magnetic switch requires a board-compatibility note`);
+    }
   }
 }
 
