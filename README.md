@@ -1,12 +1,12 @@
 # Atlas
 
-Atlas started as a mouse recommender and kept growing because the questions around a mouse rarely stop at the mouse. Pads change glide, skates change the pad, switches change how a keyboard feels, and sensitivity changes how the whole setup behaves.
+Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
-The public side is an enthusiast catalog and set of comparison tools. Product Lab uses the same data underneath for category analysis, validation plans, evidence tracking and product-operations work. They share one catalog instead of pretending to be separate portfolio demos.
+Today Atlas is an enthusiast catalog with comparison and setup tools. Product Lab sits on the same data and handles the less glamorous work behind it: category analysis, validation plans, evidence tracking and product-operations notes. It is one project with one catalog, not a collection of disconnected demos.
 
 ## Current build — v0.9
 
-The current canonical catalog contains **102 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **18 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. I would rather leave a product out than fill its record with guesses, so catalog growth is tied to sources and evidence rather than a target count.
+The canonical catalog currently has **102 products**: **43 gaming mice**, **20 mousepads**, **9 skate families**, **12 gaming keyboards** and **18 keyboard switches**, plus 8 grip subtypes and 8 game/use profiles. There is no target product count. A smaller sourced catalog is more useful than a larger one padded with guesses.
 
 The pointing-gear recommendation model is still product UI **v0.8**; Atlas **v0.9** widened the catalog and added the specialist tools around it. That version split is deliberate: adding keyboards or a new research view does not silently change an existing mouse recommendation.
 
@@ -20,7 +20,10 @@ The consumer product includes:
 - product detail inspector with type-specific specs, family/revision context, fit/feel models and source provenance;
 - evidence-health scoring that keeps manufacturer, independent, community and Atlas/editorial information visibly distinct;
 - database filters for brand, shape, polling, weight, wireless status, product status, price and evidence quality;
+- a dedicated **Mousepads** catalog at `#mousepads` with surface, firmness and stitched-edge filters plus glide/stopping sorting;
+- mousepad comparison with a glide × stopping map, footprint/build view and normalized feel profiles before the full spec table;
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
+- an **Atlas Switches** catalog at `#switches`, followed by a separately attributed directory of 466 ThereminGoat scorecards/review records rather than copied Atlas rankings;
 - **Keyboard Lab** at `#keyboard-lab` for source-backed gaming-keyboard and switch research;
 - **Sensitivity Lab** at `#sensitivity` for DPI/eDPI and base-hipfire cm/360 conversion with source-specific yaw confidence;
 - a light, product-first interface shared across the catalog and specialist tools;
@@ -29,7 +32,7 @@ The consumer product includes:
 
 ## Keyboard Lab
 
-Open **Keyboard Lab** from the Atlas utility dock or `#keyboard-lab`.
+Open **Keyboard Lab** from the main Atlas navigation or `#keyboard-lab`.
 
 The first keyboard/switch catalog pass focuses on fields that can be sourced cleanly:
 
@@ -46,7 +49,7 @@ See `research/V10_SURFACE_KEYBOARD_RESEARCH.md`.
 
 ## Sensitivity Lab
 
-Open **Sensitivity Lab** from the Atlas utility dock or `#sensitivity`.
+Open **Sensitivity Lab** from the main Atlas navigation or `#sensitivity`.
 
 The current converter matches **base horizontal physical turn distance**:
 
@@ -123,7 +126,7 @@ See `docs/product/VALIDATION_PROTOCOL.md`.
 - product changelog;
 - lightweight incident/postmortem template.
 
-The point of those docs is to record decisions Atlas actually makes, not to imitate the paperwork of a larger company.
+Those files exist because Atlas actually uses them. They are not there to make the repository look like a larger company's process.
 
 ## Canonical data architecture
 
@@ -205,9 +208,10 @@ Optional production analytics endpoints:
 2. `npm run data:validate`
 3. `npm run community:validate`
 4. `npm run sensitivity:validate`
-5. `npm run data:report`
-6. `npm run data:seed`
-7. `npm run dev`
+5. `npm run a11y:validate`
+6. `npm run data:report`
+7. `npm run data:seed`
+8. `npm run dev`
 
 ## Validation
 
@@ -216,12 +220,14 @@ npm run data:validate
 npm run community:validate
 npm run sensitivity:validate
 npm run product:validate
+npm run switch-index:validate
+npm run a11y:validate
 npm run data:report
 npm run data:seed
 npm run check
 ```
 
-CI validates every catalog shard, all qualitative evidence pilots and sensitivity-conversion invariants, generates derived artifacts, audits production npm dependencies, then runs TypeScript, Vite and a Wrangler deployment dry-run. The shared account security baseline also checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
+CI validates the catalog shards, qualitative evidence pilots, sensitivity rules, switch-review mappings and modal keyboard-accessibility invariants. It also generates the derived artifacts, audits production dependencies, and runs TypeScript, Vite and a Wrangler deployment dry-run. The security workflow checks tracked secret files, env hygiene, wildcard CORS, dependency integrity and unsafe HTML sinks.
 
 ## Cloudflare deploy
 
