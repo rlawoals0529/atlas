@@ -403,7 +403,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     }
     if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     return evidenceCoverage(b).score - evidenceCoverage(a).score || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
-  }), [catalogProducts, category, currentOnly, brand, query, savedOnly, shortlistFilterIds, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
+  }), [catalogProducts, category, currentOnly, brand, query, savedOnly, shortlistFilterIds, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sourceRecency, sort]);
 
   const replaceProductParam = (productId?: string) => {
     const url = new URL(window.location.href);
