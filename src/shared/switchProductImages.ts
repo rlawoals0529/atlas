@@ -435,13 +435,13 @@ export const switchProductImages: Record<string, ProductImage> = {
 
 
   "switch-wuque-ws-silent-linear": {
-    url: "https://ucarecdn.com/13f44cdd-2cb7-4a6f-b980-b86be862122d/-/format/auto/-/preview/3000x3000/-/quality/lighter/5.jpg",
+    url: "https://cdn.shopify.com/s/files/1/0403/9809/4489/products/7_e173317e-1582-4e0f-8be8-e8b95f5a2275.jpg?v=1669262527",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
     alt: "Wuque Studio WS Silent Linear mechanical keyboard switch",
     credit: "Wuque Studio official product image",
   },
   "switch-wuque-ws-silent-tactile": {
-    url: "https://ucarecdn.com/0ccc6ebf-01a7-4585-afc5-07556b00e4a3/-/format/auto/-/preview/3000x3000/-/quality/lighter/5.jpg",
+    url: "https://cdn.shopify.com/s/files/1/0403/9809/4489/products/7_d4d124ac-3b32-4c4f-b6b2-cdf8e6a2a75a.jpg?v=1669262527",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-switch-series",
     alt: "Wuque Studio WS Silent Tactile mechanical keyboard switch",
     credit: "Wuque Studio official product image",
@@ -453,7 +453,7 @@ export const switchProductImages: Record<string, ProductImage> = {
     credit: "Wuque Studio official product image",
   },
   "switch-wuque-ws-pearl": {
-    url: "https://shop.wuquestudio.com/cdn/shop/files/DSC04067.jpg?v=1714374536&width=600",
+    url: "https://cdn.shopify.com/s/files/1/0403/9809/4489/files/DSC04067.jpg?v=1714374536",
     sourceUrl: "https://shop.wuquestudio.com/products/ws-pearl-switch-35pcs",
     alt: "Wuque Studio WS Pearl linear mechanical keyboard switch",
     credit: "Wuque Studio official product image",
