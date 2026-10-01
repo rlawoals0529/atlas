@@ -36,10 +36,18 @@ const communityProtocol = read("docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md");
 const validationProtocol = read("docs/product/VALIDATION_PROTOCOL.md");
 const sensitivityData = read("data/sensitivity-games.json");
 const catalogMigration = read("migrations/0001_init.sql");
+const publicIndex = read("index.html");
+const publicManifest = read("public/manifest.webmanifest");
 
 assert(!app.includes("INPUT ATLAS"), "consumer UI must use Atlas branding only");
 assert(app.includes('const VERSION = "0.8"'), "consumer version must match current v0.8 Product Lab integration");
 assert(app.includes('href="#product-lab"'), "Product Lab must remain reachable from consumer navigation");
+
+assert(publicIndex.includes('name="color-scheme" content="light"'), "public metadata must match the light Atlas presentation");
+assert(publicIndex.includes('rel="canonical" href="https://atlas.rlawoals0529.workers.dev/"'), "public metadata must keep the canonical production URL");
+assert(publicIndex.includes('/atlas-mark.svg'), "public HTML must keep the Atlas favicon/app mark");
+assert(publicManifest.includes('"theme_color": "#f5f6f3"'), "PWA theme color must match Atlas paper");
+assert(publicManifest.includes('"src": "/atlas-mark.svg"'), "PWA manifest must keep an app icon");
 
 assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain routable");
 assert(main.includes('hash === "#sensitivity"'), "Sensitivity Lab must remain routable");
