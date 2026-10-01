@@ -16,6 +16,8 @@
 
 ## Verification
 
+Run `npm ci && npm run verify` for the full local verification path.
+
 - [ ] `npm run data:validate`
 - [ ] `npm run community:validate`
 - [ ] `npm run product:validate`
