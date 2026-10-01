@@ -92,6 +92,24 @@ export const productImages: Record<string, ProductImage> = {
     alt: "ESPTIGER Lei Ling gaming mousepad",
     credit: "ESPTIGER official product image",
   },
+  "keyboard-keychron-q1-he-8k": {
+    url: "https://www.keychron.com/cdn/shop/files/Keychron-Q1--HE--8K-Full-Size-Keychron-Ultra-fast-Lime-Magnetic-Switch-Keyboard-1.jpg?crop=center&height=1200&v=1761655109&width=1200",
+    sourceUrl: "https://www.keychron.com/products/keychron-q1-he-8k-magnetic-switch-keyboard",
+    alt: "Keychron Q1 HE 8K magnetic gaming keyboard",
+    credit: "Keychron official product image",
+  },
+  "keyboard-keychron-k2-he-tmr-v1": {
+    url: "https://www.keychron.com/cdn/shop/files/Iconic-features-of-K2HE.jpg?crop=center&height=1200&v=1758336687&width=1200",
+    sourceUrl: "https://www.keychron.com/products/keychron-k2-he-wireless-magnetic-switch-keyboard",
+    alt: "Keychron K2 HE wireless magnetic keyboard",
+    credit: "Keychron official product image",
+  },
+  "keyboard-keychron-q3-he-8k": {
+    url: "https://www.keychron.com/cdn/shop/files/Q3-HE-8K-Iconic-Features.jpg?crop=center&height=1200&v=1758351963&width=1200",
+    sourceUrl: "https://www.keychron.com/products/keychron-q3-he-8k-magnetic-switch-keyboard",
+    alt: "Keychron Q3 HE 8K magnetic gaming keyboard",
+    credit: "Keychron official product image",
+  },
   "keyboard-wooting-60he-v2": {
     url: "https://wooting.io/_next/image?q=90&url=https%3A%2F%2Fwooting-website.ams3.cdn.digitaloceanspaces.com%2Fproducts%2Fkeyboards%2F60HEv2%2F60he-v2_og-and-split.webp&w=3840",
     sourceUrl: "https://wooting.io/wooting-60he-v2",
