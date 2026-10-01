@@ -588,3 +588,26 @@
 @media(max-width:460px){
   .consumer-grid-switch-compact{grid-template-columns:1fr}
 }
+
+
+.consumer-switch-share-view{
+  min-height:32px;
+  flex:0 0 auto;
+  padding:0 10px;
+  border:1px solid var(--sage-7);
+  border-radius:999px;
+  background:var(--sage-12);
+  color:#fff;
+  font-size:9.5px;
+  font-weight:650;
+}
+.consumer-switch-share-view:hover{background:var(--sage-11)}
+.consumer-switch-share-status{
+  min-width:84px;
+  flex:0 0 auto;
+  color:var(--sage-10);
+  font-size:8.5px;
+}
+@media(max-width:680px){
+  .consumer-switch-share-status{min-width:0}
+}

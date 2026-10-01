@@ -50,6 +50,9 @@ assert(globalNav.includes('href: "#product-lab"'), "global navigation must expos
 assert(main.includes('hash === "#switches"'), "dedicated Switches route must remain routable");
 assert(consumer.includes("function forceToCN"), "switch actuation sorting must normalize gf/cN for ordering");
 assert(consumer.includes("forceToCN(a.specs.actuationForce)"), "switch actuation sorting must use published actuation force, not a different force point");
+assert(consumer.includes('url.hash = "#switches"'), "shared switch views must preserve the dedicated Switches route");
+assert(consumer.includes('url.searchParams.set("tech", switchTech)'), "shared switch views must encode technology filters");
+assert(consumer.includes('navigator.clipboard.writeText'), "shared switch views must expose a copyable URL");
 assert(switchReviewIndex.includes("ThereminGoat"), "Switches directory must retain expert review provenance");
 assert(switchReviewIndex.includes("without mixing those reviews into Atlas product specs"), "Switches directory must keep external reviews separate from Atlas canonical records");
 assert(switchCatalogStatus.includes("field presence, not product quality or market coverage"), "switch catalog coverage must reject quality/market inference");
