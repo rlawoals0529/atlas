@@ -248,8 +248,8 @@ body{
 .shape-swatches>button,
 .shape-color,
 .shape-color span{
-  width:22px;
-  height:22px;
+  width:26px;
+  height:26px;
 }
 .shape-swatches>button.active{
   box-shadow:0 0 0 2px #fff,0 0 0 4px #52635a;

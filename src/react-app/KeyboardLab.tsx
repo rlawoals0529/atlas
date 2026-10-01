@@ -113,15 +113,15 @@ export default function KeyboardLab() {
       </section>
 
       <section className="kb-toolbar">
-        <div className="kb-segments">{(["all","keyboard","switch"] as const).map(value => <button key={value} className={kind === value ? "active" : ""} onClick={() => setKind(value)}>{value === "all" ? "All hardware" : value === "keyboard" ? "Keyboards" : "Switches"}</button>)}</div>
-        <input placeholder="Search brand, model, technology…" value={query} onChange={event => setQuery(event.target.value)}/>
-        <select value={technology} onChange={event => setTechnology(event.target.value)}><option value="all">All technologies</option>{technologies.map(value => <option key={value} value={value}>{human(value)}</option>)}</select>
+        <div className="kb-segments" role="group" aria-label="Hardware type">{(["all","keyboard","switch"] as const).map(value => <button type="button" key={value} className={kind === value ? "active" : ""} aria-pressed={kind === value} onClick={() => setKind(value)}>{value === "all" ? "All hardware" : value === "keyboard" ? "Keyboards" : "Switches"}</button>)}</div>
+        <input type="search" aria-label="Search keyboards and switches" placeholder="Search brand, model, technology…" value={query} onChange={event => setQuery(event.target.value)}/>
+        <select aria-label="Filter keyboards and switches by technology" value={technology} onChange={event => setTechnology(event.target.value)}><option value="all">All technologies</option>{technologies.map(value => <option key={value} value={value}>{human(value)}</option>)}</select>
         <span>{filtered.length} records</span>
       </section>
 
       <section className="kb-grid">{filtered.map(product => {
         const health = evidenceHealth(product);
-        return <button className="kb-card" key={product.id} onClick={() => setSelected(product)} aria-label={`Open ${product.brand} ${product.model} record`}>
+        return <button type="button" className="kb-card" key={product.id} aria-haspopup="dialog" onClick={() => setSelected(product)} aria-label={`Open ${product.brand} ${product.model} record`}>
           <div className="kb-card-art"><ProductVisual product={product}/></div>
           <div className="kb-card-copy">
             <span>{product.brand} · {product.type}</span>

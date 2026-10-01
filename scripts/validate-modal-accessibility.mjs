@@ -6,6 +6,8 @@ const files = {
   pointing: fs.readFileSync(new URL("../src/react-app/AppV05.tsx", import.meta.url), "utf8"),
   keyboard: fs.readFileSync(new URL("../src/react-app/KeyboardLab.tsx", import.meta.url), "utf8"),
   hook: fs.readFileSync(new URL("../src/react-app/useModalDialog.ts", import.meta.url), "utf8"),
+  shape: fs.readFileSync(new URL("../src/react-app/ShapeLabV2.tsx", import.meta.url), "utf8"),
+  readability: fs.readFileSync(new URL("../src/react-app/atlas-readability.css", import.meta.url), "utf8"),
 };
 
 const errors = [];
@@ -58,10 +60,32 @@ for (const [label, requirement] of [
   if (!files.consumer.includes(requirement)) errors.push(`consumer catalog: missing ${label}`);
 }
 
+for (const [label, source, requirement] of [
+  ["pointing product cards advertise dialog behavior", files.pointing, 'aria-haspopup="dialog"'],
+  ["pointing catalog product-type controls expose pressed state", files.pointing, 'aria-pressed={dbType === type}'],
+  ["pointing catalog search has an accessible name", files.pointing, 'aria-label="Search peripheral catalog"'],
+  ["keyboard product cards advertise dialog behavior", files.keyboard, 'aria-haspopup="dialog"'],
+  ["keyboard hardware-type controls expose pressed state", files.keyboard, 'aria-pressed={kind === value}'],
+  ["keyboard search has an accessible name", files.keyboard, 'aria-label="Search keyboards and switches"'],
+  ["keyboard technology filter has an accessible name", files.keyboard, 'aria-label="Filter keyboards and switches by technology"'],
+  ["Shape Lab view controls are a named group", files.shape, 'role="group" aria-label="Shape view"'],
+  ["Shape Lab view controls expose pressed state", files.shape, 'aria-pressed={view === item}'],
+  ["Shape Lab scale controls are a named group", files.shape, 'role="group" aria-label="Scale mode"'],
+  ["Shape Lab similarity controls are a named group", files.shape, 'role="group" aria-label="Similarity mode"'],
+  ["Shape Lab line styles are a named group", files.shape, 'role="group" aria-label="Line style"'],
+  ["Shape Lab color presets expose pressed state", files.shape, 'aria-pressed={layer.color.toLowerCase() === color.toLowerCase()}'],
+]) {
+  if (!source.includes(requirement)) errors.push(`interactive controls: missing ${label}`);
+}
+
+if (!/\.shape-swatches>button,[\s\S]*?width:26px;\s*height:26px;/.test(files.readability)) {
+  errors.push("Shape Lab color swatches must retain at least a 26px explicit target");
+}
+
 if (errors.length) {
   console.error("Modal accessibility validation FAILED:");
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log("Modal accessibility PASS: dialogs trap keyboard/programmatic focus, restore the opener, preserve scroll layout, expose dialog/filter state, and keep backdrops out of the accessibility tree.");
+console.log("Accessibility PASS: dialogs retain focus/scroll behavior; dialog openers, grouped toggle controls, filters and Shape Lab targets expose their state and intent.");
