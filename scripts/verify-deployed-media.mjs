@@ -30,6 +30,47 @@ for (const name of shardNames) {
 const failures = [];
 let nextIndex = 0;
 
+function matchesImageSignature(contentType, bytes) {
+  const type = contentType.split(";")[0].trim().toLowerCase();
+  const ascii = (start, end) => String.fromCharCode(...bytes.slice(start, end));
+  if (type === "image/png") return bytes.length >= 8 && bytes[0] === 0x89 && ascii(1, 4) === "PNG";
+  if (type === "image/jpeg" || type === "image/jpg") return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (type === "image/webp") return bytes.length >= 12 && ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP";
+  if (type === "image/gif") return bytes.length >= 6 && ["GIF87a", "GIF89a"].includes(ascii(0, 6));
+  if (type === "image/avif") return bytes.length >= 12 && ascii(4, 8) === "ftyp" && ["avif", "avis"].includes(ascii(8, 12));
+  // Other image/* types are uncommon in the current registry. Content-Type remains
+  // the fallback check so adding a valid future format does not break deploys.
+  return type.startsWith("image/");
+}
+
+async function readImagePrefix(response, maxBytes = 64) {
+  if (!response.body) return new Uint8Array();
+  const reader = response.body.getReader();
+  const chunks = [];
+  let length = 0;
+  try {
+    while (length < maxBytes) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value?.length) continue;
+      chunks.push(value);
+      length += value.length;
+    }
+  } finally {
+    try { await reader.cancel(); } catch {}
+  }
+  const merged = new Uint8Array(Math.min(length, maxBytes));
+  let offset = 0;
+  for (const chunk of chunks) {
+    const remaining = merged.length - offset;
+    if (remaining <= 0) break;
+    const slice = chunk.subarray(0, remaining);
+    merged.set(slice, offset);
+    offset += slice.length;
+  }
+  return merged;
+}
+
 async function worker() {
   while (nextIndex < probes.length) {
     const probe = probes[nextIndex++];
@@ -38,10 +79,15 @@ async function worker() {
       const contentType = response.headers.get("content-type") ?? "";
       if (!response.ok || !contentType.startsWith("image/")) {
         failures.push(`${probe.id} (${probe.label}): HTTP ${response.status}, content-type ${contentType || "(none)"}`);
+        await response.body?.cancel();
       } else {
-        console.log(`PASS media: ${probe.type} ${probe.id} (${probe.explicit ? "pinned" : "resolved"} · ${contentType})`);
+        const prefix = await readImagePrefix(response);
+        if (prefix.length < 8 || !matchesImageSignature(contentType, prefix)) {
+          failures.push(`${probe.id} (${probe.label}): invalid binary signature for ${contentType || "(none)"}`);
+        } else {
+          console.log(`PASS media: ${probe.type} ${probe.id} (${probe.explicit ? "pinned" : "resolved"} · ${contentType} · signature OK)`);
+        }
       }
-      await response.body?.cancel();
     } catch (error) {
       failures.push(`${probe.id} (${probe.label}): ${error instanceof Error ? error.message : String(error)}`);
     }
