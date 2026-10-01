@@ -4,8 +4,11 @@ import path from "node:path";
 const root = process.cwd();
 const dataDir = path.join(root, "data");
 const shardNames = fs.readdirSync(dataDir).filter(name => /^catalog.*\.json$/.test(name));
-const imageRegistry = fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8");
-const explicitImageIds = new Set([...imageRegistry.matchAll(/^\s*"([^"]+)":\s*\{/gm)].map(match => match[1]));
+const imageRegistries = [
+  fs.readFileSync(path.join(root, "src/shared/productImages.ts"), "utf8"),
+  fs.readFileSync(path.join(root, "src/shared/switchProductImages.ts"), "utf8"),
+].join("\n");
+const explicitImageIds = new Set([...imageRegistries.matchAll(/^\s*"([^"]+)":\s*\{/gm)].map(match => match[1]));
 
 const targets = [];
 for (const name of shardNames) {
