@@ -1,4 +1,6 @@
 import { useId, useMemo, useState } from "react";
+import "./v05.css";
+import "./product-lab-entry.css";
 import { catalog, mice, mousepads, skates } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, familyFor, productSearchText, sourceKindMeta } from "../shared/productMeta";
 import { recommendMice, recommendPads, recommendSkates } from "../shared/recommend";

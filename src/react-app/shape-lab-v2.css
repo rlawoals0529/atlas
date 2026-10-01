@@ -1,3 +1,4 @@
+@layer atlas-route-base{
 /* Shape Lab v2: light technical canvas and searchable, layer-oriented comparison controls. */
 .shape-lab-v2{display:grid;gap:22px}
 .shape-toolbar{display:flex;align-items:end;gap:9px;padding:12px 14px;background:#fff!important;border:1px solid #d5dcd6!important;box-shadow:none!important;flex-wrap:wrap}
@@ -115,3 +116,5 @@
 .v5-product-art .v5-product-real-image.mousepad{padding:16px}
 .v5-product-art .v5-product-real-image.skate{padding:18px}
 .v5-detail-hero .v5-detail-real-image{width:min(240px,58%);height:150px;padding:10px;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(24,34,28,.1))}
+
+}

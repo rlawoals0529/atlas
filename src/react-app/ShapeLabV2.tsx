@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import "./shape-lab-v2.css";
 import { mice } from "../shared/catalog";
 import { alignmentOffset, findSimilarShapes, outlineFor, type AlignMode, type ShapeView, type SimilarityMode } from "../shared/shape";
 import type { MouseProduct } from "../shared/types";

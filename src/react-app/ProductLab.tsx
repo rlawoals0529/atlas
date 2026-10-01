@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import "./product-lab.css";
 import { catalog, mice } from "../shared/catalog";
 import { catalogStats } from "../shared/stats";
 import { analyzeMouseCatalog, type SegmentCount } from "../shared/productInsights";

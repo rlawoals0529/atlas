@@ -1,3 +1,4 @@
+@layer atlas-route-base{
 .sensitivity-shell .sens-panel,
 .sensitivity-shell .sens-panel:hover,
 .sensitivity-shell .sens-panel:focus-within{
@@ -65,4 +66,6 @@
 .sensitivity-shell .sens-matcher select option{
   background:#fff;
   color:var(--atlas-ink);
+}
+
 }

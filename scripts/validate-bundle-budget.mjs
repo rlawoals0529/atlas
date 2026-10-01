@@ -25,7 +25,7 @@ const cssPath = assetPath(styleMatch[1]);
 
 const budgets = {
   js: { raw: 460 * 1024, gzip: 118 * 1024 },
-  css: { raw: 195 * 1024, gzip: 37 * 1024 },
+  css: { raw: 115 * 1024, gzip: 22 * 1024 },
 };
 
 function measure(url) {
@@ -42,7 +42,32 @@ const measured = {
   css: measure(cssPath),
 };
 
+const mainEntryPath = new URL("../src/react-app/main.tsx", import.meta.url);
+const mainEntry = fs.readFileSync(mainEntryPath, "utf8");
+const deferredRouteStyles = [
+  "v05.css",
+  "shape-lab-v2.css",
+  "utility-labs.css",
+  "sensitivity-fixes.css",
+  "product-lab.css",
+  "product-lab-entry.css",
+  "production-analytics.css",
+];
+const routeStylePaths = deferredRouteStyles.map(name => new URL(`../src/react-app/${name}`, import.meta.url));
+
 const errors = [];
+for (const style of deferredRouteStyles) {
+  if (mainEntry.includes(`"./${style}"`)) {
+    errors.push(`Initial entry re-imports deferred route stylesheet: ${style}`);
+  }
+}
+for (const stylePath of routeStylePaths) {
+  const source = fs.readFileSync(stylePath, "utf8").trimStart();
+  if (!source.startsWith("@layer atlas-route-base{")) {
+    errors.push(`${path.basename(stylePath.pathname)} must remain in the atlas-route-base cascade layer`);
+  }
+}
+
 for (const kind of ["js", "css"]) {
   for (const mode of ["raw", "gzip"]) {
     const actual = measured[kind][mode];
