@@ -2,6 +2,8 @@
 
 [![Atlas CI](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/ci.yml)
 [![Security baseline](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/security-baseline.yml)
+[![Deploy Atlas](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/deploy.yml)
+[![Source link health](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml/badge.svg)](https://github.com/rlawoals0529/atlas/actions/workflows/source-health.yml)
 
 **Live:** https://atlas.rlawoals0529.workers.dev/ · **Release:** [v0.9.0](https://github.com/rlawoals0529/atlas/releases/tag/v0.9.0) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Case study:** [docs/PORTFOLIO_CASE_STUDY.md](docs/PORTFOLIO_CASE_STUDY.md)
 
@@ -16,7 +18,7 @@ For a fast review of the project:
 - **Validation Lab:** https://atlas.rlawoals0529.workers.dev/#validation-run — guided hardware test execution with NOT RUN / PASS / FAIL / BLOCKED evidence handling.
 - **Product Lab:** https://atlas.rlawoals0529.workers.dev/#product-lab — catalog analysis, evidence coverage, validation planning and product-operations work.
 
-Reviewer docs: [5-minute reviewer guide](docs/REVIEWER_GUIDE.md) · [architecture](docs/ARCHITECTURE.md) · [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [contributing](CONTRIBUTING.md)
+Reviewer docs: [5-minute reviewer guide](docs/REVIEWER_GUIDE.md) · [architecture](docs/ARCHITECTURE.md) · [portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [validation protocol](docs/product/VALIDATION_PROTOCOL.md) · [community evidence protocol](docs/product/COMMUNITY_EVIDENCE_PROTOCOL.md) · [data dictionary](docs/DATA_DICTIONARY.md) · [contributing](CONTRIBUTING.md)
 
 Atlas started as a mouse recommender, then grew into the rest of the setup. A pad changes how the mouse moves. Skates change the pad. Keyboards and switches have their own compatibility and tuning problems. Sensitivity ties the pointing side together.
 
