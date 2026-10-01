@@ -260,6 +260,67 @@ export const productImages: Record<string, ProductImage> = {
     alt: "LAMZU MAYA X 8K gaming mouse",
     credit: "LAMZU official product image",
   },
+
+  "switch-cherry-mx2a-brown": {
+    url: "https://www.cherry.de/fileadmin/_processed_/5/2/csm_f0694a8d967bb0b918a1deeff0d899ef_7d12c09034.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-brown",
+    alt: "CHERRY MX2A Brown mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-blue": {
+    url: "https://www.cherry.de/fileadmin/_processed_/8/9/csm_e5d019d32e75336da521e655bb7a9787_9f15b7c372.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-blue",
+    alt: "CHERRY MX2A Blue mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-black": {
+    url: "https://www.cherry.de/fileadmin/_processed_/7/c/csm_fd7691dd4272bd0321d9301da171b001_68f6181193.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-black",
+    alt: "CHERRY MX2A Black mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-silent-red": {
+    url: "https://www.cherry.de/fileadmin/_processed_/7/7/csm_a6beebe6610f3f33e4cae02af3abf080_2aec218df5.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-silent-red",
+    alt: "CHERRY MX2A Silent Red mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-speed-silver": {
+    url: "https://www.cherry.de/fileadmin/_processed_/8/9/csm_db99c95e8bc8ead9d8a587de9e73f1d2_da48d40680.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-speed-silver",
+    alt: "CHERRY MX2A Speed Silver mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx-clear": {
+    url: "https://www.cherry.de/fileadmin/_processed_/4/8/csm_96507a12c423efdcf4da7ee59ccbc382_be2ace6051.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx-clear",
+    alt: "CHERRY MX Clear mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-gateron-oil-king": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/04/products/gateron-oil-king-linear-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-oil-king-pre-lubed-switches-linear",
+    alt: "Gateron Oil King Linear mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-baby-kangaroo-2": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/20/products/gateron-baby-kangaroo-tactile-switch9.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-baby-kangaroo-20-tactile-switch-set",
+    alt: "Gateron Baby Kangaroo 2.0 tactile mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-quinn": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/06/products/gateron-quinn-tactile-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-quinn-tactile-switch-set",
+    alt: "Gateron Quinn tactile mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-milky-yellow-pro": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2407/29/photo/gateron-milky-pro-switch-red-yellow2.webp",
+    sourceUrl: "https://www.gateron.com/products/gateron-ks-3-milky-pro-switch-set",
+    alt: "Gateron KS-3X1 Milky Yellow Pro mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
 };
 
 export const productMediaSourceOverrides: Record<string, string> = {
