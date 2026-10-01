@@ -13,7 +13,8 @@
 For a fast review of the project:
 
 - **Switches:** https://atlas.rlawoals0529.workers.dev/#switches — sourced switch catalog, explicit product media, filtering, comparison, compatibility caveats and attributed external reviews.
-- **Keyboard Lab:** https://atlas.rlawoals0529.workers.dev/#keyboard-lab — complete-board research for form factor, switch technology, polling, actuation and configuration.
+- **Keyboards:** https://atlas.rlawoals0529.workers.dev/#keyboards — complete-board catalog with board-specific filters, comparison and sourced specifications.
+- **Keyboard Lab:** https://atlas.rlawoals0529.workers.dev/#keyboard-lab — deeper complete-board research for actuation, polling, platform design and configuration.
 - **Shape Lab / pointing setup:** https://atlas.rlawoals0529.workers.dev/#pointing — mouse geometry comparison and setup guidance.
 - **Sensitivity Lab:** https://atlas.rlawoals0529.workers.dev/#sensitivity — sourced base-hipfire sensitivity conversion.
 - **Validation Lab:** https://atlas.rlawoals0529.workers.dev/#validation-run — guided hardware test execution with NOT RUN / PASS / FAIL / BLOCKED evidence handling.
@@ -44,8 +45,9 @@ The consumer product includes:
 - a dedicated **Mousepads** catalog at `#mousepads` with surface, firmness and stitched-edge filters plus glide/stopping sorting;
 - mousepad comparison with a glide × stopping map, footprint/build view and normalized feel profiles before the full spec table;
 - side-by-side mouse comparison with raw deltas, shape overlays and component-level geometry similarity;
+- a dedicated **Keyboards** catalog at `#keyboards` for complete-board browsing, filtering and comparison without mixing standalone switches into the board surface;
 - an **Atlas Switches** catalog at `#switches` with manufacturer-sourced records, explicit switch media, switch-specific filters/comparison and a separately attributed directory of 466 ThereminGoat scorecards/review records rather than copied Atlas rankings;
-- **Keyboard Lab** at `#keyboard-lab` for complete-board research, actuation/platform comparison and sourced keyboard specifications;
+- **Keyboard Lab** at `#keyboard-lab` for deeper complete-board research, actuation/platform comparison and sourced keyboard specifications;
 - **Sensitivity Lab** at `#sensitivity` for DPI/eDPI and base-hipfire cm/360 conversion with source-specific yaw confidence;
 - a light, product-first interface shared across the catalog and specialist tools;
 - explicit manufacturer product imagery for every current switch record, plus pinned/fallback manufacturer media for the rest of the input-hardware catalog;
@@ -53,7 +55,7 @@ The consumer product includes:
 
 ## Keyboard Lab
 
-Open **Keyboard Lab** from the main Atlas navigation or `#keyboard-lab`.
+Browse complete boards at **Keyboards** (`#keyboards`). Open **Keyboard Lab** from the Keyboards catalog or `#keyboard-lab` for deeper board-level analysis.
 
 Keyboard Lab is intentionally board-only. It focuses on fields that can be sourced cleanly:
 
