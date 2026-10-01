@@ -260,6 +260,128 @@ export const productImages: Record<string, ProductImage> = {
     alt: "LAMZU MAYA X 8K gaming mouse",
     credit: "LAMZU official product image",
   },
+
+  "switch-cherry-mx2a-brown": {
+    url: "https://www.cherry.de/fileadmin/_processed_/5/2/csm_f0694a8d967bb0b918a1deeff0d899ef_7d12c09034.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-brown",
+    alt: "CHERRY MX2A Brown mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-blue": {
+    url: "https://www.cherry.de/fileadmin/_processed_/8/9/csm_e5d019d32e75336da521e655bb7a9787_9f15b7c372.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-blue",
+    alt: "CHERRY MX2A Blue mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-black": {
+    url: "https://www.cherry.de/fileadmin/_processed_/7/c/csm_fd7691dd4272bd0321d9301da171b001_68f6181193.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-black",
+    alt: "CHERRY MX2A Black mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-silent-red": {
+    url: "https://www.cherry.de/fileadmin/_processed_/7/7/csm_a6beebe6610f3f33e4cae02af3abf080_2aec218df5.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-silent-red",
+    alt: "CHERRY MX2A Silent Red mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx2a-speed-silver": {
+    url: "https://www.cherry.de/fileadmin/_processed_/8/9/csm_db99c95e8bc8ead9d8a587de9e73f1d2_da48d40680.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-speed-silver",
+    alt: "CHERRY MX2A Speed Silver mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-cherry-mx-clear": {
+    url: "https://www.cherry.de/fileadmin/_processed_/4/8/csm_96507a12c423efdcf4da7ee59ccbc382_be2ace6051.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx-clear",
+    alt: "CHERRY MX Clear mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-gateron-oil-king": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/04/products/gateron-oil-king-linear-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-oil-king-pre-lubed-switches-linear",
+    alt: "Gateron Oil King Linear mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-baby-kangaroo-2": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/20/products/gateron-baby-kangaroo-tactile-switch9.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-baby-kangaroo-20-tactile-switch-set",
+    alt: "Gateron Baby Kangaroo 2.0 tactile mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-quinn": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2603/06/products/gateron-quinn-tactile-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-quinn-tactile-switch-set",
+    alt: "Gateron Quinn tactile mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-milky-yellow-pro": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2407/29/photo/gateron-milky-pro-switch-red-yellow2.webp",
+    sourceUrl: "https://www.gateron.com/products/gateron-ks-3-milky-pro-switch-set",
+    alt: "Gateron KS-3X1 Milky Yellow Pro mechanical keyboard switch",
+    credit: "Gateron official product image",
+  },
+
+  "switch-gateron-magnetic-jade-emerald": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-emerald-he-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-emerald-switch-set",
+    alt: "Gateron Magnetic Jade Emerald heavy tactile Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-cherry-mx2a-red": {
+    url: "https://www.cherry.de/fileadmin/_processed_/7/a/csm_6f9d95492f1c7d13592741ed63d263d1_bef242fb90.jpg",
+    sourceUrl: "https://www.cherry.de/en-us/product/mx2a-red",
+    alt: "CHERRY MX2A Red mechanical keyboard switch",
+    credit: "CHERRY official product image",
+  },
+  "switch-wooting-lekker-tikken-medium": {
+    url: "https://checkout-apac.wooting.io/cdn/shop/files/lekker-tikken_SW1-TIK-MID-20P_1.jpg?v=1772142865&width=3840",
+    sourceUrl: "https://wooting.io/product/wooting-lekker-tikken-medium-switch",
+    alt: "Wooting Lekker Tikken Medium Hall-effect switch",
+    credit: "Wooting official product image",
+  },
+  "switch-wooting-lekker-v2-l45": {
+    url: "https://checkout-row-apac.wooting.io/cdn/shop/files/L45-V2.png?v=1771508596&width=1445",
+    sourceUrl: "https://wooting.io/product/lekker-switch-l45-v2",
+    alt: "Wooting Lekker V2 L45 Hall-effect switch",
+    credit: "Wooting official product image",
+  },
+  "switch-wooting-lekker-v2-l60": {
+    url: "https://checkout-row-apac.wooting.io/cdn/shop/files/L60-V2.png?v=1771514540&width=1445",
+    sourceUrl: "https://wooting.io/product/lekker-switch-l60-v2",
+    alt: "Wooting Lekker V2 L60 Hall-effect switch",
+    credit: "Wooting official product image",
+  },
+  "switch-gateron-magnetic-jade-delta-light": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2511/08/products/GATERONMagneticJadeDeltaSwitch1.png?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-delta-switch",
+    alt: "Gateron Magnetic Jade Delta Light Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-delta-dark": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2511/08/products/GATERONMagneticJadeDeltaSwitch7.png?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-delta-switch",
+    alt: "Gateron Magnetic Jade Delta Dark Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-genty-silent": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-genty-silent-he-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-genty-silent-switch",
+    alt: "Gateron Magnetic Genty Silent Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-ruby": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-magnetic-jade-ruby-switch1.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-ruby-switch",
+    alt: "Gateron Magnetic Jade Ruby Hall-effect switch",
+    credit: "Gateron official product image",
+  },
+  "switch-gateron-magnetic-jade-max": {
+    url: "https://ueeshop.ly200-cdn.com/u_file/UPAW/UPAW819/2512/30/products/gateron-mangeitc-jade-max-switch.webp?x-oss-process=image%2Fresize%2Cm_lfit%2Ch_1000%2Cw_1000%2Fquality%2Cq_100",
+    sourceUrl: "https://www.gateron.com/products/gateron-magnetic-jade-max-switch-set",
+    alt: "Gateron Magnetic Jade Max Hall-effect switch",
+    credit: "Gateron official product image",
+  },
 };
 
 export const productMediaSourceOverrides: Record<string, string> = {
