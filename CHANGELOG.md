@@ -5,13 +5,14 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 ## Unreleased
 
 ### Data
+- Added Wuque Studio WS Silent Linear, WS Silent Tactile, WS Morandi and WS Pearl from first-party product pages with explicit official media; absent actuation values remain unset rather than inferred from bottom-out force.
 - Expanded the canonical switch catalog with manufacturer-backed Wuque Studio WS Red, WS Yellow, WS Brown and WS Quartz records.
 - Added sourced KTT Hyacinth, Macaron Orange and Macaron Pink records with official manufacturer media. Macaron Orange keeps operating force distinct from its tactile pressure-point force.
 - Completed the seven-switch KTT Macaron family with Red, Yellow, Green, Blue and Purple; tactile pressure-point values remain distinct from actuation/bottom-out fields.
 - Added KTT Creamy Ice Cream, Taro Ice Cream and MoonRosa with official KTT media and specialist travel/force references; Guava remains excluded while KTT's own published force text disagrees across pages.
 - Added Kailh BOX Jade and BOX Silent Pink from first-party Kailh specifications and media. BOX Navy remains excluded while Kailh's own pages disagree on its operating force.
 - Added Kailh Magnetic CPG1515M01D01 and Midnight MX Silent Tactile with first-party technical specifications and media; magnetic compatibility remains explicitly board/sensor/firmware dependent.
-- Current canonical catalog: 153 products, including 69 keyboard switches.
+- Current canonical catalog: 157 products, including 73 keyboard switches.
 
 ## v0.9.0 — 2026-10-01
 
