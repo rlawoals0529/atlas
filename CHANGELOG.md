@@ -4,6 +4,9 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 
 ## Unreleased
 
+### Product and UX
+- Added source-check recency filtering and newest/oldest source-check sorting across the catalog; recency remains a maintenance signal rather than a product-quality score.
+
 ## v0.9.1 — 2026-10-01
 
 ### Product and UX
