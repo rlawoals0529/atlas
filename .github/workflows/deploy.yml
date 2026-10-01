@@ -44,6 +44,7 @@ jobs:
           npm run product:validate
           npm run media:validate
           npm run headers:validate
+          npm run public:validate
           npm run data:report
           npm run data:seed
           test -s generated/data-report.json
@@ -98,6 +99,12 @@ jobs:
             echo
             echo "Health check: PASS — deployed release metadata matches this repository checkout."
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify deployed public discovery surface
+        if: steps.cloudflare.outputs.configured == 'true'
+        shell: bash
+        run: |
+          node scripts/verify-deployed-public-surface.mjs "${{ steps.deploy.outputs.url }}" | tee /tmp/atlas-public-surface-verification.log
+          echo "Public surface: PASS — deployed metadata, discovery files and key security headers verified." >> "$GITHUB_STEP_SUMMARY"
       - name: Verify deployed product media fallbacks
         if: steps.cloudflare.outputs.configured == 'true'
         shell: bash
