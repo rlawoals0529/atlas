@@ -20,9 +20,12 @@ export default function AtlasGlobalNav({ hash, onPreload }: AtlasGlobalNavProps)
       <span><b>ATLAS</b><small>input gear intelligence</small></span>
     </a>
     <nav aria-label="Primary Atlas navigation">
-      {routes.map(route => <a key={route.href} href={route.href} className={route.match(hash) ? "active" : ""} onMouseEnter={() => onPreload?.(route.href)} onFocus={() => onPreload?.(route.href)} onPointerDown={() => onPreload?.(route.href)}>
+      {routes.map(route => {
+        const active = route.match(hash);
+        return <a key={route.href} href={route.href} className={active ? "active" : ""} aria-current={active ? "page" : undefined} onMouseEnter={() => onPreload?.(route.href)} onFocus={() => onPreload?.(route.href)} onPointerDown={() => onPreload?.(route.href)}>
         <b>{route.label}</b><small>{route.hint}</small>
-      </a>)}
+      </a>;
+      })}
     </nav>
     <span className="atlas-global-status"><i/> evidence-aware</span>
   </header>;
