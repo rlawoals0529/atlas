@@ -25,6 +25,8 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
+      - name: Run Worker API contract tests
+        run: npm test
       - name: Validate canonical catalog shards
         run: npm run data:validate
       - name: Validate community evidence pilots
