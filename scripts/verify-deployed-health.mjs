@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { loadCatalog } from "./load-catalog.mjs";
 
 const baseUrl = process.argv[2]?.replace(/\/$/, "");
 if (!baseUrl || !/^https:\/\//.test(baseUrl)) {
@@ -13,11 +14,29 @@ const readReleaseField = (field) => {
   return match[1];
 };
 
+const catalog = loadCatalog();
 const expected = {
   build: readReleaseField("label"),
   productUi: readReleaseField("productUi"),
   dataLayer: readReleaseField("dataLayer"),
   researchCutoff: readReleaseField("researchCutoff"),
+  products: catalog.mice.length + catalog.mousepads.length + catalog.skates.length + catalog.keyboards.length + catalog.switches.length,
+  mice: catalog.mice.length,
+  pads: catalog.mousepads.length,
+  skates: catalog.skates.length,
+  keyboards: catalog.keyboards.length,
+  switches: catalog.switches.length,
+};
+
+const expectedHeaders = {
+  "content-security-policy": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+  "cross-origin-resource-policy": "same-origin",
+  "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=()",
+  "referrer-policy": "no-referrer",
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
+  "cache-control": "no-store",
 };
 
 const attempts = 12;
@@ -50,15 +69,25 @@ for (let attempt = 1; attempt <= attempts; attempt += 1) {
           .filter(([key, value]) => health[key] !== value)
           .map(([key, value]) => `${key}: expected ${JSON.stringify(value)}, received ${JSON.stringify(health[key])}`);
 
-        if (health.ok === true && mismatches.length === 0) {
+        const headerMismatches = Object.entries(expectedHeaders)
+          .filter(([name, value]) => response.headers.get(name) !== value)
+          .map(([name, value]) => `header ${name}: expected ${JSON.stringify(value)}, received ${JSON.stringify(response.headers.get(name))}`);
+
+        const contentType = response.headers.get("content-type") ?? "";
+        if (!contentType.toLowerCase().startsWith("application/json")) {
+          headerMismatches.push(`header content-type: expected application/json, received ${JSON.stringify(contentType)}`);
+        }
+
+        if (health.ok === true && mismatches.length === 0 && headerMismatches.length === 0) {
           console.log(JSON.stringify(health));
-          console.log(`Verified deployed Atlas release ${expected.build} on attempt ${attempt}.`);
+          console.log(`Verified deployed Atlas release ${expected.build}, catalog counts and API security headers on attempt ${attempt}.`);
           process.exit(0);
         }
 
         lastError = [
           health.ok === true ? null : `ok: expected true, received ${JSON.stringify(health.ok)}`,
           ...mismatches,
+          ...headerMismatches,
         ].filter(Boolean).join("; ");
       }
     }
