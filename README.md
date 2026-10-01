@@ -244,6 +244,15 @@ Optional production analytics endpoints:
 
 ## Validation
 
+For the full local verification path:
+
+```bash
+npm ci
+npm run verify
+```
+
+Individual checks remain available when working on a focused change:
+
 ```bash
 npm run data:validate
 npm run community:validate
