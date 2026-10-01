@@ -5,6 +5,7 @@ Atlas release notes focus on user-visible product changes, research/data rules, 
 ## Unreleased
 
 ### Product and UX
+- Added a dedicated complete-board Keyboards catalog at `#keyboards`; Keyboard Lab remains the deeper board-analysis tool and standalone switches stay in the separate Switches catalog.
 - Added source-check recency filtering and newest/oldest source-check sorting across the catalog; recency remains a maintenance signal rather than a product-quality score.
 
 ### Fixed
