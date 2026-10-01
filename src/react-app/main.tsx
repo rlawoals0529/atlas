@@ -1,4 +1,4 @@
-import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
+import { StrictMode, Suspense, lazy, startTransition, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import AtlasConsumer from "./AtlasConsumer";
 import AnalyticsBridge from "./AnalyticsBridge";
@@ -24,19 +24,39 @@ import "./atlas-ux-refresh.css";
 import "./shape-lab-v2.css";
 import "./atlas-readability.css";
 import "./atlas-polish.css";
+import "./catalog-pages.css";
 
-const PointingApp = lazy(() => import("./AppV05"));
-const ProductLab = lazy(() => import("./ProductLab"));
-const ValidationRunner = lazy(() => import("./ValidationRunner"));
-const KeyboardLab = lazy(() => import("./KeyboardLab"));
-const SensitivityLab = lazy(() => import("./SensitivityLab"));
+const loadPointing = () => import("./AppV05");
+const loadProductLab = () => import("./ProductLab");
+const loadValidationRunner = () => import("./ValidationRunner");
+const loadKeyboardLab = () => import("./KeyboardLab");
+const loadSensitivityLab = () => import("./SensitivityLab");
+const loadSwitchReviewIndex = () => import("./SwitchReviewIndex");
 
-function ToolFallback() {
-  return <main className="v5-main v5-page">
-    <section className="v5-panel" role="status" aria-live="polite">
-      <div className="v5-kicker">ATLAS</div>
-      <p>Loading tool…</p>
-    </section>
+const PointingApp = lazy(loadPointing);
+const ProductLab = lazy(loadProductLab);
+const ValidationRunner = lazy(loadValidationRunner);
+const KeyboardLab = lazy(loadKeyboardLab);
+const SensitivityLab = lazy(loadSensitivityLab);
+const SwitchReviewIndex = lazy(loadSwitchReviewIndex);
+
+const preloadRoute = (href: string) => {
+  if (href === "#pointing") void loadPointing();
+  else if (href === "#keyboard-lab") void loadKeyboardLab();
+  else if (href === "#sensitivity") void loadSensitivityLab();
+  else if (href === "#product-lab") void loadProductLab();
+  else if (href === "#validation-run") void loadValidationRunner();
+  else if (href === "#switches") void loadSwitchReviewIndex();
+};
+
+function ToolFallback({ hash }: { hash: string }) {
+  const label = hash === "#keyboard-lab" ? "Keyboard Lab" : hash === "#sensitivity" ? "Sensitivity Lab" : hash === "#product-lab" ? "Research" : hash === "#validation-run" ? "Validation" : "Setup";
+  return <main className="atlas-route-loading" role="status" aria-live="polite" aria-label={`Loading ${label}`}>
+    <div className="atlas-route-loading-head"><span>Atlas</span><b>{label}</b></div>
+    <div className="atlas-route-loading-grid">
+      <div className="atlas-loading-block large"><i/><i/><i/></div>
+      <div className="atlas-loading-stack"><div className="atlas-loading-block"><i/><i/></div><div className="atlas-loading-block"><i/><i/><i/></div></div>
+    </div>
   </main>;
 }
 
@@ -44,7 +64,7 @@ function RootRouter() {
   const [hash, setHash] = useState(() => window.location.hash);
 
   useEffect(() => {
-    const onHash = () => setHash(window.location.hash);
+    const onHash = () => startTransition(() => setHash(window.location.hash));
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
@@ -62,8 +82,10 @@ function RootRouter() {
   const keyboardLab = hash === "#keyboard-lab";
   const sensitivityLab = hash === "#sensitivity";
   const pointingApp = hash === "#pointing";
+  const mousepadsPage = hash === "#mousepads";
+  const switchesPage = hash === "#switches";
 
-  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : productLab ? <>
+  const route = validationRunner ? <ValidationRunner /> : keyboardLab ? <KeyboardLab /> : sensitivityLab ? <SensitivityLab /> : mousepadsPage ? <AtlasConsumer key="mousepads" focusCategory="mousepad" /> : switchesPage ? <AtlasConsumer key="switches" focusCategory="switch" afterCatalog={<Suspense fallback={<div className="switch-index-inline-loading" role="status">Loading attributed switch review index…</div>}><SwitchReviewIndex /></Suspense>} /> : productLab ? <>
     <ProductLab />
     <a className="atlas-validation-run-entry" href="#validation-run" aria-label="Open guided Atlas physical validation runner"><span>RUN</span><b>Physical validation session</b><i>↗</i></a>
   </> : pointingApp ? <>
@@ -76,8 +98,8 @@ function RootRouter() {
 
   return <>
     <AnalyticsTransport />
-    <AtlasGlobalNav hash={hash}/>
-    <Suspense fallback={<ToolFallback />}>{route}</Suspense>
+    <AtlasGlobalNav hash={hash} onPreload={preloadRoute}/>
+    <Suspense fallback={<ToolFallback hash={hash} />}>{route}</Suspense>
   </>;
 }
 

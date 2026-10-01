@@ -153,8 +153,13 @@ function ProductDrawer({ product, onClose, onCompare, compared }: { product: Cat
   </div>;
 }
 
-export default function AtlasConsumer() {
-  const [category, setCategory] = useState<"all" | ProductType>("mouse");
+type AtlasConsumerProps = {
+  focusCategory?: Extract<ProductType, "mousepad" | "switch">;
+  afterCatalog?: ReactNode;
+};
+
+export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasConsumerProps = {}) {
+  const [category, setCategory] = useState<"all" | ProductType>(focusCategory ?? "mouse");
   const [query, setQuery] = useState("");
   const [brand, setBrand] = useState("all");
   const [currentOnly, setCurrentOnly] = useState(true);
@@ -230,7 +235,14 @@ export default function AtlasConsumer() {
   };
   const selectCategory = (next: "all" | ProductType) => { setCategory(next); setBrand("all"); clearCategoryFilters(); };
 
-  return <div className="consumer-shell">
+  const focusedMeta = focusCategory ? categoryMeta[focusCategory] : null;
+  const focusedDescription = focusCategory === "mousepad"
+    ? "Browse mousepads as a first-class catalog: cloth, hybrid, glass, resin and hard surfaces with material, size and feel fields kept separate from sourced evidence."
+    : focusCategory === "switch"
+      ? "Browse Atlas switch records, then search the broader attributed ThereminGoat review directory below. External review metadata stays separate from Atlas product specs."
+      : "";
+
+  return <div className={`consumer-shell ${focusCategory ? "consumer-category-page" : ""}`} data-focus-category={focusCategory ?? undefined}>
     <header className="consumer-topbar">
       <a className="consumer-brand" href="#"><span className="consumer-logo"><i/><i/><i/></span><b>ATLAS</b><small>input gear intelligence</small></a>
       <nav><a href="#pointing">Setup finder</a><a href="#keyboard-lab">Keyboard lab</a><a href="#sensitivity">Sensitivity</a><a href="#product-lab">Research</a></nav>
@@ -238,6 +250,18 @@ export default function AtlasConsumer() {
     </header>
 
     <main>
+      {focusCategory && focusedMeta && <section className="consumer-category-hero" data-category={focusCategory}>
+        <div>
+          <span>{focusedMeta.singular} database</span>
+          <h1>{focusCategory === "mousepad" ? "Mousepads" : "Switches"}</h1>
+          <p>{focusedDescription}</p>
+          <div className="consumer-category-hero-actions">
+            <a href="#">Browse all gear</a>
+            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder →</a> : <a href="#keyboard-lab">Open Keyboard Lab →</a>}
+          </div>
+        </div>
+        <aside><b>{counts[focusCategory]}</b><span>canonical Atlas records</span><small>{focusedMeta.description}</small></aside>
+      </section>}
       <section className="consumer-hero">
         <div className="consumer-hero-copy"><span className="consumer-kicker">PERIPHERAL DATABASE + DECISION TOOLS</span><h1>Find gear by <em>what matters,</em><br/>not what is trending.</h1><p>Browse specs, fit signals, surface behavior, switch characteristics and source provenance across the PC input stack. Atlas keeps manufacturer claims, independent findings and modeled guidance visibly separate.</p><div className="consumer-hero-actions"><button onClick={() => document.getElementById("consumer-catalog")?.scrollIntoView({ behavior: "smooth" })}>Browse database</button><a href="#pointing">Build a mouse setup</a></div></div>
         <div className="consumer-hero-panel"><span>CATALOG COVERAGE</span><strong>{allCatalog.length}</strong><small>canonical product records</small><div>{(Object.keys(categoryMeta) as ProductType[]).map(type => <button key={type} data-category={type} onClick={() => { selectCategory(type); document.getElementById("consumer-catalog")?.scrollIntoView({ behavior: "smooth" }); }}><span>{categoryMeta[type].label}</span><b>{counts[type]}</b></button>)}</div></div>
@@ -278,6 +302,7 @@ export default function AtlasConsumer() {
         {filtered.length > 0 ? <div className="consumer-grid">{filtered.map(product => <div className="consumer-card-wrap" key={product.id}><button className={`consumer-card-compare ${compared(product.id) ? "selected" : ""}`} onClick={() => toggleCompare(product)}>{compared(product.id) ? "Compared" : "+ Compare"}</button><ProductCard product={product} onOpen={setSelected} compared={compared(product.id)}/></div>)}</div> : <div className="consumer-empty"><b>No records match those filters.</b><span>Clear a category filter or broaden the search.</span><button onClick={() => { setQuery(""); setBrand("all"); clearCategoryFilters(); }}>Reset filters</button></div>}
       </section>
 
+      {afterCatalog}
       <section className="consumer-principles"><div><span>HOW ATLAS READS DATA</span><h2>Specs are facts. Fit is context. Reviews are evidence.</h2></div><p>Atlas does not turn every reviewer opinion into a universal score. Manufacturer specifications stay labeled as manufacturer claims, independent observations remain attributed, and derived fit models are treated as guidance rather than measurements.</p><a href="#product-lab">Open research & validation →</a></section>
     </main>
 
