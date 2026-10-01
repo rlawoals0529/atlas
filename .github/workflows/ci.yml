@@ -52,3 +52,5 @@ jobs:
           test -s generated/catalog-seed.sql
       - name: Typecheck, build, and validate Worker bundle
         run: npm run check
+      - name: Enforce initial bundle budget
+        run: npm run bundle:validate
