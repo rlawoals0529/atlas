@@ -51,7 +51,8 @@ assert(publicManifest.includes('"src": "/atlas-mark.svg"'), "PWA manifest must k
 
 assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain routable");
 assert(main.includes('hash === "#sensitivity"'), "Sensitivity Lab must remain routable");
-assert(globalNav.includes('href: "#keyboard-lab"'), "global navigation must expose Keyboard Lab");
+assert(globalNav.includes('href: "#keyboards"'), "global navigation must expose the complete-board Keyboards catalog");
+assert(keyboardLab.includes('href="#keyboards"'), "Keyboard Lab must link back to the complete-board catalog");
 assert(globalNav.includes('href: "#sensitivity"'), "global navigation must expose Sensitivity Lab");
 assert(globalNav.includes('href: "#mousepads"'), "global navigation must expose Mousepads");
 assert(globalNav.includes('href: "#switches"'), "global navigation must expose Switches");
