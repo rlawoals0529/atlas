@@ -6,7 +6,6 @@ import { shapeSimilarity, type SimilarityMode } from "../shared/shape";
 import ShapeLabV2, { ShapeCanvas, type ShapeLayer } from "./ShapeLabV2";
 import { ProductMedia } from "./ProductMedia";
 import type { GameStyle, Grip, MouseProduct, MousepadProduct, Product, SkateProduct, UserProfile } from "../shared/types";
-import "./v05.css";
 
 const VERSION = "0.8";
 
