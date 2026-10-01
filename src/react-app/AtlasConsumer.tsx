@@ -128,6 +128,11 @@ function ProductVisual({ product }: { product: CatalogProduct }) {
   return <ProductMedia productId={product.id} className={`consumer-real-image ${product.type}`} fallback={<ProductGlyph type={product.type}/>}/>;
 }
 
+function forceToCN(point?: { value: number; unit: "gf" | "cN" }) {
+  if (!point) return Number.POSITIVE_INFINITY;
+  return point.unit === "gf" ? point.value * 0.980665 : point.value;
+}
+
 function CoveragePill({ product }: { product: CatalogProduct }) {
   const coverage = evidenceCoverage(product);
   return <span className={`consumer-coverage ${coverage.label}`} title="Atlas evidence coverage heuristic"><b>{coverage.score}</b> coverage</span>;
@@ -282,8 +287,8 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (sort === "glide" && a.type === "mousepad" && b.type === "mousepad") return b.feel.dynamicSpeed - a.feel.dynamicSpeed || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "stopping" && a.type === "mousepad" && b.type === "mousepad") return b.feel.stoppingPower - a.feel.stoppingPower || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     if (sort === "actuation" && a.type === "switch" && b.type === "switch") {
-      const af = a.specs.actuationForce?.value ?? a.specs.initialForce?.value ?? Number.POSITIVE_INFINITY;
-      const bf = b.specs.actuationForce?.value ?? b.specs.initialForce?.value ?? Number.POSITIVE_INFINITY;
+      const af = forceToCN(a.specs.actuationForce);
+      const bf = forceToCN(b.specs.actuationForce);
       return af - bf || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     }
     if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
@@ -389,7 +394,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
         <div className="consumer-toolbar">
           <div className="consumer-search"><span aria-hidden="true">⌕</span><input aria-label="Search catalog" value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
-          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Actuation force · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
+          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
           <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "−" : "+"}</span></button>
         </div>
