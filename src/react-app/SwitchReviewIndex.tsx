@@ -1,10 +1,13 @@
 import { Fragment, useMemo, useState } from "react";
+import { switches } from "../shared/catalog";
+import { extraSwitches } from "../shared/switchCatalogExtras";
 import { THEREMINGOAT_SWITCH_REVIEW_COUNT, THEREMINGOAT_SWITCH_SOURCE, thereminGoatSwitchReviews } from "../shared/thereminGoatSwitchReviews";
 import "./switch-review-index.css";
 
 const typeOrder = ["Linear", "Tactile", "Clicky", "Silent Linear", "Silent Tactile"];
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 type SortMode = "name" | "manufacturer" | "newest" | "oldest";
+type LinkFilter = "all" | "linked" | "unlinked";
 
 function prettyDate(value: string) {
   const [month, day, year] = value.split("/").map(Number);
@@ -26,12 +29,30 @@ function typeClass(type: string) {
   return type.toLowerCase().replace(/\s+/g, "-");
 }
 
+function normalizeSwitchName(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+const canonicalSwitches = [...switches, ...extraSwitches];
+const canonicalMatchFor = (entry: (typeof thereminGoatSwitchReviews)[number]) => {
+  const entryName = normalizeSwitchName(entry.name);
+  const entryMaker = normalizeSwitchName(entry.manufacturer);
+  return canonicalSwitches.find(product => {
+    const productName = normalizeSwitchName(product.model);
+    const fullName = normalizeSwitchName(`${product.brand} ${product.model}`);
+    const productMaker = normalizeSwitchName(product.brand);
+    const makerCompatible = !entryMaker || !productMaker || entryMaker === productMaker || entryMaker.includes(productMaker) || productMaker.includes(entryMaker);
+    return makerCompatible && (entryName === productName || entryName === fullName);
+  });
+};
+
 export default function SwitchReviewIndex() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("all");
   const [manufacturer, setManufacturer] = useState("all");
   const [letter, setLetter] = useState("all");
   const [sort, setSort] = useState<SortMode>("name");
+  const [linkFilter, setLinkFilter] = useState<LinkFilter>("all");
 
   const manufacturers = useMemo(
     () => [...new Set(thereminGoatSwitchReviews.map(entry => entry.manufacturer))].sort((a, b) => a.localeCompare(b)),
@@ -63,8 +84,23 @@ export default function SwitchReviewIndex() {
     return counts;
   }, [baseFiltered]);
 
+  const canonicalMatches = useMemo(() => {
+    const matches = new Map<string, string>();
+    for (const entry of thereminGoatSwitchReviews) {
+      const match = canonicalMatchFor(entry);
+      if (match) matches.set(`${entry.name}::${entry.reviewedAt}`, match.id);
+    }
+    return matches;
+  }, []);
+
   const filtered = useMemo(() => {
-    const rows = baseFiltered.filter(entry => letter === "all" || initialFor(entry.name) === letter);
+    const rows = baseFiltered.filter(entry => {
+      if (letter !== "all" && initialFor(entry.name) !== letter) return false;
+      const linked = canonicalMatches.has(`${entry.name}::${entry.reviewedAt}`);
+      if (linkFilter === "linked" && !linked) return false;
+      if (linkFilter === "unlinked" && linked) return false;
+      return true;
+    });
     rows.sort((a, b) => {
       if (sort === "newest") return dateValue(b.reviewedAt) - dateValue(a.reviewedAt) || a.name.localeCompare(b.name);
       if (sort === "oldest") return dateValue(a.reviewedAt) - dateValue(b.reviewedAt) || a.name.localeCompare(b.name);
@@ -72,15 +108,16 @@ export default function SwitchReviewIndex() {
       return a.name.localeCompare(b.name);
     });
     return rows;
-  }, [baseFiltered, letter, sort]);
+  }, [baseFiltered, canonicalMatches, letter, linkFilter, sort]);
 
-  const hasFilters = query.trim() || type !== "all" || manufacturer !== "all" || letter !== "all" || sort !== "name";
+  const hasFilters = query.trim() || type !== "all" || manufacturer !== "all" || letter !== "all" || sort !== "name" || linkFilter !== "all";
   const reset = () => {
     setQuery("");
     setType("all");
     setManufacturer("all");
     setLetter("all");
     setSort("name");
+    setLinkFilter("all");
   };
 
   return <section className="switch-review-index" id="switch-review-index" aria-labelledby="switch-review-index-title">
@@ -90,7 +127,7 @@ export default function SwitchReviewIndex() {
         <h2 id="switch-review-index-title">ThereminGoat switch scorecards</h2>
         <p>Search the public scorecard directory without mixing those reviews into Atlas product specs. Names, manufacturers, switch type, review date and source links stay attributed to ThereminGoat.</p>
       </div>
-      <div className="switch-review-index-stat"><b>{thereminGoatSwitchReviews.length}</b><span>unique switches</span><small>{THEREMINGOAT_SWITCH_REVIEW_COUNT} score-sheet rows</small></div>
+      <div className="switch-review-index-stat"><b>{thereminGoatSwitchReviews.length}</b><span>unique switches</span><small>{canonicalMatches.size} exact-linked to Atlas · {THEREMINGOAT_SWITCH_REVIEW_COUNT} score-sheet rows</small></div>
     </div>
 
     <div className="switch-review-index-source">
@@ -106,7 +143,7 @@ export default function SwitchReviewIndex() {
     <div className="switch-review-index-controls">
       <label className="switch-index-search"><span>Search</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Switch, manufacturer, type…"/></label>
       <label><span>Manufacturer</span><select value={manufacturer} onChange={event => setManufacturer(event.target.value)}><option value="all">All manufacturers</option>{manufacturers.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
-      <label><span>Sort</span><select value={sort} onChange={event => setSort(event.target.value as SortMode)}><option value="name">Name · A–Z</option><option value="manufacturer">Manufacturer</option><option value="newest">Newest review</option><option value="oldest">Oldest review</option></select></label>
+      <label><span>Atlas link</span><select value={linkFilter} onChange={event => setLinkFilter(event.target.value as LinkFilter)}><option value="all">All review entries</option><option value="linked">Exact-linked</option><option value="unlinked">Not exact-linked</option></select></label><label><span>Sort</span><select value={sort} onChange={event => setSort(event.target.value as SortMode)}><option value="name">Name · A–Z</option><option value="manufacturer">Manufacturer</option><option value="newest">Newest review</option><option value="oldest">Oldest review</option></select></label>
       <div className="switch-index-summary"><b>{filtered.length}</b><span>of {thereminGoatSwitchReviews.length}</span>{hasFilters && <button type="button" onClick={reset}>Reset</button>}</div>
     </div>
 
@@ -125,7 +162,7 @@ export default function SwitchReviewIndex() {
           <span role="cell" data-label="Manufacturer">{entry.manufacturer}</span>
           <span role="cell" data-label="Type" className="switch-review-type" data-type={typeClass(entry.type)}>{entry.type}</span>
           <time role="cell" data-label="Reviewed" dateTime={entry.reviewedAt}>{prettyDate(entry.reviewedAt)}</time>
-          <span role="cell" data-label="Source"><a href={entry.reviewUrl} target="_blank" rel="noreferrer" title={entry.scorecardName ? `Source scorecard title: ${entry.scorecardName}` : undefined}>Scorecard ↗</a></span>
+          <span role="cell" data-label="Source"><a href={entry.reviewUrl} target="_blank" rel="noreferrer" title={entry.scorecardName ? `Source scorecard title: ${entry.scorecardName}` : undefined}>Scorecard ↗</a>{canonicalMatches.has(`${entry.name}::${entry.reviewedAt}`) && <small className="switch-atlas-link-badge">Atlas exact-link</small>}</span>
         </div>
       </Fragment>)}
     </div>
