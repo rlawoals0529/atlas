@@ -1,0 +1,120 @@
+name: Publish Atlas release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish, without the v prefix (example: 0.9.2)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atlas-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate requested release and exact main target
+        id: release
+        shell: bash
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$REQUESTED_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Version must be numeric semver without a v prefix." >&2
+            exit 1
+          fi
+
+          package_version="$(node -p "require('./package.json').version")"
+          if [[ "$REQUESTED_VERSION" != "$package_version" ]]; then
+            echo "Requested version $REQUESTED_VERSION does not match package.json $package_version." >&2
+            exit 1
+          fi
+
+          target_sha="$(git rev-parse HEAD)"
+          remote_main="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+          if [[ "$target_sha" != "$remote_main" ]]; then
+            echo "Checked-out main is not the current remote main." >&2
+            exit 1
+          fi
+
+          test -f "docs/releases/v${REQUESTED_VERSION}.md"
+          npm run release:validate
+
+          echo "version=$REQUESTED_VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$REQUESTED_VERSION" >> "$GITHUB_OUTPUT"
+          echo "sha=$target_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Install exact dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Generate release SBOM
+        run: npm run sbom:generate
+
+      - name: Verify exact build is live
+        run: node scripts/verify-deployed-health.mjs "https://atlas.rlawoals0529.workers.dev"
+
+      - name: Refuse duplicate tag or release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q .; then
+            echo "Tag $TAG already exists." >&2
+            exit 1
+          fi
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists." >&2
+            exit 1
+          fi
+
+      - name: Publish GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          TARGET_SHA: ${{ steps.release.outputs.sha }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$TARGET_SHA" \
+            --title "Atlas $TAG" \
+            --notes-file "docs/releases/v$VERSION.md" \
+            --latest \
+            "generated/sbom.cdx.json#CycloneDX SBOM"
+
+      - name: Release summary
+        shell: bash
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+          TARGET_SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          {
+            echo "### Atlas release published"
+            echo "- Release: $TAG"
+            echo "- Target SHA: $TARGET_SHA"
+            echo "- Production health matched the repository release contract before publication."
+            echo "- CycloneDX SBOM attached."
+          } >> "$GITHUB_STEP_SUMMARY"

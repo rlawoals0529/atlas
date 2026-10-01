@@ -36,7 +36,18 @@ Do not bump a version solely because the catalog gained a few sourced products.
 
 ## Publishing
 
-Create the GitHub release from the exact `main` SHA that has already passed production verification.
+Use **Actions → Publish Atlas release → Run workflow** and enter the package version without the `v` prefix.
+
+The workflow refuses to publish unless:
+
+- the requested version matches `package.json`;
+- the checked-out SHA is the current remote `main`;
+- `npm run release:validate` confirms package/release/README/changelog/release-note agreement;
+- the matching checked-in release notes exist;
+- the live production `/api/health` matches the repository release contract;
+- the tag/release does not already exist.
+
+It publishes the release against that exact verified `main` SHA and attaches a generated CycloneDX SBOM.
 
 The release should include:
 
