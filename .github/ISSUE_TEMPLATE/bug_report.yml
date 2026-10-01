@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible Atlas UI, API, accessibility, or deployment problem.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep the report concrete. Product-data corrections belong in the Data correction template.
+  - type: input
+    id: route
+    attributes:
+      label: Route / surface
+      description: Where did the issue happen?
+      placeholder: "#switches, #mousepads, /api/catalog, mobile nav, compare dialog..."
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. Compare ...
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser / device
+      placeholder: "Chrome 154 on Windows 11, iPhone Safari..."
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots, console output, or other evidence
+      description: Do not include credentials, private tokens, or personal information.
