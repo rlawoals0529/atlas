@@ -362,3 +362,101 @@
   align-items:center;
   gap:6px;
 }
+
+
+/* Responsive directory rules stay with the lazy SwitchReviewIndex chunk. */
+@media(max-width:1180px){
+  .switch-type-quick{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:1060px){
+  .switch-review-row{
+    grid-template-columns:minmax(220px,1.5fr) minmax(120px,.7fr) minmax(100px,.6fr) 112px 80px;
+  }
+}
+@media(max-width:820px){
+  .switch-review-index-head{
+    grid-template-columns:1fr;
+  }
+  .switch-review-index-stat{
+    min-width:0;
+    width:min(240px,100%);
+  }
+  .switch-review-index-controls{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .switch-index-search{grid-column:1/-1}
+  .switch-index-count{justify-self:stretch}
+  .switch-index-summary{justify-content:flex-start}
+  .switch-review-table{
+    border:0;
+    background:transparent;
+    overflow:visible;
+  }
+  .switch-review-row.header{display:none}
+  .switch-review-row{
+    min-width:0!important;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:7px 14px;
+    min-height:0;
+    margin-bottom:8px;
+    padding:12px 13px;
+    border:1px solid var(--sage-6)!important;
+    border-radius:10px;
+    background:#fff!important;
+    box-shadow:0 1px 0 rgba(26,33,30,.02);
+  }
+  .switch-review-row>div{
+    grid-column:1/-1;
+    padding:0!important;
+  }
+  .switch-review-row>div small{
+    flex-basis:28px;
+  }
+  .switch-review-row>div b{
+    font-size:12.5px;
+    white-space:normal;
+  }
+  .switch-review-row>span,
+  .switch-review-row>time{
+    position:relative;
+    margin:0!important;
+    padding:15px 0 0!important;
+    font-size:10px!important;
+  }
+  .switch-review-row>span:before,
+  .switch-review-row>time:before{
+    content:attr(data-label);
+    position:absolute;
+    top:0;
+    left:0;
+    color:var(--sage-10);
+    font:600 7.5px var(--atlas-mono);
+    letter-spacing:.035em;
+  }
+  .switch-review-type{
+    justify-self:start;
+    padding:3px 7px!important;
+    margin-top:15px!important;
+  }
+  .switch-review-type:before{
+    top:-15px!important;
+  }
+  .switch-review-row>span:last-child{
+    justify-self:end;
+    text-align:right;
+  }
+}
+@media(max-width:560px){
+  .switch-review-index-source{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .switch-review-index-controls{
+    grid-template-columns:1fr!important;
+  }
+  .switch-index-search{grid-column:auto}
+  .switch-index-summary{min-width:0}
+  .switch-alpha-rail{margin-inline:-2px}
+  .switch-type-quick{grid-template-columns:1fr 1fr}
+}
