@@ -25,7 +25,7 @@ const polling = (hz: number) => hz >= 1000 ? `${hz / 1000}K Hz` : `${hz} Hz`;
 const yesNo = (value?: boolean) => value == null ? "—" : value ? "Yes" : "No";
 const clamp = (value: number) => Math.max(0, Math.min(100, value));
 const scale = (value: number, min: number, max: number) => clamp(((value - min) / Math.max(1, max - min)) * 100);
-const seriesColors = ["var(--blue-10)", "var(--orange-10)", "var(--plum-10)", "var(--jade-10)"];
+const seriesColors = ["var(--blue-11)", "var(--orange-11)", "var(--plum-11)", "var(--jade-11)"];
 
 type MousepadProduct = Extract<CatalogProduct, { type: "mousepad" }>;
 
