@@ -227,6 +227,14 @@ const readSharedShortlistIds = () => {
   return value ? value.split(",").map(item => item.trim()).filter(Boolean).slice(0, 24) : [];
 };
 
+const readSharedCompareIds = () => {
+  if (typeof window === "undefined") return [] as string[];
+  const value = new URLSearchParams(window.location.search).get("compare");
+  return value ? value.split(",").map(item => item.trim()).filter(item => /^[a-z0-9-]{1,120}$/i.test(item)).slice(0, 4) : [];
+};
+
+
+
 const readSharedSwitchParam = (key: string) => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(key);
 const sharedSwitchSort = () => {
   const value = readSharedSwitchParam("sort");
@@ -249,6 +257,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [showFilters, setShowFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [compareShareStatus, setCompareShareStatus] = useState("");
   const filtersId = useId();
   const compareTrayId = useId();
 
@@ -285,6 +294,21 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     const product = catalogProducts.find(item => item.id === productId);
     if (product) setSelected(product);
   }, [catalogProducts]);
+
+  useEffect(() => {
+    const requested = readSharedCompareIds();
+    if (requested.length < 2) return;
+    const products = requested
+      .map(id => catalogProducts.find(product => product.id === id))
+      .filter((product): product is CatalogProduct => Boolean(product));
+    const firstType = products[0]?.type;
+    const sameType = firstType ? products.filter(product => product.type === firstType).slice(0, 4) : [];
+    if (sameType.length < 2) return;
+    setCompareIds(sameType.map(product => product.id));
+    void loadConsumerCompare();
+    setCompareOpen(true);
+  }, [catalogProducts]);
+
 
 
   useEffect(() => {
@@ -411,6 +435,25 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
       setShareStatus("Could not copy link");
     }
     window.setTimeout(() => setShareStatus(""), 1800);
+  };
+
+  const copyComparison = async () => {
+    if (compareProducts.length < 2) {
+      setCompareShareStatus("Add two products first");
+      window.setTimeout(() => setCompareShareStatus(""), 1800);
+      return;
+    }
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.searchParams.set("compare", compareProducts.slice(0, 4).map(product => product.id).join(","));
+    url.hash = compareProducts[0].type === "switch" ? "#switches" : compareProducts[0].type === "mousepad" ? "#mousepads" : "";
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setCompareShareStatus("Comparison link copied");
+    } catch {
+      setCompareShareStatus("Could not copy link");
+    }
+    window.setTimeout(() => setCompareShareStatus(""), 1800);
   };
 
   const copySavedShortlist = async () => {
@@ -564,7 +607,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
       <section className="consumer-principles"><div><span>HOW ATLAS READS DATA</span><h2>Specs are facts. Fit is context. Reviews are evidence.</h2></div><p>Atlas does not turn every reviewer opinion into a universal score. Manufacturer specifications stay labeled as manufacturer claims, independent observations remain attributed, and derived fit models are treated as guidance rather than measurements.</p><a href="#product-lab">Open research & validation →</a></section>
     </main>
 
-    {compareProducts.length > 0 && <div className="consumer-compare-tray" id={compareTrayId} role="region" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button type="button" onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model} from comparison`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button type="button" className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button type="button" className="consumer-compare-open" aria-haspopup="dialog" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
+    {compareProducts.length > 0 && <div className="consumer-compare-tray" id={compareTrayId} role="region" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button type="button" onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model} from comparison`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button type="button" className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button type="button" className="consumer-compare-share" disabled={compareProducts.length < 2} onClick={copyComparison}>Copy comparison</button><span className="consumer-compare-share-status" role="status" aria-live="polite">{compareShareStatus}</span><button type="button" className="consumer-compare-open" aria-haspopup="dialog" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
 
     {selected && <ProductDrawer product={selected} onClose={closeProduct} onCompare={toggleCompare} compared={compared(selected.id)} onSave={toggleSaved} saved={isSaved(selected.id)}/>} 
     {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<CompareLoadingFallback onClose={() => setCompareOpen(false)}/>} ><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 
