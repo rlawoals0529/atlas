@@ -185,6 +185,12 @@ function CompareLoadingFallback({ onClose }: { onClose: () => void }) {
   </div>;
 }
 
+const readSharedSwitchParam = (key: string) => typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(key);
+const sharedSwitchSort = () => {
+  const value = readSharedSwitchParam("sort");
+  return value && ["name", "coverage", "price", "actuation", "travel"].includes(value) ? value as "name" | "coverage" | "price" | "actuation" | "travel" : "coverage";
+};
+
 type AtlasConsumerProps = {
   focusCategory?: Extract<ProductType, "mousepad" | "switch">;
   afterCatalog?: ReactNode;
@@ -193,10 +199,10 @@ type AtlasConsumerProps = {
 
 export default function AtlasConsumer({ focusCategory, afterCatalog, additionalProducts = [] }: AtlasConsumerProps = {}) {
   const [category, setCategory] = useState<"all" | ProductType>(focusCategory ?? "mouse");
-  const [query, setQuery] = useState("");
-  const [brand, setBrand] = useState("all");
-  const [currentOnly, setCurrentOnly] = useState(true);
-  const [sort, setSort] = useState<"name" | "coverage" | "price" | "glide" | "stopping" | "actuation" | "travel">("coverage");
+  const [query, setQuery] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("q") ?? "" : "");
+  const [brand, setBrand] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("brand") ?? "all" : "all");
+  const [currentOnly, setCurrentOnly] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("current") !== "all" : true);
+  const [sort, setSort] = useState<"name" | "coverage" | "price" | "glide" | "stopping" | "actuation" | "travel">(() => focusCategory === "switch" ? sharedSwitchSort() : "coverage");
   const [selected, setSelected] = useState<CatalogProduct | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -214,9 +220,10 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [keyboardTech, setKeyboardTech] = useState("all");
   const [formFactor, setFormFactor] = useState("all");
   const [rapidTriggerOnly, setRapidTriggerOnly] = useState(false);
-  const [switchTech, setSwitchTech] = useState("all");
-  const [switchFeel, setSwitchFeel] = useState("all");
-  const [compactSwitchView, setCompactSwitchView] = useState(false);
+  const [switchTech, setSwitchTech] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("tech") ?? "all" : "all");
+  const [switchFeel, setSwitchFeel] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("feel") ?? "all" : "all");
+  const [compactSwitchView, setCompactSwitchView] = useState(() => focusCategory === "switch" && readSharedSwitchParam("density") === "compact");
+  const [shareStatus, setShareStatus] = useState("");
 
   const catalogProducts = useMemo(() => additionalProducts.length ? [...allCatalog, ...additionalProducts] : allCatalog, [additionalProducts]);
   const switchProducts = useMemo(() => catalogProducts.filter((product): product is Extract<CatalogProduct, { type: "switch" }> => product.type === "switch"), [catalogProducts]);
@@ -294,6 +301,26 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
     if (sort === "travel" && a.type === "switch" && b.type === "switch") return a.specs.totalTravelMm - b.specs.totalTravelMm || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
     return evidenceCoverage(b).score - evidenceCoverage(a).score || `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`);
   }), [catalogProducts, category, currentOnly, brand, query, shape, minPolling, maxWeight, surface, padFirmness, stitchedOnly, skateMaterial, keyboardTech, formFactor, rapidTriggerOnly, switchTech, switchFeel, sort]);
+
+  const copySwitchView = async () => {
+    const url = new URL(window.location.href);
+    url.search = "";
+    if (query.trim()) url.searchParams.set("q", query.trim());
+    if (brand !== "all") url.searchParams.set("brand", brand);
+    if (!currentOnly) url.searchParams.set("current", "all");
+    if (switchTech !== "all") url.searchParams.set("tech", switchTech);
+    if (switchFeel !== "all") url.searchParams.set("feel", switchFeel);
+    if (sort !== "coverage") url.searchParams.set("sort", sort);
+    if (compactSwitchView) url.searchParams.set("density", "compact");
+    url.hash = "#switches";
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setShareStatus("View link copied");
+    } catch {
+      setShareStatus("Could not copy link");
+    }
+    window.setTimeout(() => setShareStatus(""), 1800);
+  };
 
   const clearCategoryFilters = () => {
     setMinPolling(0); setMaxWeight(140); setShape("all"); setSurface("all"); setPadFirmness("all"); setStitchedOnly(false); setSkateMaterial("all"); setKeyboardTech("all"); setFormFactor("all"); setRapidTriggerOnly(false); setSwitchTech("all"); setSwitchFeel("all");
@@ -389,6 +416,8 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
           <div className="consumer-switch-feel-quick" role="group" aria-label="Filter Atlas switches by feel">
             {(["all","linear","tactile","clicky"] as const).map(item => <button type="button" key={item} className={switchFeel === item ? "active" : ""} onClick={() => setSwitchFeel(item)} aria-pressed={switchFeel === item}>{item === "all" ? "Any feel" : titleCase(item)}</button>)}
             <span className="consumer-switch-view-toggle"><button type="button" aria-pressed={!compactSwitchView} className={!compactSwitchView ? "active" : ""} onClick={() => setCompactSwitchView(false)}>Comfortable</button><button type="button" aria-pressed={compactSwitchView} className={compactSwitchView ? "active" : ""} onClick={() => setCompactSwitchView(true)}>Compact</button></span>
+            <button type="button" className="consumer-switch-share-view" onClick={copySwitchView}>Copy view</button>
+            <span className="consumer-switch-share-status" role="status" aria-live="polite">{shareStatus}</span>
           </div>
         </>}
         <div className="consumer-toolbar">
