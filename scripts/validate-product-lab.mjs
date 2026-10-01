@@ -168,3 +168,5 @@ assert(communityProtocol.includes("not representative market research"), "commun
 assert(!/"ANALYTICS_DB"\s*:/.test(wrangler), "optional analytics must not gain a fake/unconfigured D1 binding");
 
 if (!process.exitCode) console.log("Product Lab integrity checks passed.");
+assert(read("src/react-app/ConsumerCompare.tsx").includes('label: "Latest source check"'), "rich comparison must expose latest source-check recency");
+assert(read("src/react-app/ConsumerCompare.tsx").includes('label: "Oldest source check"'), "rich comparison must expose oldest source-check recency");
