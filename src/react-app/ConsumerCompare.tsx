@@ -72,7 +72,7 @@ function MousepadVisualSummary({ products }: { products: MousepadProduct[] }) {
       </div>
     </div>
 
-    <div className="mousepad-profile-grid">
+    <div className="mousepad-profile-grid" style={{ "--compare-count": products.length } as React.CSSProperties}>
       {products.map((product, index) => <article key={product.id} style={{ "--series-color": seriesColors[index] } as React.CSSProperties}>
         <header><span>{String(index + 1).padStart(2, "0")} · {product.brand}</span><b>{product.model}</b></header>
         <div className="mousepad-profile-chips"><span>{titleCase(product.specs.surfaceClass)}</span><span>{product.specs.stitchedEdges ? "Stitched" : "Unstitched"}</span></div>
