@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://atlas.rlawoals0529.workers.dev/sitemap.xml
