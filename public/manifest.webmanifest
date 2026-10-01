@@ -1,11 +1,23 @@
 {
-  "name": "Atlas — Gaming Peripheral Fit Lab",
+  "name": "Atlas — Gaming Peripheral Research & Comparison",
   "short_name": "Atlas",
-  "description": "Evidence-aware mouse, mousepad and skate research with explainable fit and shape comparison.",
+  "description": "Evidence-aware research and comparison for gaming mice, mousepads, skates, keyboards and switches.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#07090c",
-  "theme_color": "#07090c",
-  "categories": ["utilities", "productivity", "games"]
+  "background_color": "#f5f6f3",
+  "theme_color": "#f5f6f3",
+  "categories": [
+    "utilities",
+    "productivity",
+    "games"
+  ],
+  "icons": [
+    {
+      "src": "/atlas-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
