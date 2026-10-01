@@ -37,6 +37,7 @@ jobs:
         run: npm audit --omit=dev --audit-level=high
       - name: Validate catalog, evidence, utilities and Worker bundle
         run: |
+          npm run release:validate
           npm run data:validate
           npm run community:validate
           npm run sensitivity:validate
