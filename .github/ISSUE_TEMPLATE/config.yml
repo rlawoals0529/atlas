@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Live Atlas
+    url: https://atlas.rlawoals0529.workers.dev/
+    about: Check the current production build before filing a UI issue.
