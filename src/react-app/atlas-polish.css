@@ -1053,3 +1053,28 @@ body{
     justify-content:space-between;
   }
 }
+
+
+/* Long catalog content should wrap without pushing controls outside their cards. */
+.consumer-product h3,
+.consumer-drawer>header h2,
+.consumer-source-list b{
+  overflow-wrap:anywhere;
+}
+.consumer-drawer>header h2{line-height:1.05}
+.consumer-drawer>header button{flex:0 0 34px}
+.consumer-product>footer{
+  align-items:center;
+  flex-wrap:wrap;
+}
+.consumer-product>footer em{
+  margin-left:auto;
+  white-space:nowrap;
+}
+.consumer-source-list a>div{min-width:0}
+.consumer-source-list b{line-height:1.3}
+.consumer-evidence-list a{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
