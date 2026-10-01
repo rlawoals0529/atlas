@@ -1,13 +1,13 @@
 @layer atlas-route-base{
 /* Shape Lab v2: light technical canvas and searchable, layer-oriented comparison controls. */
 .shape-lab-v2{display:grid;gap:22px}
-.shape-toolbar{display:flex;align-items:end;gap:9px;padding:12px 14px;background:#fff!important;border:1px solid #d5dcd6!important;box-shadow:none!important;flex-wrap:wrap}
+.shape-toolbar{display:flex;align-items:end;gap:9px;padding:12px 14px;background:#fff;border:1px solid #d5dcd6;box-shadow:none;flex-wrap:wrap}
 .shape-toolbar>label{display:grid;gap:5px;color:#718078;font:600 8px "DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
 .shape-toolbar select{min-width:118px;height:36px;padding:0 10px;border:1px solid #cbd3cd;border-radius:8px;background:#fafbf8;color:#1f2522}
 .shape-segments{display:flex;gap:3px;padding:3px;border:1px solid #d4dbd5;border-radius:9px;background:#f2f4f1}
 .shape-segments button,.shape-mode-row button{min-height:30px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:#626d66;font:650 9px Inter,system-ui,sans-serif}
 .shape-segments button.active,.shape-mode-row button.active{background:#fff;color:#174d3e;box-shadow:0 1px 5px rgba(25,40,31,.08)}
-.shape-toggle{display:flex!important;grid-auto-flow:column;align-items:center;gap:7px!important;min-height:36px;padding:0 9px;border:1px solid #d5dcd6;border-radius:8px;background:#fafbf8;color:#4f5b54!important;text-transform:none!important;letter-spacing:0!important}
+.shape-toggle{display:flex!important;grid-auto-flow:column;align-items:center;gap:7px!important;min-height:36px;padding:0 9px;border:1px solid #d5dcd6;border-radius:8px;background:#fafbf8;color:#4f5b54;text-transform:none!important;letter-spacing:0!important}
 .shape-toggle input{accent-color:#1e6f5c}
 .shape-reset{min-height:36px;margin-left:auto;padding:0 11px;border:1px solid #cbd3cd;border-radius:8px;background:#fff;color:#47544d;font:650 9px Inter,system-ui,sans-serif}
 .shape-share{min-height:34px;padding:0 11px;border:1px solid #1e6f5c;border-radius:8px;background:#1e6f5c;color:#fff;font:650 8px Inter,system-ui,sans-serif;white-space:nowrap}
@@ -17,7 +17,7 @@
 .shape-reset:hover{border-color:#9eafa5;background:#f7faf7;color:#174d3e}
 
 .shape-workbench{display:grid;grid-template-columns:minmax(360px,480px) minmax(0,1fr);gap:18px;align-items:start}
-.shape-layers,.shape-stage,.shape-similar{background:#fff!important;border:1px solid #d5dcd6!important;box-shadow:none!important}
+.shape-layers,.shape-stage,.shape-similar{background:#fff;border:1px solid #d5dcd6;box-shadow:none}
 .shape-layers{min-width:0;padding:17px;position:sticky;top:calc(var(--atlas-nav-h) + 70px);overflow:hidden}
 .shape-panel-head,.shape-stage-head,.shape-similar-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .shape-panel-head span,.shape-stage-head span,.shape-similar-head span{color:#76827b;font:600 7px "DM Mono",monospace;letter-spacing:.12em}
