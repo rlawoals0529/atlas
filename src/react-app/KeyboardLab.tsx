@@ -1,49 +1,28 @@
 import { useId, useMemo, useState } from "react";
 import "./utility-labs.css";
-import { keyboards, switches } from "../shared/catalog";
+import { keyboards } from "../shared/catalog";
 import { evidenceHealth, evidenceRows, sourceKindMeta } from "../shared/productMeta";
-import type { KeyboardProduct, KeyboardSwitchProduct } from "../shared/types";
+import type { KeyboardProduct } from "../shared/types";
 import { ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
 
-type KeyboardLabProduct = KeyboardProduct | KeyboardSwitchProduct;
+type KeyboardLabProduct = KeyboardProduct;
 
 const money = (value?: number) => value == null ? "—" : `$${value.toFixed(value % 1 ? 2 : 0)}`;
 const polling = (value: number) => value >= 1000 ? `${value / 1000}K Hz` : `${value} Hz`;
-const force = (point?: { value: number; unit: "gf" | "cN" }) => point ? `${point.value} ${point.unit}` : "—";
 const human = (value: string) => value.replaceAll("-", " ").replace(/\b\w/g, char => char.toUpperCase());
 
 function ProductGlyph({ product }: { product: KeyboardLabProduct }) {
-  if (product.type === "switch") return <div className={`kb-switch-glyph ${product.specs.technology}`} aria-hidden="true"><i/><span>{product.specs.feel}</span></div>;
   return <div className={`kb-board-glyph f-${product.specs.formFactor.replace(/[^a-z0-9]/gi, "")}`} aria-hidden="true"><div className="kb-key-row">{Array.from({length: 14}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row short">{Array.from({length: 13}, (_, i) => <i key={i}/>)}</div><div className="kb-key-row">{Array.from({length: 12}, (_, i) => <i key={i}/>)}</div><span>{product.specs.formFactor}</span></div>;
 }
-
 function ProductVisual({ product }: { product: KeyboardLabProduct }) {
   return <ProductMedia productId={product.id} className={`kb-product-media ${product.type}`} fallback={<ProductGlyph product={product}/>}/>;
 }
 
 function Chips({ product }: { product: KeyboardLabProduct }) {
-  if (product.type === "switch") {
-    const silent = [product.model, product.summary, ...(product.tags ?? [])].join(" ").toLowerCase().includes("silent");
-    return <><span>{human(product.specs.technology)}</span><span>{human(product.specs.feel)}</span>{silent && <span>silent</span>}<span>{force(product.specs.actuationForce)} actuation</span><span>{product.specs.totalTravelMm} mm travel</span>{product.specs.compatibility?.length ? <span>board compatibility varies</span> : null}</>;
-  }
   return <><span>{product.specs.formFactor}</span><span>{human(product.specs.switchTechnology)}</span><span>{polling(product.specs.maxPollingHz)}</span>{product.specs.minActuationMm != null && <span>{product.specs.minActuationMm} mm min</span>}{product.specs.rapidTrigger && <span>rapid trigger</span>}</>;
 }
-
 function Specs({ product }: { product: KeyboardLabProduct }) {
-  if (product.type === "switch") return <dl className="kb-spec-list">
-    <div><dt>Technology</dt><dd>{human(product.specs.technology)}</dd></div>
-    <div><dt>Feel</dt><dd>{human(product.specs.feel)}</dd></div>
-    <div><dt>Initial force</dt><dd>{force(product.specs.initialForce)}</dd></div>
-    <div><dt>Actuation force</dt><dd>{force(product.specs.actuationForce)}</dd></div>
-    <div><dt>Bottom-out force</dt><dd>{force(product.specs.bottomOutForce)}</dd></div>
-    <div><dt>Pre-travel</dt><dd>{product.specs.preTravelMm == null ? "—" : `${product.specs.preTravelMm} mm`}</dd></div>
-    <div><dt>Total travel</dt><dd>{product.specs.totalTravelMm} mm</dd></div>
-    <div><dt>Factory lube</dt><dd>{product.specs.factoryLubed == null ? "unknown" : product.specs.factoryLubed ? "yes" : "no"}</dd></div>
-    <div><dt>Rated lifetime</dt><dd>{product.specs.ratedKeystrokesM == null ? "—" : `${product.specs.ratedKeystrokesM}M`}</dd></div>
-    {product.specs.magneticFluxGs && <div><dt>Magnetic flux</dt><dd>{product.specs.magneticFluxGs.initial} → {product.specs.magneticFluxGs.bottomOut} G</dd></div>}
-  </dl>;
-
   return <dl className="kb-spec-list">
     <div><dt>Form factor</dt><dd>{product.specs.formFactor}</dd></div>
     <div><dt>Layout</dt><dd>{product.specs.layout}</dd></div>
@@ -59,7 +38,6 @@ function Specs({ product }: { product: KeyboardLabProduct }) {
     <div><dt>Configurator</dt><dd>{product.specs.webConfigurator ? "web" : product.specs.software ?? "—"}</dd></div>
   </dl>;
 }
-
 function Inspector({ product, onClose }: { product: KeyboardLabProduct; onClose: () => void }) {
   const health = evidenceHealth(product);
   const rows = evidenceRows(product);
@@ -74,28 +52,24 @@ function Inspector({ product, onClose }: { product: KeyboardLabProduct; onClose:
       <p className="kb-summary" id={descriptionId}>{product.summary}</p>
       <div className="kb-chip-row"><Chips product={product}/><span>{money(product.msrpUsd)} MSRP</span><span>{product.status}</span></div>
       <section><div className="utility-section-head"><span>SPECIFICATION</span><h3>Source-backed hardware facts</h3></div><Specs product={product}/></section>
-      {product.type === "switch" && product.specs.compatibility?.length ? <section><div className="utility-section-head"><span>COMPATIBILITY</span><h3>Board caveats</h3></div>{product.specs.compatibility.map(item => <p className="kb-callout" key={item}>{item}</p>)}</section> : null}
       <section><div className="utility-section-head"><span>EVIDENCE</span><h3>Field provenance</h3></div>{rows.map(row => <article className="kb-evidence" key={row.field}><div><b>{human(row.field)}</b><span className={`confidence ${row.confidence}`}>{row.confidence}</span></div>{row.note && <p>{row.note}</p>}{row.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><i>{sourceKindMeta[source.kind].short}</i><span>{source.label}</span><small>{source.checkedAt} ↗</small></a>)}</article>)}</section>
     </aside>
   </div>;
 }
 
 export default function KeyboardLab() {
-  const [kind, setKind] = useState<"all" | "keyboard" | "switch">("all");
   const [query, setQuery] = useState("");
   const [technology, setTechnology] = useState("all");
   const [selected, setSelected] = useState<KeyboardLabProduct | null>(null);
-  const products = useMemo(() => [...keyboards, ...switches] as KeyboardLabProduct[], []);
+  const products = useMemo(() => [...keyboards] as KeyboardLabProduct[], []);
   const filtered = useMemo(() => products.filter(product => {
-    if (kind !== "all" && product.type !== kind) return false;
-    const tech = product.type === "keyboard" ? product.specs.switchTechnology : product.specs.technology;
+    const tech = product.specs.switchTechnology;
     if (technology !== "all" && tech !== technology) return false;
     const haystack = [product.brand, product.model, product.summary, product.type, ...(product.tags ?? []), tech].join(" ").toLowerCase();
     return !query.trim() || haystack.includes(query.trim().toLowerCase());
-  }), [kind, products, query, technology]);
-  const technologies = [...new Set(products.map(product => product.type === "keyboard" ? product.specs.switchTechnology : product.specs.technology))];
+  }), [products, query, technology]);
+  const technologies = [...new Set(products.map(product => product.specs.switchTechnology))];
   const resetFilters = () => {
-    setKind("all");
     setQuery("");
     setTechnology("all");
   };
@@ -104,24 +78,23 @@ export default function KeyboardLab() {
     <header className="utility-topbar">
       <a href="#" className="utility-brand"><b>ATLAS</b><span>KEYBOARD LAB</span></a>
       <nav><a href="#">Setup</a><a href="#sensitivity">Sensitivity</a><a href="#product-lab">Product Lab</a></nav>
-      <span className="utility-status">{keyboards.length} BOARDS · {switches.length} SWITCHES</span>
+      <span className="utility-status">{keyboards.length} BOARDS</span>
     </header>
 
     <main className="utility-main">
       <section className="utility-hero keyboard-hero">
-        <div><span className="utility-kicker">INPUT HARDWARE</span><h1>Gaming keyboards without the spec-sheet shortcuts.</h1><p>Compare switch technology, actuation range, polling, configurability and build choices while keeping manufacturer claims, independent review observations and subjective switch impressions visibly separate.</p></div>
+        <div><span className="utility-kicker">INPUT HARDWARE</span><h1>Gaming keyboards without the spec-sheet shortcuts.</h1><p>Compare keyboard switch technology, actuation range, polling, configurability and build choices while keeping published specifications and Atlas evidence visibly separate.</p></div>
         <div className="kb-hero-stack"><span>MECHANICAL</span><b>HE / OPTICAL / MX</b><small>compatibility is implementation-specific</small></div>
       </section>
 
       <section className="kb-research-boundary">
-        <b>Switch review policy</b><p>ThereminGoat scorecards and long-form reviews are useful expert evidence, but Atlas does not copy composite scores into a universal ranking. Switch smoothness, weighting, sound and tactile preference stay source-attributed and preference-dependent.</p><a href="https://github.com/ThereminGoat/switch-scores" target="_blank" rel="noreferrer">ThereminGoat switch-scores source ↗</a>
+        <b>Looking for switches?</b><p>Switch-level product records and the attributed ThereminGoat review directory now live in the dedicated Switches section, so Keyboard Lab stays focused on complete boards.</p><a href="#switches">Open Switches →</a>
       </section>
 
-      <section className="kb-toolbar">
-        <div className="kb-segments" role="group" aria-label="Hardware type">{(["all","keyboard","switch"] as const).map(value => <button type="button" key={value} className={kind === value ? "active" : ""} aria-pressed={kind === value} onClick={() => setKind(value)}>{value === "all" ? "All hardware" : value === "keyboard" ? "Keyboards" : "Switches"}</button>)}</div>
-        <input type="search" aria-label="Search keyboards and switches" placeholder="Search brand, model, technology…" value={query} onChange={event => setQuery(event.target.value)}/>
-        <select aria-label="Filter keyboards and switches by technology" value={technology} onChange={event => setTechnology(event.target.value)}><option value="all">All technologies</option>{technologies.map(value => <option key={value} value={value}>{human(value)}</option>)}</select>
-        <span role="status" aria-live="polite" aria-atomic="true">{filtered.length} records</span>
+      <section className="kb-toolbar kb-toolbar-boards-only">
+        <input type="search" aria-label="Search keyboards" placeholder="Search keyboard, brand, switch technology…" value={query} onChange={event => setQuery(event.target.value)}/>
+        <select aria-label="Filter keyboards by switch technology" value={technology} onChange={event => setTechnology(event.target.value)}><option value="all">All switch technologies</option>{technologies.map(value => <option key={value} value={value}>{human(value)}</option>)}</select>
+        <span role="status" aria-live="polite" aria-atomic="true">{filtered.length} boards</span>
       </section>
 
       {filtered.length > 0 ? <section className="kb-grid">{filtered.map(product => {
@@ -137,8 +110,8 @@ export default function KeyboardLab() {
           </div>
         </button>;
       })}</section> : <section className="kb-empty">
-        <b>No keyboards or switches match those filters.</b>
-        <span>Try a broader search or reset the hardware and technology filters.</span>
+        <b>No keyboards match those filters.</b>
+        <span>Try a broader search or reset the technology filter.</span>
         <button type="button" onClick={resetFilters}>Reset filters</button>
       </section>}
 
