@@ -1,8 +1,10 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { Suspense, lazy, useMemo, useState, type ReactNode } from "react";
 import { allCatalog, keyboards, mice, mousepads, skates, switches } from "../shared/catalog";
 import type { CatalogProduct, ProductType } from "../shared/types";
-import ConsumerCompare from "./ConsumerCompare";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
+
+const loadConsumerCompare = () => import("./ConsumerCompare");
+const ConsumerCompare = lazy(loadConsumerCompare);
 
 const categoryMeta: Record<ProductType, { label: string; singular: string; description: string; token: string }> = {
   mouse: { label: "Mice", singular: "Mouse", description: "Shape, weight, polling and hand fit", token: "M" },
@@ -40,6 +42,16 @@ function evidenceCoverage(product: CatalogProduct) {
     Math.min(20, manufacturer * 7 + independent * 8),
   ));
   return { score, label: score >= 82 ? "strong" : score >= 62 ? "good" : score >= 42 ? "developing" : "early" };
+}
+
+function compareChipMeta(product: CatalogProduct) {
+  switch (product.type) {
+    case "mouse": return `${product.specs.weightG} g · ${titleCase(product.specs.shape)}`;
+    case "mousepad": return `${titleCase(product.specs.surfaceClass)} · ${product.feel.dynamicSpeed} glide · ${product.feel.stoppingPower} stop`;
+    case "skate": return `${titleCase(product.specs.material)} · ${product.feel.brokenInSpeed ?? product.feel.speed} glide`;
+    case "keyboard": return `${product.specs.formFactor.toUpperCase()} · ${pollingLabel(product.specs.maxPollingHz)}`;
+    case "switch": return `${titleCase(product.specs.feel)} · ${titleCase(product.specs.technology)}`;
+  }
 }
 
 function productMetrics(product: CatalogProduct): [string, string][] {
@@ -192,7 +204,9 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
     const first = current.length ? allCatalog.find(item => item.id === current[0]) : null;
     if (first && first.type !== product.type) return [product.id];
     if (current.length >= 4) return current;
-    return [...current, product.id];
+    const next = [...current, product.id];
+    if (next.length >= 2) void loadConsumerCompare();
+    return next;
   });
   const removeCompare = (id: string) => {
     setCompareIds(current => {
@@ -335,9 +349,9 @@ export default function AtlasConsumer({ focusCategory, afterCatalog }: AtlasCons
       <section className="consumer-principles"><div><span>HOW ATLAS READS DATA</span><h2>Specs are facts. Fit is context. Reviews are evidence.</h2></div><p>Atlas does not turn every reviewer opinion into a universal score. Manufacturer specifications stay labeled as manufacturer claims, independent observations remain attributed, and derived fit models are treated as guidance rather than measurements.</p><a href="#product-lab">Open research & validation →</a></section>
     </main>
 
-    {compareProducts.length > 0 && <div className="consumer-compare-tray" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b></div><button onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button className="consumer-compare-open" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
+    {compareProducts.length > 0 && <div className="consumer-compare-tray" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model}`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button className="consumer-compare-open" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
 
     {selected && <ProductDrawer product={selected} onClose={() => setSelected(null)} onCompare={toggleCompare} compared={compared(selected.id)}/>} 
-    {compareOpen && compareProducts.length >= 2 && <ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/>} 
+    {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<div className="consumer-compare-shell consumer-compare-loading" role="status" aria-live="polite"><button className="consumer-compare-backdrop" onClick={() => setCompareOpen(false)} aria-label="Close comparison"/><div><i/><b>Opening comparison</b><span>Preparing the richer side-by-side view…</span></div></div>}><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 
   </div>;
 }
