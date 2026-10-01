@@ -1,0 +1,187 @@
+{
+  "mice": [],
+  "mousepads": [],
+  "skates": [],
+  "keyboards": [],
+  "switches": [
+    {
+      "id": "switch-wuque-ws-silent-linear",
+      "slug": "wuque-ws-silent-linear",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Silent Linear",
+      "status": "current",
+      "summary": "Silent linear five-pin mechanical switch with 63.5 gf published bottom-out force and 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "silent",
+        "5-pin",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-switch-series",
+          "label": "Wuque Studio WS Switch Series product page",
+          "url": "https://shop.wuquestudio.com/products/ws-switch-series",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "bottomOutForce": {
+          "value": 63.5,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-switch-series"
+          ],
+          "confidence": "high",
+          "note": "Wuque publishes WS Silent Linear as a five-pin silent linear switch with 3.50±0.3 mm total travel, 63.5 gf bottom-out force, a 15 mm single-stage spring and factory lubrication. No actuation-force value is published on the cited product page, so Atlas leaves actuationForce unset."
+        }
+      }
+    },
+    {
+      "id": "switch-wuque-ws-silent-tactile",
+      "slug": "wuque-ws-silent-tactile",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Silent Tactile",
+      "status": "current",
+      "summary": "Silent tactile five-pin mechanical switch with 63.5 gf published bottom-out force and 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "tactile",
+        "silent",
+        "5-pin",
+        "factory-lubed"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-switch-series",
+          "label": "Wuque Studio WS Switch Series product page",
+          "url": "https://shop.wuquestudio.com/products/ws-switch-series",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "tactile",
+        "bottomOutForce": {
+          "value": 63.5,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5,
+        "factoryLubed": true
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-switch-series"
+          ],
+          "confidence": "high",
+          "note": "Wuque publishes WS Silent Tactile as a five-pin silent tactile switch with 3.50±0.3 mm total travel, 63.5 gf bottom-out force, a 15 mm single-stage spring and factory lubrication. No actuation-force or tactile-peak value is published on the cited product page."
+        }
+      }
+    },
+    {
+      "id": "switch-wuque-ws-morandi",
+      "slug": "wuque-ws-morandi",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Morandi",
+      "status": "current",
+      "summary": "Linear Haimu-manufactured mechanical switch with full-POM housings, a UPE stem, 60 gf published maximum bottom-out force and 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "haimu",
+        "pom"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-morandi-official",
+          "label": "Wuque Studio WS Morandi product page",
+          "url": "https://shop.wuquestudio.com/products/ws-morandi-switch",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "bottomOutForce": {
+          "value": 60,
+          "unit": "gf"
+        },
+        "totalTravelMm": 3.5
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-morandi-official"
+          ],
+          "confidence": "high",
+          "note": "Wuque identifies Haimu as the manufacturer and publishes a linear switch with POM top/bottom housings, UPE stem, 18 mm double-stage spring, 3.50±0.3 mm total travel and 60 gf maximum bottom-out force. Atlas does not infer an actuation force from the bottom-out specification."
+        }
+      }
+    },
+    {
+      "id": "switch-wuque-ws-pearl",
+      "slug": "wuque-ws-pearl",
+      "type": "switch",
+      "brand": "Wuque Studio",
+      "model": "WS Pearl",
+      "status": "current",
+      "summary": "Factory-lubed linear mechanical switch with 30 gf published minimum preload, 58 gf maximum bottom-out force, 2.0 mm pre-travel and 3.5 mm total travel.",
+      "tags": [
+        "mechanical",
+        "linear",
+        "factory-lubed",
+        "ball-bearing"
+      ],
+      "sources": [
+        {
+          "id": "wuque-ws-pearl-official",
+          "label": "Wuque Studio WS Pearl product page",
+          "url": "https://shop.wuquestudio.com/products/ws-pearl-switch-35pcs",
+          "kind": "manufacturer",
+          "checkedAt": "2026-10-01"
+        }
+      ],
+      "specs": {
+        "technology": "mechanical",
+        "feel": "linear",
+        "initialForce": {
+          "value": 30,
+          "unit": "gf"
+        },
+        "bottomOutForce": {
+          "value": 58,
+          "unit": "gf"
+        },
+        "preTravelMm": 2,
+        "totalTravelMm": 3.5,
+        "factoryLubed": true,
+        "ratedKeystrokesM": 500
+      },
+      "evidence": {
+        "specification": {
+          "sourceIds": [
+            "wuque-ws-pearl-official"
+          ],
+          "confidence": "high",
+          "note": "Wuque publishes WS Pearl with 30 gf minimum preload, 58±10 gf maximum bottom-out force, 2.0±0.5 mm pre-travel, 3.5±0.3 mm total travel, factory lubrication and 500 million-cycle durability. Atlas stores the published preload as initialForce and does not treat it as actuation force."
+        }
+      }
+    }
+  ]
+}
