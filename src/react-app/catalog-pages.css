@@ -611,3 +611,29 @@
 @media(max-width:680px){
   .consumer-switch-share-status{min-width:0}
 }
+
+
+.consumer-compare-share{
+  min-height:34px;
+  padding:0 11px;
+  border:1px solid var(--sage-7);
+  border-radius:8px;
+  background:#fff;
+  color:var(--sage-12);
+  font-size:9px;
+  font-weight:650;
+  white-space:nowrap;
+}
+.consumer-compare-share:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.consumer-compare-share-status{
+  min-width:108px;
+  color:var(--sage-10);
+  font-size:8px;
+  line-height:1.25;
+}
+@media(max-width:720px){
+  .consumer-compare-share-status{display:none}
+}
