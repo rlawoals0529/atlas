@@ -1,4 +1,4 @@
-/* Midnight Glass - approved Atlas visual system.
+/* Midnight Glass — approved Atlas visual system.
    This first cascade layer is the authority for presentation. Legacy styles
    retain layout behavior; palette aliases keep the specialist labs consistent. */
 @font-face {
@@ -16,6 +16,31 @@
   src: url("@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2") format("woff2");
 }
 @layer atlas-midnight {
+  .consumer-modeled-note { display:block; margin:10px 0; color:var(--atlas-muted); font-size:11px; line-height:1.6; }
+  .setup-workspace { display:grid; grid-template-columns:190px minmax(0,1fr); align-items:start; }
+  .setup-sidebar { position:sticky; top:calc(var(--atlas-nav-h) + 16px); grid-column:1; grid-row:1 / span 2; min-width:0; padding:28px 12px; margin-top:12px; }
+  .setup-sidebar-heading { display:grid; gap:6px; padding:0 12px 20px; }
+  .setup-sidebar-heading b { font:600 15px var(--atlas-heading); color:var(--atlas-ink); }
+  .setup-sidebar-heading > span { color:var(--atlas-muted); font-size:11px; }
+  .setup-sidebar nav { display:grid; gap:4px; }
+  .setup-sidebar :is(button,a) { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:40px; min-width:0; padding:10px 12px; border:0; border-radius:7px; background:transparent; color:var(--atlas-muted); font:500 12px var(--atlas-sans); text-align:left; text-decoration:none; cursor:pointer; }
+  .setup-sidebar button > span { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  .setup-sidebar :is(button,a):hover { color:var(--atlas-ink); background:#14222b; }
+  .setup-sidebar button[aria-pressed=true] { background:#173040; color:#a9dfff; box-shadow:inset 2px 0 #69c9f5; }
+  .setup-sidebar small { padding:2px 6px; border-radius:4px; background:#ffffff0b; font:10px var(--atlas-mono); color:var(--atlas-muted); }
+  .setup-sidebar a { margin-top:18px; border-top:1px solid var(--atlas-line); border-radius:0; padding-top:18px; }
+  .setup-sidebar :is(button,a):focus-visible { outline:2px solid var(--atlas-accent); outline-offset:2px; }
+  .setup-workspace > .v5-main { grid-column:2; min-width:0; width:min(1300px,calc(100% - 48px)); }
+  .setup-workspace > .v5-footer { grid-column:2; min-width:0; }
+  @media(max-width:900px) {
+    .setup-workspace { display:block; }
+    .setup-sidebar { top:var(--atlas-nav-h); z-index:25; margin:0; padding:8px 14px; background:#0d171ff5; border-bottom:1px solid var(--atlas-line); }
+    .setup-sidebar-heading { display:none; }
+    .setup-sidebar nav { display:flex; gap:4px; overflow-x:auto; padding:3px; scrollbar-gutter:stable; }
+    .setup-sidebar :is(button,a) { flex:0 0 auto; white-space:nowrap; }
+    .setup-sidebar a { margin:0; border:0; padding:10px 12px; border-radius:7px; }
+    .setup-workspace > .v5-main { width:calc(100% - 28px); }
+  }
   :root {
     color-scheme: dark !important;
     --atlas-sans: "Inter Variable", Inter, system-ui, sans-serif !important;

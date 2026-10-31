@@ -4,7 +4,7 @@ import { useModalDialog } from "./useModalDialog";
 import "./atlas-jump.css";
 
 const destinations = [
-  { href: "#", name: "Browse gear", note: "Catalog � mice, pads, skates, boards and switches" },
+  { href: "#", name: "Browse gear", note: "Catalog · mice, pads, skates, boards and switches" },
   { href: "#pointing", name: "Setup finder & Shape Lab", note: "Fit, outlines and surface pairing" },
   { href: "#mousepads", name: "Mousepads", note: "Materials, glide and stopping context" },
   { href: "#keyboards", name: "Keyboards", note: "Complete board records" },
@@ -22,6 +22,6 @@ export default function AtlasJump({ onClose }: { onClose: () => void }) {
     <label><span>Find a workspace</span><input data-dialog-initial-focus value={query} onChange={event => setQuery(event.target.value)} placeholder="Try Drift, shapes or switches" onKeyDown={event => { if (event.key === "ArrowDown") { event.preventDefault(); ref.current?.querySelector<HTMLAnchorElement>(".atlas-jump-results a")?.focus(); } }}/></label>
     <nav className="atlas-jump-results" aria-label="Matching workspaces">{results.map(item => <a href={item.href} key={item.href} onClick={onClose}><b>{item.name}</b><span>{item.note}</span></a>)}</nav>
     {!results.length && <p className="atlas-jump-empty" role="status">No workspace matches. Try a tool or category name.</p>}
-    <footer>Arrow down to results � Tab to move � Enter to open � Esc to close</footer>
+    <footer>Arrow down to results · Tab to move · Enter to open · Esc to close</footer>
   </section></div>, document.body);
 }

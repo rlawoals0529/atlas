@@ -61,7 +61,7 @@ these scoped interaction/layout checks do not override it.
 
 ## Visual truth and review scope
 
-The user supplied two 945 x 2048 screenshots: a video-editor landing page with
+The user supplied two 945 × 2048 screenshots: a video-editor landing page with
 Midnight Black `#02070A`, Electric Blue `#0297DE`, and Cantaloupe Orange `#FC734D`,
 and a glass dashboard over a room photograph. The user approved an adaptation
 for Atlas: dark catalog cards, glass navigation and utility surfaces, Manrope
@@ -72,7 +72,7 @@ Source visual truth: the two image attachments in the task conversation,
 `image(20261031-002721).png` and `image(20261031-002719).png`.
 
 Implementation capture: `qa-evidence/atlas-desktop.png` (local review evidence,
-not committed). Main catalog at 1440 x 960 CSS pixels; device scale approximately
+not committed). Main catalog at 1440 × 960 CSS pixels; device scale approximately
 1.1. Browser screenshot pixels include the browser provider's capture scaling;
 CSS dimensions were read from the rendered page rather than inferred from the
 displayed thumbnail. Additional browser checks covered 390 CSS-pixel mobile,
@@ -118,7 +118,7 @@ a completed formal visual-comparison gate. Build and functional checks are indep
 - Assets: existing manufacturer images and attribution remain. Product image
   failure uses the existing Atlas mark plus an explicit unavailable label.
 - Copy: introductions and actions are concise. Modeled mousepad metrics are
-  labeled. Missing grip width displays "Not listed" rather than "- mm".
+  labeled. Missing grip width displays “Not listed” rather than “— mm”.
 
 ## Primary interactions tested
 
@@ -140,7 +140,7 @@ a completed formal visual-comparison gate. Build and functional checks are indep
   breakpoint.
 - Browser error-log inspection returned no errors on the inspected catalog tab.
 - Follow-up catalog check: the main page now reports all 157 canonical products
-  and 73 switches after its deferred chunk loads. Searching "Smoothie" found the
+  and 73 switches after its deferred chunk loads. Searching “Smoothie” found the
   added Gateron record; saving it and refreshing preserved its saved state.
 
 ## Automated validation
@@ -156,7 +156,7 @@ budget. The final post-polish `npm run verify` also exited successfully.
   source/build comparison, acknowledging this is an approved adaptation.
 - Capture and compare the same final states again before claiming visual fidelity.
 
-## Release authorization and latest scope - October 31, 2026
+## Release authorization and latest scope — October 31, 2026
 
 The user explicitly requested deployment of the latest Atlas version. That instruction supersedes the previous hold for an original-reference comparison. The original screenshot-transfer limitation remains documented; visual fidelity is not claimed.
 

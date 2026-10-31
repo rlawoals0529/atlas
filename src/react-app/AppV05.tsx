@@ -71,10 +71,6 @@ const formatHump = (value: string) => value.replace("center-rear", "center / rea
 const pollingLabel = (hz: number) => hz >= 1000 ? `${hz / 1000}K Hz` : `${hz} Hz`;
 const money = (value?: number) => value == null ? "—" : `$${value.toFixed(value % 1 ? 2 : 0)}`;
 
-function LogoMark() {
-  return <span className="v5-logo" aria-hidden="true"><i/><i/><i/></span>;
-}
-
 function Meter({ value, label }: { value: number; label?: string }) {
   return <div className="v5-meter" aria-label={label ? `${label}: ${Math.round(value)} out of 100` : undefined}><i style={{ width: `${Math.max(0, Math.min(100, value))}%` }}/></div>;
 }
@@ -264,12 +260,11 @@ function AppV05() {
   const manufacturerCount = catalog.filter(product => product.sources.some(source => source.kind === "manufacturer")).length;
   const independentCount = catalog.filter(product => product.sources.some(source => source.kind === "independent")).length;
 
-  return <div className="v5-shell">
-    <header className="v5-topbar">
-      <button className="v5-brand" onClick={() => setActive("fit")}><LogoMark/><span><b>ATLAS</b></span><small>v{VERSION}</small></button>
-      <nav>{([['fit', 'Find your setup'], ['lab', 'Shape lab'], ['catalog', 'Database'], ['compare', 'Compare'], ['method', 'Method']] as const).map(([id, label]) => <button key={id} className={active === id ? "active" : ""} onClick={() => setActive(id)}>{label}{id === "catalog" && <span>{catalog.length}</span>}</button>)}<a className="v5-product-lab-nav" href="#product-lab">Product lab</a></nav>
-      <div className="v5-top-status"><i/> evidence-aware build</div>
-    </header>
+  return <div className="v5-shell setup-workspace">
+    <aside className="setup-sidebar" aria-label="Setup workspace">
+      <div className="setup-sidebar-heading"><b>Setup</b><span>Your workspace</span></div>
+      <nav aria-label="Setup views">{([['fit', 'Find your setup'], ['lab', 'Shape lab'], ['catalog', 'Database'], ['compare', 'Compare'], ['method', 'Method']] as const).map(([id, label]) => <button type="button" key={id} aria-pressed={active === id} onClick={() => setActive(id)}><span>{label}</span>{id === "catalog" && <small>{catalog.length}</small>}</button>)}<a href="#product-lab">Product lab<span aria-hidden="true">↗</span></a></nav>
+    </aside>
 
     {active === "fit" && <main className="v5-main">
       <section className="v5-hero">
