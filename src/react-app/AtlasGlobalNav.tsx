@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
+const AtlasJump = lazy(() => import("./AtlasJump"));
 
 type AtlasGlobalNavProps = {
   hash: string;
@@ -17,18 +18,25 @@ const routes = [
 
 export default function AtlasGlobalNav({ hash, onPreload }: AtlasGlobalNavProps) {
   const navRef = useRef<HTMLElement>(null);
+  const [jumpOpen, setJumpOpen] = useState(false);
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k" && !event.isComposing && !document.querySelector('[role="dialog"]')) { event.preventDefault(); setJumpOpen(true); }
+    };
+    window.addEventListener("keydown", key); return () => window.removeEventListener("keydown", key);
+  }, []);
 
   useEffect(() => {
     const navElement = navRef.current;
     if (!navElement || navElement.scrollWidth <= navElement.clientWidth) return;
     const activeLink = navElement.querySelector<HTMLElement>('[aria-current="page"]');
-    activeLink?.scrollIntoView({ block: "nearest", inline: "center", behavior: "auto" });
+    activeLink?.scrollIntoView({ block: "nearest", inline: "center", behavior: "instant" });
   }, [hash]);
 
   return <header className="atlas-global-nav">
     <a className="atlas-global-brand" href="#" aria-label="Atlas database home">
-      <span className="atlas-global-mark" aria-hidden="true"><i/><i/><i/></span>
-      <span><b>ATLAS</b><small>input gear intelligence</small></span>
+      <img className="atlas-global-mark" src="/atlas-mark.svg" alt=""/>
+      <span><b>Atlas</b><small>Find your next peripheral</small></span>
     </a>
     <nav ref={navRef} aria-label="Primary Atlas navigation">
       {routes.map(route => {
@@ -38,6 +46,7 @@ export default function AtlasGlobalNav({ hash, onPreload }: AtlasGlobalNavProps)
       </a>;
       })}
     </nav>
-    <span className="atlas-global-status"><i/> evidence-aware</span>
+    <button type="button" className="atlas-jump-trigger" aria-haspopup="dialog" onClick={() => setJumpOpen(true)}>Jump <kbd>Ctrl K</kbd></button>
+    {jumpOpen && <Suspense fallback={null}><AtlasJump onClose={() => setJumpOpen(false)}/></Suspense>}
   </header>;
 }

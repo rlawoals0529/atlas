@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Source+Sans+3:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap');
+/* Keep the approved theme authoritative over the historical presentation rules,
+   including lazily loaded lab styles. Important declarations in this first layer
+   take precedence over unlayered legacy declarations. */
+@layer atlas-midnight, atlas-route-base;
 
 /* Minimal document reset. The previous styles.css was the unused pre-v5 application
    theme; active Atlas surfaces own their styling in scoped stylesheets. */

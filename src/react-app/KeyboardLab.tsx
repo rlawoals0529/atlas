@@ -83,7 +83,7 @@ export default function KeyboardLab() {
 
     <main className="utility-main">
       <section className="utility-hero keyboard-hero">
-        <div><span className="utility-kicker">INPUT HARDWARE</span><h1>Gaming keyboards without the spec-sheet shortcuts.</h1><p>Compare keyboard switch technology, actuation range, polling, configurability and build choices while keeping published specifications and Atlas evidence visibly separate.</p></div>
+        <div><span className="utility-kicker">INPUT HARDWARE</span><h1>Explore your keyboard setup.</h1><p>Compare actuation, polling, configuration, and build choices. Published specifications stay separate from Atlas research.</p></div>
         <div className="kb-hero-stack"><span>MECHANICAL</span><b>HE / OPTICAL / MX</b><small>compatibility is implementation-specific</small></div>
       </section>
 

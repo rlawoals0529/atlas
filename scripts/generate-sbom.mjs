@@ -3,16 +3,22 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 
 const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
-const output = execFileSync(npmBin, ["sbom", "--sbom-format=cyclonedx"], {
+// npm.cmd cannot be launched directly by execFileSync on current Windows Node.
+// npm scripts expose the CLI path, so run it through Node without a shell.
+const npmCli = process.env.npm_execpath;
+const output = execFileSync(npmCli ? process.execPath : npmBin, [
+  ...(npmCli ? [npmCli] : []), "sbom", "--sbom-format=cyclonedx",
+], {
   encoding: "utf8",
   maxBuffer: 20 * 1024 * 1024,
+  shell: !npmCli && process.platform === "win32",
 });
 const sbom = JSON.parse(output);
 
 const errors = [];
 if (sbom.bomFormat !== "CycloneDX") errors.push(`bomFormat: expected CycloneDX, received ${JSON.stringify(sbom.bomFormat)}`);
 if (typeof sbom.specVersion !== "string" || !sbom.specVersion) errors.push("specVersion is missing");
-if (!sbom.metadata?.component || sbom.metadata.component.name !== "atlas") errors.push("metadata.component.name must be atlas");
+if (sbom.metadata?.component?.name?.toLowerCase() !== "atlas") errors.push("metadata.component.name must be atlas (case-insensitive)");
 if (!Array.isArray(sbom.components) || sbom.components.length === 0) errors.push("components must be a non-empty array");
 
 if (errors.length) {

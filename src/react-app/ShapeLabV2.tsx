@@ -5,7 +5,7 @@ import { alignmentOffset, findSimilarShapes, outlineFor, type AlignMode, type Sh
 import type { MouseProduct } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 
-const COLORS = ["#0f766e", "#315f8c", "#6d5fa3", "#a35f13", "#9f3d62"];
+const COLORS = ["#69c9f5", "#fc9775", "#c4b5fd", "#f4c378", "#f4a7ba"];
 const similarityLabels: Record<SimilarityMode, string> = { balanced: "Balanced", claw: "Claw", fingertip: "Fingertip", palm: "Palm" };
 
 type LineStyle = "solid" | "dash" | "dot";

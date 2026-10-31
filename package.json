@@ -19,15 +19,20 @@
     "switch-index:validate": "node scripts/validate-switch-review-index.mjs",
     "a11y:validate": "node scripts/validate-modal-accessibility.mjs",
     "bundle:validate": "node scripts/validate-bundle-budget.mjs",
-    "verify": "npm run test && npm run sbom:generate && npm run release:validate && npm run data:validate && npm run community:validate && npm run sensitivity:validate && npm run product:validate && npm run media:validate && npm run switch-index:validate && npm run a11y:validate && npm run headers:validate && npm run public:validate && npm run check && npm run bundle:validate",
+    "verify": "npm run test && npm run sbom:generate && npm run release:validate && npm run data:validate && npm run community:validate && npm run sensitivity:validate && npm run product:validate && npm run media:validate && npm run switch-index:validate && npm run scores:validate && npm run a11y:validate && npm run headers:validate && npm run public:validate && npm run check && npm run bundle:validate",
     "source:check": "node scripts/check-source-health.mjs",
     "test": "tsx --test tests/**/*.test.ts",
     "sbom:generate": "node scripts/generate-sbom.mjs",
     "release:validate": "node scripts/validate-release-contract.mjs",
     "headers:validate": "node scripts/validate-static-headers.mjs",
-    "public:validate": "node scripts/validate-public-metadata.mjs"
+    "public:validate": "node scripts/validate-public-metadata.mjs",
+    "dev:ui": "vite --config vite.ui.config.ts",
+    "scores:generate": "node scripts/generate-switch-scores.mjs",
+    "scores:validate": "node scripts/generate-switch-scores.mjs --check"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/manrope": "5.3.0",
     "hono": "4.13.11",
     "react": "19.2.1",
     "react-dom": "19.2.1"
@@ -38,10 +43,10 @@
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.1",
+    "tsx": "4.23.15",
     "typescript": "5.9.3",
     "vite": "^7.0.0",
-    "wrangler": "4.136.1",
-    "tsx": "4.23.15"
+    "wrangler": "4.136.1"
   },
   "engines": {
     "node": "22.x"
