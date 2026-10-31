@@ -3,7 +3,18 @@
 Drift should remain a standalone native application and have its own repository.
 Atlas owns product research and a browser preview; Drift owns raw-input trials,
 curve search, saved evidence, driver application and restoration. This pass
-does not create a remote Drift repository or change the native project.
+does not create a remote Drift repository.
+
+## Canonical native workspace
+
+The `sensitivity-finder/` folder inside the Atlas workspace is now the primary
+native Drift source and build location. Use its `SensitivityFinder.exe` (6.1.1)
+or the local `Open Drift` launcher. The former D: copy is a backup.
+The folder and launcher are excluded from the Atlas repository to keep local
+profiles, sessions and binaries private. Native changes must be made here.
+
+The native presentation pass adds Atlas colors, workspace and profile tabs,
+metadata labels and setup guidance. Calibration and driver workflows remain native.
 
 ## Implemented bridge
 
@@ -33,8 +44,7 @@ loopback bridge, file-system permissions or native application launcher is added
 
 ## Source snapshot and parity
 
-The existing native source was inspected read-only on October 30, 2026. Its
-source files were not copied into Atlas or modified. SHA-256 at inspection:
+The native source was inspected read-only on October 30, 2026. These hashes record the original algorithm snapshot before the local copy and presentation pass described above:
 
 | Native Drift source | SHA-256 |
 | --- | --- |

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import "./utility-labs.css";
 import "./sensitivity-fixes.css";
 import DriftCurveDesk from "./DriftCurveDesk";
+import DriftGettingStarted from "./DriftGettingStarted";
 import { cm360, convertSensitivity, effectiveDpi, gameById, inches360, sensitivityDataset, sensitivityForCm360, sensitivityGames } from "../shared/sensitivity";
 
 const positiveNumber = (value: string) => {
@@ -13,7 +14,7 @@ const fmt = (value: number | null, digits = 3) => value == null ? "-" : Number(v
 const gameOptions = [...sensitivityGames, { id: "custom", label: "Custom yaw" }];
 
 export default function SensitivityLab() {
-  const [mode, setMode] = useState<"convert" | "distance" | "drift">("convert");
+  const [mode, setMode] = useState<"convert" | "distance" | "drift" | "guide">("convert");
   const [copyStatus, setCopyStatus] = useState("");
   const [sourceGameId, setSourceGameId] = useState("cs2");
   const [targetGameId, setTargetGameId] = useState("valorant");
@@ -82,7 +83,7 @@ export default function SensitivityLab() {
 
     <main className="utility-main">
       <section className="utility-hero">
-        <div><span className="utility-kicker">THE AIM WORKBENCH</span><h1>Make your aim feel familiar.</h1><p>Convert base sensitivity, start with a physical distance, or explore a Drift acceleration curve. Keep the math separate from performance testing.</p></div>
+        <div><span className="utility-kicker">SENSITIVITY LAB</span><h1>Bring your sensitivity across games.</h1><p>Match your turn distance, calculate a game sensitivity, or preview how a Drift curve responds to mouse speed.</p></div>
         <div className="utility-hero-metric"><b>{fmt(sourceCm, 2)}</b><span>CONVERTER CM / 360</span><small>{fmt(inches360(sourceDpi, sourceSens, sourceYaw), 2)} in / 360</small></div>
       </section>
 
@@ -90,6 +91,7 @@ export default function SensitivityLab() {
         <button type="button" aria-pressed={mode === "convert"} onClick={() => setMode("convert")}><small>01 / TRANSFER</small><b>Convert</b><span>Same turn. Different game.</span></button>
         <button type="button" aria-pressed={mode === "distance"} onClick={() => setMode("distance")}><small>02 / PHYSICAL</small><b>Match distance</b><span>Start with cm/360.</span></button>
         <button type="button" aria-pressed={mode === "drift"} onClick={() => setMode("drift")}><small>03 / RESPONSE</small><b>Drift curves</b><span>Explore speed-dependent feel.</span></button>
+        <button type="button" aria-pressed={mode === "guide"} onClick={() => setMode("guide")}><small>04 / START HERE</small><b>Install & run</b><span>Native Drift setup guide.</span></button>
       </div>
       <div hidden={mode !== "convert"}>
       <section className="sens-workbench">
@@ -131,15 +133,16 @@ export default function SensitivityLab() {
       </section>
       </div>
       <div hidden={mode !== "drift"}><DriftCurveDesk baselineCm={sourceCm} dpi={sourceDpi}/></div>
+      <div hidden={mode !== "guide"}><DriftGettingStarted/></div>
 
       <section className="utility-grid sens-explain">
         <article><span>FORMULA</span><h3>Physical-distance match</h3><code>target = source x sourceDPI x sourceYaw � targetDPI � targetYaw</code><p>cm/360 = 360 x 2.54 � (DPI x sensitivity x yaw).</p></article>
-        <article><span>BOUNDARY</span><h3>What this does not claim</h3><p>Matching cm/360 does not make different FOVs, recoil systems, zoom optics or aim-assist behavior perceptually identical. This tool matches base horizontal turn distance only.</p></article>
+        <article><span>USING YOUR RESULT</span><h3>Same distance, different game feel</h3><p>The result matches base horizontal turn distance only: the mouse distance for a full turn in hipfire. Field of view, recoil, zoom and aim assist can still change how each game feels. Check the result in-game.</p></article>
       </section>
 
       <section className="utility-card sens-sources">
-        <div className="utility-section-head"><span>PROVENANCE</span><h2>Where the yaw constants come from</h2></div>
-        <p className="utility-note">{sensitivityDataset.scope} Checked {sensitivityDataset.checkedAt}. Games without a sourced Atlas preset can still be used through Custom yaw; that value remains user-supplied and is never promoted into the dataset automatically.</p>
+        <div className="utility-section-head"><span>GAME REFERENCES</span><h2>Game rotation values and sources</h2></div>
+        <p className="utility-note">Yaw is the game's rotation per mouse count at sensitivity 1. These presets cover base hipfire; use Custom yaw for another game or a modified rotation value. Custom entries stay in your calculation. Sources checked {sensitivityDataset.checkedAt}.</p>
         <div className="sens-source-grid">{sensitivityGames.map(game => <article key={game.id}><div><b>{game.label}</b><span className={`confidence ${game.confidence}`}>{game.confidence}</span></div><strong>{game.yaw}� / count / sens</strong><p>{game.note}</p>{game.sources.map(source => <a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label} ?</a>)}</article>)}</div>
       </section>
     </main>

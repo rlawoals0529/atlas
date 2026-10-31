@@ -1,14 +1,24 @@
 @layer atlas-midnight {
   .sensitivity-shell [hidden] { display:none !important; }
-  .sens-mode-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:12px 0 28px; }
-  .sens-mode-controls button { display:grid; gap:10px; text-align:left; min-width:0; padding:22px; border:1px solid #344e60; border-radius:16px; color:var(--atlas-ink); background:#12202a; cursor:pointer; transition:translate .16s ease; }
-  .sens-mode-controls button:nth-child(2) { background:#26201b; border-color:#715140; }
-  .sens-mode-controls button:nth-child(3) { background:#211e30; border-color:#605179; }
-  .sens-mode-controls button[aria-pressed=true] { border-color:var(--atlas-accent); box-shadow:inset 0 -3px var(--atlas-accent); }
-  .sens-mode-controls button:hover { translate:0 -3px; }
+  .sens-mode-controls { display:flex; gap:6px; margin:12px 0 28px; border-bottom:1px solid var(--atlas-line); overflow-x:auto; padding:4px 2px 0; scrollbar-gutter:stable; scroll-margin-top:100px; }
+  .sens-mode-controls button { display:grid; gap:7px; text-align:left; min-width:130px; padding:12px 18px 16px; border:0; border-bottom:2px solid transparent; border-radius:7px 7px 0 0; color:var(--atlas-muted); background:transparent; cursor:pointer; flex:0 0 auto; }
+  .sens-mode-controls button[aria-pressed=true] { border-bottom-color:var(--atlas-accent); color:var(--atlas-ink); background:#152129; }
+  .sens-mode-controls button:hover { background:#152129; }
   .sens-mode-controls small { font:10px var(--atlas-mono); color:var(--atlas-muted); letter-spacing:.08em; }
-  .sens-mode-controls b { font:500 23px var(--atlas-heading); letter-spacing:-.04em; }
-  .sens-mode-controls span { font-size:12px; color:var(--atlas-muted); }
+  .sens-mode-controls b { font:600 14px var(--atlas-heading); letter-spacing:-.02em; }
+  .sens-mode-controls span { font-size:10px; color:var(--atlas-muted); }
+  .drift-getting-started { max-width:1000px; margin:24px 0 40px; }
+  .drift-getting-started h2 { font:500 clamp(27px,3vw,40px)/1.15 var(--atlas-heading) !important; max-width:25ch; margin:20px 0; }
+  .drift-getting-started p { color:var(--atlas-muted); font-size:13px; line-height:1.8; max-width:78ch; }
+  .drift-start-steps { list-style:none; margin:30px 0; padding:0; }
+  .drift-start-steps li { display:grid; grid-template-columns:40px minmax(0,1fr); gap:18px; padding:24px 0; border-top:1px solid var(--atlas-line); }
+  .drift-start-steps li > span { color:var(--atlas-accent); font:11px var(--atlas-mono); padding-top:5px; }
+  .drift-start-steps h3 { margin:0 0 12px; font-size:19px !important; }
+  .drift-getting-started a { display:inline-block; color:var(--atlas-accent); font-size:12px; margin:6px 20px 6px 0; }
+  .drift-getting-started code { color:var(--atlas-text); font:11px var(--atlas-mono); overflow-wrap:anywhere; }
+  .drift-getting-started pre { overflow:auto; background:var(--atlas-card); padding:16px; border:1px solid var(--atlas-line); border-radius:8px; max-width:100%; }
+  .drift-guide-details { font-size:13px; padding:18px; background:var(--atlas-card); border:1px solid var(--atlas-line); border-radius:12px; }
+  .drift-guide-details summary { color:var(--atlas-ink); cursor:pointer; }
   .sens-copy-result { border:1px solid var(--atlas-line-strong); border-radius:8px; padding:10px 14px; min-height:40px; color:var(--atlas-accent); background:var(--atlas-card); cursor:pointer; }
   .sens-copy-status { display:block; min-height:20px; margin:8px 0; font-size:11px; color:var(--atlas-muted); }
   .drift-desk { margin:28px 0; color:var(--atlas-ink); }
@@ -16,20 +26,21 @@
   .drift-heading { display:flex; align-items:center; justify-content:space-between; gap:30px; margin-bottom:26px; }
   .drift-heading h2 { font:500 clamp(30px,4vw,52px)/1.05 var(--atlas-heading) !important; letter-spacing:-.05em; margin:18px 0; }
   .drift-heading p { max-width:60ch; font-size:13px; line-height:1.7; color:var(--atlas-muted); }
-  .drift-stamp { display:grid; gap:8px; padding:18px 22px; border:1px solid #65537d; border-radius:12px; background:#29223b; transform:rotate(2deg); flex-shrink:0; }
-  .drift-stamp b { font:14px var(--atlas-mono); color:#d8cafa; letter-spacing:.12em; }
-  .drift-stamp span { font-size:10px; color:var(--atlas-muted); }
+  .drift-heading > div { min-width:0; }
+  .drift-stamp { display:grid; gap:8px; padding:18px 20px; border:1px solid #3b5363; border-radius:12px; background:#101b23; flex:0 1 260px; }
+  .drift-stamp b { font:12px var(--atlas-mono); color:var(--atlas-accent); letter-spacing:.08em; }
+  .drift-stamp span,.drift-stamp small { font-size:12px; line-height:1.6; color:var(--atlas-muted); }
   .drift-layout { display:grid; grid-template-columns:minmax(240px,.75fr) minmax(0,1.65fr); gap:20px; align-items:start; }
   .drift-controls,.drift-instrument { min-width:0; background:#101b23; border:1px solid #3b5363; border-radius:18px; padding:22px; }
   .drift-controls { background:#191b2a; border-color:#51465f; }
   .drift-control-head { display:flex; gap:12px; align-items:center; justify-content:space-between; font-size:12px; }
   .drift-control-head span { color:#d8cafa; }
   .drift-control-head button,.drift-link { padding:8px 0; background:transparent; color:var(--atlas-accent); border:0; font-size:11px; cursor:pointer; }
-  .drift-controls label { display:grid; gap:12px; margin:24px 0; color:var(--atlas-text); font-size:11px; }
+  .drift-controls label { display:grid; gap:12px; margin:24px 0; color:var(--atlas-text); font-size:12px; }
   .drift-controls label > span,.drift-probe > span { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; }
   .drift-controls output { color:#d8cafa; font-family:var(--atlas-mono); }
   .drift-desk input[type=range] { display:block; width:100%; min-width:0; margin:0; accent-color:#69c9f5; height:24px; cursor:pointer; }
-  .drift-note { font-size:11px; line-height:1.75; color:var(--atlas-muted); }
+  .drift-note { font-size:12px; line-height:1.75; color:var(--atlas-muted); }
   .drift-plot { margin:0; padding:0; min-width:0; }
   .drift-plot figcaption { display:grid; gap:9px; }
   .drift-plot figcaption b { font-size:14px; font-weight:500; }
@@ -70,7 +81,7 @@
     .sens-mode-controls b { font-size:16px; }
     .sens-mode-controls span { display:none; }
     .drift-heading { display:block; }
-    .drift-stamp { display:none; }
+    .drift-stamp { margin:18px 0; padding:14px 16px; }
     .drift-controls,.drift-instrument { padding:16px; }
     .drift-controls { display:block; }
     .drift-bridge { grid-template-columns:1fr; padding:20px; gap:18px; }
@@ -78,5 +89,8 @@
     .drift-readouts dd { font-size:25px; }
     .drift-probe { padding:12px; }
   }
+  @media (min-width:801px) { .sensitivity-shell .utility-hero { display:grid; grid-template-columns:minmax(0,1fr) 200px; gap:30px; align-items:center; } }
+  @media (max-width:600px) { .sens-mode-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); overflow:visible; } .sens-mode-controls button { min-width:0; } }
+  .drift-desk :is(button,summary,input,textarea):focus-visible,.sens-mode-controls button:focus-visible { outline:2px solid var(--atlas-accent); outline-offset:4px; }
   @media (prefers-reduced-motion:reduce) { .sens-mode-controls button { transition:none; translate:none !important; } }
 }

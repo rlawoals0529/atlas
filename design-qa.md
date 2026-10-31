@@ -1,6 +1,6 @@
 # Midnight Glass design QA
 
-final result: blocked
+final result: scoped product checks passed; original-reference comparison incomplete
 
 ## Drift bridge and navigation follow-up
 
@@ -28,8 +28,7 @@ native aiming trials and driver application remain outside the browser.
 - Full verification passed with 36 tests and unchanged bundle limits. Later
   layout refinements were rebuilt. New screenshots remain local review evidence.
 
-The original-reference comparison block below still applies. These scoped
-checks do not establish pixel fidelity or authorize deployment.
+The original-reference comparison block below still applies. these scoped checks do not establish pixel fidelity. The user separately authorized deployment on October 31, 2026.
 
 ## Field desk and score workbench follow-up
 
@@ -85,8 +84,7 @@ The supplied images are visible in the conversation, but both attempts to
 materialize their original bytes through the supported Library helper failed.
 Consequently a combined source/build comparison board and a normalized focused
 comparison could not be produced. This report does not claim pixel fidelity or
-a completed formal visual-comparison gate. The PR must remain a draft until
-that gate is resolved. Build and functional checks are independently complete.
+a completed formal visual-comparison gate. Build and functional checks are independently complete.
 
 ## Browser review and iteration history
 
@@ -156,5 +154,14 @@ budget. The final post-polish `npm run verify` also exited successfully.
 
 - Resolve the original-reference transfer failure and produce a combined
   source/build comparison, acknowledging this is an approved adaptation.
-- Capture and compare the same final states again; only then mark this gate
-  passed and release the draft PR for merge/deployment.
+- Capture and compare the same final states again before claiming visual fidelity.
+
+## Release authorization and latest scope - October 31, 2026
+
+The user explicitly requested deployment of the latest Atlas version. That instruction supersedes the previous hold for an original-reference comparison. The original screenshot-transfer limitation remains documented; visual fidelity is not claimed.
+
+Added compact category/workspace tabs and an Install & run guide for native Drift. Native source, binaries, profiles and sessions remain excluded from this repository. Drift's primary local copy is inside the Atlas workspace.
+
+The sensitivity copy pass replaces defensive wording with practical instructions, straightens the preview panel, wraps mobile workspace buttons into two columns, increases control-label sizes and adds visible keyboard focus styling. Browser checks covered desktop and narrow layouts with no document horizontal overflow. Preview settings remain browser-only and aiming evidence stays in native Drift.
+
+Latest npm run verify passed: 36 tests, all existing validators, TypeScript, production build, Worker dry run and unchanged bundle limits. Local screenshots and review notes remain under qa-evidence/ and are not published.
