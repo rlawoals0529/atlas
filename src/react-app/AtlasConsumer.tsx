@@ -9,6 +9,12 @@ import CatalogFilters from "./CatalogFilters";
 
 const loadConsumerCompare = () => import("./ConsumerCompare");
 const ConsumerCompare = lazy(loadConsumerCompare);
+const EMPTY_PRODUCTS: CatalogProduct[] = [];
+let loadedSwitches: CatalogProduct[] | null = null;
+let switchLoad: Promise<CatalogProduct[]> | null = null;
+const loadFullSwitchCatalog = () => switchLoad ??= import("../shared/switchCatalogExtras")
+  .then(module => loadedSwitches = module.extraSwitches)
+  .catch(error => { switchLoad = null; throw error; });
 
 const categoryMeta: Record<ProductType, { label: string; singular: string; description: string; token: string }> = {
   mouse: { label: "Mice", singular: "Mouse", description: "Shape, weight, polling and hand fit", token: "M" },
@@ -249,7 +255,7 @@ type AtlasConsumerProps = {
   additionalProducts?: CatalogProduct[];
 };
 
-export default function AtlasConsumer({ focusCategory, afterCatalog, additionalProducts = [] }: AtlasConsumerProps = {}) {
+export default function AtlasConsumer({ focusCategory, afterCatalog, additionalProducts = EMPTY_PRODUCTS }: AtlasConsumerProps = {}) {
   const [category, setCategory] = useState<"all" | ProductType>(focusCategory ?? "mouse");
   const [query, setQuery] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("q") ?? "" : "");
   const [brand, setBrand] = useState(() => focusCategory === "switch" ? readSharedSwitchParam("brand") ?? "all" : "all");
@@ -289,14 +295,31 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
   const [sharedShortlistIds] = useState<string[]>(readSharedShortlistIds);
   const [savedOnly, setSavedOnly] = useState(() => readSharedShortlistIds().length > 0);
   const [savedShareStatus, setSavedShareStatus] = useState("");
+  const [expandedSwitches, setExpandedSwitches] = useState<CatalogProduct[]>(() => loadedSwitches ?? EMPTY_PRODUCTS);
+  const [catalogLoadError, setCatalogLoadError] = useState(false);
+  const [catalogLoadAttempt, setCatalogLoadAttempt] = useState(0);
+  const catalogReady = additionalProducts.length > 0 || loadedSwitches !== null;
 
-  const catalogProducts = useMemo(() => additionalProducts.length ? [...allCatalog, ...additionalProducts] : allCatalog, [additionalProducts]);
   useEffect(() => {
+    if (additionalProducts.length) return;
+    let active = true;
+    void loadFullSwitchCatalog().then(products => {
+      if (active) { setExpandedSwitches(products); setCatalogLoadError(false); }
+    }).catch(() => { if (active) setCatalogLoadError(true); });
+    return () => { active = false; };
+  }, [additionalProducts.length, catalogLoadAttempt]);
+
+  const catalogProducts = useMemo(() => [...new Map(
+    [...allCatalog, ...(additionalProducts.length ? additionalProducts : expandedSwitches)].map(product => [product.id, product]),
+  ).values()], [additionalProducts, expandedSwitches]);
+  useEffect(() => {
+    // Do not erase saved switches while their deferred catalog chunk is loading.
+    if (!catalogReady) return;
     setSavedIds(current => {
       const valid = current.filter(id => catalogProducts.some(product => product.id === id));
       return valid.length === current.length ? current : valid;
     });
-  }, [catalogProducts]);
+  }, [catalogProducts, catalogReady]);
 
   useEffect(() => {
     const productId = readSharedProductId();
@@ -564,6 +587,8 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, additionalP
 
 
       <section className="consumer-catalog" id="consumer-catalog">
+        {!catalogReady && !catalogLoadError && <p className="consumer-catalog-notice" role="status">Loading the full switch catalog…</p>}
+        {catalogLoadError && <div className="consumer-catalog-notice" role="status">Some switch records could not be loaded. <button type="button" onClick={() => { setCatalogLoadError(false); setCatalogLoadAttempt(attempt => attempt + 1); }}>Retry loading switches</button></div>}
         <div className="consumer-section-head"><div><span>{focusCategory ? `${focusedMeta?.singular.toUpperCase()} DATABASE` : "DATABASE"}</span><h2>{catalogTitle}</h2><p>{catalogDescription}</p></div><strong aria-live="polite" aria-atomic="true">{filtered.length}<small> matching</small></strong></div>
         <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} type="button" data-category={type} aria-pressed={category === type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? catalogProducts.length : counts[type]}</span></button>)}</div>
         {focusCategory === "mousepad" && <div className="consumer-focus-quick" data-category="mousepad" aria-label="Filter mousepads by surface class">

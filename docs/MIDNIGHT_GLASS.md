@@ -29,6 +29,12 @@ unchanged.
 
 ## Catalog behavior
 
+The main catalog loads the remaining switch shards in a deferred chunk. Counts,
+search, shared links, and saved lists then cover the same complete records as the
+dedicated Switches page. Saved IDs are not pruned before that chunk finishes;
+failed loading has an explicit retry action. The external review directory stays
+separate from canonical product records.
+
 The compact introduction leads into category navigation, search, brand/sort,
 and a desktop filter sidebar. Below 980 CSS pixels the same category controls
 open in a modal filter sheet with Escape dismissal, focus trapping/restoration,

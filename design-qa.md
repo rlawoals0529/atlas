@@ -11,9 +11,8 @@ for Atlas: dark catalog cards, glass navigation and utility surfaces, Manrope
 headings, Inter body text, a compact catalog-first layout, and responsive filters.
 The room photograph and video-editor content are intentionally excluded.
 
-Source visual truth: the two image attachments in the task conversation, also
-resolved as `libfile_1c8d482385048191b4931fef7a8f64fa` and
-`libfile_d0c4156a472c8191a7e4a294cfe35793`.
+Source visual truth: the two image attachments in the task conversation,
+`image(20261031-002721).png` and `image(20261031-002719).png`.
 
 Implementation capture: `qa-evidence/atlas-desktop.png` (local review evidence,
 not committed). Main catalog at 1440 × 960 CSS pixels; device scale approximately
@@ -84,13 +83,16 @@ that gate is resolved. Build and functional checks are independently complete.
   corrected the capture dimensions before assessing the supported 320 CSS-pixel
   breakpoint.
 - Browser error-log inspection returned no errors on the inspected catalog tab.
+- Follow-up catalog check: the main page now reports all 157 canonical products
+  and 73 switches after its deferred chunk loads. Searching “Smoothie” found the
+  added Gateron record; saving it and refreshing preserved its saved state.
 
 ## Automated validation
 
 `npm run verify` passed: 27 tests, SBOM, release contract, catalog/community/
 sensitivity/product/media/switch-index/accessibility/header/public metadata
 validators, TypeScript, production build, Worker dry run, and initial bundle
-budget. A final build is rerun after the last presentation-only changes.
+budget. The final post-polish `npm run verify` also exited successfully.
 
 ## Remaining work
 
