@@ -40,7 +40,7 @@
   padding:12px;
   border:1px solid var(--sage-6);
   border-radius:11px;
-  background:#fff;
+  background:var(--atlas-card);
 }
 .mousepad-compare-card-head{
   display:flex;
@@ -51,7 +51,7 @@
 }
 .mousepad-compare-card-head b{
   color:var(--sage-12);
-  font-size:10.5px;
+  font-size:12px;
 }
 .mousepad-compare-card-head span{
   color:var(--sage-10);
@@ -88,13 +88,13 @@
   border-radius:50%;
   background:var(--series-color);
   box-shadow:0 2px 9px rgba(25,35,31,.18);
-  color:#fff;
+  color:#07131c;
   font:700 8px var(--atlas-mono);
 }
 .map-axis{
   position:absolute;
   color:var(--sage-10);
-  font:550 7.5px var(--atlas-mono);
+  font:550 10px var(--atlas-mono);
   letter-spacing:.025em;
   white-space:nowrap;
 }
@@ -150,7 +150,7 @@
   max-height:42px;
   border:1.5px solid var(--series-color);
   border-radius:3px;
-  background:color-mix(in srgb,var(--series-color) 8%,#fff);
+  background:color-mix(in srgb,var(--series-color) 14%,var(--atlas-card-strong));
 }
 .mousepad-footprints article>div:last-child{
   min-width:0;
@@ -183,7 +183,7 @@
   padding:10px;
   border:1px solid var(--sage-6);
   border-radius:9px;
-  background:#fff;
+  background:var(--atlas-card);
 }
 .mousepad-profile-grid>article>header{
   min-width:0;
@@ -224,7 +224,7 @@
 }
 .mousepad-profile-metric>span{
   color:var(--sage-11);
-  font-size:8px;
+  font-size:11px;
 }
 .mousepad-profile-metric>div{
   height:4px;
@@ -240,7 +240,7 @@
 }
 .mousepad-profile-metric>b{
   color:var(--sage-12);
-  font:650 8px var(--atlas-mono);
+  font:650 11px var(--atlas-mono);
   text-align:right;
 }
 
@@ -304,7 +304,7 @@
   padding:11px;
   border:1px solid var(--amber-7);
   border-radius:10px;
-  background:#fff;
+  background:var(--atlas-card);
 }
 .keyboard-compare-grid>article>header{
   min-height:38px;
