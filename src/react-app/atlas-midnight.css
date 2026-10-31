@@ -16,7 +16,7 @@
   src: url("@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2") format("woff2");
 }
 @layer atlas-midnight {
-  .consumer-modeled-note { display:block; margin:10px 0; color:var(--atlas-muted); font-size:11px; line-height:1.6; }
+  .consumer-catalog-results > .consumer-modeled-note { margin:0 0 16px; padding:0; color:var(--atlas-muted); font-size:12px; line-height:1.6; }
   .setup-workspace { display:grid; grid-template-columns:190px minmax(0,1fr); align-items:start; }
   .setup-sidebar { position:sticky; top:calc(var(--atlas-nav-h) + 16px); grid-column:1; grid-row:1 / span 2; min-width:0; padding:28px 12px; margin-top:12px; }
   .setup-sidebar-heading { display:grid; gap:6px; padding:0 12px 20px; }
