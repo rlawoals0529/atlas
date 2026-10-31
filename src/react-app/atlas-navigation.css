@@ -18,6 +18,7 @@
   .atlas-sidebar :is(a,button):focus-visible { outline:2px solid var(--atlas-accent) !important; outline-offset:2px; }
   .atlas-route-host { margin-left:var(--atlas-rail-w) !important; width:calc(100% - var(--atlas-rail-w)); min-width:0; }
   .atlas-route-progress { left:var(--atlas-rail-w) !important; width:calc(100% - var(--atlas-rail-w)) !important; }
+  .consumer-compare-tray { left:var(--atlas-rail-w) !important; right:0 !important; margin-inline:auto !important; transform:none !important; width:min(1100px,calc(100% - var(--atlas-rail-w) - 32px)) !important; }
   @media (min-width:601px) and (max-width:1450px) { .consumer-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; } }
   @media (min-width:1451px) and (max-width:1799px) { .consumer-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; } }
   @media (min-width:601px) and (max-width:1000px) {
