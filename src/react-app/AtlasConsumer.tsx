@@ -57,18 +57,18 @@ function evidenceCoverage(product: CatalogProduct) {
 
 function compareChipMeta(product: CatalogProduct) {
   switch (product.type) {
-    case "mouse": return `${product.specs.weightG} g � ${titleCase(product.specs.shape)}`;
-    case "mousepad": return `${titleCase(product.specs.surfaceClass)} � ${product.feel.dynamicSpeed} glide � ${product.feel.stoppingPower} stop`;
-    case "skate": return `${titleCase(product.specs.material)} � ${product.feel.brokenInSpeed ?? product.feel.speed} glide`;
-    case "keyboard": return `${product.specs.formFactor.toUpperCase()} � ${pollingLabel(product.specs.maxPollingHz)}`;
-    case "switch": return `${titleCase(product.specs.feel)} � ${titleCase(product.specs.technology)}`;
+    case "mouse": return `${product.specs.weightG} g · ${titleCase(product.specs.shape)}`;
+    case "mousepad": return `${titleCase(product.specs.surfaceClass)} · ${product.feel.dynamicSpeed} glide · ${product.feel.stoppingPower} stop`;
+    case "skate": return `${titleCase(product.specs.material)} · ${product.feel.brokenInSpeed ?? product.feel.speed} glide`;
+    case "keyboard": return `${product.specs.formFactor.toUpperCase()} · ${pollingLabel(product.specs.maxPollingHz)}`;
+    case "switch": return `${titleCase(product.specs.feel)} · ${titleCase(product.specs.technology)}`;
   }
 }
 
 function productMetrics(product: CatalogProduct): [string, string][] {
   switch (product.type) {
     case "mouse": return [["Weight", `${product.specs.weightG} g`], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Grip", `${product.specs.gripWidthMm ?? product.specs.widthMm} mm`], ["Shape", titleCase(product.specs.shape)]];
-    case "mousepad": return [["Surface", titleCase(product.specs.surfaceClass)], ["Glide � modeled", `${product.feel.dynamicSpeed}/100`], ["Stopping � modeled", `${product.feel.stoppingPower}/100`], ["Size", `${product.specs.widthMm} x ${product.specs.heightMm} mm`]];
+    case "mousepad": return [["Surface", titleCase(product.specs.surfaceClass)], ["Glide", `${product.feel.dynamicSpeed}/100`], ["Stopping power", `${product.feel.stoppingPower}/100`], ["Size", `${product.specs.widthMm} × ${product.specs.heightMm} mm`]];
     case "skate": return [["Material", titleCase(product.specs.material)], ["Format", titleCase(product.specs.format)], ["Glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`], ["Control", `${product.feel.control}/100`]];
     case "keyboard": return [["Format", product.specs.formFactor.toUpperCase()], ["Polling", pollingLabel(product.specs.maxPollingHz)], ["Actuation", product.specs.minActuationMm != null ? `${product.specs.minActuationMm} mm min` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm precision` : "Adjustable"], ["Rapid trigger", product.specs.rapidTrigger ? "Yes" : "No"]];
     case "switch": {
@@ -81,20 +81,20 @@ function productMetrics(product: CatalogProduct): [string, string][] {
 function detailRows(product: CatalogProduct): [string, ReactNode][] {
   switch (product.type) {
     case "mouse": return [
-      ["Dimensions", `${product.specs.lengthMm} x ${product.specs.widthMm} x ${product.specs.heightMm} mm`],
+      ["Dimensions", `${product.specs.lengthMm} × ${product.specs.widthMm} × ${product.specs.heightMm} mm`],
       ["Grip width", product.specs.gripWidthMm == null ? "Not listed" : `${product.specs.gripWidthMm} mm`],
       ["Weight", `${product.specs.weightG} g`],
-      ["Shape", `${titleCase(product.specs.shape)} � ${titleCase(product.specs.hump)} hump`],
+      ["Shape", `${titleCase(product.specs.shape)} · ${titleCase(product.specs.hump)} hump`],
       ["Sensor", product.specs.sensor],
       ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
       ["Main switches", product.specs.mainSwitch ?? titleCase(product.specs.switchType)],
-      ["Connectivity", product.specs.connectivity.join(" � ")],
+      ["Connectivity", product.specs.connectivity.join(" · ")],
     ];
     case "mousepad": return [
-      ["Surface", `${titleCase(product.specs.surfaceClass)} � ${product.specs.surfaceMaterial}`],
+      ["Surface", `${titleCase(product.specs.surfaceClass)} · ${product.specs.surfaceMaterial}`],
       ["Base", product.specs.baseMaterial],
       ["Firmness", titleCase(product.specs.firmness)],
-      ["Size", `${product.specs.widthMm} x ${product.specs.heightMm} mm`],
+      ["Size", `${product.specs.widthMm} × ${product.specs.heightMm} mm`],
       ["Thickness", `${product.specs.thicknessMm} mm`],
       ["Dynamic glide", `${product.feel.dynamicSpeed}/100`],
       ["Stopping power", `${product.feel.stoppingPower}/100`],
@@ -103,7 +103,7 @@ function detailRows(product: CatalogProduct): [string, ReactNode][] {
     case "skate": return [
       ["Material", titleCase(product.specs.material)],
       ["Format", titleCase(product.specs.format)],
-      ["Thickness", product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "-"],
+      ["Thickness", product.specs.thicknessMm ? `${product.specs.thicknessMm} mm` : "—"],
       ["Fresh glide", `${product.feel.freshSpeed ?? product.feel.speed}/100`],
       ["Broken-in glide", `${product.feel.brokenInSpeed ?? product.feel.speed}/100`],
       ["Control", `${product.feel.control}/100`],
@@ -116,10 +116,10 @@ function detailRows(product: CatalogProduct): [string, ReactNode][] {
       ["Switch technology", titleCase(product.specs.switchTechnology)],
       ["Stock switch", product.specs.stockSwitch],
       ["Polling ceiling", pollingLabel(product.specs.maxPollingHz)],
-      ["Actuation range", product.specs.minActuationMm != null ? `${product.specs.minActuationMm}-${product.specs.maxActuationMm ?? "?"} mm` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm published tuning precision` : "Adjustable / not fully specified"],
+      ["Actuation range", product.specs.minActuationMm != null ? `${product.specs.minActuationMm}–${product.specs.maxActuationMm ?? "?"} mm` : product.specs.actuationStepMm != null ? `${product.specs.actuationStepMm} mm published tuning precision` : "Adjustable / not fully specified"],
       ["Rapid Trigger", product.specs.rapidTrigger ? "Yes" : "No"],
       ["Hot-swap", product.specs.hotSwappable ? "Yes" : "No"],
-      ["Connectivity", product.specs.connectivity.join(" � ")],
+      ["Connectivity", product.specs.connectivity.join(" · ")],
       ["Configuration", product.specs.webConfigurator ? "Web configurator" : product.specs.software ?? "Not listed"],
     ];
     case "switch": {
@@ -127,12 +127,12 @@ function detailRows(product: CatalogProduct): [string, ReactNode][] {
       return [
         ["Technology", titleCase(product.specs.technology)],
         ["Feel", titleCase(product.specs.feel)],
-        ["Force", force ? `${force.value} ${force.unit}` : "-"],
-        ["Pre-travel", product.specs.preTravelMm != null ? `${product.specs.preTravelMm} mm` : "-"],
+        ["Force", force ? `${force.value} ${force.unit}` : "—"],
+        ["Pre-travel", product.specs.preTravelMm != null ? `${product.specs.preTravelMm} mm` : "—"],
         ["Total travel", `${product.specs.totalTravelMm} mm`],
-        ["Factory lubed", product.specs.factoryLubed == null ? "-" : product.specs.factoryLubed ? "Yes" : "No"],
-        ["Rated life", product.specs.ratedKeystrokesM ? `${product.specs.ratedKeystrokesM}M keystrokes` : "-"],
-        ["Compatibility", product.specs.compatibility?.join(" � ") ?? "Verify against the target board"],
+        ["Factory lubed", product.specs.factoryLubed == null ? "—" : product.specs.factoryLubed ? "Yes" : "No"],
+        ["Rated life", product.specs.ratedKeystrokesM ? `${product.specs.ratedKeystrokesM}M keystrokes` : "—"],
+        ["Compatibility", product.specs.compatibility?.join(" · ") ?? "Verify against the target board"],
       ];
     }
   }
@@ -163,7 +163,8 @@ function ProductCard({ product, onOpen, compared }: { product: CatalogProduct; o
     <h3>{product.model}</h3>
     <p>{product.summary}</p>
     <div className="consumer-metrics">{productMetrics(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div>
-    <footer><span className="consumer-card-price">{money(product.msrpUsd)}</span><CoveragePill product={product}/><em>Details </em></footer>
+    {product.type === "mousepad" && <small className="consumer-modeled-note">Glide and stopping power are modeled scores out of 100.</small>}
+    <footer><span className="consumer-card-price">{money(product.msrpUsd)}</span><CoveragePill product={product}/><em>Details →</em></footer>
   </button>;
 }
 
@@ -187,13 +188,13 @@ function ProductDrawer({ product, onClose, onCompare, compared, onSave, saved }:
   return <div className="consumer-drawer-shell">
     <button type="button" className="consumer-drawer-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
     <aside ref={dialogRef} className="consumer-drawer" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
-      <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>x</button></header>
+      <header><div><span>{categoryMeta[product.type].singular} / {product.brand}</span><h2 id={titleId}>{product.model}</h2></div><button type="button" data-dialog-initial-focus onClick={onClose} aria-label={`Close ${product.brand} ${product.model} details`}>×</button></header>
       <div className="consumer-drawer-hero"><div className="consumer-drawer-media"><ProductVisual product={product}/><ProductImageCredit productId={product.id}/></div><div><small>EVIDENCE COVERAGE</small><b>{coverage.score}</b><span>{coverage.label}</span><div className="consumer-drawer-source-checks"><span>Latest source check <strong>{sourceChecks.latest}</strong></span><span>Oldest source check <strong>{sourceChecks.oldest}</strong></span></div></div></div>
       <p className="consumer-drawer-summary" id={descriptionId}>{product.summary}</p>
       <div className="consumer-tag-row"><span>{titleCase(product.status)}</span><span>{money(product.msrpUsd)}</span>{product.tags?.slice(0, 4).map(tag => <span key={tag}>{titleCase(tag)}</span>)}<button type="button" className="consumer-drawer-save" aria-pressed={saved} onClick={() => onSave(product)}>{saved ? "Saved" : "Save"}</button><button type="button" className="consumer-drawer-compare" aria-pressed={compared} onClick={() => onCompare(product)}>{compared ? "Remove from compare" : "Add to compare"}</button><button type="button" className="consumer-drawer-link" onClick={copyProductLink}>Copy link</button><span className="consumer-drawer-link-status" role="status" aria-live="polite">{linkStatus}</span></div>
       <section><div className="consumer-section-title"><span>SPECIFICATIONS</span><h3>Product record</h3></div><div className="consumer-detail-grid">{detailRows(product).map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section>
-      <section><div className="consumer-section-title"><span>EVIDENCE</span><h3>What supports this record</h3></div><div className="consumer-evidence-list">{Object.entries(product.evidence ?? {}).map(([field, note]) => <article key={field}><div><b>{titleCase(field)}</b><span className={note.confidence}>{note.confidence}</span></div>{note.note && <p>{note.note}</p>}<footer>{note.sourceIds.map(sourceId => { const source = sourcesById.get(sourceId); return source ? <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span>{source.label}<i>?</i></a> : null; })}</footer></article>)}</div></section>
-      <section><div className="consumer-section-title"><span>SOURCES</span><h3>Provenance ledger</h3></div><div className="consumer-source-list">{product.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span><div><b>{source.label}</b><small>checked {source.checkedAt}</small></div><i>?</i></a>)}</div></section>
+      <section><div className="consumer-section-title"><span>EVIDENCE</span><h3>What supports this record</h3></div><div className="consumer-evidence-list">{Object.entries(product.evidence ?? {}).map(([field, note]) => <article key={field}><div><b>{titleCase(field)}</b><span className={note.confidence}>{note.confidence}</span></div>{note.note && <p>{note.note}</p>}<footer>{note.sourceIds.map(sourceId => { const source = sourcesById.get(sourceId); return source ? <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span>{source.label}<i>↗</i></a> : null; })}</footer></article>)}</div></section>
+      <section><div className="consumer-section-title"><span>SOURCES</span><h3>Provenance ledger</h3></div><div className="consumer-source-list">{product.sources.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer"><span>{source.kind}</span><div><b>{source.label}</b><small>checked {source.checkedAt}</small></div><i>↗</i></a>)}</div></section>
     </aside>
   </div>;
 }
@@ -206,10 +207,10 @@ function CompareLoadingFallback({ onClose }: { onClose: () => void }) {
   return <div className="consumer-compare-shell consumer-compare-loading">
     <button type="button" className="consumer-compare-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
-      <button type="button" className="consumer-compare-loading-close" data-dialog-initial-focus onClick={onClose} aria-label="Close comparison">x</button>
+      <button type="button" className="consumer-compare-loading-close" data-dialog-initial-focus onClick={onClose} aria-label="Close comparison">×</button>
       <i aria-hidden="true"/>
       <b id={titleId}>Opening comparison</b>
-      <span id={descriptionId} role="status" aria-live="polite">Preparing the richer side-by-side view.</span>
+      <span id={descriptionId} role="status" aria-live="polite">Preparing the richer side-by-side view…</span>
     </div>
   </div>;
 }
@@ -531,7 +532,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
     savedOnly ? { key: "saved", label: validSharedShortlistIds.length ? `Shared shortlist: ${validSharedShortlistIds.length}` : "Saved gear", clear: () => setSavedOnly(false) } : null,
     shape !== "all" ? { key: "shape", label: `Shape: ${titleCase(shape)}`, clear: () => setShape("all") } : null,
     minPolling > 0 ? { key: "polling", label: `Polling: ${pollingLabel(minPolling)}+`, clear: () => setMinPolling(0) } : null,
-    maxWeight < 140 ? { key: "weight", label: `Weight: �${maxWeight} g`, clear: () => setMaxWeight(140) } : null,
+    maxWeight < 140 ? { key: "weight", label: `Weight: ≤${maxWeight} g`, clear: () => setMaxWeight(140) } : null,
     surface !== "all" ? { key: "surface", label: `Surface: ${titleCase(surface)}`, clear: () => setSurface("all") } : null,
     padFirmness !== "all" ? { key: "firmness", label: `Firmness: ${titleCase(padFirmness)}`, clear: () => setPadFirmness("all") } : null,
     stitchedOnly ? { key: "stitched", label: "Stitched edges", clear: () => setStitchedOnly(false) } : null,
@@ -541,7 +542,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
     rapidTriggerOnly ? { key: "rapid-trigger", label: "Rapid Trigger", clear: () => setRapidTriggerOnly(false) } : null,
     switchTech !== "all" ? { key: "switch-tech", label: `Switch: ${titleCase(switchTech)}`, clear: () => setSwitchTech("all") } : null,
     switchFeel !== "all" ? { key: "switch-feel", label: `Feel: ${titleCase(switchFeel)}`, clear: () => setSwitchFeel("all") } : null,
-    sourceRecency !== "all" ? { key: "source-recency", label: sourceRecency === "30d" ? "Source check: �30 days" : sourceRecency === "90d" ? "Source check: �90 days" : "Source check: >90 days", clear: () => setSourceRecency("all") } : null,
+    sourceRecency !== "all" ? { key: "source-recency", label: sourceRecency === "30d" ? "Source check: ≤30 days" : sourceRecency === "90d" ? "Source check: ≤90 days" : "Source check: >90 days", clear: () => setSourceRecency("all") } : null,
   ].filter((item): item is { key: string; label: string; clear: () => void } => item !== null);
 
   const focusedMeta = focusCategory ? categoryMeta[focusCategory] : null;
@@ -560,7 +561,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
       : focusCategory === "switch"
         ? "These are Atlas canonical product records with sourced specifications. The much larger attributed review directory stays below as a separate evidence source."
         : "Find a shape, surface, or switch that fits. Compare up to four products from the same category.";
-  const searchPlaceholder = focusCategory === "mousepad" ? "Search pad, material, surface, base." : focusCategory === "keyboard" ? "Search board, format, switch technology, polling." : focusCategory === "switch" ? "Search switch, technology, feel, force." : "Search product, material, shape, switch, feature.";
+  const searchPlaceholder = focusCategory === "mousepad" ? "Search pad, material, surface, base…" : focusCategory === "keyboard" ? "Search board, format, switch technology, polling…" : focusCategory === "switch" ? "Search switch, technology, feel, force…" : "Search product, material, shape, switch, feature…";
 
   return <div className={`consumer-shell ${focusCategory ? "consumer-category-page" : ""}`} data-focus-category={focusCategory ?? undefined}>
     <header className="consumer-topbar">
@@ -577,7 +578,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
           <p>{focusedDescription}</p>
           <div className="consumer-category-hero-actions">
             <a href="#">Browse all gear</a>
-            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder </a> : focusCategory === "keyboard" ? <a href="#keyboard-lab">Open Keyboard Lab </a> : <a href="#switch-review-index" onClick={event => { event.preventDefault(); document.getElementById("switch-review-index")?.scrollIntoView({ behavior: "smooth" }); }}>Jump to review directory </a>}
+            {focusCategory === "mousepad" ? <a href="#pointing">Open setup finder →</a> : focusCategory === "keyboard" ? <a href="#keyboard-lab">Open Keyboard Lab →</a> : <a href="#switch-review-index" onClick={event => { event.preventDefault(); document.getElementById("switch-review-index")?.scrollIntoView({ behavior: "smooth" }); }}>Jump to review directory →</a>}
           </div>
         </div>
         <aside><b>{counts[focusCategory]}</b><span>canonical Atlas records</span><small>{focusedMeta.description}</small></aside>
@@ -591,7 +592,7 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
       <Suspense fallback={null}><AtlasDesk products={filtered} onOpen={openProduct}/></Suspense>
       {beforeCatalog}
       <section className="consumer-catalog" id="consumer-catalog">
-        {!catalogReady && !catalogLoadError && <p className="consumer-catalog-notice" role="status">Loading the full switch catalog.</p>}
+        {!catalogReady && !catalogLoadError && <p className="consumer-catalog-notice" role="status">Loading the full switch catalog…</p>}
         {catalogLoadError && <div className="consumer-catalog-notice" role="status">Some switch records could not be loaded. <button type="button" onClick={() => { setCatalogLoadError(false); setCatalogLoadAttempt(attempt => attempt + 1); }}>Retry loading switches</button></div>}
         <div className="consumer-section-head"><div><span>{focusCategory ? `${focusedMeta?.singular.toUpperCase()} DATABASE` : "DATABASE"}</span><h2>{catalogTitle}</h2><p>{catalogDescription}</p></div><strong aria-live="polite" aria-atomic="true">{filtered.length}<small> matching</small></strong></div>
         <div className="consumer-category-tabs">{(["mouse", "mousepad", "skate", "keyboard", "switch", "all"] as const).map(type => <button key={type} type="button" data-category={type} aria-pressed={category === type} className={category === type ? "active" : ""} onClick={() => selectCategory(type)}>{type === "all" ? "All gear" : categoryMeta[type].label}<span>{type === "all" ? catalogProducts.length : counts[type]}</span></button>)}</div>
@@ -617,19 +618,19 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
         </>}
         <div className="consumer-density-control" role="group" aria-label="Catalog density"><button type="button" aria-pressed={!compactSwitchView} onClick={() => setCompactSwitchView(false)}>Gallery</button><button type="button" aria-pressed={compactSwitchView} onClick={() => setCompactSwitchView(true)}>Compact</button></div>
         <div className="consumer-toolbar">
-          <div className="consumer-search"><span aria-hidden="true">?</span><input aria-label="Search catalog" value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
+          <div className="consumer-search"><span aria-hidden="true">⌕</span><input aria-label="Search catalog" value={query} onChange={event => setQuery(event.target.value)} placeholder={searchPlaceholder}/></div>
           <label>Brand<select value={brand} onChange={event => setBrand(event.target.value)}><option value="all">All brands</option>{brands.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
-          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option><option value="source-newest">Source check � newest</option><option value="source-oldest">Source check � oldest</option>{focusCategory === "mousepad" && <><option value="glide">Glide � high to low</option><option value="stopping">Stopping � high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation � light to heavy</option><option value="travel">Travel � short to long</option></>}</select></label>
+          <label>Sort<select value={sort} onChange={event => setSort(event.target.value as typeof sort)}><option value="coverage">Evidence coverage</option><option value="name">Name</option><option value="price">Price</option><option value="source-newest">Source check · newest</option><option value="source-oldest">Source check · oldest</option>{focusCategory === "mousepad" && <><option value="glide">Glide · high to low</option><option value="stopping">Stopping · high to low</option></>}{focusCategory === "switch" && <><option value="actuation">Published actuation · light to heavy</option><option value="travel">Travel · short to long</option></>}</select></label>
           <label className="consumer-toggle"><span>Current only</span><input type="checkbox" checked={currentOnly} onChange={event => setCurrentOnly(event.target.checked)}/><i/></label>
           <button type="button" className={`consumer-saved-filter ${savedOnly ? "active" : ""}`} aria-pressed={savedOnly} onClick={() => setSavedOnly(value => !value)}>{validSharedShortlistIds.length ? "Shared" : "Saved"} <span>{validSharedShortlistIds.length || savedIds.length}</span></button>
           <button type="button" className="consumer-saved-share" disabled={!savedIds.length} onClick={copySavedShortlist}>Share saved</button>
           <span className="consumer-saved-share-status" role="status" aria-live="polite">{savedShareStatus}</span>
-          <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "-" : "+"}</span></button>
+          <button type="button" className={`consumer-filter-toggle ${showFilters ? "active" : ""}`} aria-expanded={showFilters} aria-controls={filtersId} onClick={() => setShowFilters(value => !value)}>{focusCategory ? "More filters" : "Filters"} <span>{showFilters ? "−" : "+"}</span></button>
         </div>
 
         {activeFilters.length > 0 && <div className="consumer-active-filters" role="region" aria-label="Active catalog filters">
           <span>Active filters</span>
-          <div>{activeFilters.map(filter => <button type="button" key={filter.key} onClick={filter.clear} aria-label={`Remove ${filter.label} filter`}><b>{filter.label}</b><i aria-hidden="true">x</i></button>)}</div>
+          <div>{activeFilters.map(filter => <button type="button" key={filter.key} onClick={filter.clear} aria-label={`Remove ${filter.label} filter`}><b>{filter.label}</b><i aria-hidden="true">×</i></button>)}</div>
           <button type="button" className="consumer-active-filters-clear" onClick={clearAllFilters}>Clear all</button>
         </div>}
 
@@ -654,17 +655,17 @@ export default function AtlasConsumer({ focusCategory, afterCatalog, beforeCatal
           <p>Go deeper with shape comparisons, keyboard research, and sensitivity conversion.</p>
         </div>
         <div className="consumer-tool-row" aria-label="Atlas tools">
-          <a className="tool-mouse" href="#pointing"><span>01</span><div><b>Setup finder + Shape Lab</b><small>Mouse fit, pad/skate pairing and outline comparison</small></div><i></i></a>
-          <a className="tool-keyboard" href="#keyboard-lab"><span>02</span><div><b>Keyboard Lab</b><small>Complete-board actuation, polling and platform analysis</small></div><i></i></a>
-          <a className="tool-sensitivity" href="#sensitivity"><span>03</span><div><b>Sensitivity Lab</b><small>cm/360, DPI, yaw and cross-game conversion</small></div><i></i></a>
+          <a className="tool-mouse" href="#pointing"><span>01</span><div><b>Setup finder + Shape Lab</b><small>Mouse fit, pad/skate pairing and outline comparison</small></div><i>→</i></a>
+          <a className="tool-keyboard" href="#keyboard-lab"><span>02</span><div><b>Keyboard Lab</b><small>Complete-board actuation, polling and platform analysis</small></div><i>→</i></a>
+          <a className="tool-sensitivity" href="#sensitivity"><span>03</span><div><b>Sensitivity Lab</b><small>cm/360, DPI, yaw and cross-game conversion</small></div><i>→</i></a>
         </div>
       </section>
 
       {afterCatalog}
-      <section className="consumer-principles"><div><span>HOW ATLAS READS DATA</span><h2>Specs are facts. Fit is context. Reviews are evidence.</h2></div><p>Atlas does not turn every reviewer opinion into a universal score. Manufacturer specifications stay labeled as manufacturer claims, independent observations remain attributed, and derived fit models are treated as guidance rather than measurements.</p><a href="#product-lab">Open research & validation </a></section>
+      <section className="consumer-principles"><div><span>HOW ATLAS READS DATA</span><h2>Specs are facts. Fit is context. Reviews are evidence.</h2></div><p>Atlas does not turn every reviewer opinion into a universal score. Manufacturer specifications stay labeled as manufacturer claims, independent observations remain attributed, and derived fit models are treated as guidance rather than measurements.</p><a href="#product-lab">Open research & validation →</a></section>
     </main>
 
-    {compareProducts.length > 0 && <div className="consumer-compare-tray" id={compareTrayId} role="region" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare � {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button type="button" onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model} from comparison`}>x</button></div>)}</div><div className="consumer-compare-tray-actions"><button type="button" className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button type="button" className="consumer-compare-share" disabled={compareProducts.length < 2} onClick={copyComparison}>Copy comparison</button><span className="consumer-compare-share-status" role="status" aria-live="polite">{compareShareStatus}</span><button type="button" className="consumer-compare-open" aria-haspopup="dialog" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
+    {compareProducts.length > 0 && <div className="consumer-compare-tray" id={compareTrayId} role="region" aria-label="Comparison tray"><span>{categoryMeta[compareProducts[0].type].singular} compare · {compareProducts.length}/4</span><div className="consumer-compare-tray-list">{compareProducts.map(product => <div className="consumer-compare-chip" key={product.id}><span className="consumer-compare-chip-media" aria-hidden="true"><ProductMedia productId={product.id}/></span><div><small>{product.brand}</small><b>{product.model}</b><em>{compareChipMeta(product)}</em></div><button type="button" onClick={() => removeCompare(product.id)} aria-label={`Remove ${product.brand} ${product.model} from comparison`}>×</button></div>)}</div><div className="consumer-compare-tray-actions"><button type="button" className="consumer-compare-clear" onClick={() => { setCompareIds([]); setCompareOpen(false); }}>Clear</button><button type="button" className="consumer-compare-share" disabled={compareProducts.length < 2} onClick={copyComparison}>Copy comparison</button><span className="consumer-compare-share-status" role="status" aria-live="polite">{compareShareStatus}</span><button type="button" className="consumer-compare-open" aria-haspopup="dialog" disabled={compareProducts.length < 2} onClick={() => setCompareOpen(true)}>Compare {compareProducts.length >= 2 ? compareProducts.length : ""}</button></div></div>}
 
     {selected && <ProductDrawer product={selected} onClose={closeProduct} onCompare={toggleCompare} compared={compared(selected.id)} onSave={toggleSaved} saved={isSaved(selected.id)}/>} 
     {compareOpen && compareProducts.length >= 2 && <Suspense fallback={<CompareLoadingFallback onClose={() => setCompareOpen(false)}/>} ><ConsumerCompare products={compareProducts} onClose={() => setCompareOpen(false)} onRemove={removeCompare}/></Suspense>} 

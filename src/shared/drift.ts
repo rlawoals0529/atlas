@@ -28,10 +28,10 @@ export function validateCurve(value: unknown): DriftCurve {
   };
   if (!Array.isArray(c.points)) throw new Error("Curve points must be an array.");
   if (curve.kind === "lut") {
-    if (c.points.length < 2 || c.points.length > 257) throw new Error("LUT needs 2-257 velocity points.");
+    if (c.points.length < 2 || c.points.length > 257) throw new Error("LUT needs 2–257 velocity points.");
     curve.points = c.points.map(item => { const p = object(item); return { speed: Math.fround(number(p.speed, "Point speed", 0, 1000000, true)), output: Math.fround(number(p.output, "Point output", 0, 3000000, true)) }; });
     curve.points.forEach((p, i) => {
-      if (p.output / p.speed < .1 || p.output / p.speed > 3 || (i && (p.speed <= curve.points[i - 1].speed || p.output <= curve.points[i - 1].output))) throw new Error("LUT speeds and output must increase; each output/input ratio must be 0.1-3.");
+      if (p.output / p.speed < .1 || p.output / p.speed > 3 || (i && (p.speed <= curve.points[i - 1].speed || p.output <= curve.points[i - 1].output))) throw new Error("LUT speeds and output must increase; each output/input ratio must be 0.1–3.");
     });
   } else {
     if (c.points.length) throw new Error("Non-LUT curves must not contain points.");
