@@ -14,6 +14,7 @@ import "./atlas-ux-refresh.css";
 import "./atlas-readability.css";
 import "./catalog-pages.css";
 import "./atlas-midnight.css";
+import "./atlas-navigation.css";
 
 const loadPointing = () => import("./AppV05");
 const loadProductLab = () => import("./ProductLab");
