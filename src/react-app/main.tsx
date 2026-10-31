@@ -9,12 +9,11 @@ import "./atlas-base.css";
 import "./consumer.css";
 import "./consumer-compare.css";
 import "./product-media.css";
-import "./atlas-unified-theme.css";
 import "./atlas-interactions.css";
 import "./atlas-ux-refresh.css";
 import "./atlas-readability.css";
-import "./atlas-polish.css";
 import "./catalog-pages.css";
+import "./atlas-midnight.css";
 
 const loadPointing = () => import("./AppV05");
 const loadProductLab = () => import("./ProductLab");
@@ -58,6 +57,12 @@ function RootRouter() {
   const [pendingHash, setPendingHash] = useState<string | null>(null);
   const [showRouteProgress, setShowRouteProgress] = useState(false);
   const [showRouteStatus, setShowRouteStatus] = useState(false);
+
+  useEffect(() => {
+    if (["", "#", "#pointing", "#keyboards", "#mousepads", "#switches", "#keyboard-lab", "#sensitivity", "#product-lab", "#validation-run"].includes(hash)) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [hash]);
 
   useEffect(() => {
     const onHash = () => {

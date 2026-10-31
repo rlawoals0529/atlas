@@ -79,7 +79,7 @@ export default function SensitivityLab() {
 
     <main className="utility-main">
       <section className="utility-hero">
-        <div><span className="utility-kicker">AIM CALIBRATION</span><h1>Keep the same physical turn distance across games.</h1><p>Atlas matches base sensitivity through yaw, DPI and cm/360 instead of using opaque conversion multipliers. Scoped, ADS and FOV-dependent systems are deliberately excluded from this first pass.</p></div>
+        <div><span className="utility-kicker">AIM CALIBRATION</span><h1>Match your sensitivity across games.</h1><p>Match base turn distance using DPI, yaw, and cm/360. Scoped aim, ADS, and FOV effects are excluded.</p></div>
         <div className="utility-hero-metric"><b>{fmt(sourceCm, 2)}</b><span>CM / 360</span><small>{fmt(inches360(sourceDpi, sourceSens, sourceYaw), 2)} in / 360</small></div>
       </section>
 

@@ -461,7 +461,7 @@ export default function ProductLab() {
 
       <main className="pl-main">
         <section className="pl-hero">
-          <div><span className="pl-kicker">RESEARCH · ANALYTICS · OPERATIONS · VALIDATION</span><h1>One enthusiast product, operated like a real product.</h1><p>Atlas uses its own sourced catalog, behavioral instrumentation and capability model to support product decisions and hardware validation without pretending synthetic usage, anecdotal sentiment or unexecuted tests are real evidence.</p></div>
+          <div><span className="pl-kicker">RESEARCH · ANALYTICS · OPERATIONS · VALIDATION</span><h1>Trace the evidence behind the gear.</h1><p>Atlas uses its own sourced catalog, behavioral instrumentation and capability model to support product decisions and hardware validation without pretending synthetic usage, anecdotal sentiment or unexecuted tests are real evidence.</p></div>
           <div className="pl-hero-status"><span>CATALOG</span><b>{insights.currentCount} current mice</b><span>EVIDENCE</span><b>{evidence.evidenceHealthAverage}/100 health</b><span>VALIDATION</span><b>planned ≠ passed</b></div>
         </section>
 

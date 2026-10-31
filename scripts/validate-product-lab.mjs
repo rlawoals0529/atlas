@@ -43,10 +43,10 @@ assert(!app.includes("INPUT ATLAS"), "consumer UI must use Atlas branding only")
 assert(app.includes('const VERSION = "0.8"'), "consumer version must match current v0.8 Product Lab integration");
 assert(app.includes('href="#product-lab"'), "Product Lab must remain reachable from consumer navigation");
 
-assert(publicIndex.includes('name="color-scheme" content="light"'), "public metadata must match the light Atlas presentation");
+assert(publicIndex.includes('name="color-scheme" content="dark"'), "public metadata must match the Midnight Glass presentation");
 assert(publicIndex.includes('rel="canonical" href="https://atlas.rlawoals0529.workers.dev/"'), "public metadata must keep the canonical production URL");
 assert(publicIndex.includes('/atlas-mark.svg'), "public HTML must keep the Atlas favicon/app mark");
-assert(publicManifest.includes('"theme_color": "#f5f6f3"'), "PWA theme color must match Atlas paper");
+assert(publicManifest.includes('"theme_color": "#02070A"'), "PWA theme color must match Atlas midnight background");
 assert(publicManifest.includes('"src": "/atlas-mark.svg"'), "PWA manifest must keep an app icon");
 
 assert(main.includes('hash === "#keyboard-lab"'), "Keyboard Lab must remain routable");

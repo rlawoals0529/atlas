@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { CatalogProduct, ProductType } from "../shared/types";
 import { ProductImageCredit, ProductMedia } from "./ProductMedia";
 import { useModalDialog } from "./useModalDialog";
@@ -296,6 +296,16 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
   const titleId = useId();
   const descriptionId = useId();
   const dialogRef = useModalDialog<HTMLElement>(onClose);
+  const [headerHeight, setHeaderHeight] = useState(160);
+  useEffect(() => {
+    const header = dialogRef.current?.querySelector(".consumer-compare-header");
+    if (!header) return;
+    const measure = () => setHeaderHeight(header.getBoundingClientRect().height);
+    const observer = new ResizeObserver(measure);
+    observer.observe(header);
+    measure();
+    return () => observer.disconnect();
+  }, [dialogRef]);
   const type = products[0]?.type;
   const rowSets = useMemo(() => products.map(rowsFor), [products]);
   const rows = useMemo(() => {
@@ -324,7 +334,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
 
   return <div className="consumer-compare-shell" data-product-type={type}>
     <button type="button" className="consumer-compare-backdrop" tabIndex={-1} aria-hidden="true" onClick={onClose}/>
-    <section ref={dialogRef} className="consumer-compare-panel" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
+    <section ref={dialogRef} className="consumer-compare-panel" style={{ "--compare-header-height": `${headerHeight}px` } as React.CSSProperties} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId} tabIndex={-1}>
       <header className="consumer-compare-header">
         <div><span>RICH COMPARISON / {typeLabel[type].toUpperCase()}</span><h2 id={titleId}>{type === "mousepad" ? "See how the surfaces separate." : "Compare the parts that actually differ."}</h2><p id={descriptionId}>{type === "mousepad" ? "Start with glide, stopping, footprint and build, then use the full table for the sourced details. Normalized feel fields stay separate from published specifications." : "Atlas keeps raw specifications, modeled feel fields and evidence strength visible side-by-side. Bars show position on a fixed scale, not an overall quality score."}</p></div>
         <button type="button" className="consumer-compare-close" data-dialog-initial-focus onClick={onClose} aria-label="Close comparison">×</button>
@@ -338,6 +348,7 @@ export default function ConsumerCompare({ products, onClose, onRemove }: { produ
         <a href={specialistHref}>{specialistLabel} →</a>
       </div>
 
+      <p className="consumer-compare-scroll-hint">Scroll sideways to see every product.</p>
       <div className="consumer-compare-products" style={{ "--compare-count": products.length } as React.CSSProperties}>
         <div className="consumer-compare-axis"><span>PRODUCT</span></div>
         {products.map((product, index) => <article key={product.id}>
