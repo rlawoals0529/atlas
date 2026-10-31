@@ -70,3 +70,11 @@ This change does not expand the catalog, alter product specifications, or change
 source/evidence classifications. The original references are style inspiration;
 Atlas uses the approved catalog layout rather than recreating the video editor
 or the room-photo dashboard shown in those references.
+# Field desk and reviewer workbench
+
+The discovery desk adds a source-image product panel with manual Previous/Next controls. Opening a product uses the existing details drawer. It follows the current catalog filters; it does not imply a recommendation. Gallery/Compact controls now work across catalog categories. Product navigation retains keyboard focus and announces the changing record. Motion is limited to short entrance and hover transitions, with reduced-motion overrides.
+
+Switches also includes ThereminGoat's Overall, Hard and Soft score sheets in a separate workbench. Each source scale remains intact (100/70/30), with timeless and published time-weighted columns kept separate. The import preserves 474 total-ranking rows per sheet at upstream commit `324e870272e83a96ff3f8e13b15b9f4671166674`. Source ranks are labeled as such; rescores remain dated rows. Original CSVs, a repeatable importer and validation tests are included. Scores do not enter Atlas's evidence coverage heuristic or manufacturer specifications.
+
+The desk and score data are deferred modules; initial bundle budgets are unchanged. The score workbench loads on the Switches route. See `data/sources/theremingoat/README.md` for provenance and snapshot caveats. The older review-link directory has a separate September snapshot.
+

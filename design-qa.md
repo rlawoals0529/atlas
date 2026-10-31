@@ -2,9 +2,38 @@
 
 final result: blocked
 
+## Field desk and score workbench follow-up
+
+The user approved the existing redesign and requested more expressive panels and
+dynamic UI. This pass adds a discovery desk using existing attributed product
+imagery, gallery/compact catalog density, and a separate three-sheet ThereminGoat
+score explorer. The original-reference comparison block below remains unresolved;
+these scoped interaction/layout checks do not override it.
+
+- Captured the existing keyboards route before editing as
+  `qa-evidence/before-workbench.png` (local only).
+- Tested Previous/Next discovery, product drawer opening/closing and keyboard
+  Enter navigation. Focus remains on the discovery navigation button.
+- Tested all three score lenses, timeless/time-weighted modes, search for
+  Geon Raw and Alpaca, an empty search and recovery, pagination, and selection.
+  Known source values matched the selected inspector (Overall 82.8/100 for
+  Gateron G Pro 3.0 Yellow, Hard 64/70 for Ball Bearing Blue, Soft 24.9/30
+  for Gateron Lanes). The CSV importer ignores repeated type-specific tables.
+- Inspected normal desktop (1280 CSS pixels), mobile 390 and narrow 320.
+  Both new surfaces stayed within the viewport. Corrected narrow note wrapping
+  and preserved spaces where desktop line breaks collapse on mobile.
+- Focused a score input, pressed Tab and confirmed the next select had a visible
+  solid outline. Global reduced-motion overrides cover the new transitions.
+- Browser console error capture returned an empty list. Captures include
+  `qa-evidence/switch-score-workbench.png` and `qa-evidence/atlas-field-desk.png`.
+- Full verification passed with 30 tests, score/source consistency validation,
+  existing catalog/evidence/media checks, production build and Worker dry run.
+  Initial JS remains within 460 KiB raw / 118 KiB gzip; deferred workbench data
+  does not enter the initial bundle. Follow-up changes were rebuilt.
+
 ## Visual truth and review scope
 
-The user supplied two 945 × 2048 screenshots: a video-editor landing page with
+The user supplied two 945 x 2048 screenshots: a video-editor landing page with
 Midnight Black `#02070A`, Electric Blue `#0297DE`, and Cantaloupe Orange `#FC734D`,
 and a glass dashboard over a room photograph. The user approved an adaptation
 for Atlas: dark catalog cards, glass navigation and utility surfaces, Manrope
@@ -15,7 +44,7 @@ Source visual truth: the two image attachments in the task conversation,
 `image(20261031-002721).png` and `image(20261031-002719).png`.
 
 Implementation capture: `qa-evidence/atlas-desktop.png` (local review evidence,
-not committed). Main catalog at 1440 × 960 CSS pixels; device scale approximately
+not committed). Main catalog at 1440 x 960 CSS pixels; device scale approximately
 1.1. Browser screenshot pixels include the browser provider's capture scaling;
 CSS dimensions were read from the rendered page rather than inferred from the
 displayed thumbnail. Additional browser checks covered 390 CSS-pixel mobile,
@@ -62,7 +91,7 @@ that gate is resolved. Build and functional checks are independently complete.
 - Assets: existing manufacturer images and attribution remain. Product image
   failure uses the existing Atlas mark plus an explicit unavailable label.
 - Copy: introductions and actions are concise. Modeled mousepad metrics are
-  labeled. Missing grip width displays “Not listed” rather than “— mm”.
+  labeled. Missing grip width displays "Not listed" rather than "- mm".
 
 ## Primary interactions tested
 
@@ -84,7 +113,7 @@ that gate is resolved. Build and functional checks are independently complete.
   breakpoint.
 - Browser error-log inspection returned no errors on the inspected catalog tab.
 - Follow-up catalog check: the main page now reports all 157 canonical products
-  and 73 switches after its deferred chunk loads. Searching “Smoothie” found the
+  and 73 switches after its deferred chunk loads. Searching "Smoothie" found the
   added Gateron record; saving it and refreshing preserved its saved state.
 
 ## Automated validation

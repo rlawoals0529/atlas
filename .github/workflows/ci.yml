@@ -43,6 +43,8 @@ jobs:
         run: npm run media:validate
       - name: Validate external switch review index
         run: npm run switch-index:validate
+      - name: Validate attributed score snapshots
+        run: npm run scores:validate
       - name: Validate modal accessibility invariants
         run: npm run a11y:validate
       - name: Validate static-site security headers
