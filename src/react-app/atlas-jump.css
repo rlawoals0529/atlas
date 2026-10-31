@@ -1,0 +1,18 @@
+@layer atlas-midnight {
+  .atlas-jump-overlay { position:fixed; inset:0; z-index:300; background:#02070abf; backdrop-filter:blur(8px); display:flex; justify-content:center; align-items:flex-start; padding:12vh 20px 24px; overflow:auto; }
+  .atlas-jump { width:min(620px,100%); min-width:0; max-height:78vh; display:flex; flex-direction:column; padding:24px; background:#15232df5; color:var(--atlas-ink); border:1px solid #536b7d; border-radius:20px; box-shadow:10px 10px 0 #101a2280,0 30px 100px #0008; }
+  .atlas-jump header { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:20px; }
+  .atlas-jump header span { font:9px var(--atlas-mono); letter-spacing:.1em; color:var(--atlas-accent); }
+  .atlas-jump h2 { margin:10px 0 0; font:500 28px var(--atlas-heading) !important; letter-spacing:-.045em; }
+  .atlas-jump header button { color:var(--atlas-muted); background:#0c161c; border:1px solid #455b6c; border-radius:8px; min-width:42px; min-height:38px; cursor:pointer; }
+  .atlas-jump > label { display:grid; gap:9px; font-size:11px; color:var(--atlas-muted); }
+  .atlas-jump input { width:100%; height:46px; min-width:0; padding:12px; border:1px solid #526d80; border-radius:10px; background:#0b141a; color:var(--atlas-ink); font:13px var(--atlas-sans); }
+  .atlas-jump-results { display:grid; gap:5px; overflow:auto; scrollbar-gutter:stable; min-height:0; margin:16px -6px 0; padding:6px; }
+  .atlas-jump-results a { display:grid; gap:7px; padding:14px; text-decoration:none; color:var(--atlas-ink); border:1px solid transparent; border-radius:10px; min-width:0; }
+  .atlas-jump-results a:hover,.atlas-jump-results a:focus-visible { background:#203c4c; border-color:#446a83; }
+  .atlas-jump-results b { font:500 14px var(--atlas-heading); }
+  .atlas-jump-results span { color:var(--atlas-muted); font-size:11px; line-height:1.6; }
+  .atlas-jump footer { padding-top:18px; margin-top:12px; border-top:1px solid var(--atlas-line); color:var(--atlas-muted); font:9px/1.8 var(--atlas-mono); }
+  .atlas-jump-empty { font-size:12px; color:var(--atlas-muted); padding:18px 0; }
+  @media (max-width:600px) { .atlas-jump-overlay { padding:8vh 14px 20px; } .atlas-jump { padding:18px; max-height:84vh; } .atlas-jump h2 { font-size:24px !important; } }
+}

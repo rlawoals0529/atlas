@@ -2,6 +2,35 @@
 
 final result: blocked
 
+## Drift bridge and navigation follow-up
+
+The user asked to integrate their existing Drift sensitivity finder and extend
+the frontend. The native project was found and inspected read-only. Atlas now
+previews its Natural/Gain, Classic/Gain and LUT/Velocity candidate mathematics;
+native aiming trials and driver application remain outside the browser.
+
+- Added Convert / Match distance / Drift curves workspaces, retaining decimal
+  text entry. CS2 sensitivity 2 at 800 DPI still displays VALORANT 0.6286.
+- Tested a synthetic native SavedProfile import: baseline 40 cm at 1600 DPI,
+  multiplier 1.2 and Y/X 1.25. The inspector showed 33.33 slow horizontal cm/360,
+  and the expected speed-dependent horizontal/vertical readouts.
+- Tested unsupported schema rejection, LUT loading, JSON download and its
+  allowlisted contents. Export is labeled Atlas-preview-only; no native import
+  or Raw Accel settings compatibility is claimed.
+- Compiled extracted pure-math C# methods and compared 30 synthetic numerical
+  outputs with the TypeScript implementation. No driver calls were present.
+- Inspected the response plot and controls at desktop 1280, 390 and 320 CSS
+  pixels. No document overflow or controls outside the viewport were found.
+- Added the lazy Jump palette. Tested text filtering, empty state, Ctrl+K,
+  ArrowDown/Enter navigation, Escape, restored opener focus and body scrolling.
+  Inspected the 320px dialog. Fixed desktop nav grid placement so Jump does not
+  add a second header row. Active-route horizontal scrolling is immediate.
+- Full verification passed with 36 tests and unchanged bundle limits. Later
+  layout refinements were rebuilt. New screenshots remain local review evidence.
+
+The original-reference comparison block below still applies. These scoped
+checks do not establish pixel fidelity or authorize deployment.
+
 ## Field desk and score workbench follow-up
 
 The user approved the existing redesign and requested more expressive panels and

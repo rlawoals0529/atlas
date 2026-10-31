@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
+const AtlasJump = lazy(() => import("./AtlasJump"));
 
 type AtlasGlobalNavProps = {
   hash: string;
@@ -17,12 +18,19 @@ const routes = [
 
 export default function AtlasGlobalNav({ hash, onPreload }: AtlasGlobalNavProps) {
   const navRef = useRef<HTMLElement>(null);
+  const [jumpOpen, setJumpOpen] = useState(false);
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k" && !event.isComposing && !document.querySelector('[role="dialog"]')) { event.preventDefault(); setJumpOpen(true); }
+    };
+    window.addEventListener("keydown", key); return () => window.removeEventListener("keydown", key);
+  }, []);
 
   useEffect(() => {
     const navElement = navRef.current;
     if (!navElement || navElement.scrollWidth <= navElement.clientWidth) return;
     const activeLink = navElement.querySelector<HTMLElement>('[aria-current="page"]');
-    activeLink?.scrollIntoView({ block: "nearest", inline: "center", behavior: "auto" });
+    activeLink?.scrollIntoView({ block: "nearest", inline: "center", behavior: "instant" });
   }, [hash]);
 
   return <header className="atlas-global-nav">
@@ -38,6 +46,7 @@ export default function AtlasGlobalNav({ hash, onPreload }: AtlasGlobalNavProps)
       </a>;
       })}
     </nav>
-    <span className="atlas-global-status">Specs. Sources. Perspective.</span>
+    <button type="button" className="atlas-jump-trigger" aria-haspopup="dialog" onClick={() => setJumpOpen(true)}>Jump <kbd>Ctrl K</kbd></button>
+    {jumpOpen && <Suspense fallback={null}><AtlasJump onClose={() => setJumpOpen(false)}/></Suspense>}
   </header>;
 }
