@@ -1,0 +1,887 @@
+diff --git a/src/AccuracyMeasurements.cs b/src/AccuracyMeasurements.cs
+new file mode 100644
+index 0000000..ca0c9d6
+--- /dev/null
++++ b/src/AccuracyMeasurements.cs
+@@ -0,0 +1,109 @@
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Globalization;
++using System.Text;
++using System.Runtime.InteropServices;
++using System.Security.Cryptography;
++
++namespace SensitivityFinder {
++    public static class RawInputIdentity {
++        public static string Key(IntPtr device){try{uint size=0;if(device==IntPtr.Zero || GetRawInputDeviceInfo(device,0x20000007,null,ref size)==uint.MaxValue || size==0 || size>4096)return "";var name=new StringBuilder((int)size+1);if(GetRawInputDeviceInfo(device,0x20000007,name,ref size)==uint.MaxValue || name.Length==0)return "";using(var hash=SHA256.Create())return BitConverter.ToString(hash.ComputeHash(Encoding.UTF8.GetBytes(name.ToString()))).Replace("-","");}catch{return "";}}
++        [DllImport("user32.dll",EntryPoint="GetRawInputDeviceInfoW",CharSet=CharSet.Unicode)]static extern uint GetRawInputDeviceInfo(IntPtr device,uint command,StringBuilder data,ref uint size);
++    }
++    // Bounded-memory histogram. Values are upper bin edges, not precise timestamps.
++    public sealed class TimingHistogram {
++        public int[] Bins=new int[2001];
++        public int Count,Invalid;
++        public double MaximumMs,TotalMs;
++        public void Add(double ms) {
++            if(!MathUtil.Finite(ms) || ms<=0){Invalid++;return;}
++            Count++;TotalMs+=ms;MaximumMs=Math.Max(MaximumMs,ms);
++            int bin=(int)Math.Min(2000,Math.Ceiling(ms/.05));Bins[bin]++;
++        }
++        public double Percentile(double fraction) {
++            if(Count==0)return 0;
++            int rank=(int)Math.Ceiling(Math.Max(0,Math.Min(1,fraction))*Count),seen=0;
++            for(int i=0;i<Bins.Length;i++){seen+=Bins[i];if(seen>=Math.Max(1,rank))return i==2000?MaximumMs:i*.05;}
++            return MaximumMs;
++        }
++    }
++    public sealed class InputTimingEvidence {
++        public string DeviceKey="";
++        public int Version=1,IdleGaps,ShortIntervals,NonMonotonic;
++        public TimingHistogram ActiveIntervals=new TimingHistogram();
++        public double DistanceCounts;
++        public bool Usable {get{return Version==1 && ActiveIntervals.Count>=100 && NonMonotonic==0 && ActiveIntervals.Invalid==0 && ShortIntervals<=ActiveIntervals.Count*.20;}}
++        public string Summary {get{return "Windows arrival intervals / "+ActiveIntervals.Count+" active samples; median "+ActiveIntervals.Percentile(.5).ToString("0.00")+" ms, p95 "+ActiveIntervals.Percentile(.95).ToString("0.00")+" ms, p99 "+ActiveIntervals.Percentile(.99).ToString("0.00")+" ms; "+ShortIntervals+" short intervals, "+IdleGaps+" idle gaps. Not sensor timestamps.";}}
++    }
++    public sealed class PhysicalSwipe {
++        public double DistanceCm,AlongCounts,TravelCounts,SideCounts;
++        public string Device="";
++        public bool Valid {get{return new[]{DistanceCm,AlongCounts,TravelCounts,SideCounts}.All(MathUtil.Finite) && DistanceCm>=5 && DistanceCm<=100 && Math.Abs(AlongCounts)>=100 && TravelCounts>=Math.Abs(AlongCounts) && TravelCounts<=Math.Abs(AlongCounts)*1.05 && SideCounts>=0 && SideCounts<=Math.Abs(AlongCounts)*.05 && !string.IsNullOrEmpty(Device);}}
++        public double Cpi {get{return Math.Abs(AlongCounts)*2.54/DistanceCm;}}
++    }
++    public sealed class PhysicalCalibration {
++        public int Version=1,NominalDpi;
++        public string Mouse="",Pad="",At="";
++        public bool NeutralConfirmed;
++        public List<PhysicalSwipe> Swipes=new List<PhysicalSwipe>();
++        public double GameTurnDegrees,GameDistanceCm;
++        public bool Valid {get{return NeutralConfirmed && NominalDpi>=100 && NominalDpi<=50000 && Swipes.Count==3 && Swipes.All(s=>s.Valid && s.Cpi>=100 && s.Cpi<=50000) && Swipes.Select(s=>s.Device).Distinct().Count()==1 && Swipes.Select(s=>Math.Sign(s.AlongCounts)).Distinct().Count()==2 && Swipes.Max(s=>s.Cpi)/Swipes.Min(s=>s.Cpi)<=1.03;}}
++        public double MeasuredCpi {get{return Valid?Swipes.Sum(s=>Math.Abs(s.AlongCounts))*2.54/Swipes.Sum(s=>s.DistanceCm):0;}}
++        public double RepeatSpreadPercent {get{return Swipes.Count==0?0:100*(Swipes.Max(s=>s.Cpi)/Swipes.Min(s=>s.Cpi)-1);}}
++        public double MeasuredGameCm360 {get{return MathUtil.Finite(GameDistanceCm) && MathUtil.Finite(GameTurnDegrees) && GameDistanceCm>0 && GameDistanceCm<=200 && GameTurnDegrees>=90 && GameTurnDegrees<=720?GameDistanceCm*360/GameTurnDegrees:0;}}
++        public string Summary {get{return (Valid?"Measured effective CPI: "+MeasuredCpi.ToString("0.0")+"; configured DPI: "+NominalDpi+"; repeat spread "+RepeatSpreadPercent.ToString("0.00")+"%.":"Calibration incomplete or inconsistent. Use three straight measured swipes, both directions, same device, at most 3% spread.")+" Ruler distance and neutral input are user confirmed. This does not measure sensor timestamps or verify driver state. No settings are applied."+(MeasuredGameCm360>0?" Independent in-game turn check: "+MeasuredGameCm360.ToString("0.00")+" cm/360; use neutral constant response, hipfire, no ADS.":"");}}
++    }
++    public sealed class ConfirmationEstimate {
++        public int Pairs;
++        public double Mean,Low,High;
++        public bool Passed;
++        public string Reason="Incomplete matched confirmation";
++        public static ConfirmationEstimate Read(CurveSearch search,IEnumerable<SearchTrial> input) {
++            var e=new ConfirmationEstimate();var rows=input.ToList();int count=search.ConfirmationPairs;
++            if(rows.Count!=count*2 || rows.Any(t=>t.Result==null) || rows.Select(t=>t.Seed).Distinct().Count()!=count)return e;
++            var delta=new List<double>();string deviceKey="";
++            for(int pair=0;pair<count;pair++) {
++                var group=rows.Skip(pair*2).Take(2).ToList();
++                if(group.Count(t=>t.Role=="Original")!=1 || group.Count(t=>t.Role=="Winner")!=1)return e;
++                var a=group.SingleOrDefault(t=>t.Role=="Original");var b=group.SingleOrDefault(t=>t.Role=="Winner");
++                if(a==null || b==null || a.Seed!=b.Seed || (pair>0 && group[0].Role==rows[(pair-1)*2].Role))return e;
++                if(ProfileStore.ShapeKey(search.Original.Setup,a.Curve)!=ProfileStore.ShapeKey(search.Original.Setup,search.Original.Response) || ProfileStore.ShapeKey(search.Original.Setup,b.Curve)!=ProfileStore.ShapeKey(search.Original.Setup,search.Selected))return e;
++                if(!a.Result.MeasurementUsable || !b.Result.MeasurementUsable || a.Result.Frames==null || b.Result.Frames==null || a.Result.Frames.Distribution.Count<100 || b.Result.Frames.Distribution.Count<100 || a.Result.Frames.Input==null || b.Result.Frames.Input==null || !a.Result.Frames.Input.Usable || !b.Result.Frames.Input.Usable){e.Reason="Input or frame timing did not clear the new quality checks";return e;}
++                string current=a.Result.Frames.Input.DeviceKey;
++                if(string.IsNullOrEmpty(current) || current!=b.Result.Frames.Input.DeviceKey || (deviceKey!="" && current!=deviceKey)){e.Reason="Mouse identity was unavailable or changed between trials";return e;}deviceKey=current;
++                double frameA=a.Result.Frames.Distribution.Percentile(.99),frameB=b.Result.Frames.Distribution.Percentile(.99);
++                if(Math.Max(frameA,frameB)>Math.Max(1,Math.Min(frameA,frameB))*1.5){e.Reason="Tail frame timing differed by more than 50% between a matched pair";return e;}
++                if(!CoachingRun.SupportsChange(b.Result,a.Result,a.Result,"")){e.Reason="A paired trial lost accuracy, task or direction control";return e;}
++                foreach(string task in new[]{"micro","stop"}) {
++                    var before=a.Result.Targets.Where(t=>t.Task==task).ToList();var after=b.Result.Targets.Where(t=>t.Task==task).ToList();
++                    double ta=CoachSegment.CostPerHit(before),tb=CoachSegment.CostPerHit(after);
++                    if(before.Count<3 || after.Count<3 || !MathUtil.Finite(ta) || !MathUtil.Finite(tb) || tb>ta*1.03 || after.Average(t=>t.Hit?1.0:0)<before.Average(t=>t.Hit?1.0:0)-.03){e.Reason="Micro or stopping performance regressed";return e;}
++                }
++                double d=b.Result.Score-a.Result.Score;if(!MathUtil.Finite(d))return e;delta.Add(d);
++            }
++            e.Pairs=delta.Count;e.Mean=delta.Average();double sd=Math.Sqrt(delta.Sum(d=>(d-e.Mean)*(d-e.Mean))/(count-1));
++            double margin=3.182*sd/Math.Sqrt(count);e.Low=e.Mean-margin;e.High=e.Mean+margin;
++            e.Passed=delta.All(d=>d>0) && e.Mean>=3 && e.Low>0;
++            e.Reason=e.Passed?"Four fresh matched pairs cleared timing and task guards; approximate 95% paired t interval excludes zero":"Insufficient evidence. Fresh score differences did not clear the practical and uncertainty thresholds";
++            return e;
++        }
++    }
++    public sealed partial class CurveSearch {
++        public int AccuracyProtocol;
++        public int ConfirmationPairs {get{return AccuracyProtocol>=1?4:2;}}
++        public int ConfirmationTrialCount {get{return ConfirmationPairs*2;}}
++        public bool ReliableDefault {get{return AccuracyProtocol>=1 && Confirmed && ValidConfirmationDays.Count>=2 && ReadyToAdopt;}}
++        public List<string> ValidConfirmationDays {get{
++            var days=new List<string>();if(AccuracyProtocol<1)return days;
++            var rows=Trials.Where(t=>t.Phase=="Confirm").ToList();var latest=rows.LastOrDefault(t=>t.Result!=null && t.Result.Frames!=null && t.Result.Frames.Input!=null);string selectedDevice=latest==null?"":latest.Result.Frames.Input.DeviceKey;
++            for(int i=0;i+ConfirmationTrialCount<=rows.Count;i+=ConfirmationTrialCount){var batch=rows.Skip(i).Take(ConfirmationTrialCount).ToList();if(batch.Any(t=>rows.Take(i).Any(old=>old.Seed==t.Seed)))continue;var dateKeys=new List<string>();foreach(var t in batch){DateTime at;if(!DateTime.TryParse(t.At,CultureInfo.InvariantCulture,DateTimeStyles.RoundtripKind,out at)){dateKeys.Clear();break;}dateKeys.Add(at.Date.ToString("yyyy-MM-dd"));}if(dateKeys.Count==ConfirmationTrialCount && dateKeys.Distinct().Count()==1 && ConfirmationEstimate.Read(this,batch).Passed && batch[0].Result.Frames.Input.DeviceKey==selectedDevice)days.Add(dateKeys[0]);}
++            return days.Distinct().ToList();
++        }}
++        public string AccuracySummary {get{
++            if(AccuracyProtocol<1)return "Historical protocol: enhanced input/tail-frame confirmation was not collected. Existing results are preserved.";
++            var e=ConfirmationEstimate.Read(this,Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).Reverse());
++            return "Reason: "+e.Reason+". "+(e.Pairs>0?e.Pairs+" unique matched pairs; score difference "+e.Mean.ToString("0.00")+" ["+e.Low.ToString("0.00")+", "+e.High.ToString("0.00")+"]. ":"No valid paired estimate is available. ")+"Any score interval here is conditional on one frozen candidate, not an optimum or a correction for repeated searches. "+(ReliableDefault?"Repeated on two days with practical tracking and comfort clearance; in-game validation still matters.":"Provisional until the same candidate clears two distinct days plus tracking and comfort checks.");
++        }}
++    }
++}
+diff --git a/src/AccuracyTests.cs b/src/AccuracyTests.cs
+index 74d074d..06e894c 100644
+--- a/src/AccuracyTests.cs
++++ b/src/AccuracyTests.cs
+@@ -1,50 +1,50 @@
+ using System;
+-using System.IO;
+ using System.Linq;
+-
++using System.Collections.Generic;
+ namespace SensitivityFinder {
+     static class AccuracyTests {
+         static int checks;
+-        static void Check(bool ok,string title){if(!ok)throw new Exception(title);checks++;Console.WriteLine("PASS "+title);}
+-        static BlockResult Result(double error){
+-            var r=new BlockResult {ExpectedTargets=4,RequiredTrackSeconds=6,RawPackets=2000,PacketTimingSamples=2000,TimingClamps=4,RenderIntervals=1440,RenderSeconds=10,MonitorHz=144,GraphicsDevice="fixture",TrackTime=6,TrackSquaredErrorTime=6*error*error,Comfort=4,ComfortRated=true,CompletedAt="2026-10-25T12:00:00"};
+-            foreach(string task in new[]{"micro","stop"})for(int i=0;i<4;i++)r.Targets.Add(new TargetResult {Task=task,ErrorDegrees=error,Seconds=.4,Hit=true,Settled=true});return r;
+-        }
+-        static Session Copy(Session s){return Storage.Json().Deserialize<Session>(Storage.Json().Serialize(s));}
+-        static void Fill(Session s,bool better){foreach(var b in s.Blocks){b.Done=true;b.Result=Result(b.CandidateId=="S-nearby" && better?.02:.5);}}
+-        static PairedEstimate P(Session s){return PairedEstimate.Between(s,s.BaseStage,"S-nearby","S-current");}
+-        static int Main(string[] args){try{
+-            var initial=new Session();initial.Setup.RawAccelPath=args[0];initial.Setup.CleanInputConfirmed=true;initial.Start();
+-            Check(initial.Blocks.Count==6 && MeasurementEvidence.AlternatingOrder(initial,"base"),"quick base keeps six rounds and reverses the second repeat");
+-            foreach(var b in initial.Blocks){b.Done=true;b.Result=Result(b.CandidateId=="B2"?.02:.5);}initial.AdvanceBaseSearch();
+-            var reference=new SavedProfile {Id="p-reference",Status="Tested constant",Name="Reference",Setup=initial.Setup,SourceSession=initial,Response=initial.Recommended("base").Candidate};string before=Storage.Json().Serialize(reference);
+-            var s=SensitivityConfirmation.Compare(reference,true);
+-            Check(Storage.Json().Serialize(reference)==before && s.MeasurementProtocol==8 && s.Blocks.Count==6 && !s.Setup.CleanInputConfirmed && !s.WarmupCompleted,"planning a check preserves the reference and requires physical input preparation");
+-            Check(s.Candidates.All(c=>!c.IsCurve && c.YRatio==1) && Math.Abs(s.Candidates[1].BaseGain/s.Candidates[0].BaseGain-.95)<1e-9,"confirmation isolates horizontal response with a bounded five-percent slower proposal");
+-            Check(MeasurementEvidence.AlternatingOrder(s,s.BaseStage) && s.Blocks.GroupBy(b=>b.Repeat).All(g=>g.Select(b=>b.Seed).Distinct().Count()==1) && s.Blocks.Select(b=>b.Seed).Distinct().Count()==3,"confirmation changes order while matching fresh sequences within each pair");
+-            var faster=SensitivityConfirmation.Compare(reference,false);Check(Math.Abs(faster.Candidates[1].BaseGain/faster.Candidates[0].BaseGain-1.05)<1e-9,"easier-turn comparison uses the reciprocal cm distance of a five-percent faster gain");
+-            Fill(s,true);var paired=P(s);Check(paired.N==3 && paired.Low>0 && s.SensitivityImproved && s.Recommended(s.BaseStage).Candidate.Id=="S-nearby","three consistent matched improvements can select the nearby sensitivity");
+-            var equal=Copy(s);Fill(equal,false);Check(!equal.SensitivityImproved && equal.Recommended(equal.BaseStage).Candidate.Id=="S-current","close or tied results retain the reference");
+-            Check(PairedEstimate.Between(s,"different-stage","S-nearby","S-current").N==0 && PairedEstimate.Between(s,s.BaseStage,"S-current","S-current").N==0,"paired evidence rejects wrong stages and self comparison");
+-            var duplicate=Copy(s);duplicate.Blocks.Add(duplicate.Blocks.First(b=>b.CandidateId=="S-nearby"));Check(P(duplicate).N==2 && !duplicate.SensitivityImproved,"duplicate rows cannot inflate matched evidence or pass confirmation");
+-            var unfinished=Copy(s);var extra=Storage.Json().Deserialize<Block>(Storage.Json().Serialize(unfinished.Blocks[0]));extra.Done=false;unfinished.Blocks.Add(extra);Check(P(unfinished).N==2,"an unfinished duplicate still makes that repeat ambiguous");
+-            var reused=Copy(s);int firstSeed=reused.Blocks.First(b=>b.Repeat==1).Seed;foreach(var item in reused.Blocks.Where(b=>b.Repeat==2))item.Seed=firstSeed;Check(P(reused).N==1 && !reused.SensitivityImproved,"replayed seeds cannot be counted as independent pairs");
+-            var mismatch=Copy(s);mismatch.Blocks[0].Seed++;Check(P(mismatch).N==2,"mismatched target sequences are not paired");
+-            var taskMismatch=Copy(s);taskMismatch.Blocks[0].Result.ExpectedTargets=8;Check(P(taskMismatch).N==2,"different task lengths do not create matched observations");
+-            var crossStage=Copy(s);crossStage.Candidates.Add(crossStage.Candidates[0].Copy(crossStage.Candidates[0].Id,"another-stage"));Check(P(crossStage).N==0,"ambiguous candidate identities cannot cross stage boundaries");
+-            var nonfinite=Copy(s);nonfinite.Blocks[0].Result.Targets[0].ErrorDegrees=double.NaN;Check(P(nonfinite).N==2,"non-finite scores are excluded from paired estimates");
+-            var comfort=Copy(s);comfort.Blocks[0].Result.ComfortRated=false;Check(!comfort.SensitivityImproved,"missing comfort prevents a confirmation claim");
+-            var tracking=Copy(s);foreach(var b in tracking.Blocks.Where(b=>b.CandidateId=="S-nearby"))b.Result.TrackSquaredErrorTime=6;Check(!tracking.SensitivityImproved,"a tracking regression cannot be hidden by faster corrections");
+-            var batched=Copy(s);batched.Blocks[0].Result.TimingClamps=900;Check(MeasurementQuality.Read(batched,batched.BaseStage).Warnings.Count>0 && !batched.SensitivityImproved,"heavily batched input requests a repeat instead of promoting a sensitivity");
+-            var uneven=Copy(s);foreach(var b in uneven.Blocks.Where(b=>b.CandidateId=="S-nearby"))b.Result.RenderIntervals=600;Check(!uneven.SensitivityImproved && MeasurementQuality.Read(uneven,uneven.BaseStage).Warnings.Count>0,"uneven rendering conditions block promotion");
+-            var unknown=Copy(s);unknown.Blocks[0].Result.RenderIntervals=0;Check(!MeasurementQuality.Read(unknown,unknown.BaseStage).TimingRecorded && !unknown.SensitivityImproved,"missing timing is unknown rather than a clean-input claim");
+-            var sameOrder=Copy(s);sameOrder.Blocks=sameOrder.Blocks.OrderBy(b=>b.Repeat).ThenBy(b=>b.CandidateId).ToList();Check(!sameOrder.SensitivityImproved && !MeasurementEvidence.AlternatingOrder(sameOrder,sameOrder.BaseStage),"same-order evidence cannot pass the new confirmation rule");
+-            string path=Storage.Save(s);var loaded=Storage.Load(path);Check(loaded.IsSensitivityConfirmation && loaded.SensitivityParentId==reference.Id && loaded.SensitivityImproved && loaded.Blocks.Count==6,"protocol eight resumes with exact candidates, order and evidence intact");
+-            var trial=new SavedProfile {Id="p-draft",Name="Draft",Status="Trial curve / unverified",Setup=initial.Setup,Response=initial.Candidates[0],SourceSession=initial};var neutral=new SavedProfile {Id="p-neutral",Name="Neutral",Status="Neutral / Off x1",Setup=initial.Setup,Response=initial.Candidates[0],SourceSession=initial};var library=new[]{reference,trial,neutral};
+-            Check(ProfileCollection.Filter(library,reference,0,"").Single().Id==reference.Id && ProfileCollection.Filter(library,reference,1,"").Count==2 && ProfileCollection.Filter(library,reference,2,"").Single().Id==trial.Id,"collections distinguish the suggestion, saved responses and experiments");
+-            Check(ProfileCollection.Filter(library,reference,2,"reference").Count==0 && ProfileCollection.Filter(library,reference,0,reference.SlowCm.ToString("0.00")).Count==1,"collection search stays scoped and accepts turn distance");
+-            Check(MeasurementEvidence.Describe(s,s.BaseStage).Contains("3 unique matched pairs") && MeasurementEvidence.Describe(unknown,unknown.BaseStage).Contains("Timing is missing"),"evidence explains actual pairs and unavailable diagnostics");
+-            Console.WriteLine(checks+" accuracy and decision checks passed. Synthetic isolated data only.");return 0;
++        static void Check(bool ok,string why){if(!ok)throw new Exception(why);checks++;Console.WriteLine("PASS "+why);}
++        static FrameHealth Frames(double ms=10){var f=new FrameHealth{Input=new InputTimingEvidence{DeviceKey="synthetic-mouse"}};for(int i=0;i<700;i++){f.RecordInterval(ms/1000,144);f.Input.ActiveIntervals.Add(1);}return f;}
++        static CoachSegment Segment(CurveSearch s,SearchTrial t,bool good){var rows=new List<TargetResult>();foreach(string axis in new[]{"horizontal","vertical","diagonal"})foreach(string task in new[]{"micro","stop"})for(int i=0;i<4;i++)rows.Add(new TargetResult{Axis=axis,Task=task,Hit=true,Settled=true,Seconds=good?.3:.9,ErrorDegrees=good?.01:.3,DirectDegrees=10,FirstStopMeasured=true,FirstStopSeconds=.15,CorrectionSeconds=.1,MotionProtocol=2,TargetWidthDegrees=.6});return new CoachSegment{Protocol=2,Frames=Frames(),FastFlickFocus=s.QuickGoal==3,SpeedFocus=s.SpeedFocus,Response=t.Curve,Targets=rows};}
++        static void Finish(CurveSearch s){while(s.Next!=null){var t=s.Next;s.Record(Segment(s,t,t.Role=="Winner"));}}
++        static PhysicalSwipe Swipe(double count){return new PhysicalSwipe{AlongCounts=count,TravelCounts=Math.Abs(count),DistanceCm=25.4,SideCounts=0,Device="synthetic-mouse"};}
++        static PracticalCheck Practical(CurveSearch s){var c=new PracticalCheck{BeforeComfort=0,CandidateKey=ProfileStore.ShapeKey(s.Original.Setup,s.Selected),OriginalKey=ProfileStore.ShapeKey(s.Original.Setup,s.Original.Response),Display=s.DisplayDevice,Width=s.DisplayWidth,Height=s.DisplayHeight};for(int i=0;i<3;i++)foreach(string role in new[]{"Original","Winner"})c.Blocks.Add(new PracticalSample{Task=i<2?"track":"turn",Role=role,Seed=100+i,Comfort=0,Seconds=20,InsideSeconds=15,ErrorIntegral=20,Hits=4,Frames=Frames()});return c;}
++        static int Main(){try {
++            var histogram=new TimingHistogram();for(int i=0;i<950;i++)histogram.Add(4);for(int i=0;i<40;i++)histogram.Add(12);for(int i=0;i<10;i++)histogram.Add(180);
++            Check(histogram.Percentile(.5)==4 && histogram.Percentile(.95)==4 && histogram.Percentile(.99)==12 && histogram.MaximumMs==180,"tail histogram distinguishes p99 from the longest stall without unbounded storage");
++            histogram.Add(double.NaN);Check(histogram.Invalid==1,"invalid timing is recorded rather than converted into a valid interval");
++            var goodFrames=Frames();Check(goodFrames.Reliable,"stable frame fixture clears timing guards");goodFrames.RecordInterval(.2,144);Check(!goodFrames.Reliable,"a long stall invalidates a round despite a high average frame rate");
++            double[] estimates=new double[3];int k=0;foreach(int hz in new[]{1000,4000,8000}){var velocity=new InputVelocity();for(int i=0;i<hz;i++)estimates[k]=velocity.Push(i/(double)hz,8000.0/hz);Check(velocity.Timing.Usable,"steady "+hz+" Hz arrival trace is usable");k++;}
++            Check(estimates.All(v=>Math.Abs(v-8)<.001),"steady counts-per-ms estimates converge across 1k, 4k and 8k packet rates");
++            var burst=new InputVelocity();double now=0;for(int i=0;i<1000;i++){now+=i%2==0?.00001:.00199;burst.Push(now,8);}Check(!burst.Timing.Usable && burst.Timing.ShortIntervals>400,"bursty delivery cannot be labeled accurate merely because total counts match");
++            burst.Push(now-1,8);Check(burst.Timing.NonMonotonic==1,"out-of-order arrival clocks invalidate timing evidence");
++            var idle=new InputVelocity();idle.Push(0,8);idle.Push(1,8);Check(idle.Timing.IdleGaps==1 && idle.Timing.ActiveIntervals.Count==0,"idle gaps stay separate from active polling-rate statistics");
++            var input=new InputVelocity();input.Push(0,8);input.Push(.001,8);input.Reset();input.Push(1,8);Check(input.Timing.ActiveIntervals.Count==1,"target resets do not turn pauses into active intervals");input.Clear();Check(input.Timing.ActiveIntervals.Count==0,"practice diagnostics can be cleared before scored measurement");
++            var physical=new PhysicalCalibration{NominalDpi=1000,NeutralConfirmed=true,Swipes=new List<PhysicalSwipe>{Swipe(10000),Swipe(-10020),Swipe(9980)}};
++            Check(physical.Valid && Math.Abs(physical.MeasuredCpi-1000)<.001 && physical.NominalDpi==1000,"three ruler swipes estimate effective CPI while preserving configured DPI");
++            physical.Swipes[1].TravelCounts=13000;Check(!physical.Valid,"backtracking cannot inflate measured CPI");physical.Swipes[1]=Swipe(-10020);
++            physical.Swipes[2].SideCounts=1000;Check(!physical.Valid,"off-axis movement is rejected");physical.Swipes[2]=Swipe(9980);
++            physical.Swipes[2]=Swipe(11000);Check(!physical.Valid,"inconsistent repeated distances do not become accepted calibration");physical.Swipes[2]=Swipe(9980);
++            physical.NeutralConfirmed=false;Check(!physical.Valid,"unconfirmed neutral input cannot be accepted as sensor CPI");physical.NeutralConfirmed=true;
++            physical.GameTurnDegrees=180;physical.GameDistanceCm=23;Check(physical.MeasuredGameCm360==46,"independent in-game turn-distance check uses measured angle and travel");
++            var source=new SavedProfile{Id="synthetic-only",IsMainProfile=true,Setup=new Setup(),Response=new Candidate{BaseGain=.85,Limit=1.5,Offset=3,Decay=.04},SourceSession=new Session()};
++            var search=CurveSearch.Quick(source,true,12345);Check(search.AccuracyProtocol==1 && search.Trials.Count==8 && search.Trials.Select(t=>t.Seed).Distinct().Count()==4,"new search freezes one candidate across four fresh, alternating matched pairs");
++            string frozen=ProfileStore.ShapeKey(source.Setup,search.Selected);Finish(search);Check(search.Confirmed && search.ValidConfirmationDays.Count==1 && !search.ReliableDefault,"one-day confirmation stays provisional");
++            Check(ProfileStore.ShapeKey(source.Setup,search.Selected)==frozen,"confirmation does not adapt the candidate using held-out trials");
++            var rows=search.Trials.ToList();var estimate=ConfirmationEstimate.Read(search,rows);Check(estimate.Passed && estimate.Pairs==4 && estimate.Low>0,"consistent independent score gains clear the final paired interval");
++            int savedSeed=rows[2].Seed;rows[2].Seed=rows[0].Seed;Check(!ConfirmationEstimate.Read(search,rows).Passed,"replayed or mismatched target sequences cannot count as fresh pairs");rows[2].Seed=savedSeed;
++            var oldFrames=rows[1].Result.Frames;rows[1].Result.Frames=Frames(20);Check(!ConfirmationEstimate.Read(search,rows).Passed,"different p99 frame timing blocks a matched comparison");rows[1].Result.Frames=oldFrames;
++            var savedInput=oldFrames.Input;oldFrames.Input=null;Check(!ConfirmationEstimate.Read(search,rows).Passed,"old records without input diagnostics cannot gain the stronger evidence label");oldFrames.Input=savedInput;
++            savedInput.DeviceKey="different-synthetic-mouse";Check(!ConfirmationEstimate.Read(search,rows).Passed,"a different physical input identity cannot be pooled into a matched comparison");savedInput.DeviceKey="synthetic-mouse";
++            var variable=rows.Select(t=>new SearchTrial{Seed=t.Seed,Role=t.Role,Curve=t.Curve,Result=Segment(search,t,t.Role=="Winner")}).ToList();int winnerIndex=0;foreach(var t in variable.Where(t=>t.Role=="Winner")){foreach(var target in t.Result.Targets){target.Seconds=winnerIndex==3?.05:.75;target.ErrorDegrees=winnerIndex==3?0:.24;}winnerIndex++;}var uncertain=ConfirmationEstimate.Read(search,variable);Check(uncertain.Pairs==4 && uncertain.Low<=0 && !uncertain.Passed,"one unusually strong pair cannot manufacture a precise final advantage");
++            foreach(var row in search.Trials)row.At=DateTime.Now.AddDays(-1).ToString("o");search.Retest();Finish(search);Check(search.ValidConfirmationDays.Count==2 && !search.ReliableDefault,"across-day evidence alone cannot bypass tracking and comfort checks");
++            search.PracticalHistory.Add(Practical(search));Check(search.ReliableDefault,"stronger default label requires fresh evidence on two days and practical clearance");
++            foreach(var row in search.Trials.Take(8))row.Result.Frames.Input.DeviceKey="other-day-mouse";Check(search.ValidConfirmationDays.Count==1 && !search.ReliableDefault,"across-day evidence from different mice cannot strengthen the current device result");foreach(var row in search.Trials.Take(8))row.Result.Frames.Input.DeviceKey="synthetic-mouse";
++            foreach(var row in search.Trials)row.At=DateTime.Now.ToString("o");Check(search.ValidConfirmationDays.Count==1 && !search.ReliableDefault,"same-day repeats do not manufacture a second confirmation day");
++            var legacy=Storage.Json().Deserialize<CurveSearch>("{\"MeasurementProtocol\":2}");Check(legacy.AccuracyProtocol==0 && legacy.ConfirmationTrialCount==4 && !legacy.ReliableDefault,"historical records retain their original protocol without stronger claims");
++            var serialized=Storage.Json().Serialize(search);var restored=Storage.Json().Deserialize<CurveSearch>(serialized);Check(restored.AccuracyProtocol==1 && restored.Trials.Count==16 && restored.Trials[0].Result.Frames.Distribution.Count==700,"new timing evidence survives save/load");
++            Console.WriteLine(checks+" accuracy checks passed. All fixtures synthetic; no sessions or driver settings written.");return 0;
+         }catch(Exception e){Console.Error.WriteLine(e);return 1;}}
+     }
+ }
+diff --git a/src/AccuracyUiTests.cs b/src/AccuracyUiTests.cs
+new file mode 100644
+index 0000000..f296a07
+--- /dev/null
++++ b/src/AccuracyUiTests.cs
+@@ -0,0 +1,21 @@
++using System;
++using System.Drawing;
++using System.IO;
++using System.Linq;
++using System.Collections.Generic;
++using System.Windows.Forms;
++using SensitivityFinder;
++static class AccuracyUiTests {
++    static IEnumerable<Control> All(Control c){foreach(Control child in c.Controls){yield return child;foreach(var nested in All(child))yield return nested;}}
++    [STAThread]static int Main(string[] args){try{Application.EnableVisualStyles();Application.SetCompatibleTextRenderingDefault(false);Directory.CreateDirectory(args[0]);
++        foreach(var size in new[]{new Size(620,650),new Size(820,790)})using(var form=new CalibrationForm(new Setup())) {
++            form.Size=size;form.ShowInTaskbar=false;form.StartPosition=FormStartPosition.Manual;form.Location=new Point(-10000,-10000);form.Show();Application.DoEvents();form.PerformLayout();
++            using(var bitmap=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(bitmap,new Rectangle(Point.Empty,bitmap.Size));bitmap.Save(Path.Combine(args[0],"calibration-"+size.Width+".png"));}
++            var controls=All(form).ToList();if(controls.OfType<NumericUpDown>().Count(n=>!string.IsNullOrEmpty(n.AccessibleName))!=3)throw new Exception("Calibration fields need accessible names");
++            foreach(var label in controls.OfType<Label>())if(TextRenderer.MeasureText(label.Text,label.Font,new Size(label.Width,4000),TextFormatFlags.WordBreak|TextFormatFlags.NoPrefix|TextFormatFlags.TextBoxControl).Height>label.Height)throw new Exception("Calibration text is clipped");
++            if(controls.OfType<Button>().Single(b=>b.Text=="Save measured report").Enabled)throw new Exception("Incomplete calibration cannot be saved");
++            foreach(var n in controls.OfType<NumericUpDown>())if(n.Right>n.Parent.ClientSize.Width)throw new Exception("Calibration field overflows its parent");
++        }
++        Console.WriteLine("PASS calibration layout at 620 and 820 pixels; fields named; incomplete save disabled. Capture and live input NOT RUN.");return 0;
++    }catch(Exception e){Console.Error.WriteLine(e);return 1;}}
++}
+diff --git a/src/AimAnalysis.cs b/src/AimAnalysis.cs
+index be6e571..fd59e48 100644
+--- a/src/AimAnalysis.cs
++++ b/src/AimAnalysis.cs
+@@ -22,9 +22,13 @@ namespace SensitivityFinder {
+         double previous = -1, estimate;
+         public int Samples, Clamps;
+         public double IntervalSum;
++        public InputTimingEvidence Timing=new InputTimingEvidence();
+         public double Push(double now, double distance) {
+-            double dt = previous < 0 ? .001 : now - previous; previous = now;
+-            if (dt < .000125) { dt = .000125; Clamps++; }
++            if(!MathUtil.Finite(now) || !MathUtil.Finite(distance) || distance<0){Timing.NonMonotonic++;Reset();return 0;}
++            double dt = previous < 0 ? .001 : now - previous;
++            if(previous>=0){if(dt<0){Timing.NonMonotonic++;previous=now;estimate=0;return 0;}else if(dt==0){Timing.ShortIntervals++;Timing.ActiveIntervals.Invalid++;}else if(dt>.050)Timing.IdleGaps++;else {Timing.ActiveIntervals.Add(dt*1000);if(dt<.000125-1e-12)Timing.ShortIntervals++;}}
++            Timing.DistanceCounts+=distance;previous = now;
++            if (dt < .000125-1e-12) { dt = .000125; Clamps++; } else if(dt<.000125)dt=.000125;
+             if (dt > .050) { estimate = 0; dt = .001; }
+             Samples++; IntervalSum += dt * 1000;
+             double instantaneous = distance / (dt * 1000);
+@@ -34,7 +38,7 @@ namespace SensitivityFinder {
+             return estimate;
+         }
+         public void Reset() { previous = -1; estimate = 0; }
+-        public void Clear() { Reset();Samples=Clamps=0;IntervalSum=0; }
++        public void Clear() { Reset();Samples=Clamps=0;IntervalSum=0;Timing=new InputTimingEvidence(); }
+     }
+     public sealed class MovementAnalysis {
+         double startAt, startYaw, startPitch, targetYaw, targetPitch, radius, lastYaw, lastPitch, lastAlong, previousSpeed;
+diff --git a/src/CalibrationForm.cs b/src/CalibrationForm.cs
+new file mode 100644
+index 0000000..c6a4abb
+--- /dev/null
++++ b/src/CalibrationForm.cs
+@@ -0,0 +1,57 @@
++using System;
++using System.IO;
++using System.Drawing;
++using System.Runtime.InteropServices;
++using System.Windows.Forms;
++using System.Linq;
++
++namespace SensitivityFinder {
++    public sealed class CalibrationForm : Form {
++        readonly PhysicalCalibration calibration;
++        readonly NumericUpDown distance,turn,turnDistance;
++        readonly CheckBox neutral;
++        readonly Label report;
++        readonly Button start,save;
++        PhysicalSwipe active;
++        IntPtr buffer,device;
++        Rectangle oldClip;
++        bool registered;
++        public CalibrationForm(Setup setup) {
++            calibration=new PhysicalCalibration{NominalDpi=setup.Dpi,Mouse=setup.Mouse,Pad=setup.Pad};
++            LibraryUi.Style(this,"Physical sensitivity calibration",new Size(820,790));MinimumSize=new Size(620,650);KeyPreview=true;
++            var body=new Panel{Dock=DockStyle.Fill,AutoScroll=true,Padding=new Padding(16)};Controls.Add(body);
++            distance=Number("Measured swipe distance in centimeters",20,5,100);
++            turn=Number("Measured in-game turn angle in degrees",180,90,720);
++            turnDistance=Number("Measured in-game travel distance in centimeters",0,0,200);
++            neutral=new CheckBox{Text="I have neutral constant input: no acceleration, multiplier 1, Y/X 1. DPI stays unchanged.",Dock=DockStyle.Top,Height=60,ForeColor=Theme.Text,AutoSize=false};
++            start=Theme.Button("Start swipe / Space",delegate{Toggle();},true);
++            var clear=Theme.Button("Clear swipes",delegate{if(active!=null)StopCapture(false);calibration.Swipes.Clear();RefreshReport();},false);
++            save=Theme.Button("Save measured report",delegate{try{UpdateTurn();calibration.NeutralConfirmed=neutral.Checked;if(!calibration.Valid)throw new InvalidOperationException("Three valid swipes in both directions are required.");calibration.At=DateTime.Now.ToString("o");string path=Path.Combine(Storage.Root,"calibrations","calibration-"+Guid.NewGuid().ToString("N")+".json");Directory.CreateDirectory(Path.GetDirectoryName(path));File.WriteAllText(path,Storage.Json().Serialize(calibration));report.Text=calibration.Summary+"\r\nSaved locally: "+Path.GetFileName(path);}catch(Exception e){report.Text=e.Message;}},false);
++            var actions=new FlowLayoutPanel{Dock=DockStyle.Top,Height=112,WrapContents=true};actions.Controls.AddRange(new Control[]{start,clear,save});foreach(Control c in actions.Controls){c.Width=220;c.Height=42;}
++            report=Theme.Label("",11,Theme.Text,155);
++            Theme.AddStack(body,Theme.Label("Measure physical sensitivity",23,Theme.Text,54),Theme.Label("Configured DPI stays separate from measured effective CPI. This tool never changes mouse or driver settings. Save this report alongside your setup; repeat after changing mouse, DPI or surface.",11,Theme.Muted,80),neutral,Theme.Label("Place a ruler on the pad. Use three straight swipes, at least 5 cm, including both directions. Place the sensor at the start mark; press Space, move to the end mark without lifting, then press Space again. Escape discards the active swipe. Keep the same mouse and DPI. Input is captured only while this window has focus.",11,Theme.Muted,120),Theme.Label("Swipe distance (cm)",11,Theme.Text,30),distance,actions,report,Theme.Label("Optional independent game check: with neutral constant response, measure a known 90-720 degree horizontal hipfire turn. No ADS. Enter travel distance below. These values are user measured, not detected by Drift.",11,Theme.Muted,88),Theme.Label("Turn angle (degrees)",11,Theme.Text,30),turn,Theme.Label("Measured game travel (cm; 0 = not checked)",11,Theme.Text,30),turnDistance);
++            neutral.CheckedChanged+=delegate{RefreshReport();};turn.ValueChanged+=delegate{RefreshReport();};turnDistance.ValueChanged+=delegate{RefreshReport();};
++            bool fitting=false;Action fit=delegate{if(fitting)return;fitting=true;try{int width=Math.Max(200,body.ClientSize.Width-body.Padding.Horizontal-SystemInformation.VerticalScrollBarWidth);foreach(var label in body.Controls.OfType<Label>())label.Height=Math.Max(30,TextRenderer.MeasureText(label.Text,label.Font,new Size(width,4000),TextFormatFlags.WordBreak|TextFormatFlags.NoPrefix|TextFormatFlags.TextBoxControl).Height+14);neutral.Height=Math.Max(60,TextRenderer.MeasureText(neutral.Text,neutral.Font,new Size(width-24,4000),TextFormatFlags.WordBreak|TextFormatFlags.NoPrefix).Height+16);}finally{fitting=false;}};
++            body.SizeChanged+=delegate{fit();};report.TextChanged+=delegate{fit();};Shown+=delegate{fit();neutral.Focus();body.AutoScrollPosition=Point.Empty;};
++            KeyDown+=delegate(object sender,KeyEventArgs e){if(e.KeyCode==Keys.Space){Toggle();e.Handled=e.SuppressKeyPress=true;}else if(e.KeyCode==Keys.Escape && active!=null){StopCapture(false);e.Handled=e.SuppressKeyPress=true;RefreshReport();}};
++            Deactivate+=delegate{if(active!=null){StopCapture(false);report.Text="Focus lost. Active swipe discarded; completed swipes kept.";}};
++            buffer=Marshal.AllocHGlobal(256);RefreshReport();
++        }
++        static NumericUpDown Number(string name,decimal value,decimal min,decimal max){return new NumericUpDown{AccessibleName=name,Dock=DockStyle.Top,Height=36,DecimalPlaces=2,Minimum=min,Maximum=max,Value=value};}
++        void UpdateTurn(){calibration.GameTurnDegrees=(double)turn.Value;calibration.GameDistanceCm=(double)turnDistance.Value;}
++        void RefreshReport(){UpdateTurn();calibration.NeutralConfirmed=neutral.Checked;report.Text=calibration.Swipes.Count+" / 3 swipes. "+calibration.Summary;save.Enabled=active==null && calibration.Valid;distance.Enabled=neutral.Enabled=active==null;start.Text=active==null?"Start swipe / Space":"Finish swipe / Space";}
++        void Toggle(){try{
++            if(active!=null){StopCapture(true);RefreshReport();return;}
++            if(!neutral.Checked)throw new InvalidOperationException("Confirm neutral constant input first. Drift cannot detect or neutralize the driver here.");
++            if(calibration.Swipes.Count>=3)throw new InvalidOperationException("Three swipes are already recorded. Save or clear them.");
++            if(!RegisterRawInputDevices(new[]{new RawDevice{UsagePage=1,Usage=2,Flags=0x30,Target=Handle}},1,(uint)Marshal.SizeOf(typeof(RawDevice))))throw new InvalidOperationException("Windows could not register raw input. No swipe recorded.");
++            registered=true;device=IntPtr.Zero;active=new PhysicalSwipe{DistanceCm=(double)distance.Value};oldClip=Cursor.Clip;Cursor.Clip=RectangleToScreen(ClientRectangle);Cursor.Hide();RefreshReport();
++        }catch(Exception e){report.Text=e.Message;}}
++        void StopCapture(bool keep){var swipe=active;active=null;if(registered){RegisterRawInputDevices(new[]{new RawDevice{UsagePage=1,Usage=2,Flags=1,Target=IntPtr.Zero}},1,(uint)Marshal.SizeOf(typeof(RawDevice)));registered=false;Cursor.Clip=oldClip;Cursor.Show();}if(keep && swipe!=null)calibration.Swipes.Add(swipe);}
++        protected override void WndProc(ref Message message){if(message.Msg==0x00FF && active!=null && buffer!=IntPtr.Zero){uint size=256,header=(uint)(8+IntPtr.Size*2);uint got=GetRawInputData(message.LParam,0x10000003,buffer,ref size,header);if(got!=uint.MaxValue && got>=header+24 && Marshal.ReadInt32(buffer)==0){int offset=(int)header;int dx=Marshal.ReadInt32(buffer,offset+12),dy=Marshal.ReadInt32(buffer,offset+16);var current=Marshal.ReadIntPtr(buffer,8);if((Marshal.ReadInt16(buffer,offset)&1)!=0){StopCapture(false);report.Text="Absolute input is unsupported. Swipe discarded.";}else if(dx!=0 || dy!=0){if(device==IntPtr.Zero)device=current;if(current!=device){StopCapture(false);report.Text="Multiple input devices moved. Swipe discarded.";}else{active.Device=current.ToString();active.AlongCounts+=dx;active.TravelCounts+=Math.Abs((double)dx);active.SideCounts+=Math.Abs((double)dy);}}}}base.WndProc(ref message);}
++        protected override void Dispose(bool disposing){if(disposing){StopCapture(false);if(buffer!=IntPtr.Zero){Marshal.FreeHGlobal(buffer);buffer=IntPtr.Zero;}}base.Dispose(disposing);}
++        [StructLayout(LayoutKind.Sequential)]struct RawDevice{public ushort UsagePage,Usage;public uint Flags;public IntPtr Target;}
++        [DllImport("user32.dll",SetLastError=true)]static extern bool RegisterRawInputDevices(RawDevice[] devices,uint count,uint size);
++        [DllImport("user32.dll")]static extern uint GetRawInputData(IntPtr raw,uint command,IntPtr data,ref uint size,uint headerSize);
++    }
++}
+diff --git a/src/CoachingRun.cs b/src/CoachingRun.cs
+index 8015705..a8bf81e 100644
+--- a/src/CoachingRun.cs
++++ b/src/CoachingRun.cs
+@@ -5,9 +5,11 @@ using System.Linq;
+ namespace SensitivityFinder {
+     public sealed class FrameHealth {
+         public int Intervals,SlowFrames;public double Seconds,LongestMs;double last=-1;
+-        public void Observe(double now,int targetFps){if(last>=0){double dt=now-last;if(dt>0){Intervals++;Seconds+=dt;LongestMs=Math.Max(LongestMs,dt*1000);if(dt>Math.Max(.025,3.0/Math.Max(30,targetFps)))SlowFrames++;}}last=now;}
+-        [System.Web.Script.Serialization.ScriptIgnore] public bool Reliable {get{return Intervals>=100 && Seconds>=5 && LongestMs<150 && SlowFrames<=Intervals*.05;}}
+-        [System.Web.Script.Serialization.ScriptIgnore] public string Summary {get{return Intervals==0?"Frame timing unavailable":(Intervals/Math.Max(.001,Seconds)).ToString("0")+" rendered frames/s; worst gap "+LongestMs.ToString("0")+" ms; "+SlowFrames+" long gaps";}}
++        public TimingHistogram Distribution=new TimingHistogram();public InputTimingEvidence Input;
++        public void RecordInterval(double dt,int targetFps){Distribution.Add(dt*1000);if(!MathUtil.Finite(dt)||dt<=0)return;Intervals++;Seconds+=dt;LongestMs=Math.Max(LongestMs,dt*1000);if(dt>Math.Max(.025,3.0/Math.Max(30,targetFps)))SlowFrames++;}
++        public void Observe(double now,int targetFps){if(!MathUtil.Finite(now) || (last>=0 && now<=last)){Distribution.Invalid++;return;}if(last>=0)RecordInterval(now-last,targetFps);last=now;}
++        [System.Web.Script.Serialization.ScriptIgnore] public bool Reliable {get{return Intervals>=100 && Seconds>=5 && LongestMs<150 && SlowFrames<=Intervals*.05 && Distribution.Invalid==0;}}
++        [System.Web.Script.Serialization.ScriptIgnore] public string Summary {get{return Intervals==0?"Frame timing unavailable":(Intervals/Math.Max(.001,Seconds)).ToString("0")+" rendered frames/s; worst gap "+LongestMs.ToString("0")+" ms; "+SlowFrames+" long gaps; "+(Distribution.Count==0?"historical percentile timing unavailable":"median/p95/p99 "+Distribution.Percentile(.5).ToString("0.00")+"/"+Distribution.Percentile(.95).ToString("0.00")+"/"+Distribution.Percentile(.99).ToString("0.00")+" ms (0.05 ms bins)");}}
+     }
+     public sealed class CoachSegment {
+         public int Protocol;public FrameHealth Frames;
+diff --git a/src/CoachTrial.cs b/src/CoachTrial.cs
+index ad6fad0..3d27982 100644
+--- a/src/CoachTrial.cs
++++ b/src/CoachTrial.cs
+@@ -9,8 +9,8 @@ namespace SensitivityFinder {
+         void CoachNextTarget(){if(Math.Abs(y)>CoachingRun.PlayPitchLimit)y=0;if(Math.Abs(x)>CoachingRun.PlayYawLimit)x=0;phase=targetIndex%2;var delta=CoachingRun.TargetOffset(targetIndex,seed);double maximum=CoachingRun.VisibleTargetStep(setup.HorizontalFov,Math.Max(1,ClientSize.Width),Math.Max(1,ClientSize.Height),Radius),length=Math.Sqrt(delta[0]*delta[0]+delta[1]*delta[1]);if(length>maximum){delta[0]*=maximum/length;delta[1]*=maximum/length;}tx=CoachingRun.TargetYaw(x,delta[0]);ty=CoachingRun.TargetPitch(y,delta[1]);startX=x;startY=y;targetAt=clock.Elapsed.TotalSeconds;holdAt=-1;settled=overshot=false;velocity.Reset();movement.Begin(targetAt,x,y,tx,ty,Radius);}
+         void CoachRecord(bool timeout){if(coach.PracticalTask!=""){PracticalClick(timeout);return;}if(!started || finishing || coachFinishAt>=0 || phasePaused || clock.Elapsed.TotalSeconds-coachSegmentAt<CoachingRun.SettleSeconds)return;double now=clock.Elapsed.TotalSeconds;var result=new TargetResult{Task=phase==0?"micro":"stop",Axis=VerticalCalibration.Axis(targetIndex),VerticalErrorDegrees=Math.Abs(ty-y),ErrorDegrees=ErrorDistance,Seconds=now-targetAt,Hit=!timeout && ErrorDistance<=Radius,Overshot=overshot,Settled=settled,TimedOut=timeout};movement.Finish(result,now);if(!coach.Practicing(now-coachSegmentAt))coachTargets.Add(result);targetIndex++;CoachNextTarget();}
+         void CoachTick(){if(coach.PracticalTask!=""){PracticalTick();return;}if(!started || finishing)return;if(phasePaused){CoachDrawFrame();return;}double now=clock.Elapsed.TotalSeconds;if(coachFinishAt>=0){CoachDrawFrame();if(now-coachFinishAt>=.75)Finish();return;}if(now-lastInputAt>7){ErrorReason="No mouse movement for seven seconds. This unfinished block was cancelled, not scored.";Abort();return;}if(coach.SegmentFinished(coachTargets,coach.ScoredElapsed(now-coachSegmentAt))){coach.Add(coachActive,coachTargets,coachFrames);var completed=coach.Segments[coach.Segments.Count-1];completed.Protocol=coach.Protocol;completed.Frames=coachFrames;coachTargets.Clear();if(coach.Complete){coachFinishAt=now;CoachDrawFrame();return;}phasePaused=true;clock.Stop();if(captured){Cursor.Clip=oldClip;Cursor.Show();captured=false;}CoachDrawFrame();return;}
+-            if(now-coachSegmentAt>=CoachingRun.SettleSeconds){if(!coachReady){coachReady=true;CoachNextTarget();}if(!coach.Practicing(now-coachSegmentAt) && !coachScoringStarted){coachScoringStarted=true;targetIndex=0;x=y=0;coachFrames=new FrameHealth();CoachNextTarget();}movement.Observe(now,x,y,now-lastInputAt>.015?0:lastSpeed);UpdateSettlement(now);if(now-targetAt>=3)CoachRecord(true);}CoachDrawFrame();}
+-        void CoachDrawFrame(){if(coach.PracticalTask!=""){PracticalDraw();return;}if(finishing || !IsHandleCreated)return;try{if(arena==null)arena=new ArenaRenderer(Handle);double now=clock.Elapsed.TotalSeconds;bool settling=started && !phasePaused && now-coachSegmentAt<CoachingRun.SettleSeconds;bool practice=started && !phasePaused && coach.Practicing(now-coachSegmentAt);double ttk=CoachSegment.CostPerHit(coachTargets);var frame=new ArenaFrame{Yaw=x,Pitch=y,TargetYaw=tx,TargetPitch=ty,Radius=Radius,HorizontalFov=setup.HorizontalFov,Inside=ErrorDistance<=Radius,Settled=settled,Title=coach.SingleBatch?"CURVE SEARCH / BLIND TRIAL":"CONTINUOUS TUNE / EXPLORATORY",Progress=coach.SingleBatch?"One timed trial / mixed correction & flick targets":"Section "+(coach.Segments.Count+1)+" / 4 / mixed correction & flick targets",Rate=targetFps+" FPS target",Hint=practice?"Practice freely / not scored":settling?"Sensitivity changed / starts in "+Math.Max(1,Math.Ceiling(CoachingRun.SettleSeconds-(now-coachSegmentAt))).ToString("0")+" seconds":coach.TechniqueCues?(phase==0?"Small correction: light fingers, relaxed grip; keep wrist near neutral.":"Flick: comfortable wrist turn, ease the stop; reset or use arm if range runs out."):Coaching,Footer="ESC cancels / R restarts / reference restored on exit",Timer=practice?"Practice "+Math.Ceiling(CoachingRun.SettleSeconds+CoachingRun.PracticeSeconds-(now-coachSegmentAt)).ToString("0")+" s":coachFinishAt>=0?"0 s":!started || phasePaused || settling?"":Math.Ceiling(Math.Max(0,CoachingRun.SegmentSeconds-coach.ScoredElapsed(now-coachSegmentAt))).ToString("0")+" s",Score=practice?"Practice is not scored":"Time/hit "+(MathUtil.Finite(ttk)?ttk.ToString("0.00")+" s":"—")+" / Hits "+(coachTargets.Count==0?"—":(100.0*coachTargets.FindAll(t=>t.Hit).Count/coachTargets.Count).ToString("0")+"%"),Completion=(coach.Segments.Count+Math.Min(1,coach.ScoredElapsed(now-coachSegmentAt)/30))/(coach.SingleBatch?1:4),Lesson=coachFinishAt>=0 || !started || phasePaused || settling,LessonTitle=coachFinishAt>=0?"Trial complete":settling?"Starting in "+Math.Max(1,Math.Ceiling(CoachingRun.SettleSeconds-(now-coachSegmentAt))).ToString("0"):coach.SingleBatch?"Ready for your next curve trial":phasePaused?"Ready for batch "+(coach.Segments.Count+1)+" of 4":settling?"Batch "+(coach.Segments.Count+1)+" / get ready":"One run. Small changes. No questionnaires.",Line1=coachFinishAt>=0?"Timer finished. Restoring your saved setup and saving this trial.":phasePaused?"Your completed batch is kept. The next batch is paused until you start.":settling?"Scoring is paused. Targets begin when this countdown finishes.":"Aim at the inner circle, stop and click. Targets alternate small corrections and flicks.",Line2=coach.TechniqueCues?"Wrist-led practice: stay relaxed. Avoid forced wrist extremes. These cues do not detect muscle use.":"Left/right and up/down movements are balanced. Targets stay in a centered play area.",Line3=coachFinishAt>=0?"Completed trials are kept. An interrupted trial is not scored.":coach.SingleBatch?"Two-second countdown, six seconds practice, then 28 seconds scored aiming. Your saved setup is restored afterward.":phasePaused?"Click or press Space. A two-second countdown comes before scoring resumes.":"Two-second countdown per change. Practice is unscored; scored time stays unchanged.",ActionLabel=coachFinishAt>=0?"0 s / Complete":coach.SingleBatch && !started?"Click to start this trial":phasePaused?"Click to start next batch":settling?"Starting in "+Math.Max(1,Math.Ceiling(CoachingRun.SettleSeconds-(now-coachSegmentAt))).ToString("0")+"...":"Click to start continuous tune"};arena.Render(ClientSize.Width,ClientSize.Height,frame);if(started && !phasePaused && !settling && !practice && coachFinishAt<0)coachFrames.Observe(System.Diagnostics.Stopwatch.GetTimestamp()/(double)System.Diagnostics.Stopwatch.Frequency,targetFps);}catch(Exception e){ErrorReason=e.Message;Abort();}}
++            if(now-coachSegmentAt>=CoachingRun.SettleSeconds){if(!coachReady){coachReady=true;CoachNextTarget();}if(!coach.Practicing(now-coachSegmentAt) && !coachScoringStarted){coachScoringStarted=true;velocity.Clear();targetIndex=0;x=y=0;coachFrames=new FrameHealth();CoachNextTarget();}movement.Observe(now,x,y,now-lastInputAt>.015?0:lastSpeed);UpdateSettlement(now);if(now-targetAt>=3)CoachRecord(true);}CoachDrawFrame();}
++        void CoachDrawFrame(){if(coach.PracticalTask!=""){PracticalDraw();return;}if(finishing || !IsHandleCreated)return;try{if(arena==null)arena=new ArenaRenderer(Handle);double now=clock.Elapsed.TotalSeconds;bool settling=started && !phasePaused && now-coachSegmentAt<CoachingRun.SettleSeconds;bool practice=started && !phasePaused && coach.Practicing(now-coachSegmentAt);double ttk=CoachSegment.CostPerHit(coachTargets);var frame=new ArenaFrame{Yaw=x,Pitch=y,TargetYaw=tx,TargetPitch=ty,Radius=Radius,HorizontalFov=setup.HorizontalFov,Inside=ErrorDistance<=Radius,Settled=settled,Title=coach.SingleBatch?"CURVE SEARCH / BLIND TRIAL":"CONTINUOUS TUNE / EXPLORATORY",Progress=coach.SingleBatch?"One timed trial / mixed correction & flick targets":"Section "+(coach.Segments.Count+1)+" / 4 / mixed correction & flick targets",Rate=targetFps+" FPS target",Hint=practice?"Practice freely / not scored":settling?"Sensitivity changed / starts in "+Math.Max(1,Math.Ceiling(CoachingRun.SettleSeconds-(now-coachSegmentAt))).ToString("0")+" seconds":coach.TechniqueCues?(phase==0?"Small correction: light fingers, relaxed grip; keep wrist near neutral.":"Flick: comfortable wrist turn, ease the stop; reset or use arm if range runs out."):Coaching,Footer="ESC cancels / R restarts / reference restored on exit",Timer=practice?"Practice "+Math.Ceiling(CoachingRun.SettleSeconds+CoachingRun.PracticeSeconds-(now-coachSegmentAt)).ToString("0")+" s":coachFinishAt>=0?"0 s":!started || phasePaused || settling?"":Math.Ceiling(Math.Max(0,CoachingRun.SegmentSeconds-coach.ScoredElapsed(now-coachSegmentAt))).ToString("0")+" s",Score=practice?"Practice is not scored":"Time/hit "+(MathUtil.Finite(ttk)?ttk.ToString("0.00")+" s":"—")+" / Hits "+(coachTargets.Count==0?"—":(100.0*coachTargets.FindAll(t=>t.Hit).Count/coachTargets.Count).ToString("0")+"%"),Completion=(coach.Segments.Count+Math.Min(1,coach.ScoredElapsed(now-coachSegmentAt)/30))/(coach.SingleBatch?1:4),Lesson=coachFinishAt>=0 || !started || phasePaused || settling,LessonTitle=coachFinishAt>=0?"Trial complete":settling?"Starting in "+Math.Max(1,Math.Ceiling(CoachingRun.SettleSeconds-(now-coachSegmentAt))).ToString("0"):coach.SingleBatch?"Ready for your next curve trial":phasePaused?"Ready for batch "+(coach.Segments.Count+1)+" of 4":settling?"Batch "+(coach.Segments.Count+1)+" / get ready":"One run. Small changes. No questionnaires.",Line1=coachFinishAt>=0?"Timer finished. Restoring your saved setup and saving this trial.":phasePaused?"Your completed batch is kept. The next batch is paused until you start.":settling?"Scoring is paused. Targets begin when this countdown finishes.":"Aim at the inner circle, stop and click. Targets alternate small corrections and flicks.",Line2=coach.TechniqueCues?"Wrist-led practice: stay relaxed. Avoid forced wrist extremes. These cues do not detect muscle use.":"Left/right and up/down movements are balanced. Targets stay in a centered play area.",Line3=coachFinishAt>=0?"Completed trials are kept. An interrupted trial is not scored.":coach.SingleBatch?"Two-second countdown, six seconds practice, then 28 seconds scored aiming. Your saved setup is restored afterward.":phasePaused?"Click or press Space. A two-second countdown comes before scoring resumes.":"Two-second countdown per change. Practice is unscored; scored time stays unchanged.",ActionLabel=coachFinishAt>=0?"0 s / Complete":coach.SingleBatch && !started?"Click to start this trial":phasePaused?"Click to start next batch":settling?"Starting in "+Math.Max(1,Math.Ceiling(CoachingRun.SettleSeconds-(now-coachSegmentAt))).ToString("0")+"...":"Click to start continuous tune"};arena.Render(ClientSize.Width,ClientSize.Height,frame);if(started && !phasePaused && !settling && !practice && coachFinishAt<0){coachFrames.Input=velocity.Timing;coachFrames.Observe(System.Diagnostics.Stopwatch.GetTimestamp()/(double)System.Diagnostics.Stopwatch.Frequency,targetFps);}}catch(Exception e){ErrorReason=e.Message;Abort();}}
+     }
+ }
+ 
+diff --git a/src/CurveSearch.cs b/src/CurveSearch.cs
+index de0067a..68cbc47 100644
+--- a/src/CurveSearch.cs
++++ b/src/CurveSearch.cs
+@@ -6,23 +6,23 @@ namespace SensitivityFinder {
+     public sealed class SearchTrial {
+         public string Phase,Role,At="";public int Seed;public Candidate Curve;public CoachSegment Result;
+     }
+-    public sealed class CurveSearch {
++    public sealed partial class CurveSearch {
+         public List<PracticalCheck> PracticalHistory=new List<PracticalCheck>();
+         public PracticalCheck CurrentCheck {get{return PracticalHistory.LastOrDefault(c=>c.CandidateKey==Key(Original.Setup,Selected) && c.OriginalKey==Key(Original.Setup,Original.Response));}}
+         public bool ReadyToAdopt {get{return Confirmed && CurrentCheck!=null && CurrentCheck.Passed && CurrentCheck.Display==DisplayDevice && CurrentCheck.Width==DisplayWidth && CurrentCheck.Height==DisplayHeight;}}
+-        public string AcrossDays(){var rows=Trials.Where(t=>t.Phase=="Confirm" && t.Result!=null).ToList();var pairs=new List<double>();foreach(var c in rows.Where(t=>t.Role=="Winner")){var a=rows.Where(t=>t.Role=="Original" && t.Seed==c.Seed).ToList();if(a.Count!=1)continue;double before=a[0].Result.EffectiveHitSeconds,after=c.Result.EffectiveHitSeconds;if(MathUtil.Finite(before)&&MathUtil.Finite(after)&&before>0)pairs.Add(100*(1-after/before));}return "Flick confirmation: "+ConfirmedDates.Count+" distinct day(s)"+(ConfirmedDates.Count>0?" ("+string.Join(", ",ConfirmedDates)+")":"")+". "+(pairs.Count>0?"Matched-block overall time change range: "+pairs.Min().ToString("+0.0;-0.0;0")+"% to "+pairs.Max().ToString("+0.0;-0.0;0")+"%; positive is faster. ":"")+"This range is descriptive, not a confidence interval. "+(ConfirmedDates.Count<2?"Repeat the same candidate on another day before calling it a reliable default.":"Improvement repeated across days; validate in your game.");}
++        public string AcrossDays(){if(AccuracyProtocol>=1)return AccuracySummary;var rows=Trials.Where(t=>t.Phase=="Confirm" && t.Result!=null).ToList();var pairs=new List<double>();foreach(var c in rows.Where(t=>t.Role=="Winner")){var a=rows.Where(t=>t.Role=="Original" && t.Seed==c.Seed).ToList();if(a.Count!=1)continue;double before=a[0].Result.EffectiveHitSeconds,after=c.Result.EffectiveHitSeconds;if(MathUtil.Finite(before)&&MathUtil.Finite(after)&&before>0)pairs.Add(100*(1-after/before));}return "Flick confirmation: "+ConfirmedDates.Count+" distinct day(s)"+(ConfirmedDates.Count>0?" ("+string.Join(", ",ConfirmedDates)+")":"")+". "+(pairs.Count>0?"Matched-block overall time change range: "+pairs.Min().ToString("+0.0;-0.0;0")+"% to "+pairs.Max().ToString("+0.0;-0.0;0")+"%; positive is faster. ":"")+"This range is descriptive, not a confidence interval. "+(ConfirmedDates.Count<2?"Repeat the same candidate on another day before calling it a reliable default.":"Improvement repeated across days; validate in your game.");}
+ 
+         public Candidate MeasuredFlickCandidate(SavedProfile source,double radius){
+             // Propose from two independent saved-response blocks, never pooled challenger data.
+             if(MeasurementProtocol!=2 || !QuickTune || QuickGoal!=3 || Phase!="Ready" || !Compatible(source) || source.Response.CurveKind=="classic" || !MathUtil.Finite(radius) || radius<.125 || radius>1)return null;
+-            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();
+-            if(rows.Count!=4 || rows.Any(t=>t.Result==null))return null;
++            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).ToList();
++            if(rows.Count!=ConfirmationTrialCount || rows.Any(t=>t.Result==null))return null;
+             string key=Key(source.Setup,source.Response);
+             var baseline=rows.Where(t=>t.Role=="Original").ToList();
+-            if(baseline.Count!=2 || baseline.Select(t=>t.Seed).Distinct().Count()!=2 || baseline.Any(t=>Key(source.Setup,t.Curve)!=key || t.Result.Protocol!=2 || !t.Result.MeasurementUsable || !t.Result.FastFlickFocus || t.Result.SpeedFocus!=SpeedFocus))return null;
++            if(baseline.Count!=ConfirmationPairs || baseline.Select(t=>t.Seed).Distinct().Count()!=ConfirmationPairs || baseline.Any(t=>Key(source.Setup,t.Curve)!=key || t.Result.Protocol!=2 || !t.Result.MeasurementUsable || !t.Result.FastFlickFocus || t.Result.SpeedFocus!=SpeedFocus))return null;
+             var scales=baseline.Select(t=>AxisTuning.Scale(t.Result.Targets.Where(x=>x.Task=="stop" && x.MotionProtocol==2),"horizontal")).ToList();
+-            if(scales.Any(x=>x==1) || Math.Sign(scales[0]-1)!=Math.Sign(scales[1]-1))return null;
+-            double delta=Math.Sign(scales[0]-1)*Math.Min(Math.Abs(scales[0]-1),Math.Abs(scales[1]-1))*radius;
++            if(scales.Any(x=>x==1) || scales.Select(x=>Math.Sign(x-1)).Distinct().Count()!=1)return null;
++            double delta=Math.Sign(scales[0]-1)*scales.Min(x=>Math.Abs(x-1))*radius;
+             try{var c=CurrentCurve.Tune(source,0,delta,source.Response.YRatio,false);
+                 if(!CurveMath.Valid(c) || Key(source.Setup,c)==key)return null;
+                 c.DesignReason="Untested first-stop experiment: two reliable baseline blocks agree on horizontal flick "+(delta<0?"overshoot":"undershoot")+". Test "+Math.Abs(delta*100).ToString("0.##")+"% "+(delta<0?"less":"more")+" fast response; preserve slow response and Y. This is a search direction, not a confirmed improvement or ergonomic assessment.";
+@@ -30,9 +30,9 @@ namespace SensitivityFinder {
+             }catch(ArgumentException){return null;}
+         }
+         public bool FastFlickEvidence(){
+-            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();var differences=new List<double>();
++            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).ToList();var differences=new List<double>();
+             foreach(var candidate in rows.Where(t=>t.Role=="Winner")){var refs=rows.Where(t=>t.Role=="Original" && t.Seed==candidate.Seed).ToList();if(refs.Count!=1 || candidate.Result==null || refs[0].Result==null)return false;double before=CoachSegment.CostPerHit(refs[0].Result.Targets.Where(t=>t.Task=="stop")),after=CoachSegment.CostPerHit(candidate.Result.Targets.Where(t=>t.Task=="stop"));if(!MathUtil.Finite(before) || !MathUtil.Finite(after) || before<=0 || after>=before)return false;differences.Add(1-after/before);}
+-            return differences.Count==2 && differences.Average()>=.02;
++            return differences.Count==ConfirmationPairs && differences.Average()>=.02;
+         }
+         public static Candidate FastFlickCandidate(SavedProfile source,int step,double radius){
+             // A bounded response avoids escalating sensitivity with every extra bit of peak speed.
+@@ -47,8 +47,8 @@ namespace SensitivityFinder {
+             c.DesignReason="Untested fast-flick experiment: "+new[]{"6% more fast response scaled by search radius; keep slow response","reach fast response earlier; preserve slow and maximum response","slightly calmer micros with more fast response","test less fast response to check overshoot"}[phase]+". Bounded acceleration, DPI and Y unchanged. Peak packet speed is not calibrated hand velocity.";return c;
+         }
+         public string ActionableResult(){
+-            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();if(rows.Count!=4 || rows.Any(t=>t.Result==null))return "Finish this four-block comparison before choosing a winner.";
+-            var a=rows.Where(t=>t.Role=="Original").ToList();var b=rows.Where(t=>t.Role=="Winner").ToList();if(a.Count!=2 || b.Count!=2)return "A matched comparison is missing; start a fresh run.";
++            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).ToList();if(rows.Count!=ConfirmationTrialCount || rows.Any(t=>t.Result==null))return "Finish this matched comparison before choosing a winner.";
++            var a=rows.Where(t=>t.Role=="Original").ToList();var b=rows.Where(t=>t.Role=="Winner").ToList();if(a.Count!=ConfirmationPairs || b.Count!=ConfirmationPairs)return "A matched comparison is missing; start a fresh run.";
+             Func<List<SearchTrial>,string,double> time=(list,task)=>CoachSegment.CostPerHit(list.SelectMany(t=>t.Result.Targets).Where(t=>t.Task==task));
+             double flickBefore=time(a,"stop"),flickAfter=time(b,"stop"),microBefore=time(a,"micro"),microAfter=time(b,"micro");
+             if(!new[]{flickBefore,flickAfter,microBefore,microAfter}.All(MathUtil.Finite))return "Too few successful hits. Next: repeat the saved response before changing acceleration.";
+@@ -57,14 +57,14 @@ namespace SensitivityFinder {
+             return "Flick time: "+flickBefore.ToString("0.000")+" → "+flickAfter.ToString("0.000")+" s/hit. Micro time: "+microBefore.ToString("0.000")+" → "+microAfter.ToString("0.000")+" s/hit. Miss time included. "+next;
+         }
+         public int MeasurementProtocol;public string SchedulingNote="";
+-        public bool NeedsAnotherDay {get{return Phase=="Ready" && Confirmed && ConfirmedDates.Count<2 && !ConfirmedDates.Contains(DateTime.Now.ToString("yyyy-MM-dd"));}}
++        public bool NeedsAnotherDay {get{var days=AccuracyProtocol>=1?ValidConfirmationDays:ConfirmedDates;return Phase=="Ready" && Confirmed && days.Count<2 && !days.Contains(DateTime.Now.ToString("yyyy-MM-dd"));}}
+         public string EvidenceSummary(){
+-            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();
+-            if(rows.Count!=4 || rows.Any(t=>t.Result==null))return "Finish the four trial blocks to compare speed and stopping control.";
+-            var a=rows.Where(t=>t.Role=="Original").Select(t=>t.Result).ToList();var b=rows.Where(t=>t.Role=="Winner").Select(t=>t.Result).ToList();if(a.Count!=2 || b.Count!=2)return "Matched comparison unavailable.";
++            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).ToList();
++            if(rows.Count!=ConfirmationTrialCount || rows.Any(t=>t.Result==null))return "Finish all planned trial blocks to compare speed and stopping control.";
++            var a=rows.Where(t=>t.Role=="Original").Select(t=>t.Result).ToList();var b=rows.Where(t=>t.Role=="Winner").Select(t=>t.Result).ToList();if(a.Count!=ConfirmationPairs || b.Count!=ConfirmationPairs)return "Matched comparison unavailable.";
+             string verdict=Confirmed?(ConfirmedDates.Count>=2?"Repeated improvement across days":"Improvement in this run / another-day check pending"):TimingTrend()?"Promising timing / not confirmed":"Keep saved curve / test a different response";
+-            Func<List<CoachSegment>,string> format=segments=>{double time=segments.Average(x=>x.EffectiveHitSeconds);var travel=segments.Where(x=>x.TravelSeconds.HasValue).ToList();var stop=segments.Where(x=>x.CorrectionSeconds.HasValue).ToList();var rate=segments.Where(x=>x.DifficultyRate.HasValue).ToList();return (MathUtil.Finite(time)?time.ToString("0.000")+" s/hit":"no successful hits")+"; "+segments.Average(x=>x.Accuracy).ToString("0.0")+"% hits; first stop "+(travel.Count==2?travel.Average(x=>x.TravelSeconds.Value).ToString("0.000")+" s":"not measured")+"; correcting "+(stop.Count==2?stop.Average(x=>x.CorrectionSeconds.Value).ToString("0.000")+" s":"not measured")+"; difficulty rate "+(rate.Count==2?rate.Average(x=>x.DifficultyRate.Value).ToString("0.00")+" bits/s":"not measured");};
+-            return verdict+"\r\nScoring for this result: "+(QuickGoal==3?"80% flick timing / 20% micro control":SpeedFocus?"75% overall time / 25% control":"balanced control")+".\r\n"+ActionableResult()+"\r\nSaved: "+format(a)+"\r\nCandidate: "+format(b)+"\r\nTwo matched trial pairs, not a confidence interval. First-stop timing includes reaction time; difficulty rate uses nominal angular size, not ISO throughput.\r\n"+string.Join(" / ",rows.Select(t=>t.Result.Frames==null?"Historical frame timing unavailable":t.Result.Frames.Summary));
++            Func<List<CoachSegment>,string> format=segments=>{double time=segments.Average(x=>x.EffectiveHitSeconds);var travel=segments.Where(x=>x.TravelSeconds.HasValue).ToList();var stop=segments.Where(x=>x.CorrectionSeconds.HasValue).ToList();var rate=segments.Where(x=>x.DifficultyRate.HasValue).ToList();return (MathUtil.Finite(time)?time.ToString("0.000")+" s/hit":"no successful hits")+"; "+segments.Average(x=>x.Accuracy).ToString("0.0")+"% hits; first stop "+(travel.Count==ConfirmationPairs?travel.Average(x=>x.TravelSeconds.Value).ToString("0.000")+" s":"not measured")+"; correcting "+(stop.Count==ConfirmationPairs?stop.Average(x=>x.CorrectionSeconds.Value).ToString("0.000")+" s":"not measured")+"; difficulty rate "+(rate.Count==ConfirmationPairs?rate.Average(x=>x.DifficultyRate.Value).ToString("0.00")+" bits/s":"not measured");};
++            return (AccuracyProtocol>=1?AccuracySummary+"\r\n":"")+verdict+"\r\nScoring for this result: "+(QuickGoal==3?"80% flick timing / 20% micro control":SpeedFocus?"75% overall time / 25% control":"balanced control")+".\r\n"+ActionableResult()+"\r\nSaved: "+format(a)+"\r\nCandidate: "+format(b)+"\r\nMatched trial summaries are descriptive. First-stop timing includes reaction time; difficulty rate uses nominal angular size, not ISO throughput.\r\n"+string.Join(" / ",rows.Select(t=>t.Result.Frames==null?"Historical frame timing unavailable":t.Result.Frames.Summary+(t.Result.Frames.Input==null?" / arrival timing unavailable":" / "+t.Result.Frames.Input.Summary)));
+         }
+         public Candidate MovementCandidate(SavedProfile source){
+             if(MeasurementProtocol<2 || Phase!="Ready" || !Compatible(source))return null;
+@@ -81,12 +81,12 @@ namespace SensitivityFinder {
+         public int Schema=1,Seed,DisplayWidth,DisplayHeight,FixedFps,QuickStep,QuickGoal;public double StepScale=1;public string Id="search-"+Guid.NewGuid().ToString("N"),Phase="Explore",Report="",UpdatedAt="",DisplayDevice="";
+         public SavedProfile Original,CurveAnchor;public Candidate Selected;public bool SpeedFocus,Confirmed,FullSetup,ContinuousTrials,QuickTune;public List<string> ConfirmedDates=new List<string>();public List<SearchTrial> Trials=new List<SearchTrial>();
+         public CurveSearch(){}
+-        public CurveSearch(SavedProfile source,bool speed,int seed,double stepScale=1,bool fullSetup=false){if(!MathUtil.Finite(stepScale) || stepScale<.125 || stepScale>1)throw new ArgumentException("Use a search radius between one eighth and full size.");MeasurementProtocol=2;StepScale=stepScale;if(source==null || !source.IsMainProfile || !CurveMath.Valid(source.Response))throw new ArgumentException("Choose a valid main setup.");Original=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(source));Selected=source.Response.Copy("selected","search");SpeedFocus=speed;Seed=seed;FullSetup=fullSetup;if(fullSetup){Phase="Sensitivity";PlanSensitivity();}else PlanExplore();}
++        public CurveSearch(SavedProfile source,bool speed,int seed,double stepScale=1,bool fullSetup=false){if(!MathUtil.Finite(stepScale) || stepScale<.125 || stepScale>1)throw new ArgumentException("Use a search radius between one eighth and full size.");MeasurementProtocol=2;AccuracyProtocol=1;StepScale=stepScale;if(source==null || !source.IsMainProfile || !CurveMath.Valid(source.Response))throw new ArgumentException("Choose a valid main setup.");Original=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(source));Selected=source.Response.Copy("selected","search");SpeedFocus=speed;Seed=seed;FullSetup=fullSetup;if(fullSetup){Phase="Sensitivity";PlanSensitivity();}else PlanExplore();}
+         public bool MatchesDisplay(int width,int height,string device){return (DisplayWidth==0 || (DisplayWidth==width && DisplayHeight==height)) && (string.IsNullOrEmpty(DisplayDevice) || DisplayDevice==device);}
+         public bool TimingTrend(){
+             if(!QuickTune || Phase!="Ready" || Confirmed)return false;
+-            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();if(rows.Count!=4 || rows.Any(t=>t.Result==null || !t.Result.MeasurementUsable || t.Result.SpeedFocus!=SpeedFocus))return false;
+-            var refs=rows.Where(t=>t.Role=="Original").ToList();var candidates=rows.Where(t=>t.Role=="Winner").ToList();if(refs.Count!=2 || candidates.Count!=2)return false;
++            var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).ToList();if(rows.Count!=ConfirmationTrialCount || rows.Any(t=>t.Result==null || !t.Result.MeasurementUsable || t.Result.SpeedFocus!=SpeedFocus))return false;
++            var refs=rows.Where(t=>t.Role=="Original").ToList();var candidates=rows.Where(t=>t.Role=="Winner").ToList();if(refs.Count!=ConfirmationPairs || candidates.Count!=ConfirmationPairs)return false;
+             foreach(var c in candidates){var matching=refs.Where(t=>t.Seed==c.Seed).ToList();if(matching.Count!=1)return false;var r=matching[0];double before=r.Result.EffectiveHitSeconds,after=c.Result.EffectiveHitSeconds;
+                 if(c.Result.Protocol!=r.Result.Protocol || !MathUtil.Finite(before) || !MathUtil.Finite(after) || before<=0 || after>before*.97 || c.Result.Accuracy<r.Result.Accuracy || c.Result.Score<=r.Result.Score)return false;
+                 foreach(var axis in new[]{"horizontal","vertical","diagonal"})foreach(var task in new[]{"micro","stop"})if(c.Result.Targets.Count(t=>t.Axis==axis && t.Task==task)<3 || r.Result.Targets.Count(t=>t.Axis==axis && t.Task==task)<3)return false;
+@@ -110,7 +110,7 @@ namespace SensitivityFinder {
+             }
+             if(candidate==null)throw new InvalidOperationException("No valid nearby adjustment is available. Keep your saved setup or use the full search.");
+             if(goal==3 && carry && !adopted && !promising && s.QuickStep%2==0){var measured=previous.MeasuredFlickCandidate(source,s.StepScale);if(measured!=null && Key(source.Setup,measured)!=Key(source.Setup,previous.Selected)){candidate=measured;s.SchedulingNote=measured.DesignReason;}}
+-            if(goal!=3 && carry && !promising && s.QuickStep%2==0){var measured=previous.MovementCandidate(source);if(measured!=null && CurveMath.Valid(measured)){candidate=measured;s.SchedulingNote=measured.DesignReason;}}s.Selected=candidate;s.PlanConfirmation();s.Report="Quick tune: "+(goal>0?(goal==3?"fast flicks / 80% flick timing, 20% micro control":goal==1?"calmer post-flick corrections":"gentler bounded acceleration")+" / strength "+s.StepScale.ToString("0.###")+". "+candidate.DesignReason+" ":new[]{"small-movement sensitivity","acceleration onset","transition width","fast-turn response","vertical sensitivity"}[parameter]+" / "+(sign<0?"lower":"higher")+". ")+"Four trials compare one adjustment against your saved setup in opposite orders. No improvement is assumed."+(promising?" The previous candidate was consistently faster but unconfirmed; this run tests a smaller change in that direction.":"");return s;
++            if(goal!=3 && carry && !promising && s.QuickStep%2==0){var measured=previous.MovementCandidate(source);if(measured!=null && CurveMath.Valid(measured)){candidate=measured;s.SchedulingNote=measured.DesignReason;}}s.Selected=candidate;s.PlanConfirmation();s.Report="Quick tune: "+(goal>0?(goal==3?"fast flicks / 80% flick timing, 20% micro control":goal==1?"calmer post-flick corrections":"gentler bounded acceleration")+" / strength "+s.StepScale.ToString("0.###")+". "+candidate.DesignReason+" ":new[]{"small-movement sensitivity","acceleration onset","transition width","fast-turn response","vertical sensitivity"}[parameter]+" / "+(sign<0?"lower":"higher")+". ")+"Eight trials in the accuracy protocol compare one adjustment against your saved setup in opposite orders. No improvement is assumed."+(promising?" The previous candidate was consistently faster but unconfirmed; this run tests a smaller change in that direction.":"");return s;
+         }
+         static string Key(Setup setup,Candidate c){return ProfileStore.ShapeKey(setup,c);}
+         static Candidate Variation(SavedProfile source,int parameter,double sign,double step){var c=source.Response.Copy("variation-"+parameter+"-"+sign,"search");double factor=1+sign*.15*step;
+@@ -128,14 +128,14 @@ namespace SensitivityFinder {
+         void PlanExplore(){var anchor=CurveAnchor??Original;var candidates=Alternatives(anchor,StepScale);int seed=FullSetup?unchecked(Seed+65537):Seed;var random=new Random(seed);for(int i=candidates.Count-1;i>0;i--){int j=random.Next(i+1);var swap=candidates[i];candidates[i]=candidates[j];candidates[j]=swap;}AddTrial("Explore","Reference",anchor.Response,seed);foreach(var c in candidates)AddTrial("Explore","Candidate",c,seed);AddTrial("Explore","Reference",anchor.Response,seed);Report="Explore nearby curve parameters in shuffled order. No winner has been established.";}
+         public SearchTrial Next {get{return Trials.FirstOrDefault(t=>t.Result==null);}}
+         public int Done {get{return Trials.Count(t=>t.Result!=null);}}
+-        public int BatchDone {get{return QuickTune?Trials.Skip(Math.Max(0,Trials.Count-4)).Count(t=>t.Result!=null):Done;}}
+-        public bool Compatible(SavedProfile current){return current!=null && Original!=null && Selected!=null && current.Id==Original.Id && (Key(current.Setup,current.Response)==Key(Original.Setup,Original.Response) || Key(current.Setup,current.Response)==Key(Original.Setup,Selected));}
++        public int BatchDone {get{return QuickTune?Trials.Skip(Math.Max(0,Trials.Count-ConfirmationTrialCount)).Count(t=>t.Result!=null):Done;}}
++        public bool Compatible(SavedProfile current){return current!=null && Original!=null && Selected!=null && current.Id==Original.Id && (AccuracyProtocol<1 || (current.Setup.Mouse==Original.Setup.Mouse && current.Setup.Pad==Original.Setup.Pad && current.Setup.Game==Original.Setup.Game && current.Setup.HorizontalFov==Original.Setup.HorizontalFov && current.Setup.TargetFps==Original.Setup.TargetFps)) && (Key(current.Setup,current.Response)==Key(Original.Setup,Original.Response) || Key(current.Setup,current.Response)==Key(Original.Setup,Selected));}
+         public void Record(CoachSegment result){var next=Next;if(next==null || Phase=="Ready")throw new InvalidOperationException("No trial is waiting.");if(result==null || result.FastFlickFocus!=(QuickGoal==3) || result.SpeedFocus!=SpeedFocus || !CurveMath.Valid(result.Response) || Key(Original.Setup,result.Response)!=Key(Original.Setup,next.Curve) || result.Targets.Count==0 || result.Targets.Any(t=>!MathUtil.Finite(t.Seconds) || t.Seconds<=0 || !MathUtil.Finite(t.ErrorDegrees) || t.ErrorDegrees<0))throw new ArgumentException("Finish the matching trial with valid measurements. No progress was saved.");next.Result=Storage.Json().Deserialize<CoachSegment>(Storage.Json().Serialize(result));next.At=DateTime.Now.ToString("o");if(Next==null)Advance();}
+         void Advance(){if(Phase=="Sensitivity"){var rows=Trials.Where(t=>t.Phase=="Sensitivity").ToList();var refs=rows.Where(t=>t.Role=="Reference").ToList();var winner=rows.Where(t=>t.Role=="Candidate" && CoachingRun.SupportsChange(t.Result,refs[0].Result,refs[1].Result,"")).OrderByDescending(t=>t.Result.Score).FirstOrDefault();double gain=(winner??refs[0]).Curve.BaseGain;CurveAnchor=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(Original));CurveAnchor.Response.BaseGain*=gain/Original.Response.Multiplier(0);Selected=CurveAnchor.Response.Copy("base-selected","search");Phase="Explore";PlanExplore();Report=(winner==null?"No alternative beat the starting constant-response sensitivity.":"A base sensitivity passed the first-stage checks.")+" Now test curve parameters around "+(Original.Setup.BaselineCm/gain).ToString("0.00")+" cm/360 at slow speed. Final confirmation still compares against your original full setup.";}else if(Phase=="Explore"){var rows=Trials.Where(t=>t.Phase=="Explore").ToList();var refs=rows.Where(t=>t.Role=="Reference").ToList();var winner=rows.Where(t=>t.Role=="Candidate" && CoachingRun.SupportsChange(t.Result,refs[0].Result,refs[1].Result,"")).OrderByDescending(t=>t.Result.Score).FirstOrDefault();if(winner!=null)Selected=winner.Curve.Copy("selected","search");Phase="Vertical";int seed=unchecked(Seed+104729);AddTrial(Phase,"Reference",Selected,seed);var ys=new[]{1-.02*StepScale,1+.02*StepScale}.OrderBy(x=>new Random(seed+(int)(x*100)).Next()).ToArray();foreach(double scale in ys){var c=Selected.Copy("y-"+scale,"search");c.YRatio=AxisTuning.Ratio(c.YRatio,scale);if(Key(Original.Setup,c)!=Key(Original.Setup,Selected))AddTrial(Phase,"Candidate",c,seed);}AddTrial(Phase,"Reference",Selected,seed);Report=winner==null?"No curve alternative passed the exploration checks. Testing Y around the starting curve at this stage.":"An exploratory curve won the first stage. Testing Y separately; it is not confirmed yet.";}
+             else if(Phase=="Vertical"){var rows=Trials.Where(t=>t.Phase=="Vertical").ToList();var refs=rows.Where(t=>t.Role=="Reference").ToList();var winner=rows.Where(t=>t.Role=="Candidate" && CoachingRun.SupportsChange(t.Result,refs[0].Result,refs[1].Result,"vertical") && new[]{"horizontal","diagonal"}.All(a=>t.Result.ScoreFor(a)>=refs.Average(r=>r.Result.ScoreFor(a))-3)).OrderByDescending(t=>t.Result.ScoreFor("vertical")).FirstOrDefault();if(winner!=null)Selected=winner.Curve.Copy("selected","search");if(Key(Original.Setup,Selected)==Key(Original.Setup,Original.Response)){Phase="Ready";Report="No tested change passed the checks. Retain the original setup. This is not proof of an optimum.";}else PlanConfirmation();}
+             else if(Phase=="Confirm")FinishConfirmation();}
+-        void PlanConfirmation(){Phase="Confirm";int offset=Trials.Count;for(int pair=0;pair<2;pair++){int seed=unchecked(Seed+200003+offset*97+pair*7919);bool originalFirst=(Seed+pair)%2==0;AddTrial(Phase,originalFirst?"Original":"Winner",originalFirst?Original.Response:Selected,seed);AddTrial(Phase,originalFirst?"Winner":"Original",originalFirst?Selected:Original.Response,seed);}Report="Fresh-target confirmation: winner versus original in two matched, counterbalanced pairs. Exploration scores do not decide this stage.";}
+-        void FinishConfirmation(){var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).Reverse().ToList();var originals=rows.Where(t=>t.Role=="Original").ToList();var winners=rows.Where(t=>t.Role=="Winner").ToList();var combined=new CoachSegment{FastFlickFocus=QuickGoal==3,Protocol=winners.Max(t=>t.Result.Protocol),Frames=winners.All(t=>t.Result.MeasurementUsable)?winners[0].Result.Frames:null,Response=Selected,SpeedFocus=SpeedFocus,Targets=winners.SelectMany(t=>t.Result.Targets).ToList()};Confirmed=(QuickGoal!=3 || FastFlickEvidence()) && winners.All(t=>t.Result.MeasurementUsable) && CoachingRun.SupportsChange(combined,originals[0].Result,originals[1].Result,"") && winners.All(w=>w.Result.Score>originals.Single(o=>o.Seed==w.Seed).Result.Score);Phase="Ready";if(Confirmed){string day=DateTime.Now.ToString("yyyy-MM-dd");if(!ConfirmedDates.Contains(day))ConfirmedDates.Add(day);Report="Best tested curve passed two fresh-target pairs. Confirmed on "+ConfirmedDates.Count+" separate day(s). It still needs in-game tracking and comfort checks.";}else {ConfirmedDates.Clear();string reason=CoachingRun.ChangeReason(combined,originals[0].Result,originals[1].Result,"");if(reason=="Supported")reason=QuickGoal==3 && !FastFlickEvidence()?"Flicks must be faster in both matched pairs and at least 2% faster on average":"The candidate was not faster-scoring in both matched pairs";Report="Candidate did not pass confirmation. Retained for comparison; saved setup unchanged. Reason: "+reason+". "+"Score: saved "+originals.Average(t=>t.Result.Score).ToString("0.00")+" / candidate "+winners.Average(t=>t.Result.Score).ToString("0.00")+". This is insufficient evidence, not proof your current curve is optimal.";}}
++        void PlanConfirmation(){Phase="Confirm";int offset=Trials.Count;for(int pair=0;pair<ConfirmationPairs;pair++){int seed=unchecked(Seed+200003+offset*97+pair*7919);bool originalFirst=(Seed+pair)%2==0;AddTrial(Phase,originalFirst?"Original":"Winner",originalFirst?Original.Response:Selected,seed);AddTrial(Phase,originalFirst?"Winner":"Original",originalFirst?Selected:Original.Response,seed);}Report="Fresh-target confirmation: winner versus original in matched, counterbalanced pairs (four pairs for the accuracy protocol). Exploration scores do not decide this stage.";}
++        void FinishConfirmation(){if(AccuracyProtocol>=1){var finalRows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).Reverse().ToList();var evidence=ConfirmationEstimate.Read(this,finalRows);Confirmed=evidence.Passed;Phase="Ready";ConfirmedDates=ValidConfirmationDays;Report=(Confirmed?"Candidate passed provisional confirmation. ":"Candidate did not pass confirmation. Saved setup unchanged. ")+AccuracySummary;return;}var rows=Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(ConfirmationTrialCount).Reverse().ToList();var originals=rows.Where(t=>t.Role=="Original").ToList();var winners=rows.Where(t=>t.Role=="Winner").ToList();var combined=new CoachSegment{FastFlickFocus=QuickGoal==3,Protocol=winners.Max(t=>t.Result.Protocol),Frames=winners.All(t=>t.Result.MeasurementUsable)?winners[0].Result.Frames:null,Response=Selected,SpeedFocus=SpeedFocus,Targets=winners.SelectMany(t=>t.Result.Targets).ToList()};Confirmed=(QuickGoal!=3 || FastFlickEvidence()) && winners.All(t=>t.Result.MeasurementUsable) && CoachingRun.SupportsChange(combined,originals[0].Result,originals[1].Result,"") && winners.All(w=>w.Result.Score>originals.Single(o=>o.Seed==w.Seed).Result.Score);Phase="Ready";if(Confirmed){string day=DateTime.Now.ToString("yyyy-MM-dd");if(!ConfirmedDates.Contains(day))ConfirmedDates.Add(day);Report="Best tested curve passed two fresh-target pairs. Confirmed on "+ConfirmedDates.Count+" separate day(s). It still needs in-game tracking and comfort checks.";}else {ConfirmedDates.Clear();string reason=CoachingRun.ChangeReason(combined,originals[0].Result,originals[1].Result,"");if(reason=="Supported")reason=QuickGoal==3 && !FastFlickEvidence()?"Flicks must be faster in both matched pairs and at least 2% faster on average":"The candidate was not faster-scoring in both matched pairs";Report="Candidate did not pass confirmation. Retained for comparison; saved setup unchanged. Reason: "+reason+". "+"Score: saved "+originals.Average(t=>t.Result.Score).ToString("0.00")+" / candidate "+winners.Average(t=>t.Result.Score).ToString("0.00")+". This is insufficient evidence, not proof your current curve is optimal.";}}
+         public void Retest(){if(Phase!="Ready" || Key(Original.Setup,Selected)==Key(Original.Setup,Original.Response))throw new InvalidOperationException("There is no different candidate to confirm.");Confirmed=false;PlanConfirmation();}
+         public void Save(){if(Id==null || !System.Text.RegularExpressions.Regex.IsMatch(Id,"^search-[a-f0-9]{32}$"))throw new ArgumentException("Invalid search identifier.");UpdatedAt=DateTime.Now.ToString("o");ProfileStore.AtomicText(Path.Combine(ProfileStore.Root,"curve-search",Id+".json"),Storage.Json().Serialize(this));}
+         public static CurveSearch Latest(SavedProfile main,bool? fullSetup=null){string dir=Path.Combine(ProfileStore.Root,"curve-search");if(!Directory.Exists(dir))return null;foreach(var file in new DirectoryInfo(dir).GetFiles("search-*.json").OrderByDescending(f=>f.LastWriteTimeUtc)){try{var s=Storage.Json().Deserialize<CurveSearch>(File.ReadAllText(file.FullName));if(s.Schema==1 && (!fullSetup.HasValue || s.FullSetup==fullSetup.Value) && s.Compatible(main) && CurveMath.Valid(s.Selected) && s.Trials.All(t=>CurveMath.Valid(t.Curve)))return s;}catch{}}return null;}
+diff --git a/src/CurveSearchForms.cs b/src/CurveSearchForms.cs
+index b194d7d..09e0ec2 100644
+--- a/src/CurveSearchForms.cs
++++ b/src/CurveSearchForms.cs
+@@ -11,13 +11,13 @@ namespace SensitivityFinder {
+         void ShowSearch(bool fullSetup){if(!fullSetup && !advancedCurveSearch){ShowSimpleCurve();return;}var main=MainProfile.Active(draft);StudioPage(8,fullSetup?"Full setup: sensitivity → curve → Y":"Quick curve tune","One saved search. Short trials, breaks whenever you need, and a separate confirmation stage.");
+             if(main==null){Add(TextCard("","Create a saved setup first","Return to Home and complete your initial setup.",140));SetPageActions("No settings changed",Theme.Button("Home",delegate{GoToSection(0);},true));return;}
+             var search=CurveSearch.Latest(main,fullSetup);AddTrialDisplay();if(!fullSetup)AddComfortControls(main,search);
+-            if(search==null){var format=SearchFormat(false,null);Add(format.Parent);Add(AlignedCard(fullSetup?"Sensitivity → Curve → Y → Confirm":"One adjustment → four trials → review",fullSetup?"Start with constant-response base sensitivity, then tune curve parameters, then Y. Carry the supported result forward through one saved workflow. Up to 24 short trials, about 12 minutes active, with click-to-start breaks and resume. Final confirmation compares against your original saved setup.":"Four 30-second trials, about two minutes plus breaks. Compare your saved setup with one small adjustment twice, in opposite orders. Each run tests the opposite direction or next parameter if no improvement is supported. Applying a supported result narrows the next step. Apply a supported winner to carry it forward. No manual numbers required.",null));Add(AlignedCard("Your original stays available",main.SlowCm.ToString("0.00")+" cm/360 / Y "+main.Response.YRatio.ToString("0.0000")+". Each real trial loads one full curve through Raw Accel and restores your saved setup afterward. Close the Raw Accel editor before starting. Speed or balanced scoring is frozen when the search begins. AI does not choose the winner.",null));SetPageActions("Starting creates a search record; no curve is applied until you start a trial.",Theme.Button(fullSetup?"Start full setup":"Start quick tune",delegate{try{var s=fullSetup?new CurveSearch(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),1,true):CurveSearch.Quick(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),null,PlayerProfile.Load().TuningGoal);s.ContinuousTrials=format.SelectedIndex==1;s.Save();ShowSearch(fullSetup);}catch(Exception e){Error(e);}},true));return;}
+-            if(!fullSetup && !search.QuickTune && search.Phase!="Ready"){SetPageActions("Your longer search remains saved. Quick tune starts from your saved setup.",Theme.Button("Switch to 4-trial quick tune",delegate{try{var s=CurveSearch.Quick(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),null,PlayerProfile.Load().TuningGoal);s.Save();ShowSearch(false);}catch(Exception e){Error(e);}},true),Theme.Button("Home",delegate{GoToSection(0);},false));Add(AlignedCard("Shorter tuning is available","Start a four-trial comparison instead of finishing the old broad search. Completed measurements stay on disk; your saved curve is unchanged.",null));return;}if(search.Phase!="Ready"){var format=SearchFormat(search.ContinuousTrials,delegate(bool continuous){search.ContinuousTrials=continuous;search.Save();ShowSearch(fullSetup);});Add(format.Parent);}int total=search.QuickTune?4:search.Trials.Count,done=search.BatchDone;int offset=fullSetup?1:0;string stage=search.QuickTune?(search.Phase=="Ready"?"Quick tune / result":"Quick tune / four comparison trials"):search.Phase=="Sensitivity"?"1 / Find base sensitivity":search.Phase=="Explore"?(1+offset)+" / Explore curve parameters":search.Phase=="Vertical"?(2+offset)+" / Tune vertical sensitivity":search.Phase=="Confirm"?(3+offset)+" / Confirm on fresh targets":(4+offset)+" / Review your result";
++            if(search==null){var format=SearchFormat(false,null);Add(format.Parent);Add(AlignedCard(fullSetup?"Sensitivity → Curve → Y → Confirm":"One adjustment → eight trials → review",fullSetup?"Start with constant-response base sensitivity, then tune curve parameters, then Y. Carry the supported result forward through one saved workflow. Up to 28 short trials, about 17 minutes active, with click-to-start breaks and resume. Final confirmation compares against your original saved setup.":"Eight trials, about five minutes plus breaks. Compare your saved setup with one frozen adjustment across four fresh matched pairs, in alternating orders. Each run tests the opposite direction or next parameter if no improvement is supported. Applying a supported result narrows the next step. Apply a supported winner to carry it forward. No manual numbers required.",null));Add(AlignedCard("Your original stays available",main.SlowCm.ToString("0.00")+" cm/360 / Y "+main.Response.YRatio.ToString("0.0000")+". Each real trial loads one full curve through Raw Accel and restores your saved setup afterward. Close the Raw Accel editor before starting. Speed or balanced scoring is frozen when the search begins. AI does not choose the winner.",null));SetPageActions("Starting creates a search record; no curve is applied until you start a trial.",Theme.Button(fullSetup?"Start full setup":"Start quick tune",delegate{try{var s=fullSetup?new CurveSearch(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),1,true):CurveSearch.Quick(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),null,PlayerProfile.Load().TuningGoal);s.ContinuousTrials=format.SelectedIndex==1;s.Save();ShowSearch(fullSetup);}catch(Exception e){Error(e);}},true));return;}
++            if(!fullSetup && !search.QuickTune && search.Phase!="Ready"){SetPageActions("Your longer search remains saved. Quick tune starts from your saved setup.",Theme.Button("Switch to accuracy tune",delegate{try{var s=CurveSearch.Quick(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),null,PlayerProfile.Load().TuningGoal);s.Save();ShowSearch(false);}catch(Exception e){Error(e);}},true),Theme.Button("Home",delegate{GoToSection(0);},false));Add(AlignedCard("Shorter tuning is available","Start an eight-trial comparison instead of finishing the old broad search. Completed measurements stay on disk; your saved curve is unchanged.",null));return;}if(search.Phase!="Ready"){var format=SearchFormat(search.ContinuousTrials,delegate(bool continuous){search.ContinuousTrials=continuous;search.Save();ShowSearch(fullSetup);});Add(format.Parent);}int total=search.QuickTune?search.ConfirmationTrialCount:search.Trials.Count,done=search.BatchDone;int offset=fullSetup?1:0;string stage=search.QuickTune?(search.Phase=="Ready"?"Quick tune / result":"Quick tune / matched comparison trials"):search.Phase=="Sensitivity"?"1 / Find base sensitivity":search.Phase=="Explore"?(1+offset)+" / Explore curve parameters":search.Phase=="Vertical"?(2+offset)+" / Tune vertical sensitivity":search.Phase=="Confirm"?(3+offset)+" / Confirm on fresh targets":(4+offset)+" / Review your result";
+             Add(AlignedCard(stage,search.Report+"\r\n"+done+" completed trials / radius ×"+search.StepScale.ToString("0.###")+" / "+(search.SpeedFocus?"speed-focused":"balanced")+" scoring. "+(search.Phase=="Ready"?"Your original snapshot and all trial results are retained.":"Candidate labels stay hidden while testing. "+(search.ContinuousTrials?"The next block opens automatically; click to begin after each change. Escape stops the session.":"Return here between trials to start the next one.")),null));
+-            var pairs=search.Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();if(search.Phase=="Ready" && pairs.Count==4 && pairs.All(t=>t.Result!=null)){var originals=pairs.Where(t=>t.Role=="Original").ToList();var winners=pairs.Where(t=>t.Role=="Winner").ToList();double before=originals.Average(t=>t.Result.EffectiveHitSeconds),after=winners.Average(t=>t.Result.EffectiveHitSeconds);string timing=MathUtil.Finite(before) && MathUtil.Finite(after)?before.ToString("0.00")+" → "+after.ToString("0.00")+" s per hit (misses included)":"Too few successful hits for a reliable time comparison";Add(AlignedCard("Fresh-target confirmation measurements","Original → candidate: "+timing+". Hit rate: "+originals.Average(t=>t.Result.Accuracy).ToString("0")+"% → "+winners.Average(t=>t.Result.Accuracy).ToString("0")+"%. Two matched pairs; the pass/fail decision also checks task coverage, control and reference variation. This is not a statistical confidence interval.",null));}
+-            var chart=Theme.Card(285);Theme.AddStack(chart,Theme.Label(search.Phase=="Ready"?(search.Confirmed?"Best tested curve / confirmation passed":"No confirmed improvement"):"Original versus current stage candidate",17,Theme.Text,42),Theme.Label("Gray: original / Mint: candidate",11,Theme.Muted,28),new CurvePicture(new[]{search.Original.Response,search.Selected},main.Setup.Dpi,Math.Max(30,main.Response.Offset*10),main.Setup.BaselineCm){Dock=DockStyle.Top,Height=170});Add(chart);
++            var pairs=search.Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(search.ConfirmationTrialCount).ToList();if(search.Phase=="Ready" && pairs.Count==search.ConfirmationTrialCount && pairs.All(t=>t.Result!=null)){var originals=pairs.Where(t=>t.Role=="Original").ToList();var winners=pairs.Where(t=>t.Role=="Winner").ToList();double before=originals.Average(t=>t.Result.EffectiveHitSeconds),after=winners.Average(t=>t.Result.EffectiveHitSeconds);string timing=MathUtil.Finite(before) && MathUtil.Finite(after)?before.ToString("0.00")+" → "+after.ToString("0.00")+" s per hit (misses included)":"Too few successful hits for a reliable time comparison";Add(AlignedCard("Fresh-target confirmation measurements","Original → candidate: "+timing+". Hit rate: "+originals.Average(t=>t.Result.Accuracy).ToString("0")+"% → "+winners.Average(t=>t.Result.Accuracy).ToString("0")+"%. Two matched pairs; the pass/fail decision also checks task coverage, control and reference variation. This is not a statistical confidence interval.",null));}
++            var chart=Theme.Card(285);Theme.AddStack(chart,Theme.Label(search.Phase=="Ready"?(search.Confirmed?"Best tested curve / provisional confirmation passed":"No confirmed improvement"):"Original versus current stage candidate",17,Theme.Text,42),Theme.Label("Gray: original / Mint: candidate",11,Theme.Muted,28),new CurvePicture(new[]{search.Original.Response,search.Selected},main.Setup.Dpi,Math.Max(30,main.Response.Offset*10),main.Setup.BaselineCm){Dock=DockStyle.Top,Height=170});Add(chart);
+             Add(AlignedCard("What counts as evidence","A winner must pass task coverage, your scoring guards and reference-variation checks. Confirmation uses fresh seeds and two matched pairs in opposite orders. It is local evidence, not proof of a universal optimum. Confirmed on "+search.ConfirmedDates.Count+" separate day(s). Tracking, scoped aim and in-game comfort still need your own check.",null));
+-            if(search.Phase!="Ready"){SetPageActions("Trial "+(done+1)+" / up to "+(search.QuickTune?4:fullSetup?24:18)+" initially / 2-second countdown / saved setup restored afterward",Theme.Button(search.ContinuousTrials?"Continue long session":"Start next short trial",async delegate{await RunSearchTrial(search);},true),Theme.Button("Take a break",delegate{GoToSection(0);},false));}
++            if(search.Phase!="Ready"){SetPageActions("Trial "+(done+1)+" / up to "+(search.QuickTune?search.ConfirmationTrialCount:fullSetup?28:22)+" initially / 2-second countdown / saved setup restored afterward",Theme.Button(search.ContinuousTrials?"Continue long session":"Start next short trial",async delegate{await RunSearchTrial(search);},true),Theme.Button("Take a break",delegate{GoToSection(0);},false));}
+             else {if(search.Phase=="Ready")Add(AlignedCard("What the comparison measured",search.EvidenceSummary(),null,Theme.Button("Explain with local AI",delegate{OpenLocalCoach(main);},false)));
+             AddPracticalResults(search);var actions=new System.Collections.Generic.List<Button>();if(search.Confirmed && !search.ReadyToAdopt)actions.Add(Theme.Button("Check tracking & comfort",async delegate{await RunPracticalChecks(search);},true));if(search.ReadyToAdopt)actions.Add(Theme.Button(ProfileStore.ShapeKey(main.Setup,main.Response)==ProfileStore.ShapeKey(main.Setup,search.Selected)?"Apply saved winner":"Save & apply best tested",async delegate{if(liveTrialBusy)return;try{if(!search.ReadyToAdopt)throw new InvalidOperationException("Finish tracking and comfort checks before adopting this candidate.");if(Process.GetProcessesByName("rawaccel").Length>0)throw new InvalidOperationException("Close the Raw Accel editor first.");liveTrialBusy=true;var saved=ProfileStore.ShapeKey(main.Setup,main.Response)==ProfileStore.ShapeKey(main.Setup,search.Selected)?main:MainProfile.Update(main,search.Selected,search.Report);await ProfileActions.Apply(saved,true);}catch(Exception e){Error(e);}finally{liveTrialBusy=false;ShowSearch(fullSetup);}},true));
+                 if(ProfileStore.ShapeKey(main.Setup,search.Selected)!=ProfileStore.ShapeKey(main.Setup,search.Original.Response))actions.Add(Theme.Button(search.Confirmed?"Confirm again / another day":"Retest candidate",delegate{search.Retest();search.Save();ShowSearch(fullSetup);},actions.Count==0));
+@@ -39,13 +39,13 @@ namespace SensitivityFinder {
+             }catch(Exception e){Error(e);ShowSearch(false);}
+         }
+         void ShowSimpleCurve(){
+-            var main=MainProfile.Active(draft);StudioPage(8,"Tune my curve","Four flick trials, then tracking and comfort checks for a supported candidate. Apply when ready.");
++            var main=MainProfile.Active(draft);StudioPage(8,"Tune my curve","Eight flick trials for new searches, then tracking and comfort checks for a supported candidate. Apply when ready.");
+             if(main==null){SetPageActions("Create a saved setup first.",Theme.Button("Home",delegate{GoToSection(0);},true));return;}
+             AddTrialDisplay();var search=CurveSearch.Latest(main,false);bool ready=search!=null && search.QuickTune && search.Phase=="Ready",supported=ready && search.Confirmed;
+             bool differs=supported && ProfileStore.ShapeKey(main.Setup,main.Response)!=ProfileStore.ShapeKey(main.Setup,search.Selected);
+             Add(AlignedCard("Your saved curve / revision "+main.MainRevision,main.SlowCm.ToString("0.00")+" cm/360 at slow speed / Y "+main.Response.YRatio.ToString("0.0000")+" / "+main.Response.Description+". "+CurrentCurve.RecordedText()+(string.IsNullOrEmpty(curveApplyNotice)?"":"\r\n"+curveApplyNotice),null));
+             var chart=Theme.Card(265);Theme.AddStack(chart,Theme.Label(differs?"Saved curve and supported candidate":"Your saved curve",17,Theme.Text,40),new CurvePicture(differs?new[]{main.Response,search.Selected}:new[]{main.Response},main.Setup.Dpi,Math.Max(30,main.Response.Offset*10),main.Setup.BaselineCm){Dock=DockStyle.Top,Height=180});Add(chart);
+-            string next=search!=null && search.MeasurementProtocol<2?"Earlier results are preserved. Your next run starts a fresh comparison with practice and improved measurements.":ready?search.ActionableResult()+"\r\n"+search.Report:search!=null && search.QuickTune?search.BatchDone+" of 4 trials saved. Continue where you stopped.":"Compare one adjustment against your saved curve in four 36-second blocks. Each next trial opens automatically; click to start, then a two-second countdown, six seconds of unscored practice, and 28 seconds of scored aiming. Escape pauses the run and keeps completed trials.";
++            string next=search!=null && search.MeasurementProtocol<2?"Earlier results are preserved. Your next run starts a fresh comparison with practice and improved measurements.":ready?search.ActionableResult()+"\r\n"+search.Report:search!=null && search.QuickTune?search.BatchDone+" of "+search.ConfirmationTrialCount+" trials saved. Continue where you stopped.":"Compare one adjustment against your saved curve in eight short blocks. Each next trial opens automatically; click to start, then a two-second countdown, six seconds of unscored practice, and 28 seconds of scored aiming. Escape pauses the run and keeps completed trials.";
+             Add(AlignedCard(supported?(differs?"An improvement is ready":"This result is already saved"):ready?(search.TimingTrend()?"Promising speed / needs a closer test":"What changed / what to test next"):"Ready when you are",next+(search==null?"":"\r\n"+search.SchedulingNote)+"\r\nNext run goal: "+new[]{"general parameter search","calmer post-flick corrections","gentler bounded acceleration","fast flicks / 80% flick timing, 20% micro control"}[Math.Max(0,Math.Min(3,PlayerProfile.Load().TuningGoal))]+". Extra choices are under Tuning options.",null));
+             if(ready)Add(AlignedCard("What the comparison measured",search.EvidenceSummary(),null,Theme.Button("Explain with local AI",delegate{OpenLocalCoach(main);},false)));
+             AddPracticalResults(search);var actions=new System.Collections.Generic.List<Button>();if(differs)actions.Add(search.ReadyToAdopt?Theme.Button("Apply improvement",async delegate{await ApplySimpleCurve(search,false);},true):Theme.Button("Check tracking & comfort",async delegate{await RunPracticalChecks(search);},true));
+diff --git a/src/CurveSearchTests.cs b/src/CurveSearchTests.cs
+index 6585027..6043887 100644
+--- a/src/CurveSearchTests.cs
++++ b/src/CurveSearchTests.cs
+@@ -1,18 +1,19 @@
+-﻿using System;using System.Drawing;using System.Windows.Forms;using System.Reflection;using System.IO;using System.Linq;using System.Collections.Generic;using System.Threading.Tasks;
++using System;using System.Drawing;using System.Windows.Forms;using System.Reflection;using System.IO;using System.Linq;using System.Collections.Generic;using System.Threading.Tasks;
+ namespace SensitivityFinder {static class CurveSearchTests {
+ static int n;static void Check(bool ok,string message){if(!ok)throw new Exception(message);n++;Console.WriteLine("PASS "+message);}
+-static CoachSegment Result(CurveSearch s,SearchTrial t,bool good){var rows=new List<TargetResult>();foreach(string axis in new[]{"horizontal","vertical","diagonal"})foreach(string task in new[]{"micro","stop"})for(int i=0;i<4;i++)rows.Add(new TargetResult{Axis=axis,Task=task,Hit=true,Settled=true,Seconds=good?.3:.9,ErrorDegrees=good?.01:.3,DirectDegrees=10,FirstStopMeasured=true,FirstStopErrorDegrees=0});return new CoachSegment{FastFlickFocus=s.QuickGoal==3,Response=t.Curve,SpeedFocus=s.SpeedFocus,Targets=rows};}
++static FrameHealth AccurateFrames(){var f=new FrameHealth{Input=new InputTimingEvidence{DeviceKey="synthetic-mouse"}};for(int i=0;i<700;i++){f.RecordInterval(.01,144);f.Input.ActiveIntervals.Add(1);}return f;}
++static CoachSegment Result(CurveSearch s,SearchTrial t,bool good){var rows=new List<TargetResult>();foreach(string axis in new[]{"horizontal","vertical","diagonal"})foreach(string task in new[]{"micro","stop"})for(int i=0;i<4;i++)rows.Add(new TargetResult{Axis=axis,Task=task,Hit=true,Settled=true,Seconds=good?.3:.9,ErrorDegrees=good?.01:.3,DirectDegrees=10,FirstStopMeasured=true,FirstStopErrorDegrees=0});return new CoachSegment{Protocol=2,Frames=AccurateFrames(),FastFlickFocus=s.QuickGoal==3,Response=t.Curve,SpeedFocus=s.SpeedFocus,Targets=rows};}
+ static void Complete(CurveSearch s,bool confirmPass){string chosen=ProfileStore.ShapeKey(s.Original.Setup,s.Trials.First(t=>t.Role=="Candidate").Curve);while(s.Next!=null){var t=s.Next;bool good=t.Phase=="Explore"?ProfileStore.ShapeKey(s.Original.Setup,t.Curve)==chosen:t.Phase=="Vertical"?true:confirmPass?t.Role=="Winner":t.Role=="Original";s.Record(Result(s,t,good));}}
+ [STAThread]static int Main(string[] args){try{var setup=new Setup{RawAccelPath=args[0],CleanInputConfirmed=true};var session=new Session{Setup=setup};session.Start();var curve=new Candidate{Id="source",BaseGain=.85,Limit=1.5,Offset=3,Decay=.04,YRatio=1};var source=new SavedProfile{Id="p-search-fixture",Setup=setup,Response=curve,SourceSession=session,Name="Fixture",IsPersonalTune=true};ProfileStore.AtomicText(Path.Combine(ProfileStore.Root,source.Id+".json"),Storage.Json().Serialize(source));var main=MainProfile.Create(source);string original=Storage.Json().Serialize(main);
+ foreach(var kind in new[]{"natural","classic","lut"}){var comfortSource=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(main));comfortSource.Response.CurveKind=kind;if(kind=="classic"){comfortSource.Response.Acceleration=.03;comfortSource.Response.Points.Clear();}if(kind=="lut")comfortSource.Response.Points=new List<CurvePoint>{new CurvePoint(.0001,.0001),new CurvePoint(3,3),new CurvePoint(12,18),new CurvePoint(24,36),new CurvePoint(48,72)};string before=Storage.Json().Serialize(comfortSource);foreach(int goal in new[]{1,2}){var comfort=CurrentCurve.Stability(comfortSource,goal);double tail=comfort.Points.Last().Speed;Check(CurveMath.Valid(comfort) && comfort.CurveKind=="lut" && comfort.Multiplier(0)<comfortSource.Response.Multiplier(0) && comfort.YRatio==comfortSource.Response.YRatio,"comfort goal "+goal+" builds a valid bounded calmer curve from "+kind);Check(Math.Abs(comfort.Multiplier(tail*2)-comfort.Multiplier(tail*20))<.00001,"comfort curve sensitivity plateaus beyond its last points for "+kind+" goal "+goal);}Check(before==Storage.Json().Serialize(comfortSource),"comfort preview preserves original "+kind+" settings");}
+-var comfortQuick=CurveSearch.Quick(main,true,601,null,1);while(comfortQuick.Next!=null){var t=comfortQuick.Next;comfortQuick.Record(Result(comfortQuick,t,t.Role=="Original"));}var comfortNext=CurveSearch.Quick(main,true,602,comfortQuick,1);Check(comfortQuick.QuickGoal==1 && comfortNext.QuickGoal==1 && ProfileStore.ShapeKey(main.Setup,comfortNext.Selected)!=ProfileStore.ShapeKey(main.Setup,comfortQuick.Selected),"unsupported comfort comparison changes the next bounded experiment instead of repeating the same candidate");Check(comfortQuick.Report.Contains("Reason:") && comfortQuick.Report.Contains("insufficient evidence"),"held results explain the exact evidence gate rather than claiming the saved curve is optimal");var changedGoal=CurveSearch.Quick(main,true,603,comfortQuick,2);Check(changedGoal.QuickStep==0 && changedGoal.QuickGoal==2,"switching symptoms starts a separate compatible comfort search");
++var comfortQuick=CurveSearch.Quick(main,true,601,null,1);while(comfortQuick.Next!=null){var t=comfortQuick.Next;comfortQuick.Record(Result(comfortQuick,t,t.Role=="Original"));}var comfortNext=CurveSearch.Quick(main,true,602,comfortQuick,1);Check(comfortQuick.QuickGoal==1 && comfortNext.QuickGoal==1 && ProfileStore.ShapeKey(main.Setup,comfortNext.Selected)!=ProfileStore.ShapeKey(main.Setup,comfortQuick.Selected),"unsupported comfort comparison changes the next bounded experiment instead of repeating the same candidate");Check(comfortQuick.Report.Contains("Reason:") && comfortQuick.Report.Contains("paired trial"),"held results explain the exact evidence gate rather than claiming the saved curve is optimal");var changedGoal=CurveSearch.Quick(main,true,603,comfortQuick,2);Check(changedGoal.QuickStep==0 && changedGoal.QuickGoal==2,"switching symptoms starts a separate compatible comfort search");
+ var pinned=CurveSearch.Quick(main,true,581);Check(pinned.MatchesDisplay(1920,1080,"chosen"),"new search accepts the explicitly chosen screen");pinned.DisplayWidth=2560;pinned.DisplayHeight=1440;pinned.DisplayDevice="old";Check(!pinned.MatchesDisplay(1920,1080,"chosen") && !pinned.MatchesDisplay(2560,1440,"chosen"),"switching resolution or screen identity requires fresh comparisons rather than silently moving old evidence");Check(pinned.MatchesDisplay(2560,1440,"old"),"same selected screen resumes its matching geometry");pinned.DisplayDevice="";Check(pinned.MatchesDisplay(2560,1440,"chosen"),"older records can resume on explicitly selected matching dimensions");
+ var promising=CurveSearch.Quick(main,true,582);while(promising.Next!=null){var t=promising.Next;var r=Result(promising,t,false);foreach(var row in r.Targets){row.ErrorDegrees=.01;row.Seconds=t.Role=="Winner"?.90:.95;}promising.Record(r);}Check(!promising.Confirmed && promising.TimingTrend(),"consistent modest paired speed gains remain promising without bypassing acceptance guards");var closer=CurveSearch.Quick(main,true,583,promising);Check(closer.QuickStep==promising.QuickStep && closer.StepScale<promising.StepScale && ProfileStore.ShapeKey(main.Setup,closer.Selected)!=ProfileStore.ShapeKey(main.Setup,promising.Selected),"promising direction gets a smaller nearby experiment instead of automatically reversing");var bad=promising.Trials.First(t=>t.Role=="Winner").Result;bad.Targets[0].Hit=false;Check(!promising.TimingTrend(),"a hit-rate tradeoff is not called a consistent promising timing gain");
+ var pausedQuick=CurveSearch.Quick(main,true,594,null,1);pausedQuick.Record(Result(pausedQuick,pausedQuick.Next,true));var resumedQuick=CurveSearch.NextRun(main,true,595,pausedQuick,1);Check(object.ReferenceEquals(pausedQuick,resumedQuick) && resumedQuick.Done==1,"one-button tuning resumes matching unfinished progress without replacing measured trials");var differentGoal=CurveSearch.NextRun(main,true,596,pausedQuick,2);Check(differentGoal.Id!=pausedQuick.Id && differentGoal.Done==0 && pausedQuick.Done==1,"one-button tuning starts a fresh goal without discarding previous measurements");while(pausedQuick.Next!=null){var t=pausedQuick.Next;pausedQuick.Record(Result(pausedQuick,t,t.Role=="Original"));}Check(CurveSearch.NextRun(main,true,597,pausedQuick,1).Id!=pausedQuick.Id,"one-button tuning advances to a new experiment after reviewing a completed run");
+-var quick=CurveSearch.Quick(main,true,611);Check(quick.QuickTune && !quick.FullSetup && quick.Trials.Count==4 && quick.Trials.Count(t=>t.Role=="Original")==2 && quick.Trials.Count(t=>t.Role=="Winner")==2,"quick tune plans four trials in two matched counterbalanced pairs");while(quick.Next!=null){var t=quick.Next;quick.Record(Result(quick,t,t.Role=="Winner"));}Check(quick.Confirmed && quick.Phase=="Ready" && quick.Done==4,"one prespecified quick candidate can finish with supported evidence in four trials");var adopted=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(main));adopted.Response=quick.Selected.Copy("adopted","search");var refined=CurveSearch.Quick(adopted,true,612,quick);Check(refined.QuickStep==quick.QuickStep && refined.StepScale<quick.StepScale && ProfileStore.ShapeKey(adopted.Setup,refined.Original.Response)==ProfileStore.ShapeKey(adopted.Setup,adopted.Response),"applying a supported winner refines the same direction around the adopted curve with a smaller step");var unadopted=CurveSearch.Quick(main,true,613,quick);Check(unadopted.StepScale==quick.StepScale && unadopted.QuickStep==quick.QuickStep+1,"unapplied candidates are not silently promoted or given a narrower radius");var rejected=CurveSearch.Quick(main,true,614);while(rejected.Next!=null){var t=rejected.Next;rejected.Record(Result(rejected,t,t.Role=="Original"));}var opposite=CurveSearch.Quick(main,true,615,rejected);Check(!rejected.Confirmed && opposite.QuickStep==rejected.QuickStep+1 && opposite.StepScale==rejected.StepScale,"an unsuccessful run tests the opposite direction next without changing saved settings");quick.Save();Check(CurveSearch.Latest(main,false).QuickTune && CurveSearch.Latest(main,false).Done==4,"quick mode and completed evidence persist and resume");var yHistory=CurveSearch.Quick(main,true,616);yHistory.Phase="Ready";yHistory.QuickStep=7;var yQuick=CurveSearch.Quick(main,true,617,yHistory);Check(yQuick.QuickStep==8 && yQuick.Selected.YRatio!=main.Response.YRatio && yQuick.Trials.Count==4,"adaptive rotation includes a separate exact Y comparison");Check(Storage.Json().Serialize(main)==original,"quick planning and adaptive refinement preserve the saved setup");
++var quick=CurveSearch.Quick(main,true,611);Check(quick.QuickTune && !quick.FullSetup && quick.Trials.Count==8 && quick.Trials.Count(t=>t.Role=="Original")==4 && quick.Trials.Count(t=>t.Role=="Winner")==4,"accuracy tune plans eight trials in four matched counterbalanced pairs");while(quick.Next!=null){var t=quick.Next;quick.Record(Result(quick,t,t.Role=="Winner"));}Check(quick.Confirmed && quick.Phase=="Ready" && quick.Done==8,"one prespecified quick candidate can finish with supported evidence in eight trials");var adopted=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(main));adopted.Response=quick.Selected.Copy("adopted","search");var refined=CurveSearch.Quick(adopted,true,612,quick);Check(refined.QuickStep==quick.QuickStep && refined.StepScale<quick.StepScale && ProfileStore.ShapeKey(adopted.Setup,refined.Original.Response)==ProfileStore.ShapeKey(adopted.Setup,adopted.Response),"applying a supported winner refines the same direction around the adopted curve with a smaller step");var unadopted=CurveSearch.Quick(main,true,613,quick);Check(unadopted.StepScale==quick.StepScale && unadopted.QuickStep==quick.QuickStep+1,"unapplied candidates are not silently promoted or given a narrower radius");var rejected=CurveSearch.Quick(main,true,614);while(rejected.Next!=null){var t=rejected.Next;rejected.Record(Result(rejected,t,t.Role=="Original"));}var opposite=CurveSearch.Quick(main,true,615,rejected);Check(!rejected.Confirmed && opposite.QuickStep==rejected.QuickStep+1 && opposite.StepScale==rejected.StepScale,"an unsuccessful run tests the opposite direction next without changing saved settings");quick.Save();Check(CurveSearch.Latest(main,false).QuickTune && CurveSearch.Latest(main,false).Done==8,"quick mode and completed evidence persist and resume");var yHistory=CurveSearch.Quick(main,true,616);yHistory.Phase="Ready";yHistory.QuickStep=7;var yQuick=CurveSearch.Quick(main,true,617,yHistory);Check(yQuick.QuickStep==8 && yQuick.Selected.YRatio!=main.Response.YRatio && yQuick.Trials.Count==8,"adaptive rotation includes a separate exact Y comparison");Check(Storage.Json().Serialize(main)==original,"quick planning and adaptive refinement preserve the saved setup");
+ var a=new CurveSearch(main,true,71);var b=new CurveSearch(main,true,71);var c=new CurveSearch(main,true,72);Check(a.Trials.Count==10,"exploration plans eight coordinate alternatives plus two references");Check(a.Trials.Select(t=>t.Curve.Id).SequenceEqual(b.Trials.Select(t=>t.Curve.Id)) && !a.Trials.Select(t=>t.Curve.Id).SequenceEqual(c.Trials.Select(t=>t.Curve.Id)),"seeded exploration is reproducible and shuffled across searches");Check(a.Trials.All(t=>CurveMath.Valid(t.Curve) && t.Curve.YRatio==main.Response.YRatio),"exploration curves are valid and hold Y fixed");Check(a.Trials.Select(t=>t.Curve.DesignReason).Any(x=>x.Contains("onset")) && a.Trials.Select(t=>t.Curve.DesignReason).Any(x=>x.Contains("transition")),"search explores onset and transition rather than only gain");
+ a.Save();Check(CurveSearch.Latest(main).Done==0,"new search can resume before the first trial");var next=a.Next;a.Record(Result(a,next,false));a.Save();Check(CurveSearch.Latest(main).Done==1,"completed trial resumes without repeating its measurement");Check(Storage.Json().Serialize(main)==original,"planning and recording do not mutate the original setup");
+-Complete(a,true);Check(a.Phase=="Ready" && a.Confirmed && a.Done==18,"all stages finish with independent confirmation after eighteen trials");var confirm=a.Trials.Where(t=>t.Phase=="Confirm").ToList();Check(confirm.All(t=>!a.Trials.Where(e=>e.Phase!="Confirm").Any(e=>e.Seed==t.Seed)) && confirm[0].Role!=confirm[2].Role && confirm[0].Seed==confirm[1].Seed && confirm[2].Seed==confirm[3].Seed,"confirmation uses fresh matched seeds and counterbalanced order");Check(a.ConfirmedDates.Count==1,"one session confirms at most one unique day");a.Retest();Complete(a,true);Check(a.ConfirmedDates.Count==1 && a.Confirmed,"same-day confirmation does not invent a second day");
++Complete(a,true);Check(a.Phase=="Ready" && a.Confirmed && a.Done==22,"all stages finish with independent confirmation after twenty-two trials");var confirm=a.Trials.Where(t=>t.Phase=="Confirm").ToList();Check(confirm.All(t=>!a.Trials.Where(e=>e.Phase!="Confirm").Any(e=>e.Seed==t.Seed)) && confirm[0].Role!=confirm[2].Role && confirm[0].Seed==confirm[1].Seed && confirm[2].Seed==confirm[3].Seed,"confirmation uses fresh matched seeds and counterbalanced order");Check(a.ConfirmedDates.Count==1,"one session confirms at most one unique day");a.Retest();Complete(a,true);Check(a.ConfirmedDates.Count==1 && a.Confirmed,"same-day confirmation does not invent a second day");
+ var fail=new CurveSearch(main,true,81);Complete(fail,false);Check(!fail.Confirmed && fail.Report.Contains("did not pass"),"an exploratory win cannot override failed holdout confirmation");var current=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(main));current.MainRevision++;current.Response=a.Selected;Check(a.Compatible(current),"another-day confirmation can resume after applying the selected winner");current.Response=main.Response.Copy("changed","search");current.Response.BaseGain*=1.2;Check(!a.Compatible(current),"unrelated profile changes block search resumption");
+ var small=new CurveSearch(main,true,71,.5);Check(Math.Abs(small.Trials.First(t=>t.Curve.Id=="search-0-low").Curve.Multiplier(0)/main.Response.Multiplier(0)-1)<Math.Abs(a.Trials.First(t=>t.Curve.Id=="search-0-low").Curve.Multiplier(0)/main.Response.Multiplier(0)-1),"refinement narrows the parameter search radius");
+ var lut=Storage.Json().Deserialize<SavedProfile>(Storage.Json().Serialize(main));lut.Response=new Candidate{Id="lut",CurveKind="lut",BaseGain=.85,Limit=1.5,Offset=3,YRatio=1,Points=new List<CurvePoint>{new CurvePoint(.0001,.0001),new CurvePoint(3,3),new CurvePoint(10,13),new CurvePoint(20,30),new CurvePoint(40,60)}};Check(CurveSearch.Alternatives(lut).Count==8 && CurveSearch.Alternatives(lut).All(x=>CurveMath.Valid(x)),"LUT coordinate variants preserve valid ordered points");
+@@ -20,12 +21,12 @@ var noHits=new CurveSearch(main,true,91);var miss=Result(noHits,noHits.Next,fals
+ var driver=CurveSearch.DriverSession(main,a.Trials[1]);var writes=new List<bool>();new LiveDriverRound(driver,delegate(SavedProfile profile,bool record){writes.Add(record);return Task.FromResult(0);},delegate{}).Run(driver.Candidates.Single(x=>x.Id=="search-trial"),delegate{}).GetAwaiter().GetResult();Check(writes.SequenceEqual(new[]{false,true}),"full curve trial applies one curve and restores the saved reference through the existing writer");
+ var frozen=Storage.Json().Deserialize<Setup>(Storage.Json().Serialize(main.Setup));frozen.HorizontalFov=90;frozen.TargetFps=144;var frozenSession=CurveSearch.DriverSession(main,a.Trials[1],frozen);Check(frozenSession.Setup.HorizontalFov==90 && frozenSession.Setup.TargetFps==144 && main.Setup.HorizontalFov!=90,"search trial uses frozen view settings without mutating the saved setup");
+ var single=new CoachingRun(main){SingleBatch=true,Reference=a.Trials[1].Curve};var installed=single.Next();var transformed=CoachingRun.Transform(new Setup{LiveDriverTest=true},single.Reference,installed,17,-9,20);single.Add(installed,Result(a,a.Trials[1],true).Targets);Check(single.Complete && single.Segments.Count==1 && transformed[0]==17 && transformed[1]==-9,"search arena records a single batch without stacking a simulated curve");
+-var full=new CurveSearch(main,true,101,1,true);Check(full.Phase=="Sensitivity" && full.Trials.Count==6 && full.Trials.All(t=>!t.Curve.IsCurve && t.Curve.YRatio==main.Response.YRatio),"full setup begins with six constant-response sensitivity trials holding Y fixed");var baseWinner=full.Trials.First(t=>t.Role=="Candidate").Curve;while(full.Phase=="Sensitivity"){var t=full.Next;full.Record(Result(full,t,ProfileStore.ShapeKey(main.Setup,t.Curve)==ProfileStore.ShapeKey(main.Setup,baseWinner)));}Check(full.Phase=="Explore" && Math.Abs(full.CurveAnchor.Response.Multiplier(0)-baseWinner.BaseGain)<1e-9 && full.Original.Response.BaseGain==main.Response.BaseGain,"supported sensitivity feeds the curve stage without overwriting the original");string curveWinner=ProfileStore.ShapeKey(main.Setup,full.Trials.First(t=>t.Phase=="Explore" && t.Role=="Candidate").Curve);string yWinner=null;while(full.Next!=null){var t=full.Next;if(t.Phase=="Vertical" && yWinner==null)yWinner=ProfileStore.ShapeKey(main.Setup,full.Trials.First(row=>row.Phase=="Vertical" && row.Role=="Candidate").Curve);bool good=t.Phase=="Explore"?ProfileStore.ShapeKey(main.Setup,t.Curve)==curveWinner:t.Phase=="Vertical"?ProfileStore.ShapeKey(main.Setup,t.Curve)==yWinner:t.Role=="Winner";full.Record(Result(full,t,good));}Check(full.Phase=="Ready" && full.Confirmed && full.Done==24 && full.Selected.YRatio!=main.Response.YRatio,"full sensitivity curve and Y pass advances automatically into independent confirmation");full.Save();Check(CurveSearch.Latest(main,true).FullSetup && !CurveSearch.Latest(main,false).FullSetup,"full setup and curve-only searches resume independently");
++var full=new CurveSearch(main,true,101,1,true);Check(full.Phase=="Sensitivity" && full.Trials.Count==6 && full.Trials.All(t=>!t.Curve.IsCurve && t.Curve.YRatio==main.Response.YRatio),"full setup begins with six constant-response sensitivity trials holding Y fixed");var baseWinner=full.Trials.First(t=>t.Role=="Candidate").Curve;while(full.Phase=="Sensitivity"){var t=full.Next;full.Record(Result(full,t,ProfileStore.ShapeKey(main.Setup,t.Curve)==ProfileStore.ShapeKey(main.Setup,baseWinner)));}Check(full.Phase=="Explore" && Math.Abs(full.CurveAnchor.Response.Multiplier(0)-baseWinner.BaseGain)<1e-9 && full.Original.Response.BaseGain==main.Response.BaseGain,"supported sensitivity feeds the curve stage without overwriting the original");string curveWinner=ProfileStore.ShapeKey(main.Setup,full.Trials.First(t=>t.Phase=="Explore" && t.Role=="Candidate").Curve);string yWinner=null;while(full.Next!=null){var t=full.Next;if(t.Phase=="Vertical" && yWinner==null)yWinner=ProfileStore.ShapeKey(main.Setup,full.Trials.First(row=>row.Phase=="Vertical" && row.Role=="Candidate").Curve);bool good=t.Phase=="Explore"?ProfileStore.ShapeKey(main.Setup,t.Curve)==curveWinner:t.Phase=="Vertical"?ProfileStore.ShapeKey(main.Setup,t.Curve)==yWinner:t.Role=="Winner";full.Record(Result(full,t,good));}Check(full.Phase=="Ready" && full.Confirmed && full.Done==28 && full.Selected.YRatio!=main.Response.YRatio,"full sensitivity curve and Y pass advances automatically into independent confirmation");full.Save();Check(CurveSearch.Latest(main,true).FullSetup && !CurveSearch.Latest(main,false).FullSetup,"full setup and curve-only searches resume independently");
+ a.Save();using(var form=new MainForm()){var flags=BindingFlags.NonPublic|BindingFlags.Instance;form.Show();typeof(MainForm).GetMethod("ShowCurveSearch",flags).Invoke(form,null);Application.DoEvents();foreach(int width in new[]{1100,1460}){form.ClientSize=new Size(width,760);form.PerformLayout();Application.DoEvents();var buttons=(FlowLayoutPanel)typeof(MainForm).GetField("workflowButtons",flags).GetValue(form);Check(buttons.Controls.OfType<Button>().Count(x=>x.BackColor==Theme.Accent)==1 && buttons.Controls.Cast<Control>().All(x=>x.Bottom<=buttons.Height),"search result keeps one primary action and reachable buttons at width "+width);}using(var image=new Bitmap(form.Width,form.Height)){form.DrawToBitmap(image,new Rectangle(0,0,image.Width,image.Height));image.Save(Path.Combine(Storage.Root,"curve-search-result-synthetic.png"));}var applied=MainProfile.Update(main,a.Selected,"Fixture update only / no driver application");typeof(MainForm).GetMethod("ShowCurveSearch",flags).Invoke(form,null);Application.DoEvents();var footer=(FlowLayoutPanel)typeof(MainForm).GetField("workflowButtons",flags).GetValue(form);Check(footer.Controls.OfType<Button>().Any(x=>x.Text=="Restore original setup"),"applied winner keeps a direct original-setup restore action");form.ClientSize=new Size(1100,760);form.PerformLayout();Application.DoEvents();Check(footer.Controls.Cast<Control>().All(x=>x.Bottom<=footer.Height),"applied-winner actions wrap inside the footer at minimum width");form.Close();}
+-var repeatDay=CurveSearch.Quick(main,true,700);repeatDay.Phase="Ready";repeatDay.Confirmed=true;repeatDay.ConfirmedDates.Add(DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"));var nextDay=CurveSearch.NextRun(main,true,701,repeatDay,0);Check(object.ReferenceEquals(repeatDay,nextDay) && !nextDay.Confirmed && nextDay.Phase=="Confirm" && nextDay.ConfirmedDates.Count==1,"next day retests the same candidate without silently advancing or counting another confirmation");
+-var telemetry=CurveSearch.Quick(main,true,702);while(telemetry.Next!=null){var t=telemetry.Next;var r=Result(telemetry,t,t.Role=="Winner");r.Protocol=2;r.Frames=new FrameHealth();for(int i=0;i<1441;i++)r.Frames.Observe(i/240.0,240);foreach(var row in r.Targets){row.MotionProtocol=2;row.FirstStopMeasured=true;row.FirstStopErrorDegrees=1;row.DirectDegrees=10;row.FirstStopSeconds=.15;row.CorrectionSeconds=.1;row.TargetWidthDegrees=1;}telemetry.Record(r);}Check(telemetry.Confirmed && telemetry.EvidenceSummary().Contains("correcting") && telemetry.EvidenceSummary().Contains("difficulty rate"),"new comparison reports measured stopping and nominal difficulty alongside timing");var targeted=telemetry.MovementCandidate(main);Check(targeted!=null && targeted.Multiplier(0)<main.Response.Multiplier(0) && Math.Abs(targeted.Multiplier(100000)-main.Response.Multiplier(100000))<.0001 && targeted.YRatio==main.Response.YRatio,"consistent micro overshoot changes slow response while preserving fast response and Y");var privateFacts=LocalCoach.SearchFacts(main,telemetry);Check(!privateFacts.Contains(main.Id) && !privateFacts.Contains(main.Name) && !privateFacts.Contains(setup.RawAccelPath),"local search facts exclude profile identities and file paths");telemetry.Trials.First(t=>t.Role=="Original").Result.Frames.LongestMs=1000;Check(telemetry.MovementCandidate(main)==null,"unreliable frame timing cannot guide the next movement candidate");
++var repeatDay=CurveSearch.Quick(main,true,700);while(repeatDay.Next!=null){var t=repeatDay.Next;repeatDay.Record(Result(repeatDay,t,t.Role=="Winner"));}foreach(var t in repeatDay.Trials)t.At=DateTime.Now.AddDays(-1).ToString("o");repeatDay.ConfirmedDates=repeatDay.ValidConfirmationDays;var nextDay=CurveSearch.NextRun(main,true,701,repeatDay,0);Check(object.ReferenceEquals(repeatDay,nextDay) && !nextDay.Confirmed && nextDay.Phase=="Confirm" && nextDay.ConfirmedDates.Count==1,"next day retests the same candidate without silently advancing or counting another confirmation");
++var telemetry=CurveSearch.Quick(main,true,702);while(telemetry.Next!=null){var t=telemetry.Next;var r=Result(telemetry,t,t.Role=="Winner");r.Protocol=2;r.Frames=new FrameHealth{Input=AccurateFrames().Input};for(int i=0;i<1441;i++)r.Frames.Observe(i/240.0,240);foreach(var row in r.Targets){row.MotionProtocol=2;row.FirstStopMeasured=true;row.FirstStopErrorDegrees=1;row.DirectDegrees=10;row.FirstStopSeconds=.15;row.CorrectionSeconds=.1;row.TargetWidthDegrees=1;}telemetry.Record(r);}Check(telemetry.Confirmed && telemetry.EvidenceSummary().Contains("correcting") && telemetry.EvidenceSummary().Contains("difficulty rate"),"new comparison reports measured stopping and nominal difficulty alongside timing");var targeted=telemetry.MovementCandidate(main);Check(targeted!=null && targeted.Multiplier(0)<main.Response.Multiplier(0) && Math.Abs(targeted.Multiplier(100000)-main.Response.Multiplier(100000))<.0001 && targeted.YRatio==main.Response.YRatio,"consistent micro overshoot changes slow response while preserving fast response and Y");var privateFacts=LocalCoach.SearchFacts(main,telemetry);Check(!privateFacts.Contains(main.Id) && !privateFacts.Contains(main.Name) && !privateFacts.Contains(setup.RawAccelPath),"local search facts exclude profile identities and file paths");telemetry.Trials.First(t=>t.Role=="Original").Result.Frames.LongestMs=1000;Check(telemetry.MovementCandidate(main)==null,"unreliable frame timing cannot guide the next movement candidate");
+ var oldProtocol=CurveSearch.Quick(main,true,703);oldProtocol.MeasurementProtocol=0;Check(CurveSearch.NextRun(main,true,704,oldProtocol,0).Id!=oldProtocol.Id,"new practice protocol starts fresh instead of mixing with historical unfinished tests");
+-var flickSearch=CurveSearch.Quick(main,true,810,null,3);Check(flickSearch.Trials.Count==4 && flickSearch.QuickGoal==3 && Math.Abs(flickSearch.Selected.Multiplier(0)-main.Response.Multiplier(0))<1e-9 && flickSearch.Selected.Multiplier(10000)>main.Response.Multiplier(10000),"fast-flick search strengthens high-speed response without raising micros");
++var flickSearch=CurveSearch.Quick(main,true,810,null,3);Check(flickSearch.Trials.Count==8 && flickSearch.QuickGoal==3 && Math.Abs(flickSearch.Selected.Multiplier(0)-main.Response.Multiplier(0))<1e-9 && flickSearch.Selected.Multiplier(10000)>main.Response.Multiplier(10000),"fast-flick search strengthens high-speed response without raising micros");
+ var flickResponse=Result(flickSearch,flickSearch.Next,false);var fasterFlick=Result(flickSearch,flickSearch.Next,false);foreach(var r in fasterFlick.Targets.Where(t=>t.Task=="stop"))r.Seconds=.4;Check(fasterFlick.Score>flickResponse.Score,"successful flick acquisition has explicit priority");double peakScore=fasterFlick.Score;foreach(var r in fasterFlick.Targets)r.PeakSpeed=100000;Check(fasterFlick.Score==peakScore,"peak packet velocity alone earns no score");
+ for(int step=0;step<4;step++){var fc=CurveSearch.FastFlickCandidate(main,step,1);Check(CurveMath.Valid(fc) && fc.CurveKind!="classic" && fc.YRatio==main.Response.YRatio,"fast-flick experiment remains bounded and keeps Y for phase "+step);}
+ while(flickSearch.Next!=null){var t=flickSearch.Next;flickSearch.Record(Result(flickSearch,t,t.Role=="Winner"));}Check(flickSearch.Confirmed && flickSearch.ActionableResult().Contains("Flick time:") && flickSearch.ActionableResult().Contains("Micro time:"),"flick-weighted comparison confirms a clear win and explains both task outcomes");var mismatched=Result(CurveSearch.Quick(main,true,811,null,3),flickSearch.Trials[0],true);mismatched.FastFlickFocus=false;Check(CoachingRun.ChangeReason(mismatched,fasterFlick,fasterFlick,"").Contains("priorities differ"),"old and new flick objectives cannot be pooled");
+@@ -66,3 +67,4 @@ return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
+ 
+ 
+ 
++
+diff --git a/src/DriverParityChecks.cs b/src/DriverParityChecks.cs
+new file mode 100644
+index 0000000..8bf203a
+--- /dev/null
++++ b/src/DriverParityChecks.cs
+@@ -0,0 +1,42 @@
++using System;
++using System.IO;
++using System.Linq;
++using System.Collections.Generic;
++using SensitivityFinder;
++// Read-only official calculator. No Activate/GetActive/writer calls.
++static class DriverParityChecks {
++    static int checks;
++    static void Compare(Candidate c,string template) {
++        var config=DriverConfig.Convert(Storage.Json().Serialize(Storage.ProfileJson(template,c)));
++        if(config.Item2!=null)throw new Exception("Official calculator rejected the export: "+config.Item2);
++        try {
++            foreach(var xy in new[]{new[]{1000,0},new[]{0,1000},new[]{600,800},new[]{-600,800},new[]{600,-800},new[]{-600,-800}})
++            foreach(double speed in new[]{.001,.01,.1,1,2.999,3,3.001,5,12,24,48,100,500,1000}) {
++                var actual=config.Item1.accels[0].Accelerate(xy[0],xy[1],1,1000/speed);
++                var expected=c.Transform(xy[0],xy[1],speed);
++                double tolerance=1e-6*Math.Max(1,Math.Max(Math.Abs(expected[0]),Math.Abs(expected[1])));
++                if(Math.Abs(actual.Item1-expected[0])>tolerance || Math.Abs(actual.Item2-expected[1])>tolerance)throw new Exception("Calculator mismatch: "+c.CurveKind+" / speed "+speed+" / Y "+c.YRatio);
++                checks++;
++            }
++        } finally {foreach(var accel in config.Item1.accels)accel.Dispose();}
++    }
++    static int Main(string[] args){try{
++        string installed=System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"rawaccel.exe")).FileVersion;
++        if(installed!="1.6.1")throw new Exception("Only installed Raw Accel 1.6.1 is validated; found "+installed);
++        string template=File.ReadAllText(args[0]);
++        foreach(string mode in new[]{"constant","natural","classic","lut"})foreach(double y in new[]{.5,1,1.5,2}) {
++            var c=new Candidate{Id="synthetic",Stage="parity",CurveKind=mode=="constant"?"natural":mode,BaseGain=.8,YRatio=y,Limit=mode=="constant"?1:1.5,Offset=3,Decay=.04,Acceleration=.02};
++            if(mode=="lut")c.Points=new List<CurvePoint>{new CurvePoint(.0001,.0001),new CurvePoint(3,3),new CurvePoint(12,15),new CurvePoint(24,36),new CurvePoint(48,72)};
++            Compare(c,template);
++            foreach(int dpi in new[]{800,1600,3200}) {
++                var derived=DpiMatching.Rescale(c,2000,dpi,MathUtil.Cm360(2000,.45,.022,c.BaseGain),.45,.022);
++                Compare(derived,template);
++                foreach(double speed in new[]{.01,1,3,12,48,200}) {
++                    double before=c.Multiplier(speed)/c.BaseGain,after=derived.Multiplier(speed*dpi/2000)/derived.BaseGain;
++                    if(Math.Abs(before-after)>1e-5*Math.Max(1,before))throw new Exception("DPI transfer changed physical-speed shape");checks++;
++                }
++            }
++        }
++        Console.WriteLine("PASS "+checks+" official 1.6.1 calculator / direction / Y / DPI comparisons. Synthetic only. Live driver behavior NOT RUN; no driver writes.");return 0;
++    }catch(Exception e){Console.Error.WriteLine(e);return 1;}}
++}
+diff --git a/src/LocalCoach.cs b/src/LocalCoach.cs
+index c8498af..6a91605 100644
+--- a/src/LocalCoach.cs
++++ b/src/LocalCoach.cs
+@@ -13,10 +13,10 @@ namespace SensitivityFinder {
+         static double? FiniteTime(IEnumerable<TargetResult> rows){double time=CoachSegment.CostPerHit(rows);return MathUtil.Finite(time)?(double?)time:null;}
+         public static string SearchFacts(SavedProfile p,CurveSearch search){
+             if(search==null || !search.Compatible(p))throw new ArgumentException("No matching curve-search evidence is available.");
+-            return Storage.Json().Serialize(new {Protocol=search.MeasurementProtocol,Stage=search.Phase,CompletedTrials=search.Done,Confirmed=search.Confirmed,ConfirmedDays=search.ConfirmedDates.Count,PromisingTiming=search.TimingTrend(),FastFlickFocus=search.QuickGoal==3,ActionableResult=search.ActionableResult(),PracticalChecks=search.CurrentCheck==null?"Not measured":search.CurrentCheck.Summary(),ReadyToAdopt=search.ReadyToAdopt,AcrossDays=search.AcrossDays(),SpeedFocus=search.SpeedFocus,SlowCm=p.SlowCm,Y=p.Response.YRatio,
++            return Storage.Json().Serialize(new {Protocol=search.MeasurementProtocol,AccuracyProtocol=search.AccuracyProtocol,ConfirmationPairs=search.ConfirmationPairs,ReliableDefault=search.ReliableDefault,Stage=search.Phase,CompletedTrials=search.Done,Confirmed=search.Confirmed,ConfirmedDays=search.ConfirmedDates.Count,PromisingTiming=search.TimingTrend(),FastFlickFocus=search.QuickGoal==3,ActionableResult=search.ActionableResult(),PracticalChecks=search.CurrentCheck==null?"Not measured":search.CurrentCheck.Summary(),ReadyToAdopt=search.ReadyToAdopt,AcrossDays=search.AcrossDays(),SpeedFocus=search.SpeedFocus,SlowCm=p.SlowCm,Y=p.Response.YRatio,
+                 CandidateSlowCm=search.Original.Setup.BaselineCm/search.Selected.Multiplier(0),CandidateY=search.Selected.YRatio,
+                 Trials=search.Trials.Where(t=>t.Result!=null).Select(t=>new {Role=t.Role,Score=t.Result.Score,HitPercent=t.Result.Accuracy,TimePerHit=MathUtil.Finite(t.Result.EffectiveHitSeconds)?(double?)t.Result.EffectiveHitSeconds:null,FirstStop=t.Result.TravelSeconds,Correcting=t.Result.CorrectionSeconds,FlickTime=FiniteTime(t.Result.Targets.Where(x=>x.Task=="stop")),MicroTime=FiniteTime(t.Result.Targets.Where(x=>x.Task=="micro")),DifficultyRate=t.Result.DifficultyRate,Corrections=t.Result.Targets.Average(r=>r.Corrections),FrameQuality=t.Result.Protocol<2?"unknown":t.Result.MeasurementUsable?"usable":"unstable",Targets=t.Result.Targets.Count}).ToArray(),
+-                Rules="Only application confirmation can support adoption. No change during practice scoring. Two paired comparisons do not prove an optimum. First-stop includes reaction time. Difficulty rate is nominal, not ISO throughput. Historical missing metrics are unknown. No tracking or game-comfort measurement. Explain, never generate driver parameters."});
++                Rules="Only application confirmation can support adoption. No change during practice scoring. Matched comparisons of one frozen candidate do not prove an optimum. First-stop includes reaction time. Difficulty rate is nominal, not ISO throughput. Historical missing metrics are unknown. No tracking or game-comfort measurement. Explain, never generate driver parameters."});
+         }
+         public static string ParseExplanation(string json){var d=Storage.Json().Deserialize<Dictionary<string,object>>(json);var pieces=new List<string>();foreach(string key in new[]{"Explanation","NextStep","Limitations"}){if(!d.ContainsKey(key) || !(d[key] is string) || string.IsNullOrWhiteSpace((string)d[key]) || ((string)d[key]).Length>800)throw new ArgumentException("The local model returned an incomplete explanation. Your measured result is unchanged.");pieces.Add(key+": "+(string)d[key]);}return string.Join("\r\n\r\n",pieces);}
+         public static string CheckedExplanation(string json,CurveSearch search){
+diff --git a/src/MeasurementEvidence.cs b/src/MeasurementEvidence.cs
+index 8330c18..67e68bc 100644
+--- a/src/MeasurementEvidence.cs
++++ b/src/MeasurementEvidence.cs
+@@ -14,6 +14,7 @@ namespace SensitivityFinder {
+             var fps=blocks.GroupBy(b=>b.CandidateId).Where(g=>g.All(b=>b.Result.AverageRenderFps>0 && MathUtil.Finite(b.Result.AverageRenderFps))).Select(g=>g.Average(b=>b.Result.AverageRenderFps)).ToList();
+             if(fps.Count==ids.Count && fps.Count>1 && fps.Max()/fps.Min()>1.20)q.Warnings.Add("Average frame rate differed by more than 20% between settings. Repeat under consistent load.");
+             if(blocks.Select(b=>b.Result.MonitorHz).Where(v=>v>0).Distinct().Count()>1 || blocks.Select(b=>b.Result.GraphicsDevice).Where(v=>!string.IsNullOrEmpty(v)).Distinct().Count()>1)q.Warnings.Add("The recorded screen refresh rate or graphics device changed between rounds.");
++            foreach(var b in blocks.Where(b=>b.Result.AccuracyVersion>=1)){var r=b.Result;if(r.InputTiming==null || !r.InputTiming.Usable)q.Warnings.Add("Arrival timing is sparse, nonmonotonic or heavily batched. This round cannot support an accuracy-protocol recommendation.");if(r.FrameTiming==null || !r.FrameTiming.Reliable)q.Warnings.Add("Frame tails or stalls did not clear the timing guard.");}
+             return q;
+         }
+     }
+@@ -48,6 +49,7 @@ namespace SensitivityFinder {
+             var quality=MeasurementQuality.Read(s,stage);
+             text+="\r\n"+(quality.TimingRecorded?"Packet and frame timing recorded.":"Timing is missing from some rounds; input quality cannot be fully checked.");
+             foreach(var warning in quality.Warnings)text+="\r\nCheck: "+warning;
++            foreach(var b in s.Blocks.Where(b=>b.Done && b.Result!=null && ids.Contains(b.CandidateId) && b.Result.AccuracyVersion>=1)){if(b.Result.InputTiming!=null)text+="\r\n"+b.Result.InputTiming.Summary;if(b.Result.FrameTiming!=null)text+="\r\n"+b.Result.FrameTiming.Summary;}
+             if(quality.TimingRecorded && quality.Warnings.Count==0)text+=" No timing warning was triggered; this does not validate sensor accuracy.";
+             return text+(s.Setup.LiveDriverTest?"\r\nInput mode: real Raw Accel / pass-through. Speed samples are driver output, not physical mouse speed; no physical thresholds were fitted.":"\r\nInput mode: neutral driver / simulated candidates.")+"\r\nKeep the same DPI, field of view and input mode. Confirm the feel in your game and on another day. A short test cannot prove a perfect sensitivity.";
+         }
+diff --git a/src/Model.cs b/src/Model.cs
+index eac7c8f..6a7f141 100644
+--- a/src/Model.cs
++++ b/src/Model.cs
+@@ -113,6 +113,8 @@ namespace SensitivityFinder {
+         public List<AimSample> Trajectory = new List<AimSample>();
+         public int ExpectedTargets = 8;
+         public double RequiredTrackSeconds = 12;
++        public int AccuracyVersion;
++        public InputTimingEvidence InputTiming;public FrameHealth FrameTiming=new FrameHealth();
+         public int PacketTimingSamples, TimingClamps;
+         public double PacketIntervalMs;
+         public string Renderer = "Legacy canvas", GraphicsDevice = "";
+diff --git a/src/PracticalCheckForms.cs b/src/PracticalCheckForms.cs
+index 81bbc4f..aba6d59 100644
+--- a/src/PracticalCheckForms.cs
++++ b/src/PracticalCheckForms.cs
+@@ -14,7 +14,7 @@ namespace SensitivityFinder {
+  }
+  sealed class LandingPlot:Control {
+   readonly List<TargetResult> saved,candidate;
+-  public LandingPlot(CurveSearch search){DoubleBuffered=true;Height=290;Dock=DockStyle.Top;AccessibleName="First-stop landing plot: horizontal overshoot and perpendicular scatter";var rows=search.Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(4).ToList();saved=rows.Where(t=>t.Role=="Original" && t.Result!=null).SelectMany(t=>t.Result.Targets).Where(t=>t.Task=="stop" && t.FirstStopMeasured).ToList();candidate=rows.Where(t=>t.Role=="Winner" && t.Result!=null).SelectMany(t=>t.Result.Targets).Where(t=>t.Task=="stop" && t.FirstStopMeasured).ToList();}
++  public LandingPlot(CurveSearch search){DoubleBuffered=true;Height=290;Dock=DockStyle.Top;AccessibleName="First-stop landing plot: horizontal overshoot and perpendicular scatter";var rows=search.Trials.Where(t=>t.Phase=="Confirm").Reverse().Take(search.ConfirmationTrialCount).ToList();saved=rows.Where(t=>t.Role=="Original" && t.Result!=null).SelectMany(t=>t.Result.Targets).Where(t=>t.Task=="stop" && t.FirstStopMeasured).ToList();candidate=rows.Where(t=>t.Role=="Winner" && t.Result!=null).SelectMany(t=>t.Result.Targets).Where(t=>t.Task=="stop" && t.FirstStopMeasured).ToList();}
+   protected override void OnPaint(PaintEventArgs e){base.OnPaint(e);var g=e.Graphics;g.Clear(Theme.Panel);float cx=Width/2f,cy=105;var all=saved.Concat(candidate).Where(t=>MathUtil.Finite(t.FirstStopErrorDegrees)).ToList();double range=Math.Max(1,all.Select(t=>Math.Max(Math.Abs(t.FirstStopErrorDegrees),t.FirstStopScatterMeasured?Math.Abs(t.FirstStopSideErrorDegrees):0)).DefaultIfEmpty(1).Max());float scale=(float)(Math.Min(Math.Max(50,Width/2-25),80)/range);using(var pen=new Pen(Theme.Line)){g.DrawLine(pen,20,cy,Width-20,cy);g.DrawLine(pen,cx,20,cx,190);}foreach(var group in new[]{saved,candidate})using(var brush=new SolidBrush(group==saved?Theme.Muted:Theme.Accent))foreach(var t in group.Where(t=>t.FirstStopScatterMeasured && MathUtil.Finite(t.FirstStopSideErrorDegrees) && MathUtil.Finite(t.FirstStopErrorDegrees))){float x=cx+(float)t.FirstStopErrorDegrees*scale,y=cy-(float)t.FirstStopSideErrorDegrees*scale;g.FillEllipse(brush,x-3,y-3,6,6);}using(var font=Theme.BodyFont(10))using(var brush=new SolidBrush(Theme.Muted)){g.DrawString("Undershoot  ←  first stop  →  Overshoot / degrees\nGray: saved / Mint: candidate. Side error on vertical axis.\n"+(all.Any(t=>t.FirstStopScatterMeasured)?"Range ±"+range.ToString("0.0")+" deg. Scatter is descriptive; tasks vary in distance and direction.":"Earlier runs lack side-error data. Run a new comparison for the plot."),font,brush,new RectangleF(12,193,Math.Max(20,Width-24),95));}}
+  }
+  public sealed partial class MainForm {
+diff --git a/src/StudioShell.cs b/src/StudioShell.cs
+index 97276e1..b5d5b15 100644
+--- a/src/StudioShell.cs
++++ b/src/StudioShell.cs
+@@ -106,7 +106,7 @@ namespace SensitivityFinder {
+             var player=PlayerProfile.Link(main);StudioPage(0,player.DisplayName=="Your player profile"?"Your aim studio":player.DisplayName,"Test and refine one saved sensitivity setup.");
+             studioNavigation[1].Visible=studioNavigation[3].Visible=studioNavigation[4].Visible=false;
+             var latest=CoachingRun.Latest(main);bool pending=latest!=null && !latest.Dismissed && ProfileStore.ShapeKey(main.Setup,latest.Proposal)!=ProfileStore.ShapeKey(main.Setup,main.Response);
+-            Add(TextCard("","Quick tune / four trials","Compare one small adjustment in about two and a half minutes, including practice. Apply a supported winner, then tune again with a smaller step. If it does not help, the next run tries another direction or parameter. Full setup remains available for a broad search.",128));
++            Add(TextCard("","Accuracy tune / eight trials","Compare one small adjustment in about five minutes, including practice. Apply a supported winner, then tune again with a smaller step. If it does not help, the next run tries another direction or parameter. Full setup remains available for a broad search.",128));
+             Add(new Panel{Height=12,BackColor=Theme.Bg});var response=Theme.Card(300);response.Padding=new Padding(22,16,22,16);var chart=new CurvePicture(new[]{main.Response},main.Setup.Dpi,Math.Max(30,main.Response.Offset*10),main.Setup.BaselineCm){Dock=DockStyle.Top,Height=190};
+             Theme.AddStack(response,Theme.Label("Your saved setup / revision "+main.MainRevision,18,Theme.Text,44),Theme.Label(main.Setup.Mouse+" / "+main.Setup.Dpi+" DPI / "+main.Setup.Pad,11,Theme.Muted,34),chart);Add(response);
+             Add(new Panel{Height=10,BackColor=Theme.Bg});Add(Columns(104,Metric("Small-movement sensitivity",main.SlowCm.ToString("0.00")+" cm/360","Horizontal cm per full turn"),Metric("Fast-movement sensitivity",main.Response.CurveKind=="classic"?"Uncapped":(main.Setup.BaselineCm/main.Response.Multiplier(100000)).ToString("0.00")+" cm/360","Your acceleration curve"),Metric("Vertical multiplier","Y "+main.Response.YRatio.ToString("0.0000"),"Y 1.0000 = equal horizontal / vertical")));
+@@ -114,7 +114,7 @@ namespace SensitivityFinder {
+             Add(Theme.Label(recorded==null?"Saved here / no application recorded. Live driver state is unknown.":(matches?"Saved setup matches Drift's last application.":"Saved setup differs from Drift's last application.")+" Last applied: "+recorded.SlowCm.ToString("0.00")+" cm/360 / Y "+recorded.Response.YRatio.ToString("0.0000")+"\r\nThis is a saved record, not live driver detection. Tuning loads the saved curve and restores it on exit.",11,matches?Theme.Muted:Theme.Amber,72));
+             Add(Theme.Label("3 / Try it in game. Keep the change only if micros, flicks and vertical aim feel better. Return here to refine the same profile; Settings → Saved setups → Restore an earlier setup restores older versions.",11,Theme.Muted,62));
+             var settings=Theme.Button("Settings",delegate{OpenMainActions(main);},false);((RoundedButton)settings).DropArrow=true;
+-            SetPageActions((player.PreferSpeed?"Speed focused":"Balanced")+" / quick tune: four trials / saved progress between trials",Theme.Button("Tune my curve",async delegate{await TuneMyCurve();},true),Theme.Button("Full setup",delegate{ShowFullSetup();},false),settings);
++            SetPageActions((player.PreferSpeed?"Speed focused":"Balanced")+" / quick tune: eight trials / saved progress between trials",Theme.Button("Tune my curve",async delegate{await TuneMyCurve();},true),Theme.Button("Full setup",delegate{ShowFullSetup();},false),settings);
+         }
+         void ResumeRecent(Session recent) {session=Storage.Load(Path.Combine(Storage.Root,"sessions",recent.Id+".json"));session.Setup.CleanInputConfirmed=false;draft=Clone(session.Setup);resultStage="";ShowTrials();}
+         void ShowOverview() {
+@@ -173,6 +173,7 @@ namespace SensitivityFinder {
+         }
+         void ShowTools() {
+             StudioPage(4,"The right settings, in any game.","Convert horizontal turn distance, fill integer sensitivity gaps, or open Raw Accel.");
++            Add(AlignedCard("Accuracy tools","Measure effective CPI separately from configured DPI, and record a neutral in-game turn-distance check. Results stay local and never change driver or mouse settings.",null,Theme.Button("Measure physical sensitivity",delegate{using(var f=new CalibrationForm(Clone(draft)))f.ShowDialog(this);},false)));
+             var converter=TextCard("Converter","Keep your turn distance","Translate cm/360 between CS2, VALORANT and Overwatch. Changes stay in the plan until you set them.",154);
+             Add(converter);Add(Actions(Theme.Button("Open sensitivity converter",delegate{using(var f=new ConverterForm(Clone(draft)))if(f.ShowDialog(this)==DialogResult.OK){draft.UseDistance(f.ResultCm,draft.Dpi);ShowSetup();}},true)));
+             var suggested=ProfileAdvice.Choose(ProfileStore.All(false),draft);var fitGame=Theme.Button("Fit saved profile to Destiny 2",delegate{if(suggested==null)return;using(var f=new DestinyProfileForm(suggested)){f.ShowDialog(this);if(f.Saved!=null)OpenProfiles(f.Saved.Id);}},false);fitGame.Enabled=suggested!=null && !suggested.IsGameTransfer;
+@@ -209,7 +210,7 @@ namespace SensitivityFinder {
+             StudioPage(6,"Start with a reference. Change one thing.","Drift runs locally on Windows. Saved values and tested evidence stay separate.");
+             Add(TextCard("Run Drift","Open the app folder","Run SensitivityFinder.exe or your Drift desktop shortcut. Keep assets beside the executable. The Atlas-style build is SensitivityFinder-Atlas.exe while you review the update.",154));
+             Add(TextCard("Before a comparison","Check Mouse setup","Confirm your physical mouse DPI, game and baseline turn distance. Saved defaults are not hardware detection. Keep the mouse, DPI, game value and physical setup consistent.",154));
+-            Add(TextCard("1 / Test","Home > Tune my curve","Follow the live-input checklist. Keep Raw Accel enabled and close its settings editor. The quick workflow compares one candidate with the saved response in four blocks, including countdown and practice. The reference is restored between trials.",174));
++            Add(TextCard("1 / Test","Home > Tune my curve","Follow the live-input checklist. Keep Raw Accel enabled and close its settings editor. The quick workflow compares one candidate with the saved response in eight blocks for new searches, including countdown and practice. The reference is restored between trials.",174));
+             Add(TextCard("2 / Review","Read the evidence before applying","Review hits, time and control. A candidate is not a universal perfect sensitivity. Complete the offered tracking and comfort checks, repeat on another day where appropriate, and check it in game.",174));
+             Add(TextCard("3 / Choose","Apply deliberately or keep your reference","Save/apply actions remain explicit. Keep saved setup dismisses a proposal; closing a review does not establish a winner. Use history and restore controls when returning to an earlier revision.",154));
+             Add(TextCard("Atlas bridge","Preview a saved response in Atlas","Atlas's Drift curves workspace accepts a Drift SavedProfile JSON with Schema, Setup and Response. It shows curve math without importing session evidence. Atlas preview JSON is not driver settings and is not yet a native Drift import.",174));
+diff --git a/src/TrialForm.cs b/src/TrialForm.cs
+index 2a9d475..69a3f65 100644
+--- a/src/TrialForm.cs
++++ b/src/TrialForm.cs
+@@ -26,7 +26,7 @@ namespace SensitivityFinder {
+         int TargetCount {get{return warmup?(setup.QuickTest?2:3):setup.ScoredTargets;}}
+         int FamiliarizationCount {get{return setup.QuickTest?1:3;}}
+         double TrackDuration {get{return warmup?4:setup.TrackingSeconds;}}
+-        IntPtr inputDevice,rawBuffer;
++        IntPtr inputDevice,rawBuffer;string inputDeviceKey="";
+         Rectangle oldClip;
+         long lastPaint;
+         public BlockResult Result { get; private set; }
+@@ -60,8 +60,8 @@ namespace SensitivityFinder {
+         }
+         void Restart() {
+             if(coach!=null){if(started && !captured){Cursor.Clip=RectangleToScreen(ClientRectangle);Cursor.Hide();captured=true;}coach.Reset();coachActive=coach.Next();coachTargets.Clear();coachSegmentAt=0;coachFinishAt=-1;coachReady=false;coachScoringStarted=false;coachFrames=new FrameHealth();}
+-            Result=new BlockResult { DriverAppliedInput=setup.LiveDriverTest,RequestedFps=targetFps,MonitorHz=monitorHz,HighResolutionTiming=renderLoop!=null && renderLoop.HighResolution,ExpectedTargets=setup.ScoredTargets,RequiredTrackSeconds=setup.TrackingSeconds,Renderer=setup.TuneVertical?"OpenGL first-person / protocol 7 / axis-balanced":"OpenGL first-person / protocol 4",GraphicsDevice=arena==null?"":arena.Device };
+-            lastPaint=0;lastHudAt=-1;phase=targetIndex=acclimationTargets=practiceHits=practiceAttempts=0;x=y=0;random=new Random(seed);inputDevice=IntPtr.Zero;phasePaused=false;acclimating=!warmup;notice="";noticeUntil=0;ErrorReason=null;if(coach!=null && coach.PracticalTask!="")ResetPractical();
++            Result=new BlockResult { AccuracyVersion=1,DriverAppliedInput=setup.LiveDriverTest,RequestedFps=targetFps,MonitorHz=monitorHz,HighResolutionTiming=renderLoop!=null && renderLoop.HighResolution,ExpectedTargets=setup.ScoredTargets,RequiredTrackSeconds=setup.TrackingSeconds,Renderer=setup.TuneVertical?"OpenGL first-person / protocol 7 / axis-balanced":"OpenGL first-person / protocol 4",GraphicsDevice=arena==null?"":arena.Device };
++            lastPaint=0;lastHudAt=-1;phase=targetIndex=acclimationTargets=practiceHits=practiceAttempts=0;x=y=0;random=new Random(seed);inputDevice=IntPtr.Zero;inputDeviceKey="";phasePaused=false;acclimating=!warmup;notice="";noticeUntil=0;ErrorReason=null;if(coach!=null && coach.PracticalTask!="")ResetPractical();
+             clock.Restart();phaseAt=previousTick=lastInputAt=speedBucketAt=0;lastSampleAt=-1;speedBucketDistance=0;velocity.Clear();ignoreClicksUntil=.05;suppressStartingClick=false;pauseClock.Reset();NextTarget();Invalidate();
+         }
+         void Abort() { if(finishing)return;finishing=true;DialogResult=DialogResult.Cancel;Close(); }
+@@ -117,7 +117,7 @@ namespace SensitivityFinder {
+             var result=new TargetResult { Task=phase==0?"micro":"stop",Axis=setup.TuneVertical?VerticalCalibration.Axis(targetIndex):"",VerticalErrorDegrees=Math.Abs(ty-y),ErrorDegrees=ErrorDistance,Seconds=now-targetAt,Hit=!timeout && ErrorDistance<=Radius,Overshot=overshot,Settled=settled,TimedOut=timeout };
+             movement.Finish(result,now);Result.Targets.Add(result);targetIndex++;NextTarget();
+         }
+-        void EndFamiliarization(){acclimating=false;random=new Random(seed);x=y=0;PauseForLesson();velocity.Clear();Result.RawPackets=Result.BoundaryPackets=Result.RenderedFrames=Result.RenderIntervals=0;Result.RenderSeconds=Result.LongestFrameMs=0;Invalidate();}
++        void EndFamiliarization(){acclimating=false;random=new Random(seed);x=y=0;PauseForLesson();velocity.Clear();Result.FrameTiming=new FrameHealth();Result.InputTiming=velocity.Timing;Result.RawPackets=Result.BoundaryPackets=Result.RenderedFrames=Result.RenderIntervals=0;Result.RenderSeconds=Result.LongestFrameMs=0;Invalidate();}
+         void UpdateSettlement(double now) {
+             if(ErrorDistance<=Radius) { if(holdAt<0)holdAt=now;if(now-holdAt>=.15)settled=true; } else { holdAt=-1;settled=false; }
+         }
+@@ -168,7 +168,7 @@ namespace SensitivityFinder {
+                 }
+                 long stamp=Stopwatch.GetTimestamp();arena.Render(ClientSize.Width,ClientSize.Height,frame);
+                 if(started && !phasePaused) {
+-                    if(lastPaint>0) { double elapsed=(double)(stamp-lastPaint)/Stopwatch.Frequency;Result.RenderSeconds+=elapsed;Result.RenderIntervals++;Result.LongestFrameMs=Math.Max(Result.LongestFrameMs,elapsed*1000); }
++                    if(lastPaint>0) { double elapsed=(double)(stamp-lastPaint)/Stopwatch.Frequency;Result.FrameTiming.RecordInterval(elapsed,targetFps);Result.RenderSeconds+=elapsed;Result.RenderIntervals++;Result.LongestFrameMs=Math.Max(Result.LongestFrameMs,elapsed*1000); }
+                     lastPaint=stamp;Result.RenderedFrames++;
+                 }
+             } catch(Exception ex) { ErrorReason=ex.Message;if(!finishing)BeginInvoke(new Action(Abort)); }
+@@ -184,7 +184,7 @@ namespace SensitivityFinder {
+                     int offset=(int)header;ushort flags=(ushort)Marshal.ReadInt16(rawBuffer,offset);var device=Marshal.ReadIntPtr(rawBuffer,8);
+                     int dx=Marshal.ReadInt32(rawBuffer,offset+12),dy=Marshal.ReadInt32(rawBuffer,offset+16);ushort buttons=(ushort)Marshal.ReadInt16(rawBuffer,offset+4);
+                     if((flags&1)==0) {
+-                        if(inputDevice==IntPtr.Zero && (dx!=0 || dy!=0))inputDevice=device;
++                        if(inputDevice==IntPtr.Zero && (dx!=0 || dy!=0)){inputDevice=device;inputDeviceKey=RawInputIdentity.Key(device);}
+                         if((buttons&2)!=0 && (inputDevice==IntPtr.Zero || inputDevice==device))ReleaseStartingClick();
+                         if((buttons&1)!=0 && phasePaused && clock.Elapsed.TotalSeconds>=ignoreClicksUntil){ContinuePhase();suppressStartingClick=true;}
+                         else if(device==inputDevice && !phasePaused) { if(dx!=0 || dy!=0)MoveRaw(dx,dy);if((buttons&1)!=0 && phase<2 && CanScoreClick(clock.Elapsed.TotalSeconds))Record(false); }
+@@ -195,10 +195,10 @@ namespace SensitivityFinder {
+         }
+         void MoveRaw(int dx,int dy) {
+             double now=clock.Elapsed.TotalSeconds,distance=Math.Sqrt((double)dx*dx+(double)dy*dy),speed=velocity.Push(now,distance);
+-            lastSpeed=speed;lastInputAt=now;
++            velocity.Timing.DeviceKey=inputDeviceKey;lastSpeed=speed;lastInputAt=now;
+             var output=coach==null?TestInput.Transform(setup,candidate,dx,dy,speed):CoachingRun.Transform(setup,coach.Reference,coachActive,dx,dy,speed);x=AimGeometry.Wrap(x+output[0]*setup.DegreesPerCount);y+=output[1]*setup.DegreesPerCount;
+             if(Math.Abs(y)>85)Result.BoundaryPackets++;y=Math.Max(-85,Math.Min(85,y));Result.RawPackets++;
+-            Result.PacketTimingSamples=velocity.Samples;Result.TimingClamps=velocity.Clamps;Result.PacketIntervalMs=velocity.Samples>0?velocity.IntervalSum/velocity.Samples:0;
++            Result.InputTiming=velocity.Timing;Result.PacketTimingSamples=velocity.Samples;Result.TimingClamps=velocity.Clamps;Result.PacketIntervalMs=velocity.Samples>0?velocity.IntervalSum/velocity.Samples:0;
+             if(!acclimating && !warmup) {
+                 speedBucketDistance+=distance;
+                 if(now-speedBucketAt>=.008) {
+diff --git a/build.ps1 b/build.ps1
+index 6be60da..b2053c7 100644
+--- a/build.ps1
++++ b/build.ps1
+@@ -4,7 +4,7 @@ $finderRoot = $PSScriptRoot
+ $frameworkRoot = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
+ $compilerPath = Join-Path $frameworkRoot 'csc.exe'
+ if (-not (Test-Path -LiteralPath $compilerPath)) { throw '.NET Framework 4.x compiler is required.' }
+-$sourceFiles = @('Model.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','PracticalCheckForms.cs','CurveSearchForms.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','ProfileForms.cs','CurrentTuneForm.cs','LiveDriverTest.cs','MainHistoryForm.cs','GameProfileForm.cs','CuratedCurves.cs','CurveStudioForm.cs','DpiMath.cs','DpiMatchForm.cs','ApplyResultForm.cs','ArenaRenderer.cs','RenderLoop.cs','UiSupport.cs','NativeControls.cs','MovementReview.cs','ConverterForm.cs','GuidedForm.cs','StudioShell.cs','TrialForm.cs','CoachTrial.cs','CoachForms.cs','Program.cs') | ForEach-Object { Join-Path $finderRoot ('src\' + $_) }
++$sourceFiles = @('Model.cs','AccuracyMeasurements.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','PracticalCheckForms.cs','CurveSearchForms.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','ProfileForms.cs','CurrentTuneForm.cs','LiveDriverTest.cs','MainHistoryForm.cs','GameProfileForm.cs','CuratedCurves.cs','CurveStudioForm.cs','DpiMath.cs','DpiMatchForm.cs','ApplyResultForm.cs','ArenaRenderer.cs','RenderLoop.cs','UiSupport.cs','NativeControls.cs','MovementReview.cs','CalibrationForm.cs','ConverterForm.cs','GuidedForm.cs','StudioShell.cs','TrialForm.cs','CoachTrial.cs','CoachForms.cs','Program.cs') | ForEach-Object { Join-Path $finderRoot ('src\' + $_) }
+ $targetPath = [IO.Path]::GetFullPath($OutputPath)
+ & $compilerPath /nologo /codepage:65001 /target:winexe /platform:x64 /optimize+ "/win32icon:$finderRoot\assets\Drift.ico" "/resource:$finderRoot\assets\Drift.ico,SensitivityFinder.Drift.ico" "/out:$targetPath" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Web.Extensions.dll $sourceFiles
+ if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
+diff --git a/test.ps1 b/test.ps1
+index 27a0917..041eb82 100644
+--- a/test.ps1
++++ b/test.ps1
+@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
+ $testCompiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
+ $testOutput = [IO.Path]::GetFullPath($OutputDirectory)
+ New-Item -ItemType Directory -Path $testOutput -Force | Out-Null
+-$modelSources = @('Model.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','CuratedCurves.cs','DpiMath.cs') | ForEach-Object { Join-Path $PSScriptRoot ('src\' + $_) }
++$modelSources = @('Model.cs','AccuracyMeasurements.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','CuratedCurves.cs','DpiMath.cs') | ForEach-Object { Join-Path $PSScriptRoot ('src\' + $_) }
+ foreach ($suite in @('Tests','AdaptiveTests','AccuracyTests')) {
+     $testExe = Join-Path $testOutput ($suite + '.exe')
+     & $testCompiler /nologo /codepage:65001 /target:exe /platform:x64 "/out:$testExe" /reference:System.Web.Extensions.dll $modelSources (Join-Path $PSScriptRoot ('src\' + $suite + '.cs'))
+@@ -11,7 +11,7 @@ foreach ($suite in @('Tests','AdaptiveTests','AccuracyTests')) {
+     & $testExe $Template
+     if ($LASTEXITCODE -ne 0) { throw "Checks failed: $suite" }
+ }
+-$uiSources = @('Model.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','ProfileForms.cs','CurrentTuneForm.cs','LiveDriverTest.cs','MainHistoryForm.cs','GameProfileForm.cs','CuratedCurves.cs','CurveStudioForm.cs','DpiMath.cs','DpiMatchForm.cs','ApplyResultForm.cs','ArenaRenderer.cs','RenderLoop.cs','UiSupport.cs','NativeControls.cs','MovementReview.cs','ConverterForm.cs','GuidedForm.cs','StudioShell.cs','TrialForm.cs','CoachTrial.cs','CoachForms.cs','PracticalCheckForms.cs','CurveSearchForms.cs','UiTests.cs') | ForEach-Object { Join-Path $PSScriptRoot ('src\' + $_) }
++$uiSources = @('Model.cs','AccuracyMeasurements.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','ProfileForms.cs','CurrentTuneForm.cs','LiveDriverTest.cs','MainHistoryForm.cs','GameProfileForm.cs','CuratedCurves.cs','CurveStudioForm.cs','DpiMath.cs','DpiMatchForm.cs','ApplyResultForm.cs','ArenaRenderer.cs','RenderLoop.cs','UiSupport.cs','NativeControls.cs','MovementReview.cs','CalibrationForm.cs','ConverterForm.cs','GuidedForm.cs','StudioShell.cs','TrialForm.cs','CoachTrial.cs','CoachForms.cs','PracticalCheckForms.cs','CurveSearchForms.cs','UiTests.cs') | ForEach-Object { Join-Path $PSScriptRoot ('src\' + $_) }
+ $uiExe = Join-Path $testOutput 'UiTests.exe'
+ & $testCompiler /nologo /codepage:65001 /target:exe /platform:x64 "/out:$uiExe" /reference:System.Web.Extensions.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll $uiSources
+ if ($LASTEXITCODE -ne 0) { throw 'UI check compilation failed' }
+@@ -119,3 +119,15 @@ if($LASTEXITCODE -ne 0){throw 'Curve search compilation failed'}
+ if($LASTEXITCODE -ne 0){throw 'Curve search checks failed'}
+ 
+ Write-Output 'All checks including curve search passed.'
++
++$accuracyExe=Join-Path $testOutput 'AccuracyTests.exe'
++& $testCompiler /nologo /codepage:65001 /target:exe /platform:x64 "/out:$accuracyExe" /reference:System.Web.Extensions.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll $quickSources (Join-Path $PSScriptRoot 'src\AccuracyTests.cs')
++if($LASTEXITCODE -ne 0){throw 'Accuracy compilation failed'}
++& $accuracyExe
++if($LASTEXITCODE -ne 0){throw 'Accuracy checks failed'}
++$accuracyUiExe=Join-Path $testOutput 'AccuracyUiTests.exe'
++& $testCompiler /nologo /codepage:65001 /target:exe /platform:x64 "/out:$accuracyUiExe" /reference:System.Web.Extensions.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll $quickSources (Join-Path $PSScriptRoot 'src\AccuracyUiTests.cs')
++if($LASTEXITCODE -ne 0){throw 'Accuracy UI compilation failed'}
++& $accuracyUiExe (Join-Path $testOutput 'accuracy-ui')
++if($LASTEXITCODE -ne 0){throw 'Accuracy UI checks failed'}
++Write-Output 'Accuracy diagnostics, fresh confirmation and calibration checks passed. Official calculator parity is a separate read-only accuracy-check.ps1 run.'
+diff --git a/accuracy-check.ps1 b/accuracy-check.ps1
+new file mode 100644
+index 0000000..1c1f08e
+--- /dev/null
++++ b/accuracy-check.ps1
+@@ -0,0 +1,20 @@
++param([string]$OutputDirectory=(Join-Path $PSScriptRoot 'checks\accuracy'),[string]$DriverDirectory=(Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'RawAccel_v1.6.1\RawAccel'))
++$ErrorActionPreference='Stop'
++$accuracyOutput=[IO.Path]::GetFullPath($OutputDirectory)
++New-Item -ItemType Directory -Force -Path $accuracyOutput | Out-Null
++$accuracyCompiler=Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
++$accuracySources=@('Model.cs','AccuracyMeasurements.cs','AimAnalysis.cs','MeasurementEvidence.cs','VerticalCalibration.cs','ProfileLibrary.cs','MainProfile.cs','PlayerProfile.cs','PracticalChecks.cs','CoachingRun.cs','CurveSearch.cs','LocalCoach.cs','CurrentCurve.cs','LatestTestDrafts.cs','CuratedCurves.cs','DpiMath.cs') | ForEach-Object {Join-Path $PSScriptRoot ('src\'+$_)}
++$accuracyExe=Join-Path $accuracyOutput 'AccuracyTests.exe'
++& $accuracyCompiler /nologo /codepage:65001 /target:exe /platform:x64 "/out:$accuracyExe" /reference:System.Web.Extensions.dll $accuracySources (Join-Path $PSScriptRoot 'src\AccuracyTests.cs')
++if($LASTEXITCODE -ne 0){throw 'Accuracy tests did not compile'}
++& $accuracyExe
++if($LASTEXITCODE -ne 0){throw 'Accuracy checks failed'}
++if(!(Test-Path -LiteralPath (Join-Path $DriverDirectory 'rawaccel.exe'))){throw 'Official calculator parity NOT RUN: installed Raw Accel 1.6.1 is required'}
++$parityOutput=Join-Path $accuracyOutput 'official-calculator'
++New-Item -ItemType Directory -Force -Path $parityOutput | Out-Null
++foreach($dependency in @('rawaccel.exe','wrapper.dll','Newtonsoft.Json.dll')){Copy-Item -LiteralPath (Join-Path $DriverDirectory $dependency) -Destination (Join-Path $parityOutput $dependency) -Force}
++$parityExe=Join-Path $parityOutput 'DriverParityChecks.exe'
++& $accuracyCompiler /nologo /codepage:65001 /target:exe /platform:x64 "/out:$parityExe" /reference:System.Web.Extensions.dll "/reference:$DriverDirectory\rawaccel.exe" "/reference:$DriverDirectory\wrapper.dll" $accuracySources (Join-Path $PSScriptRoot 'src\DriverParityChecks.cs')
++if($LASTEXITCODE -ne 0){throw 'Official parity checks did not compile'}
++& $parityExe (Join-Path $PSScriptRoot 'docs\rawaccel-neutral-template.json')
++if($LASTEXITCODE -ne 0){throw 'Official calculator parity failed'}
+diff --git a/README.md b/README.md
+index 29e61b8..5fb5fa5 100644
+--- a/README.md
++++ b/README.md
+@@ -1,5 +1,13 @@
+ # Drift / Atlas workspace — main version
+ 
++## Accuracy update
++
++New curve searches use accuracy protocol 1: four fresh matched pairs (eight trials), packet-arrival diagnostics, frame-time percentiles and task-level guards. A result stays provisional until the same candidate repeats on two distinct days with matching mouse identity and practical tracking/comfort clearance. Earlier searches retain their original protocol and measurements.
++
++Open **Converters > Measure physical sensitivity** for three ruler-based swipes and an optional independent in-game turn-distance check. Configured DPI and measured effective CPI remain separate. The tool saves a local report; it never changes a mouse or driver setting. Neutral input and ruler distances are user confirmed.
++
++Run `test.ps1` for isolated regression, accuracy and calibration-layout checks. Run `accuracy-check.ps1` for the additional read-only comparison against the installed official Raw Accel 1.6.1 calculator. Calculator agreement does not verify hardware timing or physical sensor accuracy. Public implementation notes and the portable source patch are in the parent project's `docs/DRIFT_ACCURACY.md` and `source-import/drift/accuracy-pass.patch`.
++
+ This folder is the primary Drift project from October 30, 2026. Open `SensitivityFinder.exe` here. The former D: project is a backup, not the active source.
+ 
+ Version 6.1.1 adds Atlas midnight/blue styling, compact workspace views, grouped metadata labels, profile collection tabs and an updated Guide. It preserves the native calibration, evidence and deliberate driver workflows. The previous executable and changed UI sources are backed up under `backups/atlas-ui-pass-1/`.
