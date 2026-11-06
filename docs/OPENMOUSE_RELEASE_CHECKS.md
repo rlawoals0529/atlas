@@ -12,3 +12,5 @@ The spacing changes separate product tags from actions, let actions wrap, keep c
 - CI layout verification passed at 390 and 1440 CSS pixels across Browse, Mousepads, Keyboards, Switches and Sensitivity. Page overflow, drawer control bounds, the OpenMouse destination and Escape dismissal were checked. Fresh drawer and sensitivity screenshots were inspected at both widths. Local browser-session failures were resolved for verification by running the checks on GitHub's installed Chrome; the earlier blank sensitivity capture is not used as evidence.
 
 The native executable, profiles, sessions and synthetic test outputs stay local. The source patch and render harnesses are published under `source-import/drift/`.
+
+Production verification also caught two stale pinned images. WALLHACK's M-001 hero moved from a theme asset to its current campaign file; the VAXEE XE-S image needs the lowercase `en` path. Both replacements are official images and returned image responses before updating the registry.
