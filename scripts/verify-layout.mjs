@@ -9,11 +9,15 @@ await mkdir('qa-evidence/layout', { recursive: true });
 const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
 try {
   for (const width of [390, 1440]) {
-    const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
     for (const route of ['', '#mousepads', '#keyboards', '#switches', '#sensitivity']) {
+      const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
       await page.goto(`http://127.0.0.1:4173/${route}`);
       await page.locator(route === '#sensitivity' ? '.openmouse-companion' : '.consumer-grid').waitFor();
       await page.evaluate(() => document.fonts.ready);
+      await page.waitForFunction(() => [...document.images].filter(image => {
+        const box = image.getBoundingClientRect();
+        return box.width && box.height && box.top < innerHeight && box.bottom > 0;
+      }).every(image => image.complete));
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Page overflow: ${route} at ${width}`);
       if (route === '#sensitivity') {
         const link = page.getByRole('link', { name: 'Open OpenMouse', exact: true });
@@ -36,8 +40,8 @@ try {
         await page.keyboard.press('Escape');
         await drawer.waitFor({ state: 'hidden' });
       }
+      await page.close();
     }
-    await page.close();
   }
 } finally {
   await browser.close();
