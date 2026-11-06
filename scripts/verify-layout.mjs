@@ -25,6 +25,10 @@ try {
         await link.scrollIntoViewIfNeeded();
       }
       await page.screenshot({ path: `qa-evidence/layout/${width}-${route.slice(1) || 'browse'}.png` });
+      if (route === '#sensitivity') {
+        await page.locator('.drift-getting-started').scrollIntoViewIfNeeded();
+        await page.screenshot({ path: `qa-evidence/layout/${width}-drift-guide.png` });
+      }
       if (route === '') {
         await page.locator('.consumer-grid').getByRole('button', { name: /Details/ }).first().click();
         const drawer = page.locator('.consumer-drawer');
