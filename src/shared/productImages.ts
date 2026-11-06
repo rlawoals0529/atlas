@@ -45,7 +45,7 @@ export const productImages: Record<string, ProductImage> = {
     credit: "ZOWIE official product image",
   },
   "mouse-wallhack-m001": {
-    url: "https://wallhack.com/cdn/shop/t/68/assets/wh-m001-hero.avif?v=138427762620322925981789136467",
+    url: "https://wallhack.com/cdn/shop/files/wh-m001-hero.avif?v=1790697665&width=1200",
     sourceUrl: "https://wallhack.com/en-fr/pages/campaigns/m-001",
     alt: "WALLHACK M-001 gaming mouse viewed from above",
     credit: "WALLHACK official product image",
@@ -105,7 +105,7 @@ export const productImages: Record<string, ProductImage> = {
     credit: "ZOWIE official product image",
   },
   "mouse-vaxee-xe-s-wireless-4k": {
-    url: "https://www.vaxee.co/EN/data/goods/gallery/202405/1715938000380164487.png",
+    url: "https://www.vaxee.co/en/data/goods/gallery/202405/1715938000380164487.png",
     sourceUrl: "https://www.vaxee.co/en/product.php?act=view&id=227",
     alt: "VAXEE XE-S Wireless 4K gaming mouse color lineup",
     credit: "VAXEE official product image",
