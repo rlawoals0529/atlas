@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 const require = createRequire(`${process.env.ATLAS_BROWSER_TOOLS}/package.json`);
 const { chromium } = require('playwright');
 await mkdir('qa-evidence/layout', { recursive: true });
-const browser = await chromium.launch();
+const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
 try {
   for (const width of [390, 1440]) {
     const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
