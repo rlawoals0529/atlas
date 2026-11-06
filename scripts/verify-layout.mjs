@@ -26,6 +26,7 @@ try {
       }
       await page.screenshot({ path: `qa-evidence/layout/${width}-${route.slice(1) || 'browse'}.png` });
       if (route === '#sensitivity') {
+        await page.getByRole('button', { name: /Install & run/ }).click();
         await page.locator('.drift-getting-started').scrollIntoViewIfNeeded();
         await page.screenshot({ path: `qa-evidence/layout/${width}-drift-guide.png` });
       }
