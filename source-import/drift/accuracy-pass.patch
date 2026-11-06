@@ -487,9 +487,15 @@ index de0067a..68cbc47 100644
          public void Save(){if(Id==null || !System.Text.RegularExpressions.Regex.IsMatch(Id,"^search-[a-f0-9]{32}$"))throw new ArgumentException("Invalid search identifier.");UpdatedAt=DateTime.Now.ToString("o");ProfileStore.AtomicText(Path.Combine(ProfileStore.Root,"curve-search",Id+".json"),Storage.Json().Serialize(this));}
          public static CurveSearch Latest(SavedProfile main,bool? fullSetup=null){string dir=Path.Combine(ProfileStore.Root,"curve-search");if(!Directory.Exists(dir))return null;foreach(var file in new DirectoryInfo(dir).GetFiles("search-*.json").OrderByDescending(f=>f.LastWriteTimeUtc)){try{var s=Storage.Json().Deserialize<CurveSearch>(File.ReadAllText(file.FullName));if(s.Schema==1 && (!fullSetup.HasValue || s.FullSetup==fullSetup.Value) && s.Compatible(main) && CurveMath.Valid(s.Selected) && s.Trials.All(t=>CurveMath.Valid(t.Curve)))return s;}catch{}}return null;}
 diff --git a/src/CurveSearchForms.cs b/src/CurveSearchForms.cs
-index b194d7d..09e0ec2 100644
+index b194d7d..a207f45 100644
 --- a/src/CurveSearchForms.cs
 +++ b/src/CurveSearchForms.cs
+@@ -1,4 +1,4 @@
+-﻿using System;
++using System;
+ using System.Linq;
+ using System.Drawing;
+ using System.Diagnostics;
 @@ -11,13 +11,13 @@ namespace SensitivityFinder {
          void ShowSearch(bool fullSetup){if(!fullSetup && !advancedCurveSearch){ShowSimpleCurve();return;}var main=MainProfile.Active(draft);StudioPage(8,fullSetup?"Full setup: sensitivity → curve → Y":"Quick curve tune","One saved search. Short trials, breaks whenever you need, and a separate confirmation stage.");
              if(main==null){Add(TextCard("","Create a saved setup first","Return to Home and complete your initial setup.",140));SetPageActions("No settings changed",Theme.Button("Home",delegate{GoToSection(0);},true));return;}
@@ -525,6 +531,20 @@ index b194d7d..09e0ec2 100644
              Add(AlignedCard(supported?(differs?"An improvement is ready":"This result is already saved"):ready?(search.TimingTrend()?"Promising speed / needs a closer test":"What changed / what to test next"):"Ready when you are",next+(search==null?"":"\r\n"+search.SchedulingNote)+"\r\nNext run goal: "+new[]{"general parameter search","calmer post-flick corrections","gentler bounded acceleration","fast flicks / 80% flick timing, 20% micro control"}[Math.Max(0,Math.Min(3,PlayerProfile.Load().TuningGoal))]+". Extra choices are under Tuning options.",null));
              if(ready)Add(AlignedCard("What the comparison measured",search.EvidenceSummary(),null,Theme.Button("Explain with local AI",delegate{OpenLocalCoach(main);},false)));
              AddPracticalResults(search);var actions=new System.Collections.Generic.List<Button>();if(differs)actions.Add(search.ReadyToAdopt?Theme.Button("Apply improvement",async delegate{await ApplySimpleCurve(search,false);},true):Theme.Button("Check tracking & comfort",async delegate{await RunPracticalChecks(search);},true));
+@@ -65,7 +65,7 @@ namespace SensitivityFinder {
+             var player=PlayerProfile.Load();var goal=new DarkComboBox{Dock=DockStyle.Top,Height=42,DropDownStyle=ComboBoxStyle.DropDownList,AccessibleName="What should improve?"};goal.Items.AddRange(new[]{"General parameter search","Shaky after flicks / calmer corrections","Acceleration feels harsh / gentle bounded curve","Fast flicks / preserve small corrections"});goal.SelectedIndex=Math.Max(0,Math.Min(3,player.TuningGoal));
+             var cues=new CheckBox{Dock=DockStyle.Bottom,Height=36,Text="Wrist-led technique cues during trials",Checked=player.TechniqueCues,Font=Theme.BodyFont(11),ForeColor=Theme.Text,UseMnemonic=false};var controls=new Panel{Height=88};controls.Controls.Add(goal);controls.Controls.Add(cues);
+             goal.SelectedIndexChanged+=delegate{var saved=PlayerProfile.Load();saved.TuningGoal=goal.SelectedIndex;saved.Save();};cues.CheckedChanged+=delegate{var saved=PlayerProfile.Load();saved.TechniqueCues=cues.Checked;saved.Save();};
+-            Add(AlignedCard("Tune what feels wrong","Choose a goal before your next run. Comfort goals generate a bounded curve with gentler transitions. Each new run varies its strength; applying a supported winner narrows the next step. Preview is untested until compared. Your saved setup changes only when you apply.",controls,Theme.Button("Preview comfort curve",delegate{try{if(goal.SelectedIndex==0)throw new InvalidOperationException("Choose a comfort goal to preview, or use general quick tune.");var c=goal.SelectedIndex==3?CurveSearch.FastFlickCandidate(main,0,1):CurrentCurve.Stability(main,goal.SelectedIndex);var preview=new CoachingRun(main){Proposal=c,Report=c.DesignReason,DecisionNote="Preference-based experiment, not a measured improvement."};using(var review=new CoachReviewForm(main,preview))review.ShowDialog(this);ShowSearch(false);}catch(Exception e){Error(e);}},false),Theme.Button("Test selected goal / 4 trials",delegate{try{var s=CurveSearch.Quick(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),search,goal.SelectedIndex);s.ContinuousTrials=search!=null && search.ContinuousTrials;s.Save();ShowSearch(false);}catch(Exception e){Error(e);}},false)));
++            Add(AlignedCard("Tune what feels wrong","Choose a goal before your next run. Comfort goals generate a bounded curve with gentler transitions. Each new run varies its strength; applying a supported winner narrows the next step. Preview is untested until compared. Your saved setup changes only when you apply.",controls,Theme.Button("Preview comfort curve",delegate{try{if(goal.SelectedIndex==0)throw new InvalidOperationException("Choose a comfort goal to preview, or use general quick tune.");var c=goal.SelectedIndex==3?CurveSearch.FastFlickCandidate(main,0,1):CurrentCurve.Stability(main,goal.SelectedIndex);var preview=new CoachingRun(main){Proposal=c,Report=c.DesignReason,DecisionNote="Preference-based experiment, not a measured improvement."};using(var review=new CoachReviewForm(main,preview))review.ShowDialog(this);ShowSearch(false);}catch(Exception e){Error(e);}},false),Theme.Button("Test selected goal / 8 trials",delegate{try{var s=CurveSearch.Quick(main,PlayerProfile.Load().PreferSpeed,new Random().Next(1,1000000000),search,goal.SelectedIndex);s.ContinuousTrials=search!=null && search.ContinuousTrials;s.Save();ShowSearch(false);}catch(Exception e){Error(e);}},false)));
+         }
+         DarkComboBox SearchFormat(bool continuous,Action<bool> changed){
+             var choice=new DarkComboBox{Dock=DockStyle.Top,Height=42,DropDownStyle=ComboBoxStyle.DropDownList,AccessibleName="Testing format"};
+@@ -91,3 +91,4 @@ namespace SensitivityFinder {
+ 
+ 
+ 
++
 diff --git a/src/CurveSearchTests.cs b/src/CurveSearchTests.cs
 index 6585027..6043887 100644
 --- a/src/CurveSearchTests.cs
