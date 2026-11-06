@@ -13,3 +13,9 @@ Example after compiling the comparison executable:
 ```
 
 Use a local Windows desktop with hardware OpenGL. These checks do not start aiming trials or apply Raw Accel settings.
+
+## Accuracy pass
+
+`accuracy-pass.patch` applies to the canonical native project after the renderer pass. It contains arrival/frame diagnostics, four-pair confirmation, physical calibration, installed-calculator parity tests and backward-compatibility checks. Apply it from the native project root; do not apply it to the Atlas website root. See `docs/DRIFT_ACCURACY.md` in the Atlas repository for the measurement boundaries and test commands.
+
+The patch was applied to a clean copy of the backed-up source and compared against the canonical files. Profiles, sessions, calibration reports, binaries and installed vendor libraries are excluded.
