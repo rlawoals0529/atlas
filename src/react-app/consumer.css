@@ -2,6 +2,12 @@
 
 .consumer-shell { min-height:100vh; background:var(--consumer-paper); color:var(--consumer-ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:-.015em; }
 .consumer-shell * { box-sizing:border-box; }
+/* Let long names and source text fit their grid or flex column. */
+:where(.consumer-shell,.utility-shell,.pl-shell,.v5-shell) :is(p,h1,h2,h3) { overflow-wrap:anywhere; }
+.consumer-drawer>header>div,.consumer-detail-grid>div { min-width:0; }
+.consumer-drawer>header button { flex-shrink:0; }
+.consumer-drawer { scrollbar-gutter:stable; }
+.consumer-drawer-summary { max-width:68ch; }
 .consumer-shell button,.consumer-shell input,.consumer-shell select { font:inherit; }
 .consumer-shell button,.consumer-shell a { -webkit-tap-highlight-color:transparent; }
 .consumer-shell button { cursor:pointer; }
@@ -148,8 +154,12 @@
 .consumer-drawer-hero b { font-size:50px; letter-spacing:-.06em; line-height:1; margin-top:4px; }
 .consumer-drawer-hero span { color:var(--consumer-accent); text-transform:uppercase; font-size:10px; font-weight:800; }
 .consumer-drawer-summary { color:#616963; line-height:1.6; font-size:13px; margin:18px 0 12px; }
-.consumer-tag-row { display:flex; gap:6px; flex-wrap:wrap; }
-.consumer-tag-row span { border:1px solid #d5dad5; background:#fff; border-radius:999px; padding:5px 8px; font-size:9px; color:#656c67; }
+.consumer-tag-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap; min-width:0; }
+.consumer-tag-row > span { border:1px solid #d5dad5; background:#fff; border-radius:6px; padding:4px 8px; font-size:11px; line-height:1.4; color:#656c67; max-width:100%; overflow-wrap:anywhere; }
+.consumer-drawer-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; min-width:0; }
+.consumer-drawer-actions > button { margin:0; padding:8px 12px; line-height:1.4; border-radius:10px; max-width:100%; overflow-wrap:anywhere; }
+.consumer-drawer-actions > .consumer-drawer-link-status { padding:0; border:0; background:none; }
+@media(max-width:480px) { .consumer-drawer-actions > button { flex:1 1 auto; } .consumer-drawer-actions > .consumer-drawer-link-status { flex-basis:100%; } }
 .consumer-drawer section { margin-top:34px; }
 .consumer-section-title { border-bottom:1px solid #d9ddd8; padding-bottom:10px; margin-bottom:11px; }
 .consumer-section-title span { font-size:9px; color:var(--consumer-accent); letter-spacing:.1em; font-weight:800; }

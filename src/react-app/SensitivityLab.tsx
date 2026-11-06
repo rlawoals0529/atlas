@@ -3,6 +3,7 @@ import "./utility-labs.css";
 import "./sensitivity-fixes.css";
 import DriftCurveDesk from "./DriftCurveDesk";
 import DriftGettingStarted from "./DriftGettingStarted";
+import OpenMouseCompanion from "./OpenMouseCompanion";
 import { cm360, convertSensitivity, effectiveDpi, gameById, inches360, sensitivityDataset, sensitivityForCm360, sensitivityGames } from "../shared/sensitivity";
 
 const positiveNumber = (value: string) => {
@@ -135,6 +136,7 @@ export default function SensitivityLab() {
       <div hidden={mode !== "drift"}><DriftCurveDesk baselineCm={sourceCm} dpi={sourceDpi}/></div>
       <div hidden={mode !== "guide"}><DriftGettingStarted/></div>
 
+      <OpenMouseCompanion/>
       <section className="utility-grid sens-explain">
         <article><span>FORMULA</span><h3>Physical-distance match</h3><code>target = source × sourceDPI × sourceYaw ÷ targetDPI ÷ targetYaw</code><p>cm/360 = 360 × 2.54 ÷ (DPI × sensitivity × yaw).</p></article>
         <article><span>USING YOUR RESULT</span><h3>Same distance, different game feel</h3><p>The result matches base horizontal turn distance only: the mouse distance for a full turn in hipfire. Field of view, recoil, zoom and aim assist can still change how each game feels. Check the result in-game.</p></article>

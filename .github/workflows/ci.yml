@@ -70,3 +70,24 @@ jobs:
         run: npm run check
       - name: Enforce initial bundle budget
         run: npm run bundle:validate
+      - name: Install isolated layout-test browser
+        run: |
+          npm install --prefix "$RUNNER_TEMP/atlas-browser" --no-audit --no-fund --ignore-scripts playwright@1.56.1
+          "$RUNNER_TEMP/atlas-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Check desktop and narrow layouts
+        env:
+          ATLAS_BROWSER_TOOLS: ${{ runner.temp }}/atlas-browser
+        run: |
+          npm run dev:ui -- --port 4173 > /tmp/atlas-layout-server.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/verify-layout.mjs
+      - name: Upload layout captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atlas-layout-captures
+          path: qa-evidence/layout/
+          if-no-files-found: ignore
