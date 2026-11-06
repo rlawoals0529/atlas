@@ -1,0 +1,68 @@
+--- a/src/ArenaRenderer.cs
++++ b/src/ArenaRenderer.cs
+@@ -14,7 +14,7 @@
+     public sealed class ArenaRenderer : IDisposable {
+         readonly IntPtr window;
+         IntPtr dc, context;
++        uint topTexture, bottomTexture, lessonTexture, roomList;
+-        uint topTexture, bottomTexture, lessonTexture;
+         string topKey="",bottomKey="",lessonKey="";
+         public string Device { get; private set; }
+         public bool Hardware { get; private set; }
+@@ -31,6 +31,11 @@
+                 IntPtr swap=wglGetProcAddress("wglSwapIntervalEXT");
+                 if(swap!=IntPtr.Zero && swap!=new IntPtr(1) && swap!=new IntPtr(2) && swap!=new IntPtr(3) && swap!=new IntPtr(-1))Marshal.GetDelegateForFunctionPointer(swap,typeof(SwapIntervalDelegate)).DynamicInvoke(0);
+                 glGenTextures(1,out topTexture);glGenTextures(1,out bottomTexture);glGenTextures(1,out lessonTexture);
++                AllocateTexture(topTexture,1536,152);AllocateTexture(bottomTexture,1536,90);AllocateTexture(lessonTexture,1100,410);
++                // The room is static. Compile it once instead of crossing the native boundary
++                // for every grid vertex on every frame. Keep the immediate path as a fallback.
++                roomList=glGenLists(1);
++                if(roomList!=0) { glNewList(roomList,0x1300);DrawRoom();glEndList(); }
+             } catch { Dispose();throw; }
+         }
+         public void Render(int width,int height,ArenaFrame f) {
+@@ -44,7 +49,8 @@
+             glMatrixMode(0x1700);glLoadIdentity();
+             // Input pitch is positive down. Camera inverse rotations keep the crosshair fixed.
+             glRotated(f.Pitch,1,0,0);glRotated(f.Yaw,0,1,0);
++            if(roomList!=0)glCallList(roomList);else DrawRoom();
++            DrawTarget(f.TargetYaw,f.TargetPitch,f.Radius);
+-            DrawRoom();DrawTarget(f.TargetYaw,f.TargetPitch,f.Radius);
+             glDisable(0x0B71);glMatrixMode(0x1701);glLoadIdentity();glOrtho(0,width,height,0,-1,1);glMatrixMode(0x1700);glLoadIdentity();
+             glEnable(0x0BE2);glBlendFunc(1,0x0303);
+             if(!f.Lesson) {
+@@ -126,15 +132,19 @@
+         }
+         static void Upload(uint texture,Bitmap bitmap) {
+             var bits=bitmap.LockBits(new Rectangle(0,0,bitmap.Width,bitmap.Height),ImageLockMode.ReadOnly,PixelFormat.Format32bppPArgb);
++            try { glBindTexture(0x0DE1,texture);glTexSubImage2D(0x0DE1,0,0,0,bitmap.Width,bitmap.Height,0x80E1,0x1401,bits.Scan0); }
+-            try { glBindTexture(0x0DE1,texture);glTexParameteri(0x0DE1,0x2801,0x2601);glTexParameteri(0x0DE1,0x2800,0x2601);glTexImage2D(0x0DE1,0,0x1908,bitmap.Width,bitmap.Height,0,0x80E1,0x1401,bits.Scan0); }
+             finally { bitmap.UnlockBits(bits); }
+         }
++        static void AllocateTexture(uint texture,int width,int height) {
++            glBindTexture(0x0DE1,texture);glTexParameteri(0x0DE1,0x2801,0x2601);glTexParameteri(0x0DE1,0x2800,0x2601);
++            glTexImage2D(0x0DE1,0,0x1908,width,height,0,0x80E1,0x1401,IntPtr.Zero);
++        }
+         static void DrawTexture(uint texture,double x,double y,double w,double h) {
+             glEnable(0x0DE1);glBindTexture(0x0DE1,texture);glColor4f(1,1,1,1);glBegin(7);
+             glTexCoord2d(0,0);Vertex2(x,y);glTexCoord2d(1,0);Vertex2(x+w,y);glTexCoord2d(1,1);Vertex2(x+w,y+h);glTexCoord2d(0,1);Vertex2(x,y+h);glEnd();glDisable(0x0DE1);
+         }
+         public void Dispose() {
++            if(context!=IntPtr.Zero) { wglMakeCurrent(dc,context);if(roomList!=0)glDeleteLists(roomList,1);if(topTexture!=0)glDeleteTextures(1,ref topTexture);if(bottomTexture!=0)glDeleteTextures(1,ref bottomTexture);if(lessonTexture!=0)glDeleteTextures(1,ref lessonTexture);wglMakeCurrent(IntPtr.Zero,IntPtr.Zero);wglDeleteContext(context);context=IntPtr.Zero; }
+-            if(context!=IntPtr.Zero) { wglMakeCurrent(dc,context);if(topTexture!=0)glDeleteTextures(1,ref topTexture);if(bottomTexture!=0)glDeleteTextures(1,ref bottomTexture);if(lessonTexture!=0)glDeleteTextures(1,ref lessonTexture);wglMakeCurrent(IntPtr.Zero,IntPtr.Zero);wglDeleteContext(context);context=IntPtr.Zero; }
+             if(dc!=IntPtr.Zero) { ReleaseDC(window,dc);dc=IntPtr.Zero; }
+         }
+         [StructLayout(LayoutKind.Sequential)] struct PixelDescriptor {
+@@ -175,6 +185,12 @@
+         [DllImport("opengl32.dll")]static extern void glBindTexture(uint target,uint texture);
+         [DllImport("opengl32.dll")]static extern void glTexParameteri(uint target,uint name,int value);
+         [DllImport("opengl32.dll")]static extern void glTexImage2D(uint target,int level,int format,int width,int height,int border,uint pixelFormat,uint type,IntPtr pixels);
++        [DllImport("opengl32.dll")]static extern void glTexSubImage2D(uint target,int level,int x,int y,int width,int height,uint pixelFormat,uint type,IntPtr pixels);
++        [DllImport("opengl32.dll")]static extern uint glGenLists(int count);
++        [DllImport("opengl32.dll")]static extern void glNewList(uint list,uint mode);
++        [DllImport("opengl32.dll")]static extern void glEndList();
++        [DllImport("opengl32.dll")]static extern void glCallList(uint list);
++        [DllImport("opengl32.dll")]static extern void glDeleteLists(uint list,int count);
+         [DllImport("opengl32.dll")]static extern void glTexCoord2d(double x,double y);
+     }
+ }
